@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    void updateActions();
 };
 
 #endif // MAINWINDOW_H
