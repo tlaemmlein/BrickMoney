@@ -1,2 +1,2 @@
 # BrickMoney
-# The best tool ever!!!
+# The software for LEGO Investment
