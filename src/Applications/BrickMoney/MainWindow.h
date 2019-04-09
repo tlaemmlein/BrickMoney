@@ -7,6 +7,9 @@ namespace Ui {
 class MainWindow;
 }
 
+class LegoSetModel;
+class LegoSetList;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -17,6 +20,9 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    LegoSetModel* m_LegoSetModel;
+    LegoSetList* m_LegoSetList;
 
     void updateActions();
 };

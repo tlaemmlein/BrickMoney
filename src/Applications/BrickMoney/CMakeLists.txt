@@ -14,5 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
-add_executable(${PROJECT_NAME} "main.cpp" "MainWindow.cpp" "MainWindow.h" "MainWindow.ui")
+add_executable(${PROJECT_NAME} "main.cpp" "MainWindow.cpp" "MainWindow.h" "MainWindow.ui"
+ LegoSetModel.cpp
+ LegoSetModel.h
+)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Widgets)
