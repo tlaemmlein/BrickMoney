@@ -30,7 +30,7 @@ void LegoSetModel::addSet()
 
 void LegoSetModel::initialize()
 {
-    setHorizontalHeaderLabels(QStringList() << tr("SetID") << tr("Set number"));
+    setHorizontalHeaderLabels(QStringList() << tr("Set-ID") << tr("Set Nummer"));
 }
 
 void LegoSetModel::clear()

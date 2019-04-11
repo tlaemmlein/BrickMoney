@@ -33,7 +33,7 @@
     <property name="title">
      <string>Projekt</string>
     </property>
-    <addaction name="action_open"/>
+    <addaction name="action_load"/>
     <addaction name="action_close"/>
     <addaction name="separator"/>
     <addaction name="action_exit"/>
@@ -49,15 +49,23 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_open">
+  <action name="action_load">
+   <property name="icon">
+    <iconset resource="Images/Images.qrc">
+     <normaloff>:/Images/project_open.png</normaloff>:/Images/project_open.png</iconset>
+   </property>
    <property name="text">
-    <string>Öffnen</string>
+    <string>Laden</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
   </action>
   <action name="action_close">
+   <property name="icon">
+    <iconset resource="Images/Images.qrc">
+     <normaloff>:/Images/project_close.png</normaloff>:/Images/project_close.png</iconset>
+   </property>
    <property name="text">
     <string>Schließen</string>
    </property>
@@ -66,12 +74,35 @@
    </property>
   </action>
   <action name="action_exit">
+   <property name="icon">
+    <iconset resource="Images/Images.qrc">
+     <normaloff>:/Images/app_exit.png</normaloff>:/Images/app_exit.png</iconset>
+   </property>
    <property name="text">
     <string>Beenden</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
- <connections/>
+ <resources>
+  <include location="Images/Images.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>action_exit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>326</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

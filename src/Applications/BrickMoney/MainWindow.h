@@ -18,6 +18,9 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void loadProject();
+
 private:
     Ui::MainWindow *ui;
 
@@ -25,6 +28,8 @@ private:
     LegoSetList* m_LegoSetList;
 
     void updateActions();
+
+    void updateToolBar();
 };
 
 #endif // MAINWINDOW_H

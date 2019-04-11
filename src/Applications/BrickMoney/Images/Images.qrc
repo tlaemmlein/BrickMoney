@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>app_exit.png</file>
+        <file>project_close.png</file>
+        <file>project_open.png</file>
+    </qresource>
+</RCC>

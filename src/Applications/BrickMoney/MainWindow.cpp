@@ -23,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->statusBar->showMessage(tr("BrickMoney gestartet"));
 
     updateActions();
+
+    updateToolBar();
 }
 
 MainWindow::~MainWindow()
@@ -30,7 +32,19 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::loadProject()
+{
+
+}
+
 void MainWindow::updateActions()
 {
-    connect(ui->action_exit, &QAction::triggered, this, &MainWindow::close);
+    connect(ui->action_load, &QAction::triggered, this, &MainWindow::loadProject);
 }
+
+void MainWindow::updateToolBar()
+{
+    ui->mainToolBar->addAction(ui->action_load);
+    ui->mainToolBar->addAction(ui->action_close);
+}
+
