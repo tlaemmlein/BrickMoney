@@ -3,5 +3,8 @@
         <file>app_exit.png</file>
         <file>project_close.png</file>
         <file>project_open.png</file>
+        <file>project_save.png</file>
+        <file>legoset_delete.png</file>
+        <file>legoset_new.png</file>
     </qresource>
 </RCC>

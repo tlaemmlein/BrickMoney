@@ -16,16 +16,16 @@ void LegoSetModel::reset()
 void LegoSetModel::addSet()
 {
     QStandardItem *pSetIdItem = new QStandardItem;
+
     pSetIdItem->setData(m_MaxSetID, Qt::EditRole);
     pSetIdItem->setEditable(false);
     pSetIdItem->setEnabled(false);
     m_MaxSetID++;
     QStandardItem *pSetNumberItem = new QStandardItem;
     pSetNumberItem->setData(0, Qt::EditRole);
-    QList<QStandardItem*> cascade;
-    cascade << pSetIdItem << pSetNumberItem;
-    appendRow(cascade);
-
+    QList<QStandardItem*> legoset;
+    legoset << pSetIdItem << pSetNumberItem;
+    appendRow(legoset);
 }
 
 void LegoSetModel::initialize()

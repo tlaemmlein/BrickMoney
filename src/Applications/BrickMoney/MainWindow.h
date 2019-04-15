@@ -20,6 +20,12 @@ public:
 
 public slots:
     void loadProject();
+    void saveProject();
+
+private slots:
+    void on_legoset_new_pushButton_clicked();
+
+    void on_legoset_delete_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
