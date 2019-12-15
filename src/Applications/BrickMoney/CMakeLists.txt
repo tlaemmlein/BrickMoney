@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(TableViewExample_Controls_1 LANGUAGES CXX)
+project(BrickMoney LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)

@@ -1,6 +1,6 @@
 #include "TableModel.h"
 
-#include <QDebug>
+//#include <QDebug>
 #include <QScopeGuard>
 
 TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
@@ -25,21 +25,21 @@ int TableModel::columnCount(const QModelIndex &) const
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-    auto cleanup = qScopeGuard([] { qDebug() << "--- " << __FUNCTION__; });
-    qDebug() << "+++ " << __FUNCTION__;
+//    auto cleanup = qScopeGuard([] { qDebug() << "--- " << __FUNCTION__; });
+//    qDebug() << "+++ " << __FUNCTION__;
     if (!index.isValid())
         return QVariant();
 
-    qDebug() << "index.row(): " << index.row();
-    qDebug() << "table.size(): " << table.size();
+//    qDebug() << "index.row(): " << index.row();
+//    qDebug() << "table.size(): " << table.size();
     if (index.row() >= table.size() || table.size() < 0)
         return QVariant();
 
-    qDebug() << "role: " << role;
+//    qDebug() << "role: " << role;
 
     QVector<QVariant> row = table.at(index.row());
-    qDebug() << "row: " << row;
-    qDebug() << "row.size(): " << row.size();
+//    qDebug() << "row: " << row;
+//    qDebug() << "row.size(): " << row.size();
 
     switch (role) {
     case ImageRole:
@@ -99,52 +99,52 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 
 void TableModel::newEntry()
 {
-    qDebug() << "+++ " << __FUNCTION__;
+//    qDebug() << "+++ " << __FUNCTION__;
     //insertRows(rowCount(), 1, QModelIndex());
     if (insertRow(rowCount()))
     {
-        qDebug() << "Row inserted";
+//        qDebug() << "Row inserted";
     }
 
-    qDebug() << "--- " <<__FUNCTION__;
+//    qDebug() << "--- " <<__FUNCTION__;
 }
 
 void TableModel::deleteEntry(int rowIndex)
 {
-    qDebug() << "+++ " << __FUNCTION__;
+//    qDebug() << "+++ " << __FUNCTION__;
 
     if (removeRow(rowIndex))
     {
-        qDebug() << "Row " << rowIndex << " deleted.";
+//        qDebug() << "Row " << rowIndex << " deleted.";
     }
 
-    qDebug() << "--- " <<__FUNCTION__;
+//    qDebug() << "--- " <<__FUNCTION__;
 }
 
 
 bool TableModel::insertRows(int row, int count, const QModelIndex &)
 {
-    qDebug() << "+++ " << __FUNCTION__;
-    qDebug() << "count: " << count;
-    qDebug() << "row: " << row;
+//    qDebug() << "+++ " << __FUNCTION__;
+//    qDebug() << "count: " << count;
+//    qDebug() << "row: " << row;
     beginInsertRows(QModelIndex(), row, row + count - 1);
 
     for (int i = 0; i < count; ++i)
     {
         table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
-        qDebug() << "row +i: " << row +i;
+//        qDebug() << "row +i: " << row +i;
     }
 
     endInsertRows();
-    qDebug() << "--- " <<__FUNCTION__;
+//    qDebug() << "--- " <<__FUNCTION__;
     return true;
 }
 
 bool TableModel::removeRows(int row, int count, const QModelIndex &)
 {
-    qDebug() << "+++ " << __FUNCTION__;
-    qDebug() << "count: " << count;
-    qDebug() << "row: " << row;
+//    qDebug() << "+++ " << __FUNCTION__;
+//    qDebug() << "count: " << count;
+//    qDebug() << "row: " << row;
 
     if ( row >= table.size())
     {
@@ -153,7 +153,7 @@ bool TableModel::removeRows(int row, int count, const QModelIndex &)
 
     if ( count > 1)
     {
-        qDebug() << "Sorry. Only one row can be removed.";
+//        qDebug() << "Sorry. Only one row can be removed.";
         return false;
     }
 
@@ -163,14 +163,14 @@ bool TableModel::removeRows(int row, int count, const QModelIndex &)
 
     endRemoveRows();
 
-    qDebug() << "--- " <<__FUNCTION__;
+//    qDebug() << "--- " <<__FUNCTION__;
     return true;
 }
 
 
 QHash<int, QByteArray> TableModel::roleNames() const
 {
-    qDebug() << __FUNCTION__;
+//    qDebug() << __FUNCTION__;
     QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
     roles[SetNumberRole] = "setnumber";

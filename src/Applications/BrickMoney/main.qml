@@ -9,7 +9,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("BrickMoney - Die Software für LEGO Investment")
 
 
     Rectangle {
@@ -31,7 +31,7 @@ ApplicationWindow {
             anchors.leftMargin: 5
             height: 40
             onClicked: {
-                console.log("Add")
+                //console.log("Add")
                 _TableModel.newEntry()
                 tableView.positionViewAtRow(_TableModel.rowCount() -1)
                 tableView.selection.clear()
@@ -50,7 +50,7 @@ ApplicationWindow {
             anchors.leftMargin: 5
             height: 40
             onClicked: {
-                console.log("Delete")
+                //console.log("Delete")
                 if ( _TableModel.rowCount() === 0)
                 {
                    return
@@ -59,7 +59,7 @@ ApplicationWindow {
                 var deletedRowIndex = 0
 
                 tableView.selection.forEach( function(rowIndex) {
-                    console.log(rowIndex)
+                    //console.log(rowIndex)
                     _TableModel.deleteEntry(rowIndex)
                     deletedRowIndex = rowIndex
                 } )
@@ -70,7 +70,7 @@ ApplicationWindow {
                    return
                 }
 
-                console.log("deletedRowIndex: " +deletedRowIndex)
+                //console.log("deletedRowIndex: " +deletedRowIndex)
 
                 if (deletedRowIndex <  _TableModel.rowCount() )
                 {
