@@ -1,23 +1,20 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(BrickMoney LANGUAGES CXX)
+project(TableViewExample_Controls_1 LANGUAGES CXX)
 
-# Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed
 set(CMAKE_AUTOMOC ON)
-# Create code from a list of Qt designer ui files
-set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
-add_executable(${PROJECT_NAME}
- Images/Images.qrc
- main.cpp
- MainWindow.cpp MainWindow.h MainWindow.ui
- LegoSetModel.cpp LegoSetModel.h
-)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Widgets)
+add_executable(${PROJECT_NAME} 
+images/images.qrc
+main.cpp 
+qml.qrc
+TableModel.cpp
+TableModel.h)
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick)

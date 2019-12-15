@@ -1,11 +1,24 @@
-#include "MainWindow.h"
-#include <QApplication>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QAbstractTableModel>
+#include <QQmlContext>
+
+#include "TableModel.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
+    QGuiApplication app(argc, argv);
 
-    return a.exec();
+    qmlRegisterType<TableModel>("TableModel", 0, 1, "TableModel");
+    TableModel tm;
+
+    QQmlApplicationEngine engine;
+
+    engine.rootContext()->setContextProperty("_TableModel", &tm);
+
+    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+
+
+    return app.exec();
 }
+
