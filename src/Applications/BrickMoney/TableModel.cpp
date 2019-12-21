@@ -8,7 +8,7 @@ TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
     //for (int i = 0; i < 3000; ++i)
     //{
 
-    table.append({"http://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
+    table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
