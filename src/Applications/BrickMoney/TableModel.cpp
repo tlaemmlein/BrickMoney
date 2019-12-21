@@ -1,19 +1,19 @@
 #include "TableModel.h"
 
-//#include <QDebug>
+#include <QDebug>
 #include <QScopeGuard>
 
 TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
 {
-    //for (int i = 0; i < 3000; ++i)
-    //{
-
+    setObjectName("TableModel");
     table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
     table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
-    //}
 
+//    QVariant v = 123;
+//    auto& v1 = table.value(0).at(1);
+//    v1 = v;
 }
 
 int TableModel::rowCount(const QModelIndex &) const
@@ -87,19 +87,23 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 }
 
-//bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
-//{
-//    qDebug() << __FUNCTION__;
-//    if (!index.isValid() || role != Qt::EditRole ||
-//        index.row() < 0 || index.row() >= table.size() ||
-//        index.column() < 0 || index.column() >= table.at(0).size())
-//        return false;
+bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+    qDebug() << __FUNCTION__;
+    qDebug() << "role: " << role << " r: " << index.row() << " c: " << index.column();
+    if (!index.isValid() )
+        return false;
 
-//    QString test = table.at(index.row()).at(index.column());
-//    //= value.toString();
-//    emit dataChanged(index,index);
-//    return true;
-//}
+    if ( index.row() < 0 || index.row() >= table.size() ||
+        index.column() < 0 || index.column() >= table.at(0).size())
+        return false;
+
+    qDebug() << value.toInt();
+    qDebug() << table.at(index.row()).at(index.column()).toInt();
+    //= value.toString();
+    emit dataChanged(index,index);
+    return true;
+}
 
 void TableModel::newEntry()
 {

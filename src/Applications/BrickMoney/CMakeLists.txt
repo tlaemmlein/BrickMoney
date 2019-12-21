@@ -10,14 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Quick REQUIRED)
 
-#set(OPENSSL_USE_STATIC_LIBS FALSE)
-#set(OPENSSL_ROOT_DIR "C:/dev/BrickMoney/src/Thirdparty/OpenSSL/1.1.1d/vs2017-x64")
-#find_package(OpenSSL REQUIRED)
-
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
 message(STATUS "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
 message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
-message(STATUS "$<TARGET_FILE_DIR:${PROJECT_NAME}>")
 
 add_executable(${PROJECT_NAME} 
 images/images.qrc

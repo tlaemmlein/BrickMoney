@@ -28,7 +28,7 @@ public:
 
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-//    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     // QAbstractItemModel interface
     bool insertRows(int row, int count, const QModelIndex &parent) override;
@@ -43,6 +43,7 @@ public slots:
     void deleteEntry(int rowIndex);
 
 private:
+
     QList< QVector<QVariant> > table;
 };
 

@@ -11,6 +11,11 @@ ApplicationWindow {
     height: 480
     title: qsTr("BrickMoney - Die Software für LEGO Investment")
 
+    function listProperty(item)
+    {
+        for (var p in item)
+        console.log(p + ": " + item[p]);
+    }
 
     Rectangle {
         id: buttonBar
@@ -110,22 +115,25 @@ ApplicationWindow {
         width: parent.width -5
         height: parent.height - buttonBar.height - 15
         clip: true
+        //selectionMode: SelectionMode.SingleSelection
 
         model: _TableModel
 
         rowDelegate: Rectangle {
-           height: 70
-           SystemPalette {
-              id: myPalette;
-              colorGroup: SystemPalette.Active
-           }
-           color: {
-              var baseColor = styleData.alternate?myPalette.alternateBase:myPalette.base
-              return styleData.selected?myPalette.highlight:baseColor
-           }
+            height: 70
+            SystemPalette {
+                id: myPalette;
+                colorGroup: SystemPalette.Active
+            }
+            color: {
+                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
+                return styleData.selected ? myPalette.highlight : baseColor
+            }
+
         }
 
         C1.TableViewColumn {
+            id: imageColumn
             role: "image"
             title: "Bild"
             width: 100
@@ -137,16 +145,34 @@ ApplicationWindow {
         }
 
         C1.TableViewColumn {
+            id: setNumColumn
             role: "setnumber"
             title: "Set Nummer"
             width: 100
-            delegate: Text {
+            delegate: TextField {
                 anchors.fill: parent
                 text: styleData.value
+                onEditingFinished: {
+                    //listProperty(_TableModel)
+                    console.log("onEditingFinished - text: " + text )
+                    console.log("styleData.row: " + styleData.row);
+                    console.log("styleData.column: " + styleData.column);
+                    var q_model_index = _TableModel.index(styleData.row, styleData.column);
+
+                    var edit_role = 2; // Edit role
+
+                    var data_changed = _TableModel.setData(q_model_index, text, edit_role);
+                    console.log("data change successful?", data_changed);
+
+                    //_TableModel.setnumber = text
+                    //console.log("_TableModel.setnumber: " + _TableModel.setnumber )
+                }
             }
+
         }
 
         C1.TableViewColumn {
+            id: descColumn
             role: "description"
             title: "Bezeichnung"
             width: 100
