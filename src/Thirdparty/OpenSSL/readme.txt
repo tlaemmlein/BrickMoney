@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/45494630/how-to-build-openssl-on-windows-with-visual-studio-2017/45495686

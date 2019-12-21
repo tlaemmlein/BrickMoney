@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(BrickMoney LANGUAGES CXX)
+project(BrickMoneyWidget LANGUAGES CXX)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)

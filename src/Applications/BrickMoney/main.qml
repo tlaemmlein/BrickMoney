@@ -148,7 +148,7 @@ ApplicationWindow {
 
         C1.TableViewColumn {
             role: "description"
-            title: "Beschreibung"
+            title: "Bezeichnung"
             width: 100
             delegate: Text {
                 anchors.fill: parent
