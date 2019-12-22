@@ -6,13 +6,14 @@
 TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
 {
     setObjectName("TableModel");
-    table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
-    table.append({"https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
-    table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
-    table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
+    table.append(TableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
+
+    table.append(TableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
+    table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
+    table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
 
 //    QVariant v = 123;
-//    auto& v1 = table.value(0).at(1);
+//    auto& v1 = table.value(0)[1];
 //    v1 = v;
 }
 
@@ -23,8 +24,7 @@ int TableModel::rowCount(const QModelIndex &) const
 
 int TableModel::columnCount(const QModelIndex &) const
 {
-    auto first = table.cbegin();
-    return first != table.cend() ? first->size() : -1;
+    return TableData::count;
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
@@ -41,22 +41,22 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
 //    qDebug() << "role: " << role;
 
-    QVector<QVariant> row = table.at(index.row());
+    TableData row = table.at(index.row());
 //    qDebug() << "row: " << row;
 //    qDebug() << "row.size(): " << row.size();
 
     switch (role) {
     case ImageRole:
     {
-        return table.value(index.row()).at(0);
+        return QVariant(row.image);
     }
     case SetNumberRole:
     {
-        return table.value(index.row()).at(1);
+        return QVariant(row.setnumber);
     }
     case DescriptionRole:
     {
-        return table.value(index.row()).at(2);
+        return QVariant(row.description);
     }
     default:
         break;
@@ -89,19 +89,38 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
 
 bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    qDebug() << __FUNCTION__;
-    qDebug() << "role: " << role << " r: " << index.row() << " c: " << index.column();
+//    qDebug() << __FUNCTION__;
+//    qDebug() << "role: " << role << " r: " << index.row() << " c: " << index.column();
     if (!index.isValid() )
         return false;
 
     if ( index.row() < 0 || index.row() >= table.size() ||
-        index.column() < 0 || index.column() >= table.at(0).size())
+        index.column() < 0 || index.column() >= TableData::count)
         return false;
 
-    qDebug() << value.toInt();
-    qDebug() << table.at(index.row()).at(index.column()).toInt();
-    //= value.toString();
+    switch (role) {
+    case ImageRole:
+    {
+        return false;
+    }
+    case SetNumberRole:
+    {
+//        qDebug() << value.toInt();
+//        qDebug() << table.at(index.row()).setnumber;
+        table[index.row()].setnumber = value.toInt();
+        break;
+    }
+    case DescriptionRole:
+    {
+        table[index.row()].description = value.toString();
+        break;
+    }
+    default:
+        break;
+    }
+
     emit dataChanged(index,index);
+
     return true;
 }
 
@@ -139,7 +158,7 @@ bool TableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-        table.append({"qrc:/images/WonderWoman.png", QString("%1").arg(table.size()), QString("Beschreibung %1").arg(table.size())});
+        table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
 //        qDebug() << "row +i: " << row +i;
     }
 
@@ -184,4 +203,23 @@ QHash<int, QByteArray> TableModel::roleNames() const
     roles[SetNumberRole] = "setnumber";
     roles[DescriptionRole] = "description";
     return roles;
+}
+
+int TableModel::roleID(QString roleName)
+{
+    if (roleName == "image" )
+    {
+        return ImageRole;
+    }
+
+    if (roleName == "setnumber") {
+        return SetNumberRole;
+    }
+
+    if ( roleName =="description" )
+    {
+        return DescriptionRole;
+    }
+
+    return -1;
 }

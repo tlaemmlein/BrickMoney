@@ -35,6 +35,8 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
     QHash<int, QByteArray> roleNames() const override;
+
+    Q_INVOKABLE int roleID(QString roleName);
 signals:
 
 public slots:
@@ -43,8 +45,20 @@ public slots:
     void deleteEntry(int rowIndex);
 
 private:
+    struct TableData
+    {
+        TableData(QString new_image, int new_setnumber, QString new_description): image(new_image),
+            setnumber(new_setnumber), description(new_description)
+        {}
 
-    QList< QVector<QVariant> > table;
+        QString image;
+        int setnumber;
+        QString description;
+
+        static const int count = 3;
+    };
+
+    QList< TableData > table;
 };
 
 

@@ -115,7 +115,6 @@ ApplicationWindow {
         width: parent.width -5
         height: parent.height - buttonBar.height - 15
         clip: true
-        //selectionMode: SelectionMode.SingleSelection
 
         model: _TableModel
 
@@ -151,21 +150,13 @@ ApplicationWindow {
             width: 100
             delegate: TextField {
                 anchors.fill: parent
+                validator: IntValidator {bottom: 0; top: 2147483647;}
+                selectByMouse: true
                 text: styleData.value
                 onEditingFinished: {
-                    //listProperty(_TableModel)
-                    console.log("onEditingFinished - text: " + text )
-                    console.log("styleData.row: " + styleData.row);
-                    console.log("styleData.column: " + styleData.column);
-                    var q_model_index = _TableModel.index(styleData.row, styleData.column);
-
-                    var edit_role = 2; // Edit role
-
-                    var data_changed = _TableModel.setData(q_model_index, text, edit_role);
-                    console.log("data change successful?", data_changed);
-
-                    //_TableModel.setnumber = text
-                    //console.log("_TableModel.setnumber: " + _TableModel.setnumber )
+                    var roleID = _TableModel.roleID(setNumColumn.role)
+                    var q_model_index = _TableModel.index(styleData.row, styleData.column)
+                    var data_changed = _TableModel.setData(q_model_index, text, roleID)
                 }
             }
 
@@ -176,9 +167,15 @@ ApplicationWindow {
             role: "description"
             title: "Bezeichnung"
             width: 100
-            delegate: Text {
+            delegate: TextField {
                 anchors.fill: parent
                 text: styleData.value
+                selectByMouse: true
+                onEditingFinished: {
+                    var roleID = _TableModel.roleID(descColumn.role)
+                    var q_model_index = _TableModel.index(styleData.row, styleData.column)
+                    var data_changed = _TableModel.setData(q_model_index, text, roleID)
+                }
             }
         }
     }
