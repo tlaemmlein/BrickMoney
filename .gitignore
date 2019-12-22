@@ -2,3 +2,5 @@
 src/Applications/build-BrickMoney-Qt_5_12_5_MSVC2017_64bit-Debug/
 src/Applications/build-BrickMoney-Qt_5_12_5_MSVC2017_64bit-Release/
 src/Thirdparty/OpenSSL/1.1.1d/src/
+src/Applications/build-TableViewExample_Controls_1-Qt_5_12_5_MSVC2017_64bit-Default/
+CMakeLists.txt.user
