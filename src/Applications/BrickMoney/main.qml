@@ -1,8 +1,9 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import TableModel 0.1
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as C1
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
     id: window
@@ -11,19 +12,82 @@ ApplicationWindow {
     height: 480
     title: qsTr("BrickMoney - Die Software für LEGO Investment")
 
-    function listProperty(item)
-    {
-        for (var p in item)
-        console.log(p + ": " + item[p]);
-    }
+//    Material.theme: Material.Dark
+//    Material.accent: Material.Purple
 
     Rectangle {
-        id: buttonBar
+        id: buttonBarManageSetList
         width: parent.width -10
         anchors.left: parent.left
         anchors.leftMargin: 5
         height: 50
-        color: "#00000000"
+        // color: "#00000000"
+        radius: 8
+        border.width: 2
+
+        Button{
+            Material.accent: Material.Orange
+            id: newSetListButton
+            text: "New"
+            highlighted: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            height: 40
+            onClicked: {
+                console.log(newSetListButton.text)
+            }
+        }
+
+        Button{
+            id: openSetListButton
+            text: "Open"
+            highlighted: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: newSetListButton.right
+            anchors.leftMargin: 5
+            height: 40
+            onClicked: {
+                console.log(openSetListButton.text)
+            }
+        }
+
+        Button{
+            id: saveSetListButton
+            text: "Save"
+            highlighted: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: openSetListButton.right
+            anchors.leftMargin: 5
+            height: 40
+            onClicked: {
+                console.log(saveSetListButton.text)
+            }
+        }
+
+        Button{
+            id: saveAsSetListButton
+            text: "Save as"
+            highlighted: true
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: saveSetListButton.right
+            anchors.leftMargin: 5
+            height: 40
+            onClicked: {
+                console.log(saveAsSetListButton.text)
+            }
+        }
+    }
+
+    Rectangle {
+        id: buttonBarChangeSetList
+        width: parent.width -10
+        anchors.top: buttonBarManageSetList.bottom
+        anchors.topMargin: 5
+        anchors.left: parent.left
+        anchors.leftMargin: 5
+        height: 50
+        // color: "#00000000"
         radius: 8
         border.width: 2
 
@@ -103,6 +167,19 @@ ApplicationWindow {
             height: 40
             onClicked: tableView.selection.clear()
         }
+
+        Slider {
+            Text {
+                id: zoomText
+                text: qsTr("Zoom")
+            }
+            id: zoomSlider
+            anchors.left: clearSelectButton.right
+            from: 5
+            value: 50
+            to: 300
+        }
+
     }
 
 
@@ -110,23 +187,31 @@ ApplicationWindow {
         id: tableView
         anchors.left: parent.left
         anchors.leftMargin: 5
-        anchors.top: buttonBar.bottom
+        anchors.top: buttonBarChangeSetList.bottom
         anchors.topMargin: 5
         width: parent.width -5
-        height: parent.height - buttonBar.height - 15
+        height: parent.height - buttonBarChangeSetList.height - 15
         clip: true
 
         model: _TableModel
 
+        headerDelegate: Text {
+            text: styleData.value
+            minimumPixelSize: 12
+            font.pixelSize: 14
+        }
+
         rowDelegate: Rectangle {
-            height: 70
+            height: zoomSlider.value
             SystemPalette {
                 id: myPalette;
                 colorGroup: SystemPalette.Active
             }
             color: {
-                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
-                return styleData.selected ? myPalette.highlight : baseColor
+//                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
+                var baseColor = styleData.alternate ? "#FFFFFF" : "#9E9E9E"
+                styleData.selected ? "#03A9F4" : baseColor
+                //return styleData.selected ? myPalette.highlight : baseColor
             }
 
         }

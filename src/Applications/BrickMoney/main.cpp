@@ -7,6 +7,8 @@
 
 int main(int argc, char *argv[])
 {
+    //qputenv("QT_QUICK_CONTROLS_STYLE", "material");
+
     QGuiApplication app(argc, argv);
 
     qmlRegisterType<TableModel>("TableModel", 0, 1, "TableModel");
