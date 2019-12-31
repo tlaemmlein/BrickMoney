@@ -19,9 +19,19 @@ ApplicationWindow {
 
     MessageDialog {
         id: errorMessageDialog
-        //icon: StandardIcon.Critical
         title: "Error with brickMoney folder"
         text: "The brickMoney project folder is not empty."
+        onVisibleChanged: overlayRect.visible = visible
+    }
+
+    Rectangle {
+        id: overlayRect
+        width: window.width;
+        height: window.height;
+        color: "#0f0000"
+        z: 5
+        opacity: 0.75
+        visible: false
     }
 
     FolderDialog {
@@ -236,7 +246,7 @@ ApplicationWindow {
             }
             color: {
 //                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
-                var baseColor = styleData.alternate ? "#FFFFFF" : "#9E9E9E"
+                var baseColor = styleData.alternate ? "#FFFFFF" : "#f5f5f5"
                 styleData.selected ? "#03A9F4" : baseColor
                 //return styleData.selected ? myPalette.highlight : baseColor
             }
