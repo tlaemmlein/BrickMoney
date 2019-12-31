@@ -1,9 +1,11 @@
 import QtQuick 2.12
+import QtQuick.Dialogs 1.3
 import QtQuick.Window 2.12
 import TableModel 0.1
 import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as C1
 import QtQuick.Controls.Material 2.1
+import Qt.labs.platform 1.1
 
 ApplicationWindow {
     id: window
@@ -14,6 +16,30 @@ ApplicationWindow {
 
 //    Material.theme: Material.Dark
 //    Material.accent: Material.Purple
+
+    MessageDialog {
+        id: errorMessageDialog
+        //icon: StandardIcon.Critical
+        title: "Error with brickMoney folder"
+        text: "The brickMoney project folder is not empty."
+    }
+
+    FolderDialog {
+        id: folderDialog
+        title: "Please choose or create an empty brickMoney project folder"
+        onAccepted: {
+                console.log("You chose: " + folderDialog.folder)
+                    if (!_LegoSetIOManager.isProjectFolderReady(folderDialog.folder))
+                    {
+                        errorMessageDialog.open()
+                        return;
+                    }
+                }
+            onRejected: {
+                console.log("Canceled")
+            }
+    }
+
 
     Rectangle {
         id: buttonBarManageSetList
@@ -36,6 +62,7 @@ ApplicationWindow {
             height: 40
             onClicked: {
                 console.log(newSetListButton.text)
+                folderDialog.open()
             }
         }
 
