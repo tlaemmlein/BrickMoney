@@ -3,7 +3,7 @@
 #include <QAbstractTableModel>
 #include <QQmlContext>
 
-#include "TableModel.h"
+#include "LegoSetTableModel.h"
 #include "LegoSetIOManager.h"
 
 int main(int argc, char *argv[])
@@ -15,14 +15,14 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("BrickMoney");
     QCoreApplication::setOrganizationName("Spielolamm");
 
-    qmlRegisterType<TableModel>("TableModel", 0, 1, "TableModel");
-    qmlRegisterType<TableModel>("LegoSetIOManager", 0, 1, "LegoSetIOManager");
-    TableModel tm;
+    qmlRegisterType<LegoSetTableModel>("LegoSetTableModel", 0, 1, "LegoSetTableModel");
+    qmlRegisterType<LegoSetIOManager>("LegoSetIOManager", 0, 1, "LegoSetIOManager");
+    LegoSetTableModel lego_table_model;
     LegoSetIOManager lego_io_manager;
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("_TableModel", &tm);
+    engine.rootContext()->setContextProperty("_LegoSetTableModel", &lego_table_model);
     engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

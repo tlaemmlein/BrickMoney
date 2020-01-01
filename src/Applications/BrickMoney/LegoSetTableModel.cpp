@@ -1,9 +1,9 @@
-#include "TableModel.h"
+#include "LegoSetTableModel.h"
 
 #include <QDebug>
 #include <QScopeGuard>
 
-TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
+LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
     setObjectName("TableModel");
     table.append(TableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
@@ -17,17 +17,17 @@ TableModel::TableModel(QObject *parent) : QAbstractTableModel (parent)
 //    v1 = v;
 }
 
-int TableModel::rowCount(const QModelIndex &) const
+int LegoSetTableModel::rowCount(const QModelIndex &) const
 {
     return table.size();
 }
 
-int TableModel::columnCount(const QModelIndex &) const
+int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
     return TableData::count;
 }
 
-QVariant TableModel::data(const QModelIndex &index, int role) const
+QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 {
 //    auto cleanup = qScopeGuard([] { qDebug() << "--- " << __FUNCTION__; });
 //    qDebug() << "+++ " << __FUNCTION__;
@@ -65,7 +65,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant TableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role != Qt::DisplayRole)
         return QVariant();
@@ -87,7 +87,7 @@ QVariant TableModel::headerData(int section, Qt::Orientation orientation, int ro
     return QVariant();
 }
 
-bool TableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
 //    qDebug() << __FUNCTION__;
 //    qDebug() << "role: " << role << " r: " << index.row() << " c: " << index.column();
@@ -124,7 +124,7 @@ bool TableModel::setData(const QModelIndex &index, const QVariant &value, int ro
     return true;
 }
 
-void TableModel::newEntry()
+void LegoSetTableModel::newEntry()
 {
 //    qDebug() << "+++ " << __FUNCTION__;
     //insertRows(rowCount(), 1, QModelIndex());
@@ -136,7 +136,7 @@ void TableModel::newEntry()
 //    qDebug() << "--- " <<__FUNCTION__;
 }
 
-void TableModel::deleteEntry(int rowIndex)
+void LegoSetTableModel::deleteEntry(int rowIndex)
 {
 //    qDebug() << "+++ " << __FUNCTION__;
 
@@ -149,7 +149,7 @@ void TableModel::deleteEntry(int rowIndex)
 }
 
 
-bool TableModel::insertRows(int row, int count, const QModelIndex &)
+bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 {
 //    qDebug() << "+++ " << __FUNCTION__;
 //    qDebug() << "count: " << count;
@@ -167,7 +167,7 @@ bool TableModel::insertRows(int row, int count, const QModelIndex &)
     return true;
 }
 
-bool TableModel::removeRows(int row, int count, const QModelIndex &)
+bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 {
 //    qDebug() << "+++ " << __FUNCTION__;
 //    qDebug() << "count: " << count;
@@ -195,7 +195,7 @@ bool TableModel::removeRows(int row, int count, const QModelIndex &)
 }
 
 
-QHash<int, QByteArray> TableModel::roleNames() const
+QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 {
 //    qDebug() << __FUNCTION__;
     QHash<int, QByteArray> roles;
@@ -205,7 +205,7 @@ QHash<int, QByteArray> TableModel::roleNames() const
     return roles;
 }
 
-int TableModel::roleID(QString roleName)
+int LegoSetTableModel::roleID(QString roleName)
 {
     if (roleName == "image" )
     {

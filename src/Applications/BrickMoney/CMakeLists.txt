@@ -18,8 +18,8 @@ add_executable(${PROJECT_NAME}
 images/images.qrc
 main.cpp 
 qml.qrc
-TableModel.cpp
-TableModel.h
+LegoSetTableModel.cpp
+LegoSetTableModel.h
 LegoSetIOManager.cpp
 LegoSetIOManager.h)
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)

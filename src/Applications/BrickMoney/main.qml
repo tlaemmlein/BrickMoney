@@ -1,7 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Dialogs 1.3
 import QtQuick.Window 2.12
-import TableModel 0.1
+import LegoSetTableModel 0.1
+import LegoSetIOManager 0.1
 import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as C1
 import QtQuick.Controls.Material 2.1
@@ -138,10 +139,10 @@ ApplicationWindow {
             height: 40
             onClicked: {
                 //console.log("Add")
-                _TableModel.newEntry()
-                tableView.positionViewAtRow(_TableModel.rowCount() -1)
+                _LegoSetTableModel.newEntry()
+                tableView.positionViewAtRow(_LegoSetTableModel.rowCount() -1)
                 tableView.selection.clear()
-                tableView.selection.select(_TableModel.rowCount() -1)
+                tableView.selection.select(_LegoSetTableModel.rowCount() -1)
             }
         }
 
@@ -157,7 +158,7 @@ ApplicationWindow {
             height: 40
             onClicked: {
                 //console.log("Delete")
-                if ( _TableModel.rowCount() === 0)
+                if ( _LegoSetTableModel.rowCount() === 0)
                 {
                    return
                 }
@@ -166,19 +167,19 @@ ApplicationWindow {
 
                 tableView.selection.forEach( function(rowIndex) {
                     //console.log(rowIndex)
-                    _TableModel.deleteEntry(rowIndex)
+                    _LegoSetTableModel.deleteEntry(rowIndex)
                     deletedRowIndex = rowIndex
                 } )
                 tableView.selection.clear()
 
-                if ( _TableModel.rowCount() === 0)
+                if ( _LegoSetTableModel.rowCount() === 0)
                 {
                    return
                 }
 
                 //console.log("deletedRowIndex: " +deletedRowIndex)
 
-                if (deletedRowIndex <  _TableModel.rowCount() )
+                if (deletedRowIndex <  _LegoSetTableModel.rowCount() )
                 {
                     tableView.selection.select(deletedRowIndex)
                     return
@@ -230,7 +231,7 @@ ApplicationWindow {
         height: parent.height - buttonBarChangeSetList.height - 15
         clip: true
 
-        model: _TableModel
+        model: _LegoSetTableModel
 
         headerDelegate: Text {
             text: styleData.value
@@ -276,9 +277,9 @@ ApplicationWindow {
                 selectByMouse: true
                 text: styleData.value
                 onEditingFinished: {
-                    var roleID = _TableModel.roleID(setNumColumn.role)
-                    var q_model_index = _TableModel.index(styleData.row, styleData.column)
-                    var data_changed = _TableModel.setData(q_model_index, text, roleID)
+                    var roleID = _LegoSetTableModel.roleID(setNumColumn.role)
+                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                    var data_changed = _LegoSetTableModel.setData(q_model_index, text, roleID)
                 }
             }
 
@@ -294,9 +295,9 @@ ApplicationWindow {
                 text: styleData.value
                 selectByMouse: true
                 onEditingFinished: {
-                    var roleID = _TableModel.roleID(descColumn.role)
-                    var q_model_index = _TableModel.index(styleData.row, styleData.column)
-                    var data_changed = _TableModel.setData(q_model_index, text, roleID)
+                    var roleID = _LegoSetTableModel.roleID(descColumn.role)
+                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                    var data_changed = _LegoSetTableModel.setData(q_model_index, text, roleID)
                 }
             }
         }

@@ -1,12 +1,11 @@
-#ifndef TABLEMODEL_H
-#define TABLEMODEL_H
-
+#ifndef LEGOSET_TABLE_MODEL_H
+#define LEGOSET_TABLE_MODEL_H
 
 #include <QAbstractTableModel>
 
 #include <QLinkedList>
 
-class TableModel : public QAbstractTableModel
+class LegoSetTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -18,7 +17,7 @@ class TableModel : public QAbstractTableModel
 
 
 public:
-    explicit TableModel(QObject *parent= nullptr);
+    explicit LegoSetTableModel(QObject *parent= nullptr);
 
     int rowCount(const QModelIndex & = QModelIndex()) const override;
 
