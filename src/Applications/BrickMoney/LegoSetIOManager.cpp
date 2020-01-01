@@ -6,6 +6,7 @@
 
 
 LegoSetIOManager::LegoSetIOManager(QObject *parent): QObject(parent)
+    , mProjectFolder("Empty")
 {
 
 }
@@ -37,4 +38,18 @@ bool LegoSetIOManager::isProjectFolderReady(const QString& projectFolder)
     }
 
     return true;
+}
+
+void LegoSetIOManager::setProjectFolder(QString folder)
+{
+    if ( mProjectFolder != folder)
+    {
+        mProjectFolder = folder;
+        emit projectFolderChange();
+    }
+}
+
+QString LegoSetIOManager::projectFolder()
+{
+    return mProjectFolder;
 }

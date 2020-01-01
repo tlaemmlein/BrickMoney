@@ -15,42 +15,8 @@ ApplicationWindow {
     height: 480
     title: qsTr("BrickMoney - Die Software für LEGO Investment")
 
-//    Material.theme: Material.Dark
-//    Material.accent: Material.Purple
-
-    MessageDialog {
-        id: errorMessageDialog
-        title: "Error with brickMoney folder"
-        text: "The brickMoney project folder is not empty."
-        onVisibleChanged: overlayRect.visible = visible
-    }
-
-    Rectangle {
-        id: overlayRect
-        width: window.width;
-        height: window.height;
-        color: "#0f0000"
-        z: 5
-        opacity: 0.75
-        visible: false
-    }
-
-    FolderDialog {
-        id: folderDialog
-        title: "Please choose or create an empty brickMoney project folder"
-        onAccepted: {
-                console.log("You chose: " + folderDialog.folder)
-                    if (!_LegoSetIOManager.isProjectFolderReady(folderDialog.folder))
-                    {
-                        errorMessageDialog.open()
-                        return;
-                    }
-                }
-            onRejected: {
-                console.log("Canceled")
-            }
-    }
-
+    //    Material.theme: Material.Dark
+    //    Material.accent: Material.Purple
 
     Rectangle {
         id: buttonBarManageSetList
@@ -60,12 +26,15 @@ ApplicationWindow {
         height: 50
         // color: "#00000000"
         radius: 8
-        border.width: 2
+        border.width: 0
 
         Button{
             Material.accent: Material.Orange
             id: newSetListButton
             text: "New"
+            transformOrigin: Item.Center
+            rotation: 0
+            flat: false
             highlighted: true
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
@@ -115,7 +84,81 @@ ApplicationWindow {
                 console.log(saveAsSetListButton.text)
             }
         }
+
+        Rectangle {
+            id: legoSetProjectNameRect
+            width: 195
+            anchors.left: saveAsSetListButton.right
+            anchors.top: buttonBarManageSetList.top
+            anchors.topMargin: 5
+            anchors.leftMargin: 5
+            anchors.right: parent.right
+            anchors.rightMargin: 5
+            height: 40
+            color: "#ffffff"
+            // color: "#00000000"
+            radius: 8
+            border.width: 0
+
+            Text {
+                id: projectNameLabel
+                text: qsTr("Project:")
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: parent.left
+                anchors.leftMargin: 5
+                font.pixelSize: 12
+            }
+
+            Text {
+                id: projectNameValue
+                text: _LegoSetIOManager.ProjectFolder
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: projectNameLabel.right
+                anchors.leftMargin: 5
+                anchors.right: parent.right
+                anchors.rightMargin: 5
+                font.pixelSize: 12
+            }
+        }
+
+
+
     }
+
+    MessageDialog {
+        id: errorMessageDialog
+        title: "Error with brickMoney folder"
+        text: "The brickMoney project folder is not empty."
+        onVisibleChanged: overlayRect.visible = visible
+    }
+
+    Rectangle {
+        id: overlayRect
+        width: window.width;
+        height: window.height;
+        color: "#0f0000"
+        z: 5
+        opacity: 0.75
+        visible: false
+    }
+
+    FolderDialog {
+        id: folderDialog
+        title: "Please choose or create an empty brickMoney project folder"
+        onAccepted: {
+            console.log("You chose: " + folderDialog.folder)
+            if (!_LegoSetIOManager.isProjectFolderReady(folderDialog.folder))
+            {
+                errorMessageDialog.open()
+                return;
+            }
+            _LegoSetIOManager.ProjectFolder = folderDialog.folder
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+    }
+
 
     Rectangle {
         id: buttonBarChangeSetList
@@ -127,7 +170,7 @@ ApplicationWindow {
         height: 50
         // color: "#00000000"
         radius: 8
-        border.width: 2
+        border.width: 0
 
         Button{
             id: addButton
@@ -160,7 +203,7 @@ ApplicationWindow {
                 //console.log("Delete")
                 if ( _LegoSetTableModel.rowCount() === 0)
                 {
-                   return
+                    return
                 }
 
                 var deletedRowIndex = 0
@@ -174,7 +217,7 @@ ApplicationWindow {
 
                 if ( _LegoSetTableModel.rowCount() === 0)
                 {
-                   return
+                    return
                 }
 
                 //console.log("deletedRowIndex: " +deletedRowIndex)
@@ -212,6 +255,10 @@ ApplicationWindow {
                 text: qsTr("Zoom")
             }
             id: zoomSlider
+            wheelEnabled: false
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.leftMargin: 5
             anchors.left: clearSelectButton.right
             from: 5
             value: 50
@@ -229,15 +276,21 @@ ApplicationWindow {
         anchors.topMargin: 5
         width: parent.width -5
         height: parent.height - buttonBarChangeSetList.height
-         - buttonBarManageSetList.height -15
+                - buttonBarManageSetList.height -15
         clip: true
 
         model: _LegoSetTableModel
 
-        headerDelegate: Text {
-            text: styleData.value
-            minimumPixelSize: 12
-            font.pixelSize: 14
+        headerDelegate:
+            Rectangle {
+            color: "#808080"
+            Text {
+                text: styleData.value
+                minimumPixelSize: 12
+                font.pixelSize: 14
+            }
+            width: childrenRect.width
+            height: childrenRect.height
         }
 
         rowDelegate: Rectangle {
@@ -247,7 +300,7 @@ ApplicationWindow {
                 colorGroup: SystemPalette.Active
             }
             color: {
-//                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
+                //                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
                 var baseColor = styleData.alternate ? "#FFFFFF" : "#f5f5f5"
                 styleData.selected ? "#03A9F4" : baseColor
                 //return styleData.selected ? myPalette.highlight : baseColor
@@ -304,4 +357,21 @@ ApplicationWindow {
         }
     }
 
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+/*##^## Designer {
+    D{i:7;anchors_x:53;anchors_y:13}D{i:8;anchors_x:52}
+}
+ ##^##*/
