@@ -228,7 +228,8 @@ ApplicationWindow {
         anchors.top: buttonBarChangeSetList.bottom
         anchors.topMargin: 5
         width: parent.width -5
-        height: parent.height - buttonBarChangeSetList.height - 15
+        height: parent.height - buttonBarChangeSetList.height
+         - buttonBarManageSetList.height -15
         clip: true
 
         model: _LegoSetTableModel
