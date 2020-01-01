@@ -149,12 +149,12 @@ ApplicationWindow {
         title: "Please choose or create an empty brickMoney project folder"
         onAccepted: {
             console.log("You chose: " + folderDialog.folder)
-            if (!_LegoSetIOManager.isProjectFolderValid(folderDialog.folder))
+            _LegoSetIOManager.ProjectFolder = folderDialog.folder
+            if (!_LegoSetIOManager.isProjectReady)
             {
                 errorMessageDialog.open()
                 return;
             }
-            _LegoSetIOManager.ProjectFolder = folderDialog.folder
         }
         onRejected: {
             console.log("Canceled")
