@@ -70,6 +70,7 @@ ApplicationWindow {
             enabled: _LegoSetIOManager.isProjectReady
             onClicked: {
                 console.log(saveSetListButton.text)
+                _LegoSetIOManager.saveProject()
             }
         }
 

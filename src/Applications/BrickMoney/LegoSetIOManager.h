@@ -15,6 +15,8 @@ public:
 
     void setLegoSetTableModel(QSharedPointer<LegoSetTableModel> legoSetTableModel);
 
+    Q_INVOKABLE void saveProject();
+
 public: Q_PROPERTY(QString ProjectFolder WRITE setProjectFolder READ projectFolder NOTIFY projectFolderChanged)
 public: void setProjectFolder(QString folder);
 public: QString projectFolder();
@@ -31,6 +33,8 @@ private:
     bool mIsProjectReady;
 
     bool isProjectFolderValid(const QString& projectFolder);
+
+    QString toLocalFile(const QString& projectFolder);
 };
 
 #endif // LEGOSETIOMANAGER_H

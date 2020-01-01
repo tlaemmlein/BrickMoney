@@ -4,6 +4,7 @@
 #include <QAbstractTableModel>
 
 #include <QLinkedList>
+#include <QTextStream>
 
 class LegoSetTableModel : public QAbstractTableModel
 {
@@ -36,7 +37,9 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE int roleID(QString roleName);
-signals:
+
+    void saveDataTo(const QChar& separator, QTextStream& out) const;
+
 
 public slots:
 
@@ -45,9 +48,10 @@ public slots:
     void clearAll();
 
 private:
-    struct TableData
+
+    struct LegoSetTableData
     {
-        TableData(QString new_image, int new_setnumber, QString new_description): image(new_image),
+        LegoSetTableData(QString new_image, int new_setnumber, QString new_description): image(new_image),
             setnumber(new_setnumber), description(new_description)
         {}
 
@@ -58,7 +62,8 @@ private:
         static const int count = 3;
     };
 
-    QList< TableData > table;
+
+    QList< LegoSetTableData > mLegoSetTableData;
 };
 
 

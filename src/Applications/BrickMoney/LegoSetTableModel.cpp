@@ -6,20 +6,20 @@
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
     setObjectName("TableModel");
-//    table.append(TableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(TableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
+//    table.append(LegoSetTableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
+//    table.append(LegoSetTableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
+//    table.append(LegoSetTableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
+//    table.append(LegoSetTableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
 {
-    return table.size();
+    return mLegoSetTableData.size();
 }
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return TableData::count;
+    return LegoSetTableData::count;
 }
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
@@ -31,12 +31,12 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 
 //    qDebug() << "index.row(): " << index.row();
 //    qDebug() << "table.size(): " << table.size();
-    if (index.row() >= table.size() || table.size() < 0)
+    if (index.row() >= mLegoSetTableData.size() || mLegoSetTableData.size() < 0)
         return QVariant();
 
 //    qDebug() << "role: " << role;
 
-    TableData row = table.at(index.row());
+    LegoSetTableData row = mLegoSetTableData.at(index.row());
 //    qDebug() << "row: " << row;
 //    qDebug() << "row.size(): " << row.size();
 
@@ -89,8 +89,8 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     if (!index.isValid() )
         return false;
 
-    if ( index.row() < 0 || index.row() >= table.size() ||
-        index.column() < 0 || index.column() >= TableData::count)
+    if ( index.row() < 0 || index.row() >= mLegoSetTableData.size() ||
+        index.column() < 0 || index.column() >= LegoSetTableData::count)
         return false;
 
     switch (role) {
@@ -102,12 +102,12 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     {
 //        qDebug() << value.toInt();
 //        qDebug() << table.at(index.row()).setnumber;
-        table[index.row()].setnumber = value.toInt();
+        mLegoSetTableData[index.row()].setnumber = value.toInt();
         break;
     }
     case DescriptionRole:
     {
-        table[index.row()].description = value.toString();
+        mLegoSetTableData[index.row()].description = value.toString();
         break;
     }
     default:
@@ -147,7 +147,7 @@ void LegoSetTableModel::clearAll()
 {
     //qDebug() << "+++ " << __FUNCTION__;
     beginResetModel();
-    table.clear();
+    mLegoSetTableData.clear();
     endResetModel();
     //qDebug() << "--- " <<__FUNCTION__;
 }
@@ -162,7 +162,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-        table.append(TableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
+        mLegoSetTableData.append(LegoSetTableData("qrc:/images/WonderWoman.png", mLegoSetTableData.size(), QString("Beschreibung %1").arg(mLegoSetTableData.size())));
 //        qDebug() << "row +i: " << row +i;
     }
 
@@ -177,7 +177,7 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 //    qDebug() << "count: " << count;
 //    qDebug() << "row: " << row;
 
-    if ( row >= table.size())
+    if ( row >= mLegoSetTableData.size())
     {
         return false;
     }
@@ -190,7 +190,7 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 
     beginRemoveRows(QModelIndex(), row, row + count - 1);
 
-    table.removeAt(row);
+    mLegoSetTableData.removeAt(row);
 
     endRemoveRows();
 
@@ -227,3 +227,12 @@ int LegoSetTableModel::roleID(QString roleName)
 
     return -1;
 }
+
+void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
+{
+    for(const auto & entry : mLegoSetTableData)
+    {
+        out << entry.image << sep << entry.setnumber << sep << entry.description << "\n";
+    }
+}
+

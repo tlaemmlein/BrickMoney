@@ -23,6 +23,35 @@ void LegoSetIOManager::setLegoSetTableModel(QSharedPointer<LegoSetTableModel> le
     mLegoSetTableModel = legoSetTableModel;
 }
 
+void LegoSetIOManager::saveProject()
+{
+    qDebug() << "+++ " << __FUNCTION__;
+
+    if ( !mLegoSetTableModel )
+        return;
+
+    if ( !isProjectReady() )
+        return;
+
+    QString csvPath = projectFolder() + "/brick_money.csv";
+
+    qDebug() << "Write to " << csvPath;
+
+    QFile cvsData(csvPath);
+
+    if ( !cvsData.open(QFile::WriteOnly))
+    {
+        qDebug() << "Could not write to " << csvPath;
+        return;
+    }
+
+    QTextStream output(&cvsData);
+
+    mLegoSetTableModel->saveDataTo(';', output);
+
+    qDebug() << "--- " << __FUNCTION__;
+}
+
 void LegoSetIOManager::setProjectFolder(QString folder)
 {
     if ( !isProjectFolderValid(folder))
@@ -37,9 +66,11 @@ void LegoSetIOManager::setProjectFolder(QString folder)
     mIsProjectReady = true;
     emit projectReadyChanged();
 
-    if ( mProjectFolder != folder)
+    const QString new_project_folder = toLocalFile(folder);
+
+    if ( mProjectFolder != new_project_folder)
     {
-        mProjectFolder = folder;
+        mProjectFolder = new_project_folder;
         emit projectFolderChanged();
     }
 }
@@ -55,13 +86,7 @@ bool LegoSetIOManager::isProjectFolderValid(const QString& projectFolder)
 
     qDebug() << "projectFolder: " << projectFolder;
 
-    QUrl url(projectFolder);
-
-    QString path = url.toLocalFile();
-
-    qDebug() <<  path;
-
-    QDir projDir(path);
+    QDir projDir(toLocalFile(projectFolder));
 
     if ( !projDir.exists() )
     {
@@ -76,4 +101,11 @@ bool LegoSetIOManager::isProjectFolderValid(const QString& projectFolder)
     }
 
     return true;
+}
+
+QString LegoSetIOManager::toLocalFile(const QString &projectFolder)
+{
+    QUrl url(projectFolder);
+
+    return url.toLocalFile();
 }
