@@ -11,6 +11,7 @@ LegoSetIOManager::LegoSetIOManager(QObject *parent): QObject(parent)
 
 }
 
+
 bool LegoSetIOManager::isProjectFolderReady(const QString& projectFolder)
 {
     qDebug() << "+++ " << __FUNCTION__;
@@ -40,8 +41,16 @@ bool LegoSetIOManager::isProjectFolderReady(const QString& projectFolder)
     return true;
 }
 
+void LegoSetIOManager::setLegoSetTableModel(QSharedPointer<LegoSetTableModel> legoSetTableModel)
+{
+    mLegoSetTableModel = legoSetTableModel;
+}
+
 void LegoSetIOManager::setProjectFolder(QString folder)
 {
+    if ( mLegoSetTableModel )
+        mLegoSetTableModel->clearAll();
+
     if ( mProjectFolder != folder)
     {
         mProjectFolder = folder;

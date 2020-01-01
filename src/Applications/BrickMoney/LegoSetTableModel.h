@@ -42,6 +42,7 @@ public slots:
 
     void newEntry();
     void deleteEntry(int rowIndex);
+    void clearAll();
 
 private:
     struct TableData

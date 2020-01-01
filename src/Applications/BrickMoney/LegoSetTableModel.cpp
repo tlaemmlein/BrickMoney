@@ -145,7 +145,16 @@ void LegoSetTableModel::deleteEntry(int rowIndex)
 //        qDebug() << "Row " << rowIndex << " deleted.";
     }
 
-//    qDebug() << "--- " <<__FUNCTION__;
+    //    qDebug() << "--- " <<__FUNCTION__;
+}
+
+void LegoSetTableModel::clearAll()
+{
+    //qDebug() << "+++ " << __FUNCTION__;
+    beginResetModel();
+    table.clear();
+    endResetModel();
+    //qDebug() << "--- " <<__FUNCTION__;
 }
 
 
