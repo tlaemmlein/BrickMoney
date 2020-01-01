@@ -67,6 +67,7 @@ ApplicationWindow {
             anchors.left: openSetListButton.right
             anchors.leftMargin: 5
             height: 40
+            enabled: _LegoSetIOManager.isProjectReady
             onClicked: {
                 console.log(saveSetListButton.text)
             }
@@ -80,6 +81,7 @@ ApplicationWindow {
             anchors.left: saveSetListButton.right
             anchors.leftMargin: 5
             height: 40
+            enabled: _LegoSetIOManager.isProjectReady
             onClicked: {
                 console.log(saveAsSetListButton.text)
             }
@@ -147,7 +149,7 @@ ApplicationWindow {
         title: "Please choose or create an empty brickMoney project folder"
         onAccepted: {
             console.log("You chose: " + folderDialog.folder)
-            if (!_LegoSetIOManager.isProjectFolderReady(folderDialog.folder))
+            if (!_LegoSetIOManager.isProjectFolderValid(folderDialog.folder))
             {
                 errorMessageDialog.open()
                 return;
@@ -180,6 +182,7 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.leftMargin: 5
             height: 40
+            enabled: _LegoSetIOManager.isProjectReady
             onClicked: {
                 //console.log("Add")
                 _LegoSetTableModel.newEntry()

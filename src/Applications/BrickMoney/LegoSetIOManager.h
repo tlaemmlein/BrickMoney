@@ -13,18 +13,25 @@ class LegoSetIOManager : public QObject
 public:
     explicit LegoSetIOManager(QObject *parent = nullptr);
 
-    Q_INVOKABLE bool isProjectFolderReady(const QString& projectFolder);
+    Q_INVOKABLE bool isProjectFolderValid(const QString& projectFolder);
 
     void setLegoSetTableModel(QSharedPointer<LegoSetTableModel> legoSetTableModel);
 
-Q_PROPERTY(QString ProjectFolder WRITE setProjectFolder READ projectFolder NOTIFY projectFolderChange)
+Q_PROPERTY(QString ProjectFolder WRITE setProjectFolder READ projectFolder NOTIFY projectFolderChanged)
 public: void setProjectFolder(QString folder);
 public: QString projectFolder();
 private: QString mProjectFolder;
-signals: void projectFolderChange();
+signals: void projectFolderChanged();
+
+public:
+Q_PROPERTY(bool isProjectReady READ isProjectReady NOTIFY projectReadyChanged)
+public: bool isProjectReady();
+signals: void projectReadyChanged();
 
 private:
     QSharedPointer<LegoSetTableModel> mLegoSetTableModel;
+
+    bool mIsProjectReady;
 
 };
 
