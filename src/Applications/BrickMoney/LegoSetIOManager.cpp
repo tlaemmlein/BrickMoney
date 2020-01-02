@@ -52,6 +52,37 @@ void LegoSetIOManager::saveProject()
     qDebug() << "--- " << __FUNCTION__;
 }
 
+void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
+{
+    qDebug() << "+++ " << __FUNCTION__;
+
+    if ( !mLegoSetTableModel )
+        return;
+
+    setProjectFolder(projectFolderToLoad);
+
+    if (!isProjectReady())
+        return;
+
+    QString csvPath = projectFolder() + "/brick_money.csv";
+
+    qDebug() << "Read from " << csvPath;
+
+    QFile cvsData(csvPath);
+
+    if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
+    {
+        qDebug() << "Could not read from " << csvPath;
+        return;
+    }
+
+    QTextStream input(&cvsData);
+
+    mLegoSetTableModel->loadDataFrom(';', input);
+
+    qDebug() << "--- " << __FUNCTION__;
+}
+
 void LegoSetIOManager::setProjectFolder(QString folder)
 {
     if ( !isProjectFolderValid(folder))
@@ -91,12 +122,6 @@ bool LegoSetIOManager::isProjectFolderValid(const QString& projectFolder)
     if ( !projDir.exists() )
     {
         qDebug() << "!exists";
-        return false;
-    }
-
-    if ( !projDir.isEmpty())
-    {
-        qDebug() << "!isEmpty";
         return false;
     }
 

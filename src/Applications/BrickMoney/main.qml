@@ -9,7 +9,7 @@ import QtQuick.Controls.Material 2.1
 import Qt.labs.platform 1.1
 
 ApplicationWindow {
-    id: window
+    id: mainWindow
     visible: true
     width: 640
     height: 480
@@ -42,7 +42,7 @@ ApplicationWindow {
             height: 40
             onClicked: {
                 console.log(newSetListButton.text)
-                folderDialog.open()
+                newProjectFolderDialog.open()
             }
         }
 
@@ -56,6 +56,7 @@ ApplicationWindow {
             height: 40
             onClicked: {
                 console.log(openSetListButton.text)
+                openProjectDialog.open()
             }
         }
 
@@ -74,24 +75,10 @@ ApplicationWindow {
             }
         }
 
-        Button{
-            id: saveAsSetListButton
-            text: "Save as"
-            highlighted: true
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: saveSetListButton.right
-            anchors.leftMargin: 5
-            height: 40
-            enabled: _LegoSetIOManager.isProjectReady
-            onClicked: {
-                console.log(saveAsSetListButton.text)
-            }
-        }
-
         Rectangle {
             id: legoSetProjectNameRect
             width: 195
-            anchors.left: saveAsSetListButton.right
+            anchors.left: saveSetListButton.right
             anchors.top: buttonBarManageSetList.top
             anchors.topMargin: 5
             anchors.leftMargin: 5
@@ -131,14 +118,14 @@ ApplicationWindow {
     MessageDialog {
         id: errorMessageDialog
         title: "Error with brickMoney folder"
-        text: "The brickMoney project folder is not empty."
+        text: "The brickMoney project folder is not ready."
         onVisibleChanged: overlayRect.visible = visible
     }
 
     Rectangle {
         id: overlayRect
-        width: window.width;
-        height: window.height;
+        width: mainWindow.width;
+        height: mainWindow.height;
         color: "#0f0000"
         z: 5
         opacity: 0.75
@@ -146,11 +133,28 @@ ApplicationWindow {
     }
 
     FolderDialog {
-        id: folderDialog
-        title: "Please choose or create an empty brickMoney project folder"
+        id: newProjectFolderDialog
+        title: "Please choose or create a folder for the BrickMoney project"
         onAccepted: {
-            console.log("You chose: " + folderDialog.folder)
-            _LegoSetIOManager.ProjectFolder = folderDialog.folder
+            console.log("You chose: " + newProjectFolderDialog.folder)
+            _LegoSetIOManager.ProjectFolder = newProjectFolderDialog.folder
+            if (!_LegoSetIOManager.isProjectReady)
+            {
+                errorMessageDialog.open()
+                return;
+            }
+        }
+        onRejected: {
+            console.log("Canceled")
+        }
+    }
+
+    FolderDialog {
+        id: openProjectDialog
+        title: "Please select BrickMoney project folder"
+        onAccepted: {
+            console.log("You chose: " + openProjectDialog.folder)
+            _LegoSetIOManager.loadProject(openProjectDialog.folder)
             if (!_LegoSetIOManager.isProjectReady)
             {
                 errorMessageDialog.open()
@@ -278,7 +282,8 @@ ApplicationWindow {
         anchors.leftMargin: 5
         anchors.top: buttonBarChangeSetList.bottom
         anchors.topMargin: 5
-        width: parent.width -5
+        anchors.right: parent.right
+        anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height
                 - buttonBarManageSetList.height -15
         clip: true
@@ -364,14 +369,6 @@ ApplicationWindow {
 
 
 }
-
-
-
-
-
-
-
-
 
 
 

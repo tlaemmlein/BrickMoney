@@ -236,3 +236,19 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
     }
 }
 
+void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in)
+{
+    beginResetModel();
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList row = line.split(sep);
+        if (row.size() != LegoSetTableData::count)
+            continue;
+
+        mLegoSetTableData.append(LegoSetTableData(row.at(0), row.at(1).toInt(), row.at(2)));
+    }
+
+    endResetModel();
+}
+
