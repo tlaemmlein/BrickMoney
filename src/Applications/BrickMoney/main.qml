@@ -6,6 +6,7 @@ import LegoSetIOManager 0.1
 import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as C1
 import QtQuick.Controls.Material 2.1
+import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.1
 
 ApplicationWindow {
@@ -322,11 +323,39 @@ ApplicationWindow {
             role: "image"
             title: "Bild"
             width: 100
-            delegate: Image {
+            delegate:
+                Image {
+                id:  tableViewImage
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
                 source: styleData.value
+
+                TextField {
+                    id: tableViewImageUrl
+                    text: styleData.value
+                    anchors.left: tableViewImage.left
+                    anchors.right: tableViewImage.right
+                    anchors.top: tableViewImage.top
+                    visible: false
+                    font.pixelSize: 12
+                    readOnly: true
+                }
+
+                MouseArea {
+                    hoverEnabled: true
+                    anchors.fill: parent
+                    onEntered: {
+                        //console.log("entered");
+                        tableViewImageUrl.visible = true
+                        tableViewImageUrl.forceActiveFocus()
+                    }
+                    onExited: {
+                        //console.log("exited")
+                        tableViewImageUrl.visible = false
+                    }
+                }
             }
+
         }
 
         C1.TableViewColumn {
@@ -342,7 +371,7 @@ ApplicationWindow {
                 onEditingFinished: {
                     var roleID = _LegoSetTableModel.roleID(setNumColumn.role)
                     var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                    var data_changed = _LegoSetTableModel.setData(q_model_index, text, roleID)
+                    _LegoSetTableModel.setData(q_model_index, text, roleID)
                 }
             }
 
@@ -360,7 +389,7 @@ ApplicationWindow {
                 onEditingFinished: {
                     var roleID = _LegoSetTableModel.roleID(descColumn.role)
                     var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                    var data_changed = _LegoSetTableModel.setData(q_model_index, text, roleID)
+                    _LegoSetTableModel.setData(q_model_index, text, roleID)
                 }
             }
         }
