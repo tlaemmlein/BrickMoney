@@ -40,7 +40,7 @@ public:
 
     void saveDataTo(const QChar& separator, QTextStream& out) const;
 
-    void loadDataFrom(const QChar& separator, QTextStream& in);
+    void loadDataFrom(const QChar& separator, QTextStream& in, const QString& projectFolder);
 
 public slots:
 

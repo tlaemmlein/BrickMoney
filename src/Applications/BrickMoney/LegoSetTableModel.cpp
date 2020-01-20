@@ -2,6 +2,9 @@
 
 #include <QDebug>
 #include <QScopeGuard>
+#include <QFile>
+#include <QUrl>
+#include <QResource>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
@@ -236,7 +239,7 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
     }
 }
 
-void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in)
+void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QString &projectFolder)
 {
     beginResetModel();
 
@@ -246,7 +249,25 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in)
         if (row.size() != LegoSetTableData::count)
             continue;
 
-        mLegoSetTableData.append(LegoSetTableData(row.at(0), row.at(1).toInt(), row.at(2)));
+        QString imageName = row.at(0);
+        QFile file(imageName);
+        file.open(QIODevice::ReadOnly);
+        QUrl url = QUrl::fromLocalFile(file.fileName());
+
+        if (!file.exists())
+        {
+            //qDebug() << "Not exists 1";
+            QFile file2(projectFolder + "/images/" + imageName);
+            file2.open(QIODevice::ReadOnly);
+            if (!file2.exists())
+            {
+                //qDebug() << "Not exists 2";
+                continue;
+            }
+            url = QUrl::fromLocalFile(file2.fileName());
+        }
+
+        mLegoSetTableData.append(LegoSetTableData(url.toString(), row.at(1).toInt(), row.at(2)));
     }
 
     endResetModel();

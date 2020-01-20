@@ -78,7 +78,7 @@ void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
 
     QTextStream input(&cvsData);
 
-    mLegoSetTableModel->loadDataFrom(';', input);
+    mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
 
     qDebug() << "--- " << __FUNCTION__;
 }
