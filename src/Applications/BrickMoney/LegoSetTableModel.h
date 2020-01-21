@@ -13,7 +13,8 @@ class LegoSetTableModel : public QAbstractTableModel
     enum TableRoles{
         ImageRole = Qt::UserRole +1,
         SetNumberRole,
-        DescriptionRole
+        DescriptionRole,
+        YearRole
     };
 
 
@@ -52,15 +53,16 @@ private:
 
     struct LegoSetTableData
     {
-        LegoSetTableData(QString new_image, int new_setnumber, QString new_description): image(new_image),
-            setnumber(new_setnumber), description(new_description)
+        LegoSetTableData(QString new_image, int new_setnumber, QString new_description, int new_year): image(new_image),
+            setnumber(new_setnumber), description(new_description), year(new_year)
         {}
 
         QString image;
         int setnumber;
         QString description;
+        int year;
 
-        static const int count = 3;
+        static const int count = 4;
     };
 
 

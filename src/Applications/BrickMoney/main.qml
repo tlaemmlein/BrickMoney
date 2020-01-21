@@ -337,7 +337,7 @@ ApplicationWindow {
                     anchors.right: tableViewImage.right
                     anchors.top: tableViewImage.top
                     visible: false
-                    font.pixelSize: 12
+                    font.pixelSize: 10
                     readOnly: true
                 }
 
@@ -393,6 +393,26 @@ ApplicationWindow {
                 }
             }
         }
+
+        C1.TableViewColumn {
+            id: yearColumn
+            role: "year"
+            title: "Year"
+            width: 100
+            delegate: TextField {
+                anchors.fill: parent
+                validator: IntValidator {bottom: 0; top: 2147483647;}
+                selectByMouse: true
+                text: styleData.value
+                onEditingFinished: {
+                    var roleID = _LegoSetTableModel.roleID(yearColumn.role)
+                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                    _LegoSetTableModel.setData(q_model_index, text, roleID)
+                }
+            }
+
+        }
+
     }
 
 

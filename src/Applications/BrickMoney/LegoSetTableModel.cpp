@@ -9,10 +9,6 @@
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
     setObjectName("TableModel");
-//    table.append(LegoSetTableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt1.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(LegoSetTableData("https://www.brickmerge.de/img/sets/l/LEGO_41599_alt3.jpg", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(LegoSetTableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
-//    table.append(LegoSetTableData("qrc:/images/WonderWoman.png", table.size(), QString("Beschreibung %1").arg(table.size())));
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
@@ -55,6 +51,10 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     case DescriptionRole:
     {
         return QVariant(row.description);
+    }
+    case YearRole:
+    {
+        return QVariant(row.year);
     }
     default:
         break;
@@ -113,6 +113,11 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
         mLegoSetTableData[index.row()].description = value.toString();
         break;
     }
+    case YearRole:
+    {
+        mLegoSetTableData[index.row()].year = value.toInt();
+        break;
+    }
     default:
         break;
     }
@@ -165,7 +170,9 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-        mLegoSetTableData.append(LegoSetTableData("qrc:/images/WonderWoman.png", mLegoSetTableData.size(), QString("Beschreibung %1").arg(mLegoSetTableData.size())));
+        mLegoSetTableData.append(LegoSetTableData("qrc:/images/WonderWoman.png", mLegoSetTableData.size(),
+                                                  QString("Beschreibung %1").arg(mLegoSetTableData.size())
+                                                  ,2018));
 //        qDebug() << "row +i: " << row +i;
     }
 
@@ -209,6 +216,7 @@ QHash<int, QByteArray> LegoSetTableModel::roleNames() const
     roles[ImageRole] = "image";
     roles[SetNumberRole] = "setnumber";
     roles[DescriptionRole] = "description";
+    roles[YearRole] = "year";
     return roles;
 }
 
@@ -226,6 +234,11 @@ int LegoSetTableModel::roleID(QString roleName)
     if ( roleName =="description" )
     {
         return DescriptionRole;
+    }
+
+    if ( roleName =="year" )
+    {
+        return YearRole;
     }
 
     return -1;
@@ -267,7 +280,7 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
             url = QUrl::fromLocalFile(file2.fileName());
         }
 
-        mLegoSetTableData.append(LegoSetTableData(url.toString(), row.at(1).toInt(), row.at(2)));
+        mLegoSetTableData.append(LegoSetTableData(url.toString(), row.at(1).toInt(), row.at(2), row.at(3).toInt()));
     }
 
     endResetModel();
