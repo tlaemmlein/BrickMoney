@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Dialogs 1.3
 import QtQuick.Window 2.12
-import LegoSetTableModel 0.1
 import LegoSetIOManager 0.1
 import QtQuick.Controls 2.12
 import QtQuick.Controls 1.4 as C1
@@ -167,7 +166,6 @@ ApplicationWindow {
         }
     }
 
-
     Rectangle {
         id: buttonBarChangeSetList
         width: parent.width -10
@@ -192,9 +190,9 @@ ApplicationWindow {
             onClicked: {
                 //console.log("Add")
                 _LegoSetTableModel.newEntry()
-                tableView.positionViewAtRow(_LegoSetTableModel.rowCount() -1)
-                tableView.selection.clear()
-                tableView.selection.select(_LegoSetTableModel.rowCount() -1)
+                legoTable.positionViewAtRow(_LegoSetTableModel.rowCount() -1)
+                legoTable.selection.clear()
+                legoTable.selection.select(_LegoSetTableModel.rowCount() -1)
             }
         }
 
@@ -203,7 +201,7 @@ ApplicationWindow {
             text: "Delete"
             highlighted: true
             flat: false
-            enabled: tableView.selection.count > 0 ? true: false
+            enabled: legoTable.selection.count > 0 ? true: false
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: addButton.right
             anchors.leftMargin: 5
@@ -217,12 +215,12 @@ ApplicationWindow {
 
                 var deletedRowIndex = 0
 
-                tableView.selection.forEach( function(rowIndex) {
+                legoTable.selection.forEach( function(rowIndex) {
                     //console.log(rowIndex)
                     _LegoSetTableModel.deleteEntry(rowIndex)
                     deletedRowIndex = rowIndex
                 } )
-                tableView.selection.clear()
+                legoTable.selection.clear()
 
                 if ( _LegoSetTableModel.rowCount() === 0)
                 {
@@ -233,13 +231,13 @@ ApplicationWindow {
 
                 if (deletedRowIndex <  _LegoSetTableModel.rowCount() )
                 {
-                    tableView.selection.select(deletedRowIndex)
+                    legoTable.selection.select(deletedRowIndex)
                     return
                 }
 
                 if (deletedRowIndex-1 >= 0 )
                 {
-                    tableView.selection.select(deletedRowIndex-1)
+                    legoTable.selection.select(deletedRowIndex-1)
                 }
 
             }
@@ -250,12 +248,12 @@ ApplicationWindow {
             text: "Clear Selection"
             highlighted: true
             flat: false
-            enabled: tableView.selection.count
+            enabled: legoTable.selection.count
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: deleteButton.right
             anchors.leftMargin: 5
             height: 40
-            onClicked: tableView.selection.clear()
+            onClicked: legoTable.selection.clear()
         }
 
         Slider {
@@ -276,152 +274,11 @@ ApplicationWindow {
 
     }
 
-
-    C1.TableView {
-        id: tableView
-        anchors.left: parent.left
-        anchors.leftMargin: 5
-        anchors.top: buttonBarChangeSetList.bottom
-        anchors.topMargin: 5
-        anchors.right: parent.right
-        anchors.rightMargin: 5
-        height: parent.height - buttonBarChangeSetList.height
-                - buttonBarManageSetList.height -15
-        clip: true
-
-        model: _LegoSetTableModel
-
-        headerDelegate:
-            Rectangle {
-            color: "#808080"
-            Text {
-                text: styleData.value
-                minimumPixelSize: 12
-                font.pixelSize: 14
-            }
-            width: childrenRect.width
-            height: childrenRect.height
-        }
-
-        rowDelegate: Rectangle {
-            height: zoomSlider.value
-            SystemPalette {
-                id: myPalette;
-                colorGroup: SystemPalette.Active
-            }
-            color: {
-                //                var baseColor = styleData.alternate ? myPalette.alternateBase : myPalette.base
-                var baseColor = styleData.alternate ? "#FFFFFF" : "#f5f5f5"
-                styleData.selected ? "#03A9F4" : baseColor
-                //return styleData.selected ? myPalette.highlight : baseColor
-            }
-
-        }
-
-        C1.TableViewColumn {
-            id: imageColumn
-            role: "image"
-            title: "Bild"
-            width: 100
-            delegate:
-                Image {
-                id:  tableViewImage
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                source: styleData.value
-
-                TextField {
-                    id: tableViewImageUrl
-                    text: styleData.value
-                    anchors.left: tableViewImage.left
-                    anchors.right: tableViewImage.right
-                    anchors.top: tableViewImage.top
-                    visible: false
-                    font.pixelSize: 10
-                    readOnly: true
-                }
-
-                MouseArea {
-                    hoverEnabled: true
-                    anchors.fill: parent
-                    onEntered: {
-                        //console.log("entered");
-                        tableViewImageUrl.visible = true
-                        tableViewImageUrl.forceActiveFocus()
-                    }
-                    onExited: {
-                        //console.log("exited")
-                        tableViewImageUrl.visible = false
-                    }
-                }
-            }
-
-        }
-
-        C1.TableViewColumn {
-            id: setNumColumn
-            role: "setnumber"
-            title: "Set Nummer"
-            width: 100
-            delegate: TextField {
-                anchors.fill: parent
-                validator: IntValidator {bottom: 0; top: 2147483647;}
-                selectByMouse: true
-                text: styleData.value
-                onEditingFinished: {
-                    var roleID = _LegoSetTableModel.roleID(setNumColumn.role)
-                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                    _LegoSetTableModel.setData(q_model_index, text, roleID)
-                }
-            }
-
-        }
-
-        C1.TableViewColumn {
-            id: descColumn
-            role: "description"
-            title: "Bezeichnung"
-            width: 100
-            delegate: TextField {
-                anchors.fill: parent
-                text: styleData.value
-                selectByMouse: true
-                onEditingFinished: {
-                    var roleID = _LegoSetTableModel.roleID(descColumn.role)
-                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                    _LegoSetTableModel.setData(q_model_index, text, roleID)
-                }
-            }
-        }
-
-        C1.TableViewColumn {
-            id: yearColumn
-            role: "year"
-            title: "Year"
-            width: 100
-            delegate: TextField {
-                anchors.fill: parent
-                validator: IntValidator {bottom: 0; top: 2147483647;}
-                selectByMouse: true
-                text: styleData.value
-                onEditingFinished: {
-                    var roleID = _LegoSetTableModel.roleID(yearColumn.role)
-                    var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                    _LegoSetTableModel.setData(q_model_index, text, roleID)
-                }
-            }
-
-        }
-
+    LegoTable {
+        id: legoTable
     }
 
-
-
 }
 
 
 
-/*##^## Designer {
-    D{i:7;anchors_x:53;anchors_y:13}D{i:8;anchors_x:52}
-}
- ##^##*/
