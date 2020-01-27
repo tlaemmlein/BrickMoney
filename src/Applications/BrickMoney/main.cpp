@@ -1,16 +1,20 @@
+#include "Logging.h"
+SET_LOGGER("BrickMoney.Main")
+
 #include "LegoSetTableModel.h"
+
 #include "LegoSetIOManager.h"
 
-#include <log4cplus/logger.h>
-#include <log4cplus/loggingmacros.h>
-#include <log4cplus/configurator.h>
-#include <log4cplus/initializer.h>
 #include <log4cplus/consoleappender.h>
+#include <log4cplus/initializer.h>
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QAbstractTableModel>
 #include <QQmlContext>
+
+using namespace log4cplus;
+using namespace log4cplus::helpers;
 
 
 int main(int argc, char *argv[])
@@ -18,12 +22,14 @@ int main(int argc, char *argv[])
 //    // Initialization and deinitialization.
     log4cplus::Initializer initializer;
 
-    log4cplus::BasicConfigurator config;
-    config.configure();
+	SharedObjectPtr<Appender> console_appender(new ConsoleAppender());
+	console_appender->setName(LOG4CPLUS_TEXT("BrickMoneyConsole"));
 
-    log4cplus::Logger logger = log4cplus::Logger::getInstance(
-        LOG4CPLUS_TEXT("main"));
-    LOG4CPLUS_WARN(logger, LOG4CPLUS_TEXT("Hello, World!"));
+	log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
+	console_appender->setLayout(std::unique_ptr<Layout>(new PatternLayout(pattern)));
+	Logger::getRoot().addAppender(console_appender);
+
+    LOG_INFO("Start BrickMoney");
 
     qputenv("QT_QUICK_CONTROLS_STYLE", "universal");
 
@@ -44,7 +50,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-
 
     return app.exec();
 }
