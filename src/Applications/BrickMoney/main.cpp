@@ -1,13 +1,30 @@
+#include "LegoSetTableModel.h"
+#include "LegoSetIOManager.h"
+
+#include <log4cplus/logger.h>
+#include <log4cplus/loggingmacros.h>
+#include <log4cplus/configurator.h>
+#include <log4cplus/initializer.h>
+#include <log4cplus/consoleappender.h>
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QAbstractTableModel>
 #include <QQmlContext>
 
-#include "LegoSetTableModel.h"
-#include "LegoSetIOManager.h"
 
 int main(int argc, char *argv[])
 {
+//    // Initialization and deinitialization.
+    log4cplus::Initializer initializer;
+
+    log4cplus::BasicConfigurator config;
+    config.configure();
+
+    log4cplus::Logger logger = log4cplus::Logger::getInstance(
+        LOG4CPLUS_TEXT("main"));
+    LOG4CPLUS_WARN(logger, LOG4CPLUS_TEXT("Hello, World!"));
+
     qputenv("QT_QUICK_CONTROLS_STYLE", "universal");
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
