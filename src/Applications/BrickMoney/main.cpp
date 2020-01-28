@@ -22,12 +22,14 @@ int main(int argc, char *argv[])
 //    // Initialization and deinitialization.
     log4cplus::Initializer initializer;
 
-	SharedObjectPtr<Appender> console_appender(new ConsoleAppender());
+    SharedObjectPtr<Appender> console_appender(new ConsoleAppender(false, true));
 	console_appender->setName(LOG4CPLUS_TEXT("BrickMoneyConsole"));
 
 	log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
 	console_appender->setLayout(std::unique_ptr<Layout>(new PatternLayout(pattern)));
 	Logger::getRoot().addAppender(console_appender);
+
+    Logger::getRoot().setLogLevel(TRACE_LOG_LEVEL);
 
     LOG_INFO("Start BrickMoney");
 

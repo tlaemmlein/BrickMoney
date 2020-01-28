@@ -1,7 +1,9 @@
+#include "Logging.h"
+SET_LOGGER("BrickMoney.LegoSetIOManager")
+
 #include "LegoSetIOManager.h"
 
 #include <QDir>
-#include <QDebug>
 #include <QUrl>
 
 
@@ -25,7 +27,7 @@ void LegoSetIOManager::setLegoSetTableModel(QSharedPointer<LegoSetTableModel> le
 
 void LegoSetIOManager::saveProject()
 {
-    qDebug() << "+++ " << __FUNCTION__;
+    LOG_SCOPE_METHOD(L"");
 
     if ( !mLegoSetTableModel )
         return;
@@ -35,26 +37,24 @@ void LegoSetIOManager::saveProject()
 
     QString csvPath = projectFolder() + "/brick_money.csv";
 
-    qDebug() << "Write to " << csvPath;
+    LOG_INFO("Write to " << csvPath.toStdWString());
 
     QFile cvsData(csvPath);
 
     if ( !cvsData.open(QFile::WriteOnly))
     {
-        qDebug() << "Could not write to " << csvPath;
+        LOG_ERROR("Could not write to " << csvPath.toStdWString());
         return;
     }
 
     QTextStream output(&cvsData);
 
     mLegoSetTableModel->saveDataTo(';', output);
-
-    qDebug() << "--- " << __FUNCTION__;
 }
 
 void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
 {
-    qDebug() << "+++ " << __FUNCTION__;
+    LOG_SCOPE_METHOD(L"");
 
     if ( !mLegoSetTableModel )
         return;
@@ -66,25 +66,24 @@ void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
 
     QString csvPath = projectFolder() + "/brick_money.csv";
 
-    qDebug() << "Read from " << csvPath;
+    LOG_INFO("Read from " << csvPath.toStdWString());
 
     QFile cvsData(csvPath);
 
     if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
     {
-        qDebug() << "Could not read from " << csvPath;
+        LOG_ERROR("Could not read from " << csvPath.toStdWString());
         return;
     }
 
     QTextStream input(&cvsData);
 
     mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
-
-    qDebug() << "--- " << __FUNCTION__;
 }
 
 void LegoSetIOManager::setProjectFolder(QString folder)
 {
+    LOG_SCOPE_METHOD(L"");
     if ( !isProjectFolderValid(folder))
     {
         mIsProjectReady = false;
@@ -113,15 +112,15 @@ QString LegoSetIOManager::projectFolder()
 
 bool LegoSetIOManager::isProjectFolderValid(const QString& projectFolder)
 {
-    qDebug() << "+++ " << __FUNCTION__;
+    LOG_SCOPE_METHOD(L"");
 
-    qDebug() << "projectFolder: " << projectFolder;
+    LOG_DEBUG("projectFolder: " << projectFolder.toStdWString());
 
     QDir projDir(toLocalFile(projectFolder));
 
     if ( !projDir.exists() )
     {
-        qDebug() << "!exists";
+        LOG_ERROR("projDir doesn't exists: " << projDir.path().toStdWString());
         return false;
     }
 

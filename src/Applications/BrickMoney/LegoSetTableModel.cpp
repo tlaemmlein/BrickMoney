@@ -1,3 +1,6 @@
+#include "Logging.h"
+SET_LOGGER("BrickMoney.LegoSetTableModel")
+
 #include "LegoSetTableModel.h"
 
 #include <QDebug>
@@ -254,6 +257,7 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
 
 void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QString &projectFolder)
 {
+    LOG_SCOPE_METHOD(L"");
     beginResetModel();
 
     while (!in.atEnd()) {
@@ -282,6 +286,9 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
 
         mLegoSetTableData.append(LegoSetTableData(url.toString(), row.at(1).toInt(), row.at(2), row.at(3).toInt()));
     }
+
+    if ( 0 == mLegoSetTableData.size())
+        LOG_ERROR("LegoSetTableData is empty. Nothing to load.");
 
     endResetModel();
 }
