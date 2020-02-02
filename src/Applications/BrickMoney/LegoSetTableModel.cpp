@@ -3,9 +3,8 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 
 #include "LegoSetTableModel.h"
 
-#include <QDebug>
-#include <QScopeGuard>
 #include <QFile>
+#include <QDir>
 #include <QUrl>
 #include <QResource>
 
@@ -26,26 +25,25 @@ int LegoSetTableModel::columnCount(const QModelIndex &) const
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 {
-//    auto cleanup = qScopeGuard([] { qDebug() << "--- " << __FUNCTION__; });
-//    qDebug() << "+++ " << __FUNCTION__;
+	LOG_SCOPE_METHOD(L"");
+
     if (!index.isValid())
         return QVariant();
 
-//    qDebug() << "index.row(): " << index.row();
-//    qDebug() << "table.size(): " << table.size();
+	LOG_DEBUG("index.row(): " << index.row() << " mLegoSetTableData.size(): " << mLegoSetTableData.size());
+
     if (index.row() >= mLegoSetTableData.size() || mLegoSetTableData.size() < 0)
         return QVariant();
 
-//    qDebug() << "role: " << role;
+	LOG_DEBUG("role: " << role);
 
     LegoSetTableData row = mLegoSetTableData.at(index.row());
-//    qDebug() << "row: " << row;
-//    qDebug() << "row.size(): " << row.size();
+	LOG_DEBUG("row.count: " << row.count);
 
     switch (role) {
     case ImageRole:
     {
-        return QVariant(row.image);
+        return QVariant(row.imageData.imageFilePath);
     }
     case SetNumberRole:
     {
@@ -68,6 +66,8 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 
 QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+	LOG_SCOPE_METHOD(L"");
+
     if (role != Qt::DisplayRole)
         return QVariant();
 
@@ -90,8 +90,9 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 
 bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//    qDebug() << __FUNCTION__;
-//    qDebug() << "role: " << role << " r: " << index.row() << " c: " << index.column();
+	LOG_SCOPE_METHOD(L"");
+
+	LOG_DEBUG("role: " << role << " r: " << index.row() << " c: " << index.column());
     if (!index.isValid() )
         return false;
 
@@ -106,8 +107,8 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     }
     case SetNumberRole:
     {
-//        qDebug() << value.toInt();
-//        qDebug() << table.at(index.row()).setnumber;
+		LOG_DEBUG(value.toInt());
+		LOG_DEBUG(mLegoSetTableData.at(index.row()).setnumber);
         mLegoSetTableData[index.row()].setnumber = value.toInt();
         break;
     }
@@ -132,63 +133,59 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
 
 void LegoSetTableModel::newEntry()
 {
-//    qDebug() << "+++ " << __FUNCTION__;
+	LOG_SCOPE_METHOD(L"");
+
     //insertRows(rowCount(), 1, QModelIndex());
     if (insertRow(rowCount()))
     {
-//        qDebug() << "Row inserted";
+		LOG_DEBUG("Row inserted");
     }
-
-//    qDebug() << "--- " <<__FUNCTION__;
 }
 
 void LegoSetTableModel::deleteEntry(int rowIndex)
 {
-//    qDebug() << "+++ " << __FUNCTION__;
+	LOG_SCOPE_METHOD(L"");
 
     if (removeRow(rowIndex))
     {
-//        qDebug() << "Row " << rowIndex << " deleted.";
+		LOG_DEBUG("Row " << rowIndex << " deleted.");
     }
-
-    //    qDebug() << "--- " <<__FUNCTION__;
 }
 
 void LegoSetTableModel::clearAll()
 {
-    //qDebug() << "+++ " << __FUNCTION__;
+	LOG_SCOPE_METHOD(L"");
+
     beginResetModel();
     mLegoSetTableData.clear();
     endResetModel();
-    //qDebug() << "--- " <<__FUNCTION__;
 }
 
 
 bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 {
-//    qDebug() << "+++ " << __FUNCTION__;
-//    qDebug() << "count: " << count;
-//    qDebug() << "row: " << row;
+	LOG_SCOPE_METHOD(L"");
+	LOG_DEBUG("count: " << count);
+	LOG_DEBUG("row: " << row);
     beginInsertRows(QModelIndex(), row, row + count - 1);
 
     for (int i = 0; i < count; ++i)
     {
-        mLegoSetTableData.append(LegoSetTableData("qrc:/images/WonderWoman.png", mLegoSetTableData.size(),
+		mLegoSetTableData.append(LegoSetTableData({ "Empty.svg", "qrc:/images/Empty.svg" }, mLegoSetTableData.size(),
                                                   QString("Beschreibung %1").arg(mLegoSetTableData.size())
                                                   ,2018));
-//        qDebug() << "row +i: " << row +i;
+		LOG_DEBUG("row +i: " << row +i);
     }
 
     endInsertRows();
-//    qDebug() << "--- " <<__FUNCTION__;
     return true;
 }
 
 bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 {
-//    qDebug() << "+++ " << __FUNCTION__;
-//    qDebug() << "count: " << count;
-//    qDebug() << "row: " << row;
+	LOG_SCOPE_METHOD(L"");
+	LOG_DEBUG("count: " << count);
+	LOG_DEBUG("row: " << row);
 
     if ( row >= mLegoSetTableData.size())
     {
@@ -197,7 +194,7 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 
     if ( count > 1)
     {
-//        qDebug() << "Sorry. Only one row can be removed.";
+		LOG_ERROR("Sorry. Only one row can be removed.");
         return false;
     }
 
@@ -206,16 +203,14 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
     mLegoSetTableData.removeAt(row);
 
     endRemoveRows();
-
-//    qDebug() << "--- " <<__FUNCTION__;
     return true;
 }
 
 
 QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 {
-//    qDebug() << __FUNCTION__;
-    QHash<int, QByteArray> roles;
+	LOG_SCOPE_METHOD(L"");
+	QHash<int, QByteArray> roles;
     roles[ImageRole] = "image";
     roles[SetNumberRole] = "setnumber";
     roles[DescriptionRole] = "description";
@@ -225,6 +220,8 @@ QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 
 int LegoSetTableModel::roleID(QString roleName)
 {
+	LOG_SCOPE_METHOD(L"");
+
     if (roleName == "image" )
     {
         return ImageRole;
@@ -251,7 +248,8 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
 {
     for(const auto & entry : mLegoSetTableData)
     {
-        out << entry.image << sep << entry.setnumber << sep << entry.description << "\n";
+        out << entry.imageData.imageName << sep << entry.setnumber 
+			<< sep << entry.description << sep << entry.year << "\n";
     }
 }
 
@@ -263,28 +261,37 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList row = line.split(sep);
-        if (row.size() != LegoSetTableData::count)
-            continue;
+		if (row.size() != LegoSetTableData::count)
+		{
+			LOG_WARN("The number of the imported columns differs from the expected columns. Actual: "
+				     << row.size() << " Expexted: "<< LegoSetTableData::count << ". Read the next line.");
+  		   continue;
+		}
 
         QString imageName = row.at(0);
-        QFile file(imageName);
-        file.open(QIODevice::ReadOnly);
-        QUrl url = QUrl::fromLocalFile(file.fileName());
+		QUrl url = QUrl(imageName);
+		QString localeFile = url.toLocalFile();
+		QString nativeLocaleFile = QDir::toNativeSeparators(localeFile);
+		QFile checkFilePath(nativeLocaleFile);
+		checkFilePath.open(QIODevice::ReadOnly);
+		if (checkFilePath.exists())
+		{
+			LOG_WARN("A complete file path to the image is not expected. ImageFilePath: " << imageName.toStdWString()
+				<< "Read the next line.");
+			continue;
+		}
 
-        if (!file.exists())
-        {
-            //qDebug() << "Not exists 1";
-            QFile file2(projectFolder + "/images/" + imageName);
-            file2.open(QIODevice::ReadOnly);
-            if (!file2.exists())
-            {
-                //qDebug() << "Not exists 2";
-                continue;
-            }
-            url = QUrl::fromLocalFile(file2.fileName());
-        }
+		QString imageFilePathString = projectFolder + "/images/" + imageName;
+		QFile imageFilePath(imageFilePathString);
+		imageFilePath.open(QIODevice::ReadOnly);
+		if (!imageFilePath.exists())
+		{
+			LOG_DEBUG(imageFilePathString.toStdWString() << " doesn't exists. Read the next line.");
+			continue;
+		}
+		url = QUrl::fromLocalFile(imageFilePath.fileName());
 
-        mLegoSetTableData.append(LegoSetTableData(url.toString(), row.at(1).toInt(), row.at(2), row.at(3).toInt()));
+		mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2), row.at(3).toInt()));
     }
 
     if ( 0 == mLegoSetTableData.size())

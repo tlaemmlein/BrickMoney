@@ -50,14 +50,22 @@ public slots:
     void clearAll();
 
 private:
+	struct ImageData
+	{
+		ImageData(QString const& new_imageName, QString const& new_imageFilePath ) : imageName(new_imageName), imageFilePath(new_imageFilePath)
+		{}
+
+		QString imageName; // ImageName + Extension
+		QString imageFilePath; // Full file path
+	};
 
     struct LegoSetTableData
     {
-        LegoSetTableData(QString new_image, int new_setnumber, QString new_description, int new_year): image(new_image),
+        LegoSetTableData(ImageData new_imageData, int new_setnumber, QString new_description, int new_year): imageData(new_imageData),
             setnumber(new_setnumber), description(new_description), year(new_year)
         {}
 
-        QString image;
+		ImageData imageData;
         int setnumber;
         QString description;
         int year;

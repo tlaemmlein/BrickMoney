@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="images/">
+        <file>Empty.svg</file>
         <file>WonderWoman.png</file>
     </qresource>
 </RCC>
