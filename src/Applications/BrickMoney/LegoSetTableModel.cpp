@@ -244,9 +244,34 @@ int LegoSetTableModel::roleID(QString roleName)
     return -1;
 }
 
-void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out) const
+void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QString& projectFolder) const
 {
-    for(const auto & entry : mLegoSetTableData)
+	LOG_SCOPE_METHOD(L"");
+
+	QString imageFolderString = projectFolder + "/images";
+
+	if (!QDir(imageFolderString).exists())
+	{
+		if (!QDir().mkdir(imageFolderString))
+		{
+			LOG_ERROR("Could not create " << imageFolderString.toStdWString());
+			return;
+		}
+	}
+	
+	QString imageFilePathString = imageFolderString + "/Empty.svg";
+	if (!QFileInfo::exists(imageFilePathString))
+	{
+		QFile emptySvgFile(":/images/Empty.svg");
+
+		if (!emptySvgFile.copy(imageFilePathString))
+		{
+			LOG_ERROR("Could not copy from " << emptySvgFile.fileName().toStdWString()
+				<< " to " << imageFilePathString.toStdWString() );
+		}
+	}
+
+	for(const auto & entry : mLegoSetTableData)
     {
         out << entry.imageData.imageName << sep << entry.setnumber 
 			<< sep << entry.description << sep << entry.year << "\n";
@@ -272,9 +297,7 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
 		QUrl url = QUrl(imageName);
 		QString localeFile = url.toLocalFile();
 		QString nativeLocaleFile = QDir::toNativeSeparators(localeFile);
-		QFile checkFilePath(nativeLocaleFile);
-		checkFilePath.open(QIODevice::ReadOnly);
-		if (checkFilePath.exists())
+		if (QFileInfo::exists(nativeLocaleFile))
 		{
 			LOG_WARN("A complete file path to the image is not expected. ImageFilePath: " << imageName.toStdWString()
 				<< "Read the next line.");
@@ -282,14 +305,12 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
 		}
 
 		QString imageFilePathString = projectFolder + "/images/" + imageName;
-		QFile imageFilePath(imageFilePathString);
-		imageFilePath.open(QIODevice::ReadOnly);
-		if (!imageFilePath.exists())
+		if (!QFileInfo::exists(imageFilePathString))
 		{
 			LOG_DEBUG(imageFilePathString.toStdWString() << " doesn't exists. Read the next line.");
 			continue;
 		}
-		url = QUrl::fromLocalFile(imageFilePath.fileName());
+		url = QUrl::fromLocalFile(QFileInfo(imageFilePathString).canonicalFilePath());
 
 		mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2), row.at(3).toInt()));
     }

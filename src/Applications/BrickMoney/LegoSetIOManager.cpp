@@ -49,7 +49,7 @@ void LegoSetIOManager::saveProject()
 
     QTextStream output(&cvsData);
 
-    mLegoSetTableModel->saveDataTo(';', output);
+    mLegoSetTableModel->saveDataTo(';', output, projectFolder());
 }
 
 void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)

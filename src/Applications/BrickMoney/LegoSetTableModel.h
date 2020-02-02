@@ -39,7 +39,7 @@ public:
 
     Q_INVOKABLE int roleID(QString roleName);
 
-    void saveDataTo(const QChar& separator, QTextStream& out) const;
+    void saveDataTo(const QChar& separator, QTextStream& out, const QString& projectFolder) const;
 
     void loadDataFrom(const QChar& separator, QTextStream& in, const QString& projectFolder);
 
