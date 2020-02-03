@@ -2,5 +2,9 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>LegoTable.qml</file>
+        <file>images/LogoBrickMoneyIcon_16.png</file>
+        <file>images/LogoBrickMoneyIcon_32.png</file>
+        <file>images/LogoBrickMoneyIcon_48.png</file>
+        <file>images/LogoBrickMoneyIcon_64.png</file>
     </qresource>
 </RCC>

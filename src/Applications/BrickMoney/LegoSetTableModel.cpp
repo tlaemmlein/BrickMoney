@@ -135,7 +135,6 @@ void LegoSetTableModel::newEntry()
 {
 	LOG_SCOPE_METHOD(L"");
 
-    //insertRows(rowCount(), 1, QModelIndex());
     if (insertRow(rowCount()))
     {
 		LOG_DEBUG("Row inserted");

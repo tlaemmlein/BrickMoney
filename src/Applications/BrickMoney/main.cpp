@@ -12,6 +12,7 @@ SET_LOGGER("BrickMoney.Main")
 #include <QQmlApplicationEngine>
 #include <QAbstractTableModel>
 #include <QQmlContext>
+#include <QIcon>
 
 using namespace log4cplus;
 using namespace log4cplus::helpers;
@@ -19,7 +20,7 @@ using namespace log4cplus::helpers;
 
 int main(int argc, char *argv[])
 {
-//    // Initialization and deinitialization.
+    // Initialization and deinitialization.
     log4cplus::Initializer initializer;
 
     SharedObjectPtr<Appender> console_appender(new ConsoleAppender(false, true));
@@ -37,6 +38,14 @@ int main(int argc, char *argv[])
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
+
+	QIcon icon(":/images/LogoBrickMoneyIcon_16.png");
+	icon.addFile(":/images/LogoBrickMoneyIcon_32.png");
+	icon.addFile(":/images/LogoBrickMoneyIcon_48.png");
+	icon.addFile(":/images/LogoBrickMoneyIcon_64.png");
+
+	app.setWindowIcon(icon);
+
     QCoreApplication::setApplicationName("BrickMoney");
     QCoreApplication::setOrganizationName("Spielolamm");
 
