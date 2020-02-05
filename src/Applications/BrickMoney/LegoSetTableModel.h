@@ -14,7 +14,8 @@ class LegoSetTableModel : public QAbstractTableModel
         ImageRole = Qt::UserRole +1,
         SetNumberRole,
         DescriptionRole,
-        YearRole
+        YearRole,
+		RrpRole
     };
 
 
@@ -61,16 +62,18 @@ private:
 
     struct LegoSetTableData
     {
-        LegoSetTableData(ImageData new_imageData, int new_setnumber, QString new_description, int new_year): imageData(new_imageData),
-            setnumber(new_setnumber), description(new_description), year(new_year)
+        LegoSetTableData(ImageData new_imageData, int new_setnumber, QString new_description, int new_year
+		,double new_rrp): imageData(new_imageData),setnumber(new_setnumber), description(new_description), year(new_year),
+			rrp(new_rrp)
         {}
 
 		ImageData imageData;
         int setnumber;
         QString description;
         int year;
+		double rrp; // recommended retail price in euros
 
-        static const int count = 4;
+        static const int count = 5;
     };
 
 

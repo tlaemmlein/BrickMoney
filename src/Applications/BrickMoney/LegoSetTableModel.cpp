@@ -7,6 +7,7 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QDir>
 #include <QUrl>
 #include <QResource>
+#include <QTextCodec>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
@@ -57,6 +58,10 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     {
         return QVariant(row.year);
     }
+	case RrpRole:
+	{
+		return QVariant(row.rrp);
+	}
     default:
         break;
     }
@@ -107,8 +112,6 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     }
     case SetNumberRole:
     {
-		LOG_DEBUG(value.toInt());
-		LOG_DEBUG(mLegoSetTableData.at(index.row()).setnumber);
         mLegoSetTableData[index.row()].setnumber = value.toInt();
         break;
     }
@@ -122,6 +125,10 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
         mLegoSetTableData[index.row()].year = value.toInt();
         break;
     }
+	case RrpRole:
+	{
+		mLegoSetTableData[index.row()].rrp = value.toDouble();
+	}
     default:
         break;
     }
@@ -172,7 +179,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
     {
 		mLegoSetTableData.append(LegoSetTableData({ "Empty.svg", "qrc:/images/Empty.svg" }, mLegoSetTableData.size(),
                                                   QString("Beschreibung %1").arg(mLegoSetTableData.size())
-                                                  ,2018));
+                                                  ,2018, 19.99));
 		LOG_DEBUG("row +i: " << row +i);
     }
 
@@ -213,8 +220,9 @@ QHash<int, QByteArray> LegoSetTableModel::roleNames() const
     roles[ImageRole] = "image";
     roles[SetNumberRole] = "setnumber";
     roles[DescriptionRole] = "description";
-    roles[YearRole] = "year";
-    return roles;
+	roles[YearRole] = "year";
+	roles[RrpRole] = "rrp";
+	return roles;
 }
 
 int LegoSetTableModel::roleID(QString roleName)
@@ -239,6 +247,11 @@ int LegoSetTableModel::roleID(QString roleName)
     {
         return YearRole;
     }
+
+	if (roleName == "rrp")
+	{
+		return RrpRole;
+	}
 
     return -1;
 }
@@ -311,7 +324,9 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
 		}
 		url = QUrl::fromLocalFile(QFileInfo(imageFilePathString).canonicalFilePath());
 
-		mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2), row.at(3).toInt()));
+        LOG_TRACE(row.at(2).toStdWString());
+
+		mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2), row.at(3).toInt(), row.at(4).toDouble()));
     }
 
     if ( 0 == mLegoSetTableData.size())

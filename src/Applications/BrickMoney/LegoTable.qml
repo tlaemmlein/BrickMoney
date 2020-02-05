@@ -48,7 +48,7 @@ C1.TableView {
     C1.TableViewColumn {
         id: imageColumn
         role: "image"
-        title: "Bild"
+        title: "Image"
         width: 100
         delegate:
             Image {
@@ -88,7 +88,7 @@ C1.TableView {
     C1.TableViewColumn {
         id: setNumColumn
         role: "setnumber"
-        title: "Set Nummer"
+        title: "Set number"
         width: 100
         delegate: TextField {
             anchors.fill: parent
@@ -107,7 +107,7 @@ C1.TableView {
     C1.TableViewColumn {
         id: descColumn
         role: "description"
-        title: "Bezeichnung"
+        title: "Description"
         width: 100
         delegate: TextField {
             anchors.fill: parent
@@ -137,8 +137,24 @@ C1.TableView {
                 _LegoSetTableModel.setData(q_model_index, text, roleID)
             }
         }
-
     }
 
+    C1.TableViewColumn {
+        id: rrpColumn
+        role: "rrp"
+        title: "RRP[€]"
+        width: 100
+        delegate: TextField {
+            anchors.fill: parent
+            validator: DoubleValidator {bottom: 0.0; top: 2147483647.0;}
+            selectByMouse: true
+            text: styleData.value
+            onEditingFinished: {
+                var roleID = _LegoSetTableModel.roleID(rrpColumn.role)
+                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                _LegoSetTableModel.setData(q_model_index, text, roleID)
+            }
+        }
+    }
 }
 

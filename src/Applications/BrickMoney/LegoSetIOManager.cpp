@@ -77,6 +77,7 @@ void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
     }
 
     QTextStream input(&cvsData);
+    input.setAutoDetectUnicode (true);
 
     mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
 }
