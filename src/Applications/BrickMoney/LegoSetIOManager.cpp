@@ -48,6 +48,7 @@ void LegoSetIOManager::saveProject()
     }
 
     QTextStream output(&cvsData);
+    output.setCodec("UTF-8");
 
     mLegoSetTableModel->saveDataTo(';', output, projectFolder());
 }
@@ -77,7 +78,7 @@ void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
     }
 
     QTextStream input(&cvsData);
-    input.setAutoDetectUnicode (true);
+    input.setCodec("UTF-8");
 
     mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
 }

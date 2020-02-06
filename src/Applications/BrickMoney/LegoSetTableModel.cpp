@@ -285,8 +285,8 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QSt
 
 	for(const auto & entry : mLegoSetTableData)
     {
-        out << entry.imageData.imageName << sep << entry.setnumber 
-			<< sep << entry.description << sep << entry.year << "\n";
+        out << entry.imageData.imageName << sep << entry.setnumber
+            << sep << entry.description << sep << entry.year << sep << entry.rrp << "\n";
     }
 }
 
