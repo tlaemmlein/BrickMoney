@@ -15,7 +15,9 @@ class LegoSetTableModel : public QAbstractTableModel
         SetNumberRole,
         DescriptionRole,
         YearRole,
-		RrpRole
+        RrpRole,
+        PurchasingPriceRole,
+        CheaperPercentRole
     };
 
 
@@ -63,8 +65,9 @@ private:
     struct LegoSetTableData
     {
         LegoSetTableData(ImageData new_imageData, int new_setnumber, QString new_description, int new_year
-		,double new_rrp): imageData(new_imageData),setnumber(new_setnumber), description(new_description), year(new_year),
-			rrp(new_rrp)
+        ,double new_rrp, double new_purchasing_price, double new_cheaper_percent):
+            imageData(new_imageData),setnumber(new_setnumber), description(new_description)
+            , year(new_year),rrp(new_rrp), purchasingPrice(new_purchasing_price), cheaperPercent(new_cheaper_percent)
         {}
 
 		ImageData imageData;
@@ -72,9 +75,14 @@ private:
         QString description;
         int year;
 		double rrp; // recommended retail price in euros
+        double purchasingPrice; //purchase price in euros
+        double cheaperPercent;
 
-        static const int count = 5;
+        static const int countForGui = 7;
+        static const int countForIO = 6;
     };
+
+    double calcCheaperPercent(double rrp, double purchasingPrice);
 
 
     QList< LegoSetTableData > mLegoSetTableData;

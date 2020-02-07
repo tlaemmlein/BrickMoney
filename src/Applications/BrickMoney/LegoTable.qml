@@ -113,6 +113,7 @@ C1.TableView {
             anchors.fill: parent
             text: styleData.value
             selectByMouse: true
+            wrapMode: "WrapAtWordBoundaryOrAnywhere"
             onEditingFinished: {
                 var roleID = _LegoSetTableModel.roleID(descColumn.role)
                 var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
@@ -153,6 +154,40 @@ C1.TableView {
                 var roleID = _LegoSetTableModel.roleID(rrpColumn.role)
                 var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
                 _LegoSetTableModel.setData(q_model_index, text, roleID)
+            }
+        }
+    }
+
+    C1.TableViewColumn {
+        id: purchasingPriceColumn
+        role: "purchasePrice"
+        title: "PPrice[€]"
+        width: 100
+        delegate: TextField {
+            anchors.fill: parent
+            validator: DoubleValidator {bottom: 0.0; top: 2147483647.0;}
+            selectByMouse: true
+            text: styleData.value
+            onEditingFinished: {
+                var roleID = _LegoSetTableModel.roleID(purchasingPriceColumn.role)
+                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                _LegoSetTableModel.setData(q_model_index, text, roleID)
+            }
+        }
+    }
+
+    C1.TableViewColumn {
+        id: cheaperPercentColumn
+        role: "cheaperPercent"
+        title: "Cheaper [%]"
+        width: 100
+        delegate: TextField {
+            anchors.fill: parent
+            readOnly: true
+            //validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
+            text: {
+                var raw = styleData.value
+                return raw.toFixed(2) +"%";
             }
         }
     }

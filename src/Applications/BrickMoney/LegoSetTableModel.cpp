@@ -21,7 +21,7 @@ int LegoSetTableModel::rowCount(const QModelIndex &) const
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return LegoSetTableData::count;
+    return LegoSetTableData::countForGui;
 }
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
@@ -39,7 +39,7 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 	LOG_DEBUG("role: " << role);
 
     LegoSetTableData row = mLegoSetTableData.at(index.row());
-	LOG_DEBUG("row.count: " << row.count);
+    LOG_DEBUG("row.countForGui: " << row.countForGui);
 
     switch (role) {
     case ImageRole:
@@ -58,10 +58,18 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     {
         return QVariant(row.year);
     }
-	case RrpRole:
-	{
-		return QVariant(row.rrp);
-	}
+    case RrpRole:
+    {
+        return QVariant(row.rrp);
+    }
+    case PurchasingPriceRole:
+    {
+        return QVariant(row.purchasingPrice);
+    }
+    case CheaperPercentRole:
+    {
+        return QVariant(row.cheaperPercent);
+    }
     default:
         break;
     }
@@ -102,7 +110,7 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
         return false;
 
     if ( index.row() < 0 || index.row() >= mLegoSetTableData.size() ||
-        index.column() < 0 || index.column() >= LegoSetTableData::count)
+        index.column() < 0 || index.column() >= LegoSetTableData::countForGui)
         return false;
 
     switch (role) {
@@ -128,7 +136,22 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
 	case RrpRole:
 	{
 		mLegoSetTableData[index.row()].rrp = value.toDouble();
-	}
+        mLegoSetTableData[index.row()].cheaperPercent =
+            calcCheaperPercent(mLegoSetTableData[index.row()].rrp, mLegoSetTableData[index.row()].purchasingPrice);
+        break;
+    }
+    case PurchasingPriceRole:
+    {
+        mLegoSetTableData[index.row()].purchasingPrice = value.toDouble();
+        mLegoSetTableData[index.row()].cheaperPercent =
+            calcCheaperPercent(mLegoSetTableData[index.row()].rrp, mLegoSetTableData[index.row()].purchasingPrice);
+        break;
+    }
+    case CheaperPercentRole:
+    {
+        mLegoSetTableData[index.row()].cheaperPercent = value.toDouble();
+        break;
+    }
     default:
         break;
     }
@@ -167,6 +190,11 @@ void LegoSetTableModel::clearAll()
     endResetModel();
 }
 
+double LegoSetTableModel::calcCheaperPercent(double rrp, double purchasingPrice)
+{
+  return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
+}
+
 
 bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 {
@@ -179,7 +207,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
     {
 		mLegoSetTableData.append(LegoSetTableData({ "Empty.svg", "qrc:/images/Empty.svg" }, mLegoSetTableData.size(),
                                                   QString("Beschreibung %1").arg(mLegoSetTableData.size())
-                                                  ,2018, 19.99));
+                                                  ,2018, 10.0, 5.0, 100.0));
 		LOG_DEBUG("row +i: " << row +i);
     }
 
@@ -222,6 +250,8 @@ QHash<int, QByteArray> LegoSetTableModel::roleNames() const
     roles[DescriptionRole] = "description";
 	roles[YearRole] = "year";
 	roles[RrpRole] = "rrp";
+    roles[PurchasingPriceRole] = "purchasePrice";
+    roles[CheaperPercentRole] = "cheaperPercent";
 	return roles;
 }
 
@@ -252,6 +282,16 @@ int LegoSetTableModel::roleID(QString roleName)
 	{
 		return RrpRole;
 	}
+
+    if (roleName == "purchasePrice")
+    {
+        return PurchasingPriceRole;
+    }
+
+    if ( roleName == "cheaperPercent")
+    {
+        return CheaperPercentRole;
+    }
 
     return -1;
 }
@@ -286,7 +326,8 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QSt
 	for(const auto & entry : mLegoSetTableData)
     {
         out << entry.imageData.imageName << sep << entry.setnumber
-            << sep << entry.description << sep << entry.year << sep << entry.rrp << "\n";
+            << sep << entry.description << sep << entry.year << sep << entry.rrp
+            << sep << entry.purchasingPrice << "\n";
     }
 }
 
@@ -298,10 +339,10 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList row = line.split(sep);
-		if (row.size() != LegoSetTableData::count)
+        if (row.size() != LegoSetTableData::countForIO)
 		{
 			LOG_WARN("The number of the imported columns differs from the expected columns. Actual: "
-				     << row.size() << " Expexted: "<< LegoSetTableData::count << ". Read the next line.");
+                     << row.size() << " Expexted: "<< LegoSetTableData::countForIO << ". Read the next line.");
   		   continue;
 		}
 
@@ -326,7 +367,12 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
 
         LOG_TRACE(row.at(2).toStdWString());
 
-		mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2), row.at(3).toInt(), row.at(4).toDouble()));
+        const double rrp = row.at(4).toDouble();
+        const double pPrice = row.at(5).toDouble();
+        const double cheaperPercent = calcCheaperPercent(rrp, pPrice);
+
+        mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2),
+                                                  row.at(3).toInt(), rrp, pPrice, cheaperPercent));
     }
 
     if ( 0 == mLegoSetTableData.size())
