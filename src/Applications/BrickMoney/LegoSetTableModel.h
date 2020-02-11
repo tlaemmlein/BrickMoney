@@ -30,8 +30,6 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const override;
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
     // QAbstractItemModel interface
@@ -40,7 +38,7 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    Q_INVOKABLE int roleID(QString roleName);
+    Q_INVOKABLE int roleID(const QString& roleName);
 
     void saveDataTo(const QChar& separator, QTextStream& out, const QString& projectFolder) const;
 
@@ -86,6 +84,7 @@ private:
 
 
     QList< LegoSetTableData > mLegoSetTableData;
+    QHash<int, QByteArray> mRoles;
 };
 
 

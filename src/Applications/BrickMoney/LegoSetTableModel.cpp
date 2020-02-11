@@ -12,6 +12,13 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
     setObjectName("TableModel");
+    mRoles[ImageRole] = "image";
+    mRoles[SetNumberRole] = "setnumber";
+    mRoles[DescriptionRole] = "description";
+    mRoles[YearRole] = "year";
+    mRoles[RrpRole] = "rrp";
+    mRoles[PurchasingPriceRole] = "purchasePrice";
+    mRoles[CheaperPercentRole] = "cheaperPercent";
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
@@ -77,29 +84,6 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-	LOG_SCOPE_METHOD(L"");
-
-    if (role != Qt::DisplayRole)
-        return QVariant();
-
-    if (orientation == Qt::Horizontal) {
-        switch (section) {
-        case 0:
-            return tr("Bild");
-
-        case 1:
-            return tr("Set Nummer");
-
-        case 2:
-            return tr("Beschreibung");
-        default:
-            return QVariant();
-        }
-    }
-    return QVariant();
-}
 
 bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -244,56 +228,14 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 {
 	LOG_SCOPE_METHOD(L"");
-	QHash<int, QByteArray> roles;
-    roles[ImageRole] = "image";
-    roles[SetNumberRole] = "setnumber";
-    roles[DescriptionRole] = "description";
-	roles[YearRole] = "year";
-	roles[RrpRole] = "rrp";
-    roles[PurchasingPriceRole] = "purchasePrice";
-    roles[CheaperPercentRole] = "cheaperPercent";
-	return roles;
+    return mRoles;
 }
 
-int LegoSetTableModel::roleID(QString roleName)
+int LegoSetTableModel::roleID(const QString& roleName)
 {
 	LOG_SCOPE_METHOD(L"");
 
-    if (roleName == "image" )
-    {
-        return ImageRole;
-    }
-
-    if (roleName == "setnumber") {
-        return SetNumberRole;
-    }
-
-    if ( roleName =="description" )
-    {
-        return DescriptionRole;
-    }
-
-    if ( roleName =="year" )
-    {
-        return YearRole;
-    }
-
-	if (roleName == "rrp")
-	{
-		return RrpRole;
-	}
-
-    if (roleName == "purchasePrice")
-    {
-        return PurchasingPriceRole;
-    }
-
-    if ( roleName == "cheaperPercent")
-    {
-        return CheaperPercentRole;
-    }
-
-    return -1;
+    return mRoles.key(roleName.toUtf8());
 }
 
 void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QString& projectFolder) const
