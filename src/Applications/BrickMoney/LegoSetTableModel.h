@@ -51,24 +51,16 @@ public slots:
     void clearAll();
 
 private:
-	struct ImageData
-	{
-		ImageData(QString const& new_imageName, QString const& new_imageFilePath ) : imageName(new_imageName), imageFilePath(new_imageFilePath)
-		{}
-
-		QString imageName; // ImageName + Extension
-		QString imageFilePath; // Full file path
-	};
-
-    struct LegoSetTableData
+    struct LegoSetRecord
     {
-        LegoSetTableData(ImageData new_imageData, int new_setnumber, QString new_description, int new_year
+        LegoSetRecord(QString new_imageName, QString new_imageFilePath, int new_setnumber, QString new_description, int new_year
         ,double new_rrp, double new_purchasing_price, double new_cheaper_percent):
-            imageData(new_imageData),setnumber(new_setnumber), description(new_description)
+            imageName(new_imageName),imageFilePath(new_imageFilePath), setnumber(new_setnumber), description(new_description)
             , year(new_year),rrp(new_rrp), purchasingPrice(new_purchasing_price), cheaperPercent(new_cheaper_percent)
         {}
 
-		ImageData imageData;
+        QString imageName; // ImageName + Extension
+        QString imageFilePath; // Full file path
         int setnumber;
         QString description;
         int year;
@@ -83,7 +75,7 @@ private:
     double calcCheaperPercent(double rrp, double purchasingPrice);
 
 
-    QList< LegoSetTableData > mLegoSetTableData;
+    QList< LegoSetRecord > mLegoSetTableData;
     QHash<int, QByteArray> mRoles;
 };
 

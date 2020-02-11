@@ -28,7 +28,7 @@ int LegoSetTableModel::rowCount(const QModelIndex &) const
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return LegoSetTableData::countForGui;
+    return LegoSetRecord::countForGui;
 }
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
@@ -45,13 +45,13 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 
 	LOG_DEBUG("role: " << role);
 
-    LegoSetTableData row = mLegoSetTableData.at(index.row());
+    LegoSetRecord row = mLegoSetTableData.at(index.row());
     LOG_DEBUG("row.countForGui: " << row.countForGui);
 
     switch (role) {
     case ImageRole:
     {
-        return QVariant(row.imageData.imageFilePath);
+        return QVariant(row.imageFilePath);
     }
     case SetNumberRole:
     {
@@ -94,7 +94,7 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
         return false;
 
     if ( index.row() < 0 || index.row() >= mLegoSetTableData.size() ||
-        index.column() < 0 || index.column() >= LegoSetTableData::countForGui)
+        index.column() < 0 || index.column() >= LegoSetRecord::countForGui)
         return false;
 
     switch (role) {
@@ -189,7 +189,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-		mLegoSetTableData.append(LegoSetTableData({ "Empty.svg", "qrc:/images/Empty.svg" }, mLegoSetTableData.size(),
+        mLegoSetTableData.append(LegoSetRecord( "Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.size(),
                                                   QString("Beschreibung %1").arg(mLegoSetTableData.size())
                                                   ,2018, 10.0, 5.0, 100.0));
 		LOG_DEBUG("row +i: " << row +i);
@@ -267,7 +267,7 @@ void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QSt
 
 	for(const auto & entry : mLegoSetTableData)
     {
-        out << entry.imageData.imageName << sep << entry.setnumber
+        out << entry.imageName << sep << entry.setnumber
             << sep << entry.description << sep << entry.year << sep << entry.rrp
             << sep << entry.purchasingPrice << "\n";
     }
@@ -281,10 +281,10 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList row = line.split(sep);
-        if (row.size() != LegoSetTableData::countForIO)
+        if (row.size() != LegoSetRecord::countForIO)
 		{
 			LOG_WARN("The number of the imported columns differs from the expected columns. Actual: "
-                     << row.size() << " Expexted: "<< LegoSetTableData::countForIO << ". Read the next line.");
+                     << row.size() << " Expexted: "<< LegoSetRecord::countForIO << ". Read the next line.");
   		   continue;
 		}
 
@@ -313,7 +313,7 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
         const double pPrice = row.at(5).toDouble();
         const double cheaperPercent = calcCheaperPercent(rrp, pPrice);
 
-        mLegoSetTableData.append(LegoSetTableData({ imageName, url.toString() }, row.at(1).toInt(), row.at(2),
+        mLegoSetTableData.append(LegoSetRecord(imageName, url.toString(), row.at(1).toInt(), row.at(2),
                                                   row.at(3).toInt(), rrp, pPrice, cheaperPercent));
     }
 
