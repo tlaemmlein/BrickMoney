@@ -184,10 +184,10 @@ C1.TableView {
         delegate: TextField {
             anchors.fill: parent
             readOnly: true
-            //validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
+            validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
             text: {
                 var raw = styleData.value
-                return raw.toFixed(2) +"%";
+                return raw !== null ? raw.toFixed(2) +"%" : 0.0;
             }
         }
     }

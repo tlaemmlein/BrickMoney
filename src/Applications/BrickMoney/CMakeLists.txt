@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
     qml.qrc
     LegoSetTableModel.cpp
     LegoSetTableModel.h
+    LegoSetTableData.cpp
+    LegoSetTableData.h
     LegoSetIOManager.cpp
     LegoSetIOManager.h
     Logging.h)
