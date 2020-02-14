@@ -142,7 +142,7 @@ C1.TableView {
 
     C1.TableViewColumn {
         id: rrpColumn
-        role: "rrp"
+        role: "recommendedRetailPrice"
         title: "RRP[€]"
         width: 100
         delegate: TextField {
@@ -160,7 +160,7 @@ C1.TableView {
 
     C1.TableViewColumn {
         id: purchasingPriceColumn
-        role: "purchasePrice"
+        role: "purchasingPrice"
         title: "PPrice[€]"
         width: 100
         delegate: TextField {

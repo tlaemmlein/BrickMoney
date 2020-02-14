@@ -13,6 +13,7 @@ public:
     virtual ~LegoSetItem() = default;
 
     virtual int role() const = 0;
+    virtual QByteArray roleName() = 0;
     virtual QVariant getData() = 0;
     virtual bool setData(const QVariant &value) = 0;
     virtual bool shouldBeIO() = 0;
@@ -95,6 +96,7 @@ public:
     LegoSetImage(const QString& value) : LegoSetString(value) {}
     ~LegoSetImage() = default;
     int role() const override { return -1;}
+    QByteArray roleName() override { return "imageFilePath"; }
     bool shouldBeIO() override { return true;}
 };
 
@@ -104,6 +106,7 @@ public:
     LegoSetImageFilePath(const QString& value) : LegoSetString(value) {}
     ~LegoSetImageFilePath() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "image"; }
     bool shouldBeIO() override { return false;}
 private:
     static const int mRole = Qt::UserRole +1;
@@ -115,6 +118,7 @@ public:
     LegoSetNumber(int value) : LegoSetInt(value) {}
     ~LegoSetNumber() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "setnumber"; }
     bool shouldBeIO() override { return true;}
 private:
     static const int mRole = Qt::UserRole +2;
@@ -126,6 +130,7 @@ public:
     LegoSetDescription(const QString& value) : LegoSetString(value) {}
     ~LegoSetDescription() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "description"; }
     bool shouldBeIO() override { return true;}
 private:
     static const int mRole = Qt::UserRole +3;
@@ -137,6 +142,7 @@ public:
     LegoSetYear(int value) : LegoSetInt(value) {}
     ~LegoSetYear() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "year"; }
     bool shouldBeIO() override { return true;}
 private:
     static const int mRole = Qt::UserRole +4;
@@ -148,6 +154,7 @@ public:
     LegoSetRecommendedRetailPrice(double value) : LegoSetDouble(value) {}
     ~LegoSetRecommendedRetailPrice() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "recommendedRetailPrice"; }
     bool shouldBeIO() override { return true;}
 private:
     static constexpr double mRole = Qt::UserRole +5;
@@ -159,6 +166,7 @@ public:
     LegoSetPurchasingPrice(double value) : LegoSetDouble(value) {}
     ~LegoSetPurchasingPrice() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "purchasingPrice"; }
     bool shouldBeIO() override { return true;}
 private:
     static constexpr double mRole = Qt::UserRole +6;
@@ -170,6 +178,7 @@ public:
     LegoSetCheaperPercent(double value) : LegoSetDouble(value) {}
     ~LegoSetCheaperPercent() = default;
     int role() const override { return mRole;}
+    QByteArray roleName() override { return "cheaperPercent"; }
     bool shouldBeIO() override { return false;}
 private:
     static constexpr double mRole = Qt::UserRole +7;
@@ -193,6 +202,8 @@ public:
 
     std::vector<LegoSetItem*> record() const;
 
+    QHash<int, QByteArray> roleNames() const;
+
 	void check(LegoSetItem* item);
 
 private:
@@ -206,6 +217,7 @@ private:
     LegoSetCheaperPercent* mCheaperPercent;
 
     std::vector<LegoSetItem*> mRecord;
+    QHash<int, QByteArray> mRoles;
 
     int mColumnCountForGui;
     int mColumnCountForIO;

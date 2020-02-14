@@ -39,16 +39,6 @@ public:
     void loadDataFrom(const QChar& separator, QTextStream& in, const QString& projectFolder);
 
 private:
-    enum TableRoles{
-        ImageRole = Qt::UserRole +1,
-        SetNumberRole,
-        DescriptionRole,
-        YearRole,
-        RrpRole,
-        PurchasingPriceRole,
-        CheaperPercentRole
-    };
-
     QList< LegoSetRecord* > mData;
     QHash<int, QByteArray> mRoles;
 	int mColumnCountForGui;

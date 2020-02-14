@@ -9,17 +9,10 @@ SET_LOGGER("BrickMoney.LegoSetTableData")
 
 LegoSetTableData::LegoSetTableData()
 {
-    mRoles[ImageRole] = "image";
-    mRoles[SetNumberRole] = "setnumber";
-    mRoles[DescriptionRole] = "description";
-    mRoles[YearRole] = "year";
-    mRoles[RrpRole] = "rrp";
-    mRoles[PurchasingPriceRole] = "purchasePrice";
-    mRoles[CheaperPercentRole] = "cheaperPercent";
-
 	LegoSetRecord test("Empty.svg", "qrc:/images/Empty.svg", 1,"Egal",2018, 10.0, 5.0);
 	mColumnCountForGui = test.columnCountForGui();
 	mColumnCountForIO = test.columnCountForIO();
+    mRoles = test.roleNames();
 }
 
 LegoSetTableData::~LegoSetTableData()
@@ -66,20 +59,6 @@ bool LegoSetTableData::setData(int row, const QVariant &value, int role)
 			return ret;
         }
     }
-
-//    {
-//        mData[row].rrp = value.toDouble();
-//        mData[row].cheaperPercent =
-//            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
-//        break;
-//    }
-//    case PurchasingPriceRole:
-//    {
-//        mData[row].purchasingPrice = value.toDouble();
-//        mData[row].cheaperPercent =
-//            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
-//        break;
-//    }
 
     return false;
 }

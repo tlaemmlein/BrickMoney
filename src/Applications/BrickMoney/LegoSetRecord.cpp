@@ -29,13 +29,18 @@ LegoSetRecord::LegoSetRecord(QString new_imageName, QString new_imageFilePath,
 
     mColumnCountForGui = 0;
     mColumnCountForIO = 0;
-    for( auto entry : mRecord)
+    for( auto item : mRecord)
     {
-        if ( entry->role() >= 0 )
+        if ( item->role() >= 0 )
+        {
             ++mColumnCountForGui;
+            mRoles[item->role()] = item->roleName();
+        }
 
-        if ( entry->shouldBeIO())
+        if ( item->shouldBeIO())
+        {
             ++mColumnCountForIO;
+        }
     }
 }
 
@@ -61,6 +66,11 @@ int LegoSetRecord::columnCountForIO() const
 std::vector<LegoSetItem *> LegoSetRecord::record() const
 {
     return mRecord;
+}
+
+QHash<int, QByteArray> LegoSetRecord::roleNames() const
+{
+    return mRoles;
 }
 
 void LegoSetRecord::check(LegoSetItem * item)
