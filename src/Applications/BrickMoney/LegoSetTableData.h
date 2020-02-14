@@ -8,28 +8,13 @@
 #include <QHash>
 #include <QTextStream>
 
-struct LegoSetRecord
-{
-    LegoSetRecord(QString new_imageName, QString new_imageFilePath, int new_setnumber, QString new_description, int new_year
-                  ,double new_rrp, double new_purchasing_price);
-
-    QString imageName; // ImageName + Extension
-    QString imageFilePath; // Full file path
-    int setnumber;
-    QString description;
-    int year;
-    double rrp; // recommended retail price in euros
-    double purchasingPrice; //purchase price in euros
-    double cheaperPercent;
-
-    static const int columnCountForGui = 7;
-    static const int columnCountForInport = 6;
-};
+class LegoSetRecord;
 
 class LegoSetTableData
 {
 public:
     LegoSetTableData();
+	~LegoSetTableData();
 
     int rowCount() const;
 
@@ -41,7 +26,7 @@ public:
 
     void clear();
 
-    void append(const LegoSetRecord& record);
+    void append(LegoSetRecord* record);
 
     void removeAt(int row);
 
@@ -64,8 +49,10 @@ private:
         CheaperPercentRole
     };
 
-    QList< LegoSetRecord > mData;
+    QList< LegoSetRecord* > mData;
     QHash<int, QByteArray> mRoles;
+	int mColumnCountForGui;
+	int mColumnCountForIO;
 };
 
 #endif

@@ -2,25 +2,10 @@
 SET_LOGGER("BrickMoney.LegoSetTableData")
 
 #include "LegoSetTableData.h"
+#include "LegoSetRecord.h"
 
 #include <QDir>
 #include <QUrl>
-
-
-static double calcCheaperPercent(double rrp, double purchasingPrice)
-{
-   return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
-}
-
-
-LegoSetRecord::LegoSetRecord(QString new_imageName, QString new_imageFilePath, int new_setnumber,
-                                               QString new_description, int new_year, double new_rrp, double new_purchasing_price):
-    imageName(new_imageName),imageFilePath(new_imageFilePath), setnumber(new_setnumber), description(new_description)
-    , year(new_year),rrp(new_rrp), purchasingPrice(new_purchasing_price), cheaperPercent( calcCheaperPercent(rrp, purchasingPrice) )
-{
-
-}
-
 
 LegoSetTableData::LegoSetTableData()
 {
@@ -31,6 +16,15 @@ LegoSetTableData::LegoSetTableData()
     mRoles[RrpRole] = "rrp";
     mRoles[PurchasingPriceRole] = "purchasePrice";
     mRoles[CheaperPercentRole] = "cheaperPercent";
+
+	LegoSetRecord test("Empty.svg", "qrc:/images/Empty.svg", 1,"Egal",2018, 10.0, 5.0);
+	mColumnCountForGui = test.columnCountForGui();
+	mColumnCountForIO = test.columnCountForIO();
+}
+
+LegoSetTableData::~LegoSetTableData()
+{
+	clear();
 }
 
 int LegoSetTableData::rowCount() const
@@ -40,7 +34,7 @@ int LegoSetTableData::rowCount() const
 
 int LegoSetTableData::columnCount() const
 {
-    return LegoSetRecord::columnCountForGui;
+    return mColumnCountForGui;
 }
 
 QVariant LegoSetTableData::getData(int row, int role) const
@@ -48,41 +42,14 @@ QVariant LegoSetTableData::getData(int row, int role) const
     LOG_DEBUG("row: " << row << " role: " << role);
 
     if (row >= rowCount() || rowCount() < 0)
-        return {};
+        return QVariant();
 
-    LegoSetRecord record = mData.at(row);
-
-    switch (role) {
-    case ImageRole:
+    for (LegoSetItem* item : mData.at(row)->record())
     {
-        return QVariant(record.imageFilePath);
-    }
-    case SetNumberRole:
-    {
-        return QVariant(record.setnumber);
-    }
-    case DescriptionRole:
-    {
-        return QVariant(record.description);
-    }
-    case YearRole:
-    {
-        return QVariant(record.year);
-    }
-    case RrpRole:
-    {
-        return QVariant(record.rrp);
-    }
-    case PurchasingPriceRole:
-    {
-        return QVariant(record.purchasingPrice);
-    }
-    case CheaperPercentRole:
-    {
-        return QVariant(record.cheaperPercent);
-    }
-    default:
-        break;
+        if (item->role() == role )
+        {
+            return item->getData();
+        }
     }
 
     return QVariant();
@@ -90,64 +57,54 @@ QVariant LegoSetTableData::getData(int row, int role) const
 
 bool LegoSetTableData::setData(int row, const QVariant &value, int role)
 {
-    switch (role) {
-    case ImageRole:
+    for (auto item : mData.at(row)->record())
     {
-        return false;
-    }
-    case SetNumberRole:
-    {
-        mData[row].setnumber = value.toInt();
-        break;
-    }
-    case DescriptionRole:
-    {
-        mData[row].description = value.toString();
-        break;
-    }
-    case YearRole:
-    {
-        mData[row].year = value.toInt();
-        break;
-    }
-    case RrpRole:
-    {
-        mData[row].rrp = value.toDouble();
-        mData[row].cheaperPercent =
-            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
-        break;
-    }
-    case PurchasingPriceRole:
-    {
-        mData[row].purchasingPrice = value.toDouble();
-        mData[row].cheaperPercent =
-            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
-        break;
-    }
-    case CheaperPercentRole:
-    {
-        mData[row].cheaperPercent = value.toDouble();
-        break;
-    }
-    default:
-        break;
+        if (item->role() == role )
+        {
+			bool ret = item->setData(value);
+			mData.at(row)->check(item);
+			return ret;
+        }
     }
 
-    return true;
+//    {
+//        mData[row].rrp = value.toDouble();
+//        mData[row].cheaperPercent =
+//            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
+//        break;
+//    }
+//    case PurchasingPriceRole:
+//    {
+//        mData[row].purchasingPrice = value.toDouble();
+//        mData[row].cheaperPercent =
+//            calcCheaperPercent(mData[row].rrp, mData[row].purchasingPrice);
+//        break;
+//    }
+
+    return false;
 }
 
 void LegoSetTableData::clear()
 {
+	for (auto e : mData)
+	{
+		delete e;
+		e = nullptr;
+	}
+
     mData.clear();
 }
 
-void LegoSetTableData::append(const LegoSetRecord &record)
+void LegoSetTableData::append(LegoSetRecord* record)
 {
     mData.append(record);
 }
 
 void LegoSetTableData::removeAt(int row)
 {
+	auto e= mData.value(row);
+	delete e;
+	e = nullptr;
     mData.removeAt(row);
 }
 
@@ -186,11 +143,27 @@ void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, cons
         }
     }
 
-    for(const auto & entry : mData)
+    for(auto legoSetRecord : mData)
     {
-        out << entry.imageName << separator << entry.setnumber
-            << separator << entry.description << separator << entry.year << separator << entry.rrp
-            << separator << entry.purchasingPrice << "\n";
+		auto record = legoSetRecord->record();
+		auto size = record.size();
+        for(int i = 0; i < size; ++i)
+        {
+			auto item = record.at(i);
+            if (item->shouldBeIO())
+            {
+                if ( LegoSetInt* int_item = dynamic_cast<LegoSetInt*>(item) )
+                    out << int_item->getValue();
+                else if ( LegoSetDouble* double_item = dynamic_cast<LegoSetDouble*>(item) )
+                    out << double_item->getValue();
+                else if ( LegoSetString* string_item = dynamic_cast<LegoSetString*>(item) )
+                    out << string_item->getValue();
+
+				if (i < size - 2)
+					out << separator;
+            }
+        }
+        out << "\n";
     }
 }
 
@@ -199,10 +172,10 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList columns = line.split(separator);
-        if (columns.size() != LegoSetRecord::columnCountForInport)
+        if (columns.size() != mColumnCountForIO)
         {
             LOG_WARN("The number of the imported columns differs from the expected columns. Actual: "
-                     << columns.size() << " Expexted: "<< LegoSetRecord::columnCountForInport << ". Read the next line.");
+                     << columns.size() << " Expexted: "<< mColumnCountForIO << ". Read the next line.");
             continue;
         }
 
@@ -228,7 +201,8 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
         const double rrp = columns.at(4).toDouble();
         const double pPrice = columns.at(5).toDouble();
 
-        mData.append(LegoSetRecord(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
+        mData.append(new LegoSetRecord(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
                                                columns.at(3).toInt(), rrp, pPrice));
     }
 }
+

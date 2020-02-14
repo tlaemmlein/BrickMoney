@@ -2,12 +2,11 @@
 SET_LOGGER("BrickMoney.LegoSetTableModel")
 
 #include "LegoSetTableModel.h"
+#include "LegoSetRecord.h"
 
 #include <QFile>
 #include <QDir>
 #include <QUrl>
-#include <QResource>
-#include <QTextCodec>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
 {
@@ -89,7 +88,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-        mLegoSetTableData.append(LegoSetRecord( "Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
+        mLegoSetTableData.append(new LegoSetRecord( "Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
                                                   QString("Beschreibung %1").arg(mLegoSetTableData.rowCount())
                                                   ,2018, 10.0, 5.0));
 		LOG_DEBUG("row +i: " << row +i);
