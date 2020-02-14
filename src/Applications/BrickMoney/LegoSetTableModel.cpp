@@ -88,9 +88,11 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 
     for (int i = 0; i < count; ++i)
     {
-        mLegoSetTableData.append(new LegoSetRecord( "Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
-                                                  QString("Beschreibung %1").arg(mLegoSetTableData.rowCount())
-                                                  ,2018, 10.0, 5.0));
+        LegoSetRecord record("Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
+                             QString("Beschreibung %1").arg(mLegoSetTableData.rowCount())
+                                 ,2018, 10.0, 5.0);
+
+        mLegoSetTableData.append(record);
 		LOG_DEBUG("row +i: " << row +i);
     }
 

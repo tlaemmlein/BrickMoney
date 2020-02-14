@@ -1,19 +1,19 @@
 #ifndef LEGOSET_TABLE_DATA_H
 #define LEGOSET_TABLE_DATA_H
 
+#include "LegoSetRecord.h"
 
 #include <QString>
-#include <QList>
 #include <QVariant>
 #include <QHash>
 #include <QTextStream>
 
-class LegoSetRecord;
+class LegoSetTableDataPrivate;
 
-class LegoSetTableData
+class LegoSetTableData : public QObject
 {
 public:
-    LegoSetTableData();
+    explicit LegoSetTableData(QObject* parent = nullptr);
 	~LegoSetTableData();
 
     int rowCount() const;
@@ -26,7 +26,7 @@ public:
 
     void clear();
 
-    void append(LegoSetRecord* record);
+    void append(const LegoSetRecord &record);
 
     void removeAt(int row);
 
@@ -39,10 +39,7 @@ public:
     void loadDataFrom(const QChar& separator, QTextStream& in, const QString& projectFolder);
 
 private:
-    QList< LegoSetRecord* > mData;
-    QHash<int, QByteArray> mRoles;
-	int mColumnCountForGui;
-	int mColumnCountForIO;
+    LegoSetTableDataPrivate *d_ptr;
 };
 
 #endif

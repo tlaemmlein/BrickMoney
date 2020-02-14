@@ -2,17 +2,31 @@
 SET_LOGGER("BrickMoney.LegoSetTableData")
 
 #include "LegoSetTableData.h"
+#include "LegoSetTableData_p.h"
 #include "LegoSetRecord.h"
 
 #include <QDir>
 #include <QUrl>
 
-LegoSetTableData::LegoSetTableData()
+LegoSetTableData::LegoSetTableData(QObject *parent) : QObject(parent), d_ptr(new LegoSetTableDataPrivate(this))
 {
-	LegoSetRecord test("Empty.svg", "qrc:/images/Empty.svg", 1,"Egal",2018, 10.0, 5.0);
-	mColumnCountForGui = test.columnCountForGui();
-	mColumnCountForIO = test.columnCountForIO();
-    mRoles = test.roleNames();
+    LegoSetRecordInternal testRecord;
+
+    d_ptr->mColumnCountForGui = 0;
+    d_ptr->mColumnCountForIO = 0;
+    for( auto item : testRecord.mRecord)
+    {
+        if ( item->role() >= 0 )
+        {
+            ++d_ptr->mColumnCountForGui;
+            d_ptr->mRoles[item->role()] = item->roleName();
+        }
+
+        if ( item->shouldBeIO())
+        {
+            ++d_ptr->mColumnCountForIO;
+        }
+    }
 }
 
 LegoSetTableData::~LegoSetTableData()
@@ -22,12 +36,12 @@ LegoSetTableData::~LegoSetTableData()
 
 int LegoSetTableData::rowCount() const
 {
-    return mData.size();
+    return d_ptr->mData.size();
 }
 
 int LegoSetTableData::columnCount() const
 {
-    return mColumnCountForGui;
+    return d_ptr->mColumnCountForGui;
 }
 
 QVariant LegoSetTableData::getData(int row, int role) const
@@ -37,7 +51,7 @@ QVariant LegoSetTableData::getData(int row, int role) const
     if (row >= rowCount() || rowCount() < 0)
         return QVariant();
 
-    for (LegoSetItem* item : mData.at(row)->record())
+    for (LegoSetItem* item : d_ptr->mData.at(row)->mRecord)
     {
         if (item->role() == role )
         {
@@ -50,12 +64,12 @@ QVariant LegoSetTableData::getData(int row, int role) const
 
 bool LegoSetTableData::setData(int row, const QVariant &value, int role)
 {
-    for (auto item : mData.at(row)->record())
+    for (auto item : d_ptr->mData.at(row)->mRecord)
     {
         if (item->role() == role )
         {
-			bool ret = item->setData(value);
-			mData.at(row)->check(item);
+            bool ret = item->setData(value);
+            d_ptr->mData.at(row)->check(item);
 			return ret;
         }
     }
@@ -65,36 +79,36 @@ bool LegoSetTableData::setData(int row, const QVariant &value, int role)
 
 void LegoSetTableData::clear()
 {
-	for (auto e : mData)
+    for (auto e : d_ptr->mData)
 	{
 		delete e;
 		e = nullptr;
 	}
 
-    mData.clear();
+    d_ptr->mData.clear();
 }
 
-void LegoSetTableData::append(LegoSetRecord* record)
+void LegoSetTableData::append(const LegoSetRecord& record)
 {
-    mData.append(record);
+    d_ptr->mData.append(new LegoSetRecordInternal(record, this));
 }
 
 void LegoSetTableData::removeAt(int row)
 {
-	auto e= mData.value(row);
+    auto e= d_ptr->mData.value(row);
 	delete e;
 	e = nullptr;
-    mData.removeAt(row);
+    d_ptr->mData.removeAt(row);
 }
 
 QHash<int, QByteArray> LegoSetTableData::roleNames() const
 {
-    return mRoles;
+    return d_ptr->mRoles;
 }
 
 int LegoSetTableData::roleID(const QString &roleName)
 {
-    return mRoles.key(roleName.toUtf8());
+    return d_ptr->mRoles.key(roleName.toUtf8());
 }
 
 void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, const QString &projectFolder) const
@@ -122,9 +136,9 @@ void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, cons
         }
     }
 
-    for(auto legoSetRecord : mData)
+    for(auto legoSetRecord : d_ptr->mData)
     {
-		auto record = legoSetRecord->record();
+        auto record = legoSetRecord->mRecord;
 		auto size = record.size();
         for(int i = 0; i < size; ++i)
         {
@@ -151,10 +165,10 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList columns = line.split(separator);
-        if (columns.size() != mColumnCountForIO)
+        if (columns.size() != d_ptr->mColumnCountForIO)
         {
             LOG_WARN("The number of the imported columns differs from the expected columns. Actual: "
-                     << columns.size() << " Expexted: "<< mColumnCountForIO << ". Read the next line.");
+                     << columns.size() << " Expexted: "<< d_ptr->mColumnCountForIO << ". Read the next line.");
             continue;
         }
 
@@ -180,8 +194,10 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
         const double rrp = columns.at(4).toDouble();
         const double pPrice = columns.at(5).toDouble();
 
-        mData.append(new LegoSetRecord(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
-                                               columns.at(3).toInt(), rrp, pPrice));
+        LegoSetRecord record(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
+                             columns.at(3).toInt(), rrp, pPrice);
+
+        d_ptr->mData.append(new LegoSetRecordInternal(record, this));
     }
 }
 

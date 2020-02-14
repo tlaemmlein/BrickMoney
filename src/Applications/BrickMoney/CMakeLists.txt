@@ -22,7 +22,7 @@ add_executable(${PROJECT_NAME}
     LegoSetTableModel.h
     LegoSetTableData.cpp
     LegoSetTableData.h
-    LegoSetRecord.cpp
+    LegoSetTableData_p.h
     LegoSetRecord.h
     LegoSetIOManager.cpp
     LegoSetIOManager.h
