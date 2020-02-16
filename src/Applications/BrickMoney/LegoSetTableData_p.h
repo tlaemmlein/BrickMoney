@@ -187,17 +187,34 @@ private:
     static constexpr double mRole = Qt::UserRole +7;
 };
 
+class LegoSetSeller : public LegoSetString
+{
+public:
+    LegoSetSeller(const QString& value) : LegoSetString(value) {}
+    ~LegoSetSeller() = default;
+    int role() const override { return mRole;}
+    QByteArray roleName() override { return "seller"; }
+    bool shouldBeIO() override { return true;}
+private:
+    static const int mRole = Qt::UserRole +8;
+};
+
+
 using LegoSetItemRecord = std::vector<LegoSetItem*>;
 
 class LegoSetRecordInternal : public QObject
 {
 public:
     explicit LegoSetRecordInternal(QObject *parent= nullptr) : QObject(parent),
-        mImageName( new LegoSetImage("imageName")), mImageFilePath( new LegoSetImageFilePath("imageFilePath"))
-        , mSetNumber(new LegoSetNumber(123)), mDescription(new LegoSetDescription("description"))
-        , mYear(new LegoSetYear(2018)), mRRetailPrice( new LegoSetRecommendedRetailPrice(100.0))
+          mImageName( new LegoSetImage("imageName"))
+        , mImageFilePath( new LegoSetImageFilePath("imageFilePath"))
+        , mSetNumber(new LegoSetNumber(123))
+        , mDescription(new LegoSetDescription("description"))
+        , mYear(new LegoSetYear(2018))
+        , mRRetailPrice( new LegoSetRecommendedRetailPrice(100.0))
         , mPurchasingPrice(new LegoSetPurchasingPrice(10.0))
-        , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(100.0, 10.0)) )
+        , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(100.0, 10.0)))
+        , mSeller(new LegoSetSeller("Seller"))
     {
         init();
     }
@@ -210,7 +227,8 @@ public:
         , mYear(new LegoSetYear(std::get<4>(record) ) )
         , mRRetailPrice( new LegoSetRecommendedRetailPrice(std::get<5>(record) ) )
         , mPurchasingPrice(new LegoSetPurchasingPrice(std::get<6>(record) ) )
-        , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(std::get<5>(record), std::get<6>(record)) ) )
+        , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(std::get<5>(record), std::get<6>(record)) ))
+        , mSeller(new LegoSetSeller(std::get<7>(record)))
     {
         init();
     }
@@ -249,6 +267,7 @@ public:
     LegoSetRecommendedRetailPrice* mRRetailPrice;
     LegoSetPurchasingPrice* mPurchasingPrice;
     LegoSetCheaperPercent* mCheaperPercent;
+    LegoSetSeller* mSeller;
 
     LegoSetItemRecord mRecord;
 
@@ -262,6 +281,7 @@ private:
         mRecord.push_back(mRRetailPrice);
         mRecord.push_back(mPurchasingPrice);
         mRecord.push_back(mCheaperPercent);
+        mRecord.push_back(mSeller);
     }
 };
 
