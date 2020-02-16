@@ -210,5 +210,23 @@ C1.TableView {
         }
     }
 
+    C1.TableViewColumn {
+        id: purchaseDateColumn
+        role: "purchaseDate"
+        title: "Purchase Date"
+        width: 100
+        delegate: TextField {
+            anchors.fill: parent
+            text: styleData.value
+            selectByMouse: true
+            wrapMode: "WrapAtWordBoundaryOrAnywhere"
+            onEditingFinished: {
+                var roleID = _LegoSetTableModel.roleID(purchaseDateColumn.role)
+                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                _LegoSetTableModel.setData(q_model_index, text, roleID)
+            }
+        }
+    }
+
 }
 

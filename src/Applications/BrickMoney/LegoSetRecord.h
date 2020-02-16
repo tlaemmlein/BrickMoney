@@ -13,6 +13,7 @@ using LegoSetRecord = std::tuple<  QString  //00: imageName
                                  , double   //05: rrp
                                  , double   //06: purchasing_price
                                  , QString  //07: Seller
+                                 , QString  //08: Purchase date
                                  >;
 #endif
 

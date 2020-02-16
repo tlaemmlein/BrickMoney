@@ -113,6 +113,8 @@ int LegoSetTableData::roleID(const QString &roleName)
 
 void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, const QString &projectFolder) const
 {
+    LOG_SCOPE_METHOD(L"");
+
     QString imageFolderString = projectFolder + "/images";
 
     if (!QDir(imageFolderString).exists())
@@ -139,10 +141,21 @@ void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, cons
     for(auto legoSetRecord : d_ptr->mData)
     {
         auto record = legoSetRecord->mRecord;
-		auto size = record.size();
-        for(int i = 0; i < size; ++i)
-        {
+		LegoSetItemRecord recordForExport;
+		for (int i = 0; i < record.size(); ++i)
+		{
 			auto item = record.at(i);
+			if (item->shouldBeIO())
+			{
+				recordForExport.push_back(item);
+			}
+		}
+
+		size_t sizeForExport = recordForExport.size();
+
+        for(int i = 0; i < sizeForExport; ++i)
+        {
+			auto item = recordForExport.at(i);
             if (item->shouldBeIO())
             {
                 if ( LegoSetInt* int_item = dynamic_cast<LegoSetInt*>(item) )
@@ -152,7 +165,7 @@ void LegoSetTableData::saveDataTo(const QChar &separator, QTextStream &out, cons
                 else if ( LegoSetString* string_item = dynamic_cast<LegoSetString*>(item) )
                     out << string_item->getValue();
 
-				if (i < size - 2)
+				if (i < sizeForExport - 1)
 					out << separator;
             }
         }
@@ -195,7 +208,7 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
         const double pPrice = columns.at(5).toDouble();
 
         LegoSetRecord record(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
-                             columns.at(3).toInt(), rrp, pPrice,columns.at(6));
+                             columns.at(3).toInt(), rrp, pPrice,columns.at(6),columns.at(7));
 
         d_ptr->mData.append(new LegoSetRecordInternal(record, this));
     }
