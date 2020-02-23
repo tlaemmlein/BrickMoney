@@ -153,28 +153,46 @@ C1.TableView {
             onEditingFinished: {
                 var roleID = _LegoSetTableModel.roleID(rrpColumn.role)
                 var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                var value =
                 _LegoSetTableModel.setData(q_model_index, text, roleID)
             }
         }
     }
+
+//    C1.TableViewColumn {
+//        id: purchasingPriceColumn
+//        role: "purchasingPrice"
+//        title: "PPrice[€]"
+//        width: 100
+//        delegate: TextField {
+//            anchors.fill: parent
+//            validator: DoubleValidator {bottom: 0.0; top: 2147483647.0;}
+//            selectByMouse: true
+//            text: styleData.value
+//            onEditingFinished: {
+//                var roleID = _LegoSetTableModel.roleID(purchasingPriceColumn.role)
+//                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+//                _LegoSetTableModel.setData(q_model_index, text, roleID)
+//            }
+//        }
+//    }
 
     C1.TableViewColumn {
         id: purchasingPriceColumn
         role: "purchasingPrice"
         title: "PPrice[€]"
         width: 100
-        delegate: TextField {
+        delegate:  DoubleSpinBox {
+            value: styleData.value
+            stepSize: 0.1
             anchors.fill: parent
-            validator: DoubleValidator {bottom: 0.0; top: 2147483647.0;}
-            selectByMouse: true
-            text: styleData.value
-            onEditingFinished: {
-                var roleID = _LegoSetTableModel.roleID(purchasingPriceColumn.role)
-                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
-                _LegoSetTableModel.setData(q_model_index, text, roleID)
+            editable: true
+            onValueChanged: {
+                model.purchasingPrice = value;
             }
         }
     }
+
 
     C1.TableViewColumn {
         id: cheaperPercentColumn
@@ -227,6 +245,25 @@ C1.TableView {
             }
         }
     }
+
+    C1.TableViewColumn {
+        id: retailPriceColumn
+        role: "retailPrice"
+        title: "Retail price[€]"
+        width: 100
+        delegate: TextField {
+            anchors.fill: parent
+            validator: DoubleValidator {bottom: 0.0; top: 2147483647.0;}
+            selectByMouse: true
+            text: styleData.value
+            onEditingFinished: {
+                var roleID = _LegoSetTableModel.roleID(retailPriceColumn.role)
+                var q_model_index = _LegoSetTableModel.index(styleData.row, styleData.column)
+                _LegoSetTableModel.setData(q_model_index, text, roleID)
+            }
+        }
+    }
+
 
 }
 

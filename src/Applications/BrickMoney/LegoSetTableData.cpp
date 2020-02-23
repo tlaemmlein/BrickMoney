@@ -204,11 +204,16 @@ void LegoSetTableData::loadDataFrom(const QChar &separator, QTextStream &in, con
         }
         url = QUrl::fromLocalFile(QFileInfo(imageFilePathString).canonicalFilePath());
 
-        const double rrp = columns.at(4).toDouble();
-        const double pPrice = columns.at(5).toDouble();
-
-        LegoSetRecord record(imageName, url.toString(), columns.at(1).toInt(), columns.at(2),
-                             columns.at(3).toInt(), rrp, pPrice,columns.at(6),columns.at(7));
+        LegoSetRecord record(imageName
+                             , url.toString()
+                             , columns.at( 1).toInt()
+                             , columns.at( 2)
+                             , columns.at( 3).toInt()
+                             , columns.at( 4).toDouble()
+                             , columns.at( 5).toDouble()
+                             , columns.at( 6)
+                             , columns.at( 7)
+                             , columns.at( 8).toDouble());
 
         d_ptr->mData.append(new LegoSetRecordInternal(record, this));
     }

@@ -211,6 +211,19 @@ private:
     static const int mRole = Qt::UserRole +9;
 };
 
+class LegoSetRetailPrice : public LegoSetDouble
+{
+public:
+    LegoSetRetailPrice(double value) : LegoSetDouble(value) {}
+    ~LegoSetRetailPrice() = default;
+    int role() const override { return mRole;}
+    QByteArray roleName() override { return "retailPrice"; }
+    bool shouldBeIO() override { return true;}
+private:
+    static constexpr double mRole = Qt::UserRole +10;
+};
+
+
 using LegoSetItemRecord = std::vector<LegoSetItem*>;
 
 class LegoSetRecordInternal : public QObject
@@ -227,6 +240,7 @@ public:
         , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(100.0, 10.0)))
         , mSeller(new LegoSetSeller("Seller"))
         , mPurchaseDate(new LegoSetPurchaseDate("07.0.72018"))
+        , mRetailPrice(new LegoSetRetailPrice(100.0))
     {
         init();
     }
@@ -242,6 +256,7 @@ public:
         , mCheaperPercent(new LegoSetCheaperPercent(calcCheaperPercent(std::get<5>(record), std::get<6>(record)) ))
         , mSeller(new LegoSetSeller(std::get<7>(record)))
         , mPurchaseDate( new LegoSetPurchaseDate(std::get<8>(record)))
+        , mRetailPrice(new LegoSetRetailPrice(std::get<9>(record)))
     {
         init();
     }
@@ -282,6 +297,7 @@ public:
     LegoSetCheaperPercent* mCheaperPercent;
     LegoSetSeller* mSeller;
     LegoSetPurchaseDate* mPurchaseDate;
+    LegoSetRetailPrice* mRetailPrice;
 
     LegoSetItemRecord mRecord;
 
@@ -297,6 +313,7 @@ private:
         mRecord.push_back(mCheaperPercent);
         mRecord.push_back(mSeller);
         mRecord.push_back(mPurchaseDate);
+        mRecord.push_back(mRetailPrice);
     }
 };
 

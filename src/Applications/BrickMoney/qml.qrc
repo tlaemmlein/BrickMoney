@@ -6,5 +6,6 @@
         <file>images/LogoBrickMoneyIcon_32.png</file>
         <file>images/LogoBrickMoneyIcon_48.png</file>
         <file>images/LogoBrickMoneyIcon_64.png</file>
+        <file>DoubleSpinBox.qml</file>
     </qresource>
 </RCC>

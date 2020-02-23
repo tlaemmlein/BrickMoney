@@ -90,7 +90,7 @@ bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
     {
         LegoSetRecord record("Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
                              QString("Beschreibung %1").arg(mLegoSetTableData.rowCount())
-                                 ,2018, 10.0, 5.0, "www.lego.de", "07.07.2018");
+                                 ,2018, 10.0, 5.0, "www.lego.de", "07.07.2018", 15.0);
 
         mLegoSetTableData.append(record);
 		LOG_DEBUG("row +i: " << row +i);

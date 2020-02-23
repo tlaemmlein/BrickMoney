@@ -3,6 +3,8 @@ SET_LOGGER("BrickMoney.Main")
 
 #include "LegoSetTableModel.h"
 
+#include "QmlValuePreview.h"
+
 #include "LegoSetIOManager.h"
 
 #include <log4cplus/consoleappender.h>
@@ -14,8 +16,13 @@ SET_LOGGER("BrickMoney.Main")
 #include <QQmlContext>
 #include <QIcon>
 
+#define URI "QmlUtils"
+#define VERSION_MAJOR 1
+#define VERSION_MINOR 0
+
 using namespace log4cplus;
 using namespace log4cplus::helpers;
+
 
 
 int main(int argc, char *argv[])
@@ -48,6 +55,9 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setApplicationName("BrickMoney");
     QCoreApplication::setOrganizationName("Spielolamm");
+
+    qRegisterMetaType<QDoubleValueArg *>("QDoubleValueArg *");
+    qmlRegisterType<QmlDoubleValuePreview>(URI, VERSION_MAJOR, VERSION_MINOR, "DoubleValuePreview");
 
     qmlRegisterType<LegoSetTableModel>("LegoSetTableModel", 0, 1, "LegoSetTableModel");
     qmlRegisterType<LegoSetIOManager>("LegoSetIOManager", 0, 1, "LegoSetIOManager");

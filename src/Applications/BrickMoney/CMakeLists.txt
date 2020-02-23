@@ -18,6 +18,7 @@ add_executable(${PROJECT_NAME}
     images/images.qrc
     main.cpp
     qml.qrc
+    QmlValuePreview.h
     LegoSetTableModel.cpp
     LegoSetTableModel.h
     LegoSetTableData.cpp
