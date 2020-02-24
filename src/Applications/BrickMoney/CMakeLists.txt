@@ -19,6 +19,10 @@ add_executable(${PROJECT_NAME}
     main.cpp
     qml.qrc
     QmlValuePreview.h
+    DataSource.cpp
+    DataSource.h
+    LegoSet.cpp
+    LegoSet.h
     LegoSetTableModel.cpp
     LegoSetTableModel.h
     LegoSetTableData.cpp
