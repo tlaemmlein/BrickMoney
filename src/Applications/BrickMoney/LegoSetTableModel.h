@@ -2,15 +2,20 @@
 #define LEGOSET_TABLE_MODEL_H
 
 #include "LegoSetTableData.h"
+#include "LegoSet.h"
+#include "DataSource.h"
 
 #include <QAbstractTableModel>
-
-#include <QLinkedList>
-#include <QTextStream>
+#include <QQmlListProperty>
 
 class LegoSetTableModel : public QAbstractTableModel
 {
     Q_OBJECT
+    Q_PROPERTY(DataSource* dataSource READ dataSource WRITE setDataSource NOTIFY dataSourceChanged)
+    Q_PROPERTY(QQmlListProperty<LegoSet> legoSets READ legoSets NOTIFY legoSetsChanged)
+
+    Q_CLASSINFO("DefaultProperty", "legoSets")
+
 
 public:
     explicit LegoSetTableModel(QObject *parent= nullptr);
@@ -35,15 +40,28 @@ public:
 
     void loadDataFrom(const QChar& separator, QTextStream& in, const QString& projectFolder);
 
+    DataSource *dataSource() const;
+
+    QQmlListProperty<LegoSet> legoSets() const;
+
 public slots:
 
     void newEntry();
     void deleteEntry(int rowIndex);
     void clearAll();
 
+    void setDataSource(DataSource* dataSource);
+
+signals:
+    void dataSourceChanged(DataSource* dataSource);
+
+    void legoSetsChanged(QQmlListProperty<LegoSet> legoSets);
+
 private:
 
     LegoSetTableData mLegoSetTableData;
+    DataSource* m_dataSource;
+    QQmlListProperty<LegoSet> m_legoSets;
 };
 
 

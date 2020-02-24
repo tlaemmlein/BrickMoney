@@ -79,10 +79,19 @@ void LegoSetTableModel::clearAll()
     endResetModel();
 }
 
+void LegoSetTableModel::setDataSource(DataSource *datasource)
+{
+    if (m_dataSource == datasource)
+        return;
+
+    m_dataSource = datasource;
+    emit dataSourceChanged(m_dataSource);
+}
+
 
 bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
 {
-	LOG_SCOPE_METHOD(L"");
+    LOG_SCOPE_METHOD(L"");
     LOG_DEBUG("row: " << row << " count: " << count);
     beginInsertRows(QModelIndex(), row, row + count - 1);
 
@@ -154,5 +163,15 @@ void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QS
         LOG_ERROR("LegoSetTableData is empty. Nothing was load.");
 
     endResetModel();
+}
+
+DataSource *LegoSetTableModel::dataSource() const
+{
+    return m_dataSource;
+}
+
+QQmlListProperty<LegoSet> LegoSetTableModel::legoSets() const
+{
+    return m_legoSets;
 }
 
