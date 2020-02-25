@@ -9,13 +9,15 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QUrl>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
+    , m_signalConnected(false)
 {
     setObjectName("TableModel");
+    setDataSource( new DataSource(this));
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
 {
-    return mLegoSetTableData.rowCount();
+    return m_dataSource->dataItems().size();
 }
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
@@ -27,10 +29,36 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 {
 	LOG_SCOPE_METHOD(L"");
 
-    if (!index.isValid())
+    if (index.row() < 0 || index.row() >= m_dataSource->dataItems().size() )
         return QVariant();
 
-    return mLegoSetTableData.getData(index.row(), role);
+    //The index is valid
+    LegoSet *set = m_dataSource->dataItems().at(index.row());
+
+    if ( ImageNameRole == role)
+        return set->imageName();
+    if ( ImageFilePathRole == role)
+        return set->imageFilePath();
+    if ( SetNumberRole == role)
+        return set->setNumber();
+    if ( DescriptionRole == role)
+        return set->description();
+    if ( YearRole == role)
+        return set->year();
+    if ( RecommendedRetailPriceRole == role)
+        return set->recommendedRetailPrice();
+    if ( PurchasingPriceRole == role)
+        return set->purchasingPrice();
+    if ( CheaperPercentRole == role)
+        return set->cheaperPercent();
+    if ( SellerRole == role)
+        return set->seller();
+    if ( PurchaseDateRole == role)
+        return set->purchaseDate();
+    if ( RetailPrice == role)
+        return set->retailPrice();
+
+    return QVariant();
 }
 
 
@@ -42,12 +70,109 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     if (!index.isValid() )
         return false;
 
-    if (!mLegoSetTableData.setData(index.row(), value, role) )
-        return false;
+    LegoSet *set = m_dataSource->dataItems().at(index.row());
+    bool somethingChanged = false;
 
-    emit dataChanged(index,index);
+    switch (static_cast<LegoSetRoles>(role)) {
+    case LegoSetTableModel::ImageNameRole:
+    {
+        if (set->imageName() != value.toString() ) {
+            set->setImageName(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::ImageFilePathRole:
+    {
+        if (set->imageFilePath() != value.toString() ) {
+            set->setImageFilePath(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::SetNumberRole:
+    {
+        if (set->setNumber() != value.toInt() ) {
+            set->setSetNumber(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::DescriptionRole:
+    {
+        if (set->description() != value.toString() ) {
+            set->setDescription(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::YearRole:
+    {
+        if (set->year() != value.toInt() ) {
+            set->setYear(value.toInt());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::RecommendedRetailPriceRole:
+    {
+        qWarning("Floating point comparison needs context sanity check");
+        if (! qFuzzyCompare(set->recommendedRetailPrice(), value.toDouble())) {
+            set->setRecommendedRetailPrice(value.toDouble());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::PurchasingPriceRole:
+    {
+        qWarning("Floating point comparison needs context sanity check");
+        if (! qFuzzyCompare(set->purchasingPrice(), value.toDouble())) {
+            set->setPurchasingPrice(value.toDouble());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::CheaperPercentRole:
+    {
+        qWarning("Floating point comparison needs context sanity check");
+        if (! qFuzzyCompare(set->cheaperPercent(), value.toDouble())) {
+            set->setCheaperPercent(value.toDouble());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::SellerRole:
+    {
+        if (set->seller() != value.toString() ) {
+            set->setSeller(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::PurchaseDateRole:
+    {
+        if (set->purchaseDate() != value.toString() ) {
+            set->setPurchaseDate(value.toString());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::RetailPrice:
+    {
+        qWarning("Floating point comparison needs context sanity check");
+        if (! qFuzzyCompare(set->retailPrice(), value.toDouble())) {
+            set->setRetailPrice(value.toDouble());
+            somethingChanged = true;
+        }
+        break;
+    }
+    }
 
-    return true;
+    if( somethingChanged){
+        emit dataChanged(index,index,QVector<int>() << role);
+        return true;
+    }
+    return false;
 }
 
 void LegoSetTableModel::newEntry()
@@ -136,14 +261,20 @@ bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
 
 QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 {
-	LOG_SCOPE_METHOD(L"");
-    return mLegoSetTableData.roleNames();
-}
+    QHash<int, QByteArray> roles;
 
-int LegoSetTableModel::roleID(const QString& roleName)
-{
-	LOG_SCOPE_METHOD(L"");
-    return mLegoSetTableData.roleID(roleName);
+    roles[ImageNameRole]="imageName";
+    roles[ImageFilePathRole]="imageFilePath";
+    roles[SetNumberRole]="setNumber";
+    roles[DescriptionRole]="description";
+    roles[YearRole]="year";
+    roles[RecommendedRetailPriceRole]="recommendedRetailPrice";
+    roles[PurchasingPriceRole]="purchasingPrice";
+    roles[CheaperPercentRole]="cheaperPercent";
+    roles[SellerRole]="seller";
+    roles[PurchaseDateRole]="purchaseDate";
+    roles[RetailPrice]="retailPrice";
+    return roles;
 }
 
 void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QString& projectFolder) const

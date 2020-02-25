@@ -16,6 +16,19 @@ class LegoSetTableModel : public QAbstractTableModel
 
     Q_CLASSINFO("DefaultProperty", "legoSets")
 
+    enum LegoSetRoles {
+        ImageNameRole = Qt::UserRole + 1,
+        ImageFilePathRole,
+        SetNumberRole,
+        DescriptionRole,
+        YearRole,
+        RecommendedRetailPriceRole,
+        PurchasingPriceRole,
+        CheaperPercentRole,
+        SellerRole,
+        PurchaseDateRole,
+        RetailPrice
+    };
 
 public:
     explicit LegoSetTableModel(QObject *parent= nullptr);
@@ -33,8 +46,6 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent) override;
 
     QHash<int, QByteArray> roleNames() const override;
-
-    Q_INVOKABLE int roleID(const QString& roleName);
 
     void saveDataTo(const QChar& separator, QTextStream& out, const QString& projectFolder) const;
 
@@ -61,6 +72,7 @@ private:
 
     LegoSetTableData mLegoSetTableData;
     DataSource* m_dataSource;
+    bool m_signalConnected;
     QQmlListProperty<LegoSet> m_legoSets;
 };
 
