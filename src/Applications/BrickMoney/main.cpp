@@ -1,11 +1,11 @@
 #include "Logging.h"
 SET_LOGGER("BrickMoney.Main")
 
+//#include "LegoSetIOManager.h"
 #include "LegoSetTableModel.h"
+#include "LegoSet.h"
 
 #include "QmlValuePreview.h"
-
-#include "LegoSetIOManager.h"
 
 #include <log4cplus/consoleappender.h>
 #include <log4cplus/initializer.h>
@@ -15,10 +15,6 @@ SET_LOGGER("BrickMoney.Main")
 #include <QAbstractTableModel>
 #include <QQmlContext>
 #include <QIcon>
-
-#define URI "QmlUtils"
-#define VERSION_MAJOR 1
-#define VERSION_MINOR 0
 
 using namespace log4cplus;
 using namespace log4cplus::helpers;
@@ -37,7 +33,7 @@ int main(int argc, char *argv[])
 	console_appender->setLayout(std::unique_ptr<Layout>(new PatternLayout(pattern)));
 	Logger::getRoot().addAppender(console_appender);
 
-    Logger::getRoot().setLogLevel(TRACE_LOG_LEVEL);
+    Logger::getRoot().setLogLevel(DEBUG_LOG_LEVEL);
 
     LOG_INFO("Start BrickMoney");
 
@@ -57,20 +53,24 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("Spielolamm");
 
     qRegisterMetaType<QDoubleValueArg *>("QDoubleValueArg *");
-    qmlRegisterType<QmlDoubleValuePreview>(URI, VERSION_MAJOR, VERSION_MINOR, "DoubleValuePreview");
+    qmlRegisterType<QmlDoubleValuePreview>("QmlUtils", 1, 0, "DoubleValuePreview");
 
-    qmlRegisterType<LegoSetTableModel>("LegoSetTableModel", 0, 1, "LegoSetTableModel");
-    qmlRegisterType<LegoSetIOManager>("LegoSetIOManager", 0, 1, "LegoSetIOManager");
-    QSharedPointer<LegoSetTableModel> lego_table_model = QSharedPointer<LegoSetTableModel>(new LegoSetTableModel);
-    LegoSetIOManager lego_io_manager;
-    lego_io_manager.setLegoSetTableModel(lego_table_model);
+    qmlRegisterType<LegoSet>("de.brickmoney.models", 0, 1, "LegoSet");
+    qmlRegisterType<LegoSetTableModel>("de.brickmoney.models", 0, 1, "LegoSetTableModel");
+//    qmlRegisterType<LegoSetIOManager>("LegoSetIOManager", 0, 1, "LegoSetIOManager");
+
+//    QSharedPointer<LegoSetTableModel> lego_table_model = QSharedPointer<LegoSetTableModel>(new LegoSetTableModel);
+//    LegoSetIOManager lego_io_manager;
+//    lego_io_manager.setLegoSetTableModel(lego_table_model);
 
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("_LegoSetTableModel", lego_table_model.get());
-    engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
+//    engine.rootContext()->setContextProperty("_LegoSetTableModel", lego_table_model.get());
+//    engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
 
-    engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/main_2.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }

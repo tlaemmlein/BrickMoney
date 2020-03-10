@@ -5,6 +5,7 @@ SET_LOGGER("BrickMoney.LegoSetIOManager")
 
 #include <QDir>
 #include <QUrl>
+#include <QTextStream>
 
 
 LegoSetIOManager::LegoSetIOManager(QObject *parent): QObject(parent)
@@ -50,7 +51,7 @@ void LegoSetIOManager::saveProject()
     QTextStream output(&cvsData);
     output.setCodec("UTF-8");
 
-    mLegoSetTableModel->saveDataTo(';', output, projectFolder());
+//    mLegoSetTableModel->saveDataTo(';', output, projectFolder());
 }
 
 void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
@@ -80,7 +81,7 @@ void LegoSetIOManager::loadProject(const QString &projectFolderToLoad)
     QTextStream input(&cvsData);
     input.setCodec("UTF-8");
 
-    mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
+//    mLegoSetTableModel->loadDataFrom(';', input, projectFolder());
 }
 
 void LegoSetIOManager::setProjectFolder(QString folder)

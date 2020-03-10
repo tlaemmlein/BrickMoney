@@ -7,6 +7,7 @@ import QtQuick.Controls 1.4 as C1
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.1
+import de.brickmoney.models 0.1
 
 ApplicationWindow {
     id: mainWindow
@@ -272,6 +273,14 @@ ApplicationWindow {
             to: 300
         }
 
+    }
+
+    LegoSetTableModel {
+        id: mLegoSetModel
+
+        LegoSet {
+            imageFilePath: "image.png"
+        }
     }
 
     LegoTable {

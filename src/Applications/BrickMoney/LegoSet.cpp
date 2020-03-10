@@ -1,8 +1,11 @@
 #include "LegoSet.h"
 
+#include "LegoSetInfoGenerator.h"
+
+
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
     ,m_imageName("None")
-    ,m_imageFilePath("None")
+    ,m_imageUrl("None")
     ,m_setNumber(-1)
     ,m_description("None")
     ,m_year(0)
@@ -10,38 +13,27 @@ LegoSet::LegoSet(QObject *parent) : QObject(parent)
     ,m_purchasingPrice(0)
     ,m_cheaperPercent(0)
     ,m_seller("None")
-    ,m_purchaseDate("None")
+    ,m_purchaseDate(QDate::currentDate())
     ,m_retailPrice(0)
+    ,m_profitEuros(0)
+    ,m_profitPercent(0)
+    ,m_saleDate(QDate(1900,1,1))
+    ,m_soldOver("")
+    ,m_buyer("")
 {
-
+    m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageName, this, &LegoSet::setImageName);
 }
 
-LegoSet::LegoSet(const QString &imageName, const QString &imageFilePath, int setNumber, const QString &description,
-                 int year, double recommendedRetailPrice, double purchasingPrice, double cheaperPercent,
-                 const QString &seller, const QString &purchaseDate, double retailPrice, QObject *parent) : QObject(parent)
-    ,m_imageName(imageName)
-    ,m_imageFilePath(imageFilePath)
-    ,m_setNumber(setNumber)
-    ,m_description(description)
-    ,m_year(year)
-    ,m_recommendedRetailPrice(recommendedRetailPrice)
-    ,m_purchasingPrice(purchasingPrice)
-    ,m_cheaperPercent(cheaperPercent)
-    ,m_seller(seller)
-    ,m_purchaseDate(purchaseDate)
-    ,m_retailPrice(retailPrice)
-{
-
-}
 
 QString LegoSet::imageName() const
 {
     return m_imageName;
 }
 
-QString LegoSet::imageFilePath() const
+QString LegoSet::imageUrl() const
 {
-    return m_imageFilePath;
+    return m_imageUrl;
 }
 
 int LegoSet::setNumber() const
@@ -79,7 +71,7 @@ QString LegoSet::seller() const
     return m_seller;
 }
 
-QString LegoSet::purchaseDate() const
+QDate LegoSet::purchaseDate() const
 {
     return m_purchaseDate;
 }
@@ -89,22 +81,38 @@ double LegoSet::retailPrice() const
     return m_retailPrice;
 }
 
-void LegoSet::setImageName(QString imageName)
+double LegoSet::profitEuros() const
 {
-    if (m_imageName == imageName)
-        return;
-
-    m_imageName = imageName;
-    emit imageNameChanged(m_imageName);
+    return m_profitEuros;
 }
 
-void LegoSet::setImageFilePath(QString imageFilePath)
+double LegoSet::profitPercent() const
 {
-    if (m_imageFilePath == imageFilePath)
+    return m_profitPercent;
+}
+
+QDate LegoSet::saleDate() const
+{
+    return m_saleDate;
+}
+
+QString LegoSet::soldOver() const
+{
+    return m_soldOver;
+}
+
+QString LegoSet::buyer() const
+{
+    return m_buyer;
+}
+
+void LegoSet::setImageUrl(QString imageUrl)
+{
+    if (m_imageUrl == imageUrl)
         return;
 
-    m_imageFilePath = imageFilePath;
-    emit imageFilePathChanged(m_imageFilePath);
+    m_imageUrl = imageUrl;
+    emit imageUrlChanged(m_imageUrl);
 }
 
 void LegoSet::setSetNumber(int setNumber)
@@ -136,27 +144,26 @@ void LegoSet::setYear(int year)
 
 void LegoSet::setRecommendedRetailPrice(double recommendedRetailPrice)
 {
-    qWarning("Floating point comparison needs context sanity check");
     if (qFuzzyCompare(m_recommendedRetailPrice, recommendedRetailPrice))
         return;
 
     m_recommendedRetailPrice = recommendedRetailPrice;
     emit recommendedRetailPriceChanged(m_recommendedRetailPrice);
+
+    setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
 }
 
 void LegoSet::setPurchasingPrice(double purchasingPrice)
 {
-    m_purchasingPrice = purchasingPrice;
-}
-
-void LegoSet::setCheaperPercent(double cheaperPercent)
-{
-    qWarning("Floating point comparison needs context sanity check");
-    if (qFuzzyCompare(m_cheaperPercent, cheaperPercent))
+    if (qFuzzyCompare(m_purchasingPrice, purchasingPrice))
         return;
 
-    m_cheaperPercent = cheaperPercent;
-    emit cheaperPercentChanged(m_cheaperPercent);
+    m_purchasingPrice = purchasingPrice;
+    emit purchasingPriceChanged(m_purchasingPrice);
+
+    setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
+    setProfitEuros( calcProfitEuros(m_retailPrice, m_purchasingPrice));
+    setProfitPercent( calcProfitPercent(m_retailPrice, m_purchasingPrice));
 }
 
 void LegoSet::setSeller(QString seller)
@@ -168,7 +175,7 @@ void LegoSet::setSeller(QString seller)
     emit sellerChanged(m_seller);
 }
 
-void LegoSet::setPurchaseDate(QString purchaseDate)
+void LegoSet::setPurchaseDate(QDate purchaseDate)
 {
     if (m_purchaseDate == purchaseDate)
         return;
@@ -179,11 +186,93 @@ void LegoSet::setPurchaseDate(QString purchaseDate)
 
 void LegoSet::setRetailPrice(double retailPrice)
 {
-    qWarning("Floating point comparison needs context sanity check");
     if (qFuzzyCompare(m_retailPrice, retailPrice))
         return;
 
     m_retailPrice = retailPrice;
     emit retailPriceChanged(m_retailPrice);
+
+    setProfitEuros( calcProfitEuros(m_retailPrice, m_purchasingPrice));
+    setProfitPercent( calcProfitPercent(m_retailPrice, m_purchasingPrice));
 }
 
+void LegoSet::setSaleDate(QDate saleDate)
+{
+    if (m_saleDate == saleDate)
+        return;
+
+    m_saleDate = saleDate;
+    emit saleDateChanged(m_saleDate);
+}
+
+void LegoSet::setSoldOver(QString soldOver)
+{
+    if (m_soldOver == soldOver)
+        return;
+
+    m_soldOver = soldOver;
+    emit soldOverChanged(m_soldOver);
+}
+
+void LegoSet::setBuyer(QString buyer)
+{
+    if (m_buyer == buyer)
+        return;
+
+    m_buyer = buyer;
+    emit buyerChanged(m_buyer);
+}
+
+void LegoSet::setImageName(QString imageName)
+{
+    if (m_imageName == imageName)
+        return;
+
+    m_imageName = imageName;
+    emit imageNameChanged(m_imageName);
+}
+
+
+double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
+{
+    return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
+}
+
+void LegoSet::setCheaperPercent(double cheaperPercent)
+{
+    if (qFuzzyCompare(m_cheaperPercent, cheaperPercent))
+        return;
+
+    m_cheaperPercent = cheaperPercent;
+    emit cheaperPercentChanged(m_cheaperPercent);
+}
+
+double LegoSet::calcProfitEuros(double retailPrice, double purchasingPrice)
+{
+    return (retailPrice <= 0.0) ? 0.0 : (retailPrice - purchasingPrice);
+}
+
+void LegoSet::setProfitEuros(double profitEuros)
+{
+    if (qFuzzyCompare(m_profitEuros, profitEuros))
+        return;
+
+    m_profitEuros = profitEuros;
+    emit profitEurosChanged(m_profitEuros);
+}
+
+double LegoSet::calcProfitPercent(double retailPrice, double purchasingPrice)
+{
+    if ( retailPrice <= 0.0 || purchasingPrice <= 0.0)
+        return 0.0;
+    return ( (retailPrice/purchasingPrice) -1.0) *100.0;
+}
+
+void LegoSet::setProfitPercent(double profitPercent)
+{
+    if (qFuzzyCompare(m_profitPercent, profitPercent))
+        return;
+
+    m_profitPercent = profitPercent;
+    emit profitPercentChanged(m_profitPercent);
+}

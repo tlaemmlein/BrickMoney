@@ -7,12 +7,30 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QFile>
 #include <QDir>
 #include <QUrl>
+#include <QQmlListProperty>
 
-LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel (parent)
+LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)
 {
-    setObjectName("TableModel");
+    setObjectName("LegoSetTableModel");
     setDataSource( new DataSource(this));
+
+    m_roles[ImageNameRole]="imageName";
+    m_roles[ImageUrl]="imageUrl";
+    m_roles[SetNumberRole]="setNumber";
+    m_roles[DescriptionRole]="description";
+    m_roles[YearRole]="year";
+    m_roles[RecommendedRetailPriceRole]="recommendedRetailPrice";
+    m_roles[PurchasingPriceRole]="purchasingPrice";
+    m_roles[CheaperPercentRole]="cheaperPercent";
+    m_roles[SellerRole]="seller";
+    m_roles[PurchaseDateRole]="purchaseDate";
+    m_roles[RetailPrice]="retailPrice";
+    m_roles[ProfitEuros]="profitEuros";
+    m_roles[ProfitPercent]="profitPercent";
+    m_roles[SaleDate]="saleDate";
+    m_roles[SoldOver]="soldOver";
+    m_roles[Buyer]="buyer";
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
@@ -22,7 +40,7 @@ int LegoSetTableModel::rowCount(const QModelIndex &) const
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return mLegoSetTableData.columnCount();
+    return m_roles.size();
 }
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
@@ -37,8 +55,8 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 
     if ( ImageNameRole == role)
         return set->imageName();
-    if ( ImageFilePathRole == role)
-        return set->imageFilePath();
+    if ( ImageUrl == role)
+        return set->imageUrl();
     if ( SetNumberRole == role)
         return set->setNumber();
     if ( DescriptionRole == role)
@@ -57,6 +75,16 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
         return set->purchaseDate();
     if ( RetailPrice == role)
         return set->retailPrice();
+    if ( ProfitEuros == role)
+        return set->profitEuros();
+    if (ProfitPercent == role)
+        return set->profitPercent();
+    if (SaleDate == role)
+        return set->saleDate();
+    if (SoldOver == role)
+        return set->soldOver();
+    if (Buyer == role)
+        return set->buyer();
 
     return QVariant();
 }
@@ -66,26 +94,20 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
 {
 	LOG_SCOPE_METHOD(L"");
 
-	LOG_DEBUG("role: " << role << " r: " << index.row() << " c: " << index.column());
+    LOG_TRACE("role: " << role << " r: " << index.row() << " c: " << index.column());
     if (!index.isValid() )
         return false;
 
     LegoSet *set = m_dataSource->dataItems().at(index.row());
     bool somethingChanged = false;
+    QVector<int> changedRoles;
 
     switch (static_cast<LegoSetRoles>(role)) {
-    case LegoSetTableModel::ImageNameRole:
+    case LegoSetTableModel::ImageUrl:
     {
-        if (set->imageName() != value.toString() ) {
-            set->setImageName(value.toString());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::ImageFilePathRole:
-    {
-        if (set->imageFilePath() != value.toString() ) {
-            set->setImageFilePath(value.toString());
+        if (set->imageUrl() != value.toString() ) {
+            set->setImageUrl(value.toString());
+            changedRoles << role;
             somethingChanged = true;
         }
         break;
@@ -116,29 +138,29 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     }
     case LegoSetTableModel::RecommendedRetailPriceRole:
     {
-        qWarning("Floating point comparison needs context sanity check");
         if (! qFuzzyCompare(set->recommendedRetailPrice(), value.toDouble())) {
             set->setRecommendedRetailPrice(value.toDouble());
+            changedRoles << CheaperPercentRole;
             somethingChanged = true;
         }
         break;
     }
     case LegoSetTableModel::PurchasingPriceRole:
     {
-        qWarning("Floating point comparison needs context sanity check");
         if (! qFuzzyCompare(set->purchasingPrice(), value.toDouble())) {
             set->setPurchasingPrice(value.toDouble());
+            changedRoles << CheaperPercentRole;
+            changedRoles << ProfitEuros << ProfitPercent;
             somethingChanged = true;
         }
         break;
     }
     case LegoSetTableModel::CheaperPercentRole:
     {
-        qWarning("Floating point comparison needs context sanity check");
-        if (! qFuzzyCompare(set->cheaperPercent(), value.toDouble())) {
-            set->setCheaperPercent(value.toDouble());
+//        if (! qFuzzyCompare(set->cheaperPercent(), value.toDouble())) {
+//            set->setPurchasingPrice(value.toDouble());
             somethingChanged = true;
-        }
+//        }
         break;
     }
     case LegoSetTableModel::SellerRole:
@@ -151,17 +173,51 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     }
     case LegoSetTableModel::PurchaseDateRole:
     {
-        if (set->purchaseDate() != value.toString() ) {
-            set->setPurchaseDate(value.toString());
+        if (set->purchaseDate() != value.toDate() ) {
+            set->setPurchaseDate(value.toDate());
             somethingChanged = true;
         }
         break;
     }
     case LegoSetTableModel::RetailPrice:
     {
-        qWarning("Floating point comparison needs context sanity check");
         if (! qFuzzyCompare(set->retailPrice(), value.toDouble())) {
             set->setRetailPrice(value.toDouble());
+            changedRoles << ProfitEuros << ProfitPercent;
+            somethingChanged = true;
+        }
+        break;
+    }
+    case LegoSetTableModel::ProfitEuros:
+    {
+        somethingChanged = true;
+        break;
+    }
+    case ProfitPercent:
+    {
+        somethingChanged = true;
+        break;
+    }
+    case SaleDate:
+    {
+        if (set->saleDate() != value.toDate() ) {
+            set->setSaleDate(value.toDate());
+            somethingChanged = true;
+        }
+        break;
+    }
+    case SoldOver:
+    {
+        if (set->soldOver() != value.toString()) {
+            set->setSoldOver((value.toString()));
+            somethingChanged = true;
+        }
+        break;
+    }
+    case Buyer:
+    {
+        if (set->buyer() != value.toString()) {
+            set->setBuyer((value.toString()));
             somethingChanged = true;
         }
         break;
@@ -169,30 +225,25 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     }
 
     if( somethingChanged){
-        emit dataChanged(index,index,QVector<int>() << role);
+        changedRoles << role;
+        emit dataChanged(index,index,changedRoles);
         return true;
     }
     return false;
 }
 
-void LegoSetTableModel::newEntry()
+void LegoSetTableModel::addLegoSet()
 {
 	LOG_SCOPE_METHOD(L"");
 
-    if (insertRow(rowCount()))
-    {
-		LOG_DEBUG("Row inserted");
-    }
+    m_dataSource->addLegoSet( new LegoSet());
 }
 
-void LegoSetTableModel::deleteEntry(int rowIndex)
+void LegoSetTableModel::removeLegoSet(int rowIndex)
 {
 	LOG_SCOPE_METHOD(L"");
 
-    if (removeRow(rowIndex))
-    {
-		LOG_DEBUG("Row " << rowIndex << " deleted.");
-    }
+    m_dataSource->removeLegoSet(rowIndex);
 }
 
 void LegoSetTableModel::clearAll()
@@ -200,98 +251,43 @@ void LegoSetTableModel::clearAll()
 	LOG_SCOPE_METHOD(L"");
 
     beginResetModel();
-    mLegoSetTableData.clear();
+    m_dataSource->clearLegoSets();
     endResetModel();
-}
-
-void LegoSetTableModel::setDataSource(DataSource *datasource)
-{
-    if (m_dataSource == datasource)
-        return;
-
-    m_dataSource = datasource;
-    emit dataSourceChanged(m_dataSource);
-}
-
-
-bool LegoSetTableModel::insertRows(int row, int count, const QModelIndex &)
-{
-    LOG_SCOPE_METHOD(L"");
-    LOG_DEBUG("row: " << row << " count: " << count);
-    beginInsertRows(QModelIndex(), row, row + count - 1);
-
-    for (int i = 0; i < count; ++i)
-    {
-        LegoSetRecord record("Empty.svg", "qrc:/images/Empty.svg", mLegoSetTableData.rowCount(),
-                             QString("Beschreibung %1").arg(mLegoSetTableData.rowCount())
-                                 ,2018, 10.0, 5.0, "www.lego.de", "07.07.2018", 15.0);
-
-        mLegoSetTableData.append(record);
-		LOG_DEBUG("row +i: " << row +i);
-    }
-
-    endInsertRows();
-    return true;
-}
-
-bool LegoSetTableModel::removeRows(int row, int count, const QModelIndex &)
-{
-	LOG_SCOPE_METHOD(L"");
-    LOG_DEBUG("row: " << row << " count: " << count);
-
-    if ( row >= mLegoSetTableData.rowCount())
-    {
-        return false;
-    }
-
-    if ( count > 1)
-    {
-		LOG_ERROR("Sorry. Only one row can be removed.");
-        return false;
-    }
-
-    beginRemoveRows(QModelIndex(), row, row + count - 1);
-
-    mLegoSetTableData.removeAt(row);
-
-    endRemoveRows();
-    return true;
 }
 
 
 QHash<int, QByteArray> LegoSetTableModel::roleNames() const
 {
-    QHash<int, QByteArray> roles;
-
-    roles[ImageNameRole]="imageName";
-    roles[ImageFilePathRole]="imageFilePath";
-    roles[SetNumberRole]="setNumber";
-    roles[DescriptionRole]="description";
-    roles[YearRole]="year";
-    roles[RecommendedRetailPriceRole]="recommendedRetailPrice";
-    roles[PurchasingPriceRole]="purchasingPrice";
-    roles[CheaperPercentRole]="cheaperPercent";
-    roles[SellerRole]="seller";
-    roles[PurchaseDateRole]="purchaseDate";
-    roles[RetailPrice]="retailPrice";
-    return roles;
+    return m_roles;
 }
 
-void LegoSetTableModel::saveDataTo(const QChar &sep, QTextStream &out, const QString& projectFolder) const
+void LegoSetTableModel::setDataSource(DataSource *dataSource)
 {
-	LOG_SCOPE_METHOD(L"");
-    mLegoSetTableData.saveDataTo(sep, out, projectFolder);
-}
-
-void LegoSetTableModel::loadDataFrom(const QChar &sep, QTextStream &in, const QString &projectFolder)
-{
-    LOG_SCOPE_METHOD(L"");
     beginResetModel();
 
-    mLegoSetTableData.loadDataFrom(sep, in, projectFolder);
+    if( m_dataSource && m_signalConnected)
+        m_dataSource->disconnect(this);
 
-    if ( 0 == mLegoSetTableData.rowCount())
-        LOG_ERROR("LegoSetTableData is empty. Nothing was load.");
+    m_dataSource = dataSource;
+
+    connect(m_dataSource,&DataSource::preLegoSetAdded,this,[=](){
+        const int index = m_dataSource->dataItems().size();
+        beginInsertRows(QModelIndex(),index,index);
+    });
+
+    connect(m_dataSource,&DataSource::postLegoSetAdded,this,[=](){
+        endInsertRows();
+    });
+
+    connect(m_dataSource,&DataSource::preLegoSetRemoved,this,[=](int index){
+        beginRemoveRows(QModelIndex(), index, index);
+    });
+
+    connect(m_dataSource,&DataSource::postLegoSetRemoved,this,[=](){
+        endRemoveRows();
+    });
+
+    m_signalConnected = true;
 
     endResetModel();
 }
@@ -301,8 +297,33 @@ DataSource *LegoSetTableModel::dataSource() const
     return m_dataSource;
 }
 
-QQmlListProperty<LegoSet> LegoSetTableModel::legoSets() const
+void LegoSetTableModel::appendLegoSet(QQmlListProperty<LegoSet> *list, LegoSet *set)
 {
-    return m_legoSets;
+    reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->addLegoSet(set);
+}
+
+int LegoSetTableModel::legoSetCount(QQmlListProperty<LegoSet> *list)
+{
+    return reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->legoSetCount();
+}
+
+LegoSet *LegoSetTableModel::legoSet(QQmlListProperty<LegoSet> *list, int index)
+{
+    return reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->legoSetAt(index);
+}
+
+void LegoSetTableModel::clearLegoSets(QQmlListProperty<LegoSet> *list)
+{
+    reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->clearLegoSets();
+}
+
+
+QQmlListProperty<LegoSet> LegoSetTableModel::legoSets()
+{
+    return QQmlListProperty<LegoSet>(this, this,
+                                    &LegoSetTableModel::appendLegoSet,
+                                    &LegoSetTableModel::legoSetCount,
+                                    &LegoSetTableModel::legoSet,
+                                    &LegoSetTableModel::clearLegoSets);
 }
 
