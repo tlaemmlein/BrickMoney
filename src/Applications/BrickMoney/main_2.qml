@@ -105,7 +105,7 @@ ApplicationWindow {
 
         LegoSet {
             //imageUrl: "qrc:/images/WonderWoman.png"
-            setNumber: 41599
+            setNumber: 75002
             description: "LEGO® BrickHeadz 41599 Wonder Woman 2 And then there was a famous person which wants all the stuff of them all"
             year: 2018
             recommendedRetailPrice: 9.99
