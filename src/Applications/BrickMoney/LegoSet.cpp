@@ -4,9 +4,9 @@
 
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
+    ,m_setNumber(-1)
     ,m_imageName("None")
     ,m_imageUrl("None")
-    ,m_setNumber(-1)
     ,m_description("None")
     ,m_year(0)
     ,m_recommendedRetailPrice(0)
@@ -24,6 +24,14 @@ LegoSet::LegoSet(QObject *parent) : QObject(parent)
     m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageName, this, &LegoSet::setImageName);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageUrl, this, &LegoSet::setImageUrl);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::description, this, &LegoSet::setDescription);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::year, this, &LegoSet::setYear);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::recommendedRetailPrice, this, &LegoSet::setRecommendedRetailPrice);
+}
+
+int LegoSet::setNumber() const
+{
+    return m_setNumber;
 }
 
 
@@ -35,11 +43,6 @@ QString LegoSet::imageName() const
 QString LegoSet::imageUrl() const
 {
     return m_imageUrl;
-}
-
-int LegoSet::setNumber() const
-{
-    return m_setNumber;
 }
 
 QString LegoSet::description() const
@@ -119,34 +122,6 @@ void LegoSet::setSetNumber(int setNumber)
     emit setNumberChanged(m_setNumber);
 }
 
-void LegoSet::setDescription(QString description)
-{
-    if (m_description == description)
-        return;
-
-    m_description = description;
-    emit descriptionChanged(m_description);
-}
-
-void LegoSet::setYear(int year)
-{
-    if (m_year == year)
-        return;
-
-    m_year = year;
-    emit yearChanged(m_year);
-}
-
-void LegoSet::setRecommendedRetailPrice(double recommendedRetailPrice)
-{
-    if (qFuzzyCompare(m_recommendedRetailPrice, recommendedRetailPrice))
-        return;
-
-    m_recommendedRetailPrice = recommendedRetailPrice;
-    emit recommendedRetailPriceChanged(m_recommendedRetailPrice);
-
-    setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
-}
 
 void LegoSet::setPurchasingPrice(double purchasingPrice)
 {
@@ -235,6 +210,35 @@ void LegoSet::setImageUrl(QString imageUrl)
 
     m_imageUrl = imageUrl;
     emit imageUrlChanged(m_imageUrl);
+}
+
+void LegoSet::setDescription(QString description)
+{
+    if (m_description == description)
+        return;
+
+    m_description = description;
+    emit descriptionChanged(m_description);
+}
+
+void LegoSet::setYear(int year)
+{
+    if (m_year == year)
+        return;
+
+    m_year = year;
+    emit yearChanged(m_year);
+}
+
+void LegoSet::setRecommendedRetailPrice(double recommendedRetailPrice)
+{
+    if (qFuzzyCompare(m_recommendedRetailPrice, recommendedRetailPrice))
+        return;
+
+    m_recommendedRetailPrice = recommendedRetailPrice;
+    emit recommendedRetailPriceChanged(m_recommendedRetailPrice);
+
+    setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
 }
 
 

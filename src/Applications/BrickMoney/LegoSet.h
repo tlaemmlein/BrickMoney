@@ -9,12 +9,13 @@ class LegoSetInfoGenerator;
 class LegoSet : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
     Q_PROPERTY(QString imageName READ imageName NOTIFY imageNameChanged)
     Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
-    Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
-    Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
-    Q_PROPERTY(int year READ year WRITE setYear NOTIFY yearChanged)
-    Q_PROPERTY(double recommendedRetailPrice READ recommendedRetailPrice WRITE setRecommendedRetailPrice NOTIFY recommendedRetailPriceChanged)
+    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(int year READ year NOTIFY yearChanged)
+    Q_PROPERTY(double recommendedRetailPrice READ recommendedRetailPrice NOTIFY recommendedRetailPriceChanged)
+
     Q_PROPERTY(double purchasingPrice READ purchasingPrice WRITE setPurchasingPrice NOTIFY purchasingPriceChanged)
     Q_PROPERTY(double cheaperPercent READ cheaperPercent NOTIFY cheaperPercentChanged)
     Q_PROPERTY(QString seller READ seller WRITE setSeller NOTIFY sellerChanged)
@@ -29,10 +30,9 @@ class LegoSet : public QObject
 public:
     explicit LegoSet(QObject *parent = nullptr);
 
-
+    int setNumber() const;
     QString imageName() const;
     QString imageUrl() const;
-    int setNumber() const;
     QString description() const;
     int year() const;
     double recommendedRetailPrice() const;
@@ -49,9 +49,6 @@ public:
 
 public slots:
     void setSetNumber(int setNumber);
-    void setDescription(QString description);
-    void setYear(int year);
-    void setRecommendedRetailPrice(double recommendedRetailPrice);
     void setPurchasingPrice(double purchasingPrice);
     void setSeller(QString seller);
     void setPurchaseDate(QDate purchaseDate);
@@ -61,12 +58,13 @@ public slots:
     void setBuyer(QString buyer);
 
 signals:
+    void setNumberChanged(int setNumber);
     void imageNameChanged(QString imageName);
     void imageUrlChanged(QString imageUrl);
-    void setNumberChanged(int setNumber);
     void descriptionChanged(QString description);
     void yearChanged(int year);
     void recommendedRetailPriceChanged(double recommendedRetailPrice);
+
     void purchasingPriceChanged(double purchasingPrice);
     void cheaperPercentChanged(double cheaperPercent);
     void sellerChanged(QString seller);
@@ -81,13 +79,16 @@ signals:
 private slots:
     void setImageName(QString imageName);
     void setImageUrl(QString imageUrl);
+    void setDescription(QString description);
+    void setYear(int year);
+    void setRecommendedRetailPrice(double recommendedRetailPrice);
 
 
 private:
     LegoSetInfoGenerator* m_LegoSetInfoGenerator;
+    int     m_setNumber;
     QString m_imageName;
     QString m_imageUrl;
-    int     m_setNumber;
     QString m_description;
     int     m_year;
     double  m_recommendedRetailPrice;

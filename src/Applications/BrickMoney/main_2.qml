@@ -89,11 +89,7 @@ ApplicationWindow {
         id: mLegoSetModel
 
         LegoSet {
-            //imageUrl: "qrc:/images/WonderWoman.png"
             setNumber: 41599
-            description: "LEGO® BrickHeadz 41599 Wonder Woman 1"
-            year: 2018
-            recommendedRetailPrice: 9.99
             purchasingPrice: 7.71
             seller: "Karstadt München"
             purchaseDate: new Date('2019-04-15') //"15.04.2019"
@@ -104,11 +100,7 @@ ApplicationWindow {
         }
 
         LegoSet {
-            //imageUrl: "qrc:/images/WonderWoman.png"
-            setNumber: 75002
-            description: "LEGO® BrickHeadz 41599 Wonder Woman 2 And then there was a famous person which wants all the stuff of them all"
-            year: 2018
-            recommendedRetailPrice: 9.99
+            setNumber: 70608
             purchasingPrice: 8.99
             seller: "Karstadt München"
             //purchaseDate: new Date('2019-04-17') //"15.04.2019"

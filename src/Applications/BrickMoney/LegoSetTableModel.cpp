@@ -102,44 +102,10 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     QVector<int> changedRoles;
 
     switch (static_cast<LegoSetRoles>(role)) {
-//    case LegoSetTableModel::ImageUrl:
-//    {
-//        if (set->imageUrl() != value.toString() ) {
-//            set->setImageUrl(value.toString());
-//            changedRoles << role;
-//            somethingChanged = true;
-//        }
-//        break;
-//    }
     case LegoSetTableModel::SetNumberRole:
     {
         if (set->setNumber() != value.toInt() ) {
             set->setSetNumber(value.toInt());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::DescriptionRole:
-    {
-        if (set->description() != value.toString() ) {
-            set->setDescription(value.toString());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::YearRole:
-    {
-        if (set->year() != value.toInt() ) {
-            set->setYear(value.toInt());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::RecommendedRetailPriceRole:
-    {
-        if (! qFuzzyCompare(set->recommendedRetailPrice(), value.toDouble())) {
-            set->setRecommendedRetailPrice(value.toDouble());
-            changedRoles << CheaperPercentRole;
             somethingChanged = true;
         }
         break;
