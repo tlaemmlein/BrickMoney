@@ -23,6 +23,7 @@ LegoSet::LegoSet(QObject *parent) : QObject(parent)
 {
     m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageName, this, &LegoSet::setImageName);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageUrl, this, &LegoSet::setImageUrl);
 }
 
 
@@ -106,19 +107,13 @@ QString LegoSet::buyer() const
     return m_buyer;
 }
 
-void LegoSet::setImageUrl(QString imageUrl)
-{
-    if (m_imageUrl == imageUrl)
-        return;
-
-    m_imageUrl = imageUrl;
-    emit imageUrlChanged(m_imageUrl);
-}
 
 void LegoSet::setSetNumber(int setNumber)
 {
     if (m_setNumber == setNumber)
         return;
+
+    m_LegoSetInfoGenerator->querySetNumber(setNumber);
 
     m_setNumber = setNumber;
     emit setNumberChanged(m_setNumber);
@@ -223,6 +218,7 @@ void LegoSet::setBuyer(QString buyer)
     emit buyerChanged(m_buyer);
 }
 
+
 void LegoSet::setImageName(QString imageName)
 {
     if (m_imageName == imageName)
@@ -231,6 +227,16 @@ void LegoSet::setImageName(QString imageName)
     m_imageName = imageName;
     emit imageNameChanged(m_imageName);
 }
+
+void LegoSet::setImageUrl(QString imageUrl)
+{
+    if (m_imageUrl == imageUrl)
+        return;
+
+    m_imageUrl = imageUrl;
+    emit imageUrlChanged(m_imageUrl);
+}
+
 
 
 double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
@@ -276,3 +282,4 @@ void LegoSet::setProfitPercent(double profitPercent)
     m_profitPercent = profitPercent;
     emit profitPercentChanged(m_profitPercent);
 }
+

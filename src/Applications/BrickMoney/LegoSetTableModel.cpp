@@ -102,15 +102,15 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     QVector<int> changedRoles;
 
     switch (static_cast<LegoSetRoles>(role)) {
-    case LegoSetTableModel::ImageUrl:
-    {
-        if (set->imageUrl() != value.toString() ) {
-            set->setImageUrl(value.toString());
-            changedRoles << role;
-            somethingChanged = true;
-        }
-        break;
-    }
+//    case LegoSetTableModel::ImageUrl:
+//    {
+//        if (set->imageUrl() != value.toString() ) {
+//            set->setImageUrl(value.toString());
+//            changedRoles << role;
+//            somethingChanged = true;
+//        }
+//        break;
+//    }
     case LegoSetTableModel::SetNumberRole:
     {
         if (set->setNumber() != value.toInt() ) {

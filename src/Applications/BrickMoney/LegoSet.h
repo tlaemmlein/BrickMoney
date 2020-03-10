@@ -10,7 +10,7 @@ class LegoSet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString imageName READ imageName NOTIFY imageNameChanged)
-    Q_PROPERTY(QString imageUrl READ imageUrl WRITE setImageUrl NOTIFY imageUrlChanged)
+    Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
     Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
     Q_PROPERTY(QString description READ description WRITE setDescription NOTIFY descriptionChanged)
     Q_PROPERTY(int year READ year WRITE setYear NOTIFY yearChanged)
@@ -48,7 +48,6 @@ public:
     QString buyer() const;
 
 public slots:
-    void setImageUrl(QString imageUrl);
     void setSetNumber(int setNumber);
     void setDescription(QString description);
     void setYear(int year);
@@ -81,6 +80,7 @@ signals:
 
 private slots:
     void setImageName(QString imageName);
+    void setImageUrl(QString imageUrl);
 
 
 private:
@@ -109,6 +109,8 @@ private:
     double calcProfitPercent(double retailPrice, double purchasingPrice);
     void setProfitPercent(double profitPercent);
 };
+
+
 
 
 #endif // LEGOSET_H
