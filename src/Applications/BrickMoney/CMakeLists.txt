@@ -25,10 +25,6 @@ add_executable(${PROJECT_NAME}
     LegoSet.h
     LegoSetTableModel.cpp
     LegoSetTableModel.h
-    LegoSetTableData.cpp
-    LegoSetTableData.h
-    LegoSetTableData_p.h
-    LegoSetRecord.h
     LegoSetIOManager.cpp
     LegoSetIOManager.h
     Logging.h

@@ -2,7 +2,6 @@
 SET_LOGGER("BrickMoney.LegoSetTableModel")
 
 #include "LegoSetTableModel.h"
-#include "LegoSetRecord.h"
 
 #include <QFile>
 #include <QDir>
