@@ -53,7 +53,7 @@ public:
 
     QQmlListProperty<LegoSet> legoSets();
 
-    Q_INVOKABLE void addLegoSet();
+    Q_INVOKABLE void addLegoSet(int setNumber);
     Q_INVOKABLE void removeLegoSet(int rowIndex);
     Q_INVOKABLE void clearAll();
 

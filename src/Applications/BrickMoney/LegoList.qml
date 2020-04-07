@@ -13,6 +13,16 @@ Item {
     function isSelected(){ return false }
     function clearSelection() {}
 
+    Image {
+        id: legoSetImageLarge
+        // anchors.fill: parent
+        fillMode: Image.PreserveAspectFit
+//        source: model.imageUrl
+        z: 100
+        visible: false
+    }
+
+
     ListView {
         id : legoListView
         anchors.fill: parent
@@ -51,7 +61,6 @@ Item {
                     id: selectionHeader
                     width: legoListView.selLegoSetWidth
                     border.color: "black"
-                    //color : "blue"
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -241,18 +250,41 @@ Item {
             height: 60
             border.color: "black"
             width: parent.width
+
             Row{
                 anchors.fill: parent
                 spacing: 2
 
-                CheckBox {
-                    id: selectionLegoSet
+                ToolButton{
+                    id: removeLegoSetButton
+                    Image {
+                        anchors.fill: parent
+                        source: "qrc:/images/Trash.svg"
+                        fillMode: Image.PreserveAspectFit
+                    }
                     width: legoListView.selLegoSetWidth
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
                     }
+                    Dialog {
+                        id: confirmRemoveDialog
+                        modal: true
+                        title: "Do you want to remove the LegoSet " + index + "?"
+                        standardButtons: Dialog.Yes | Dialog.No
+
+                        onAccepted:
+                        {
+                            console.log("Yes clicked")
+                            legoListView.model.removeLegoSet(index)
+                        }
+                        onRejected: console.log("No clicked")
+                    }
+                    onClicked: {
+                        confirmRemoveDialog.open()
+                    }
                 }
+
 
                 Rectangle {
                     id: legoSetInfo
@@ -263,36 +295,74 @@ Item {
                         margins: 4
                     }
                     radius: 10
-                    color : "lightgray"
+                    color : "white"
                     border.color: "black"
+
                     Image {
                         id: legoSetImage
                         width: 50
                         height: 50
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: legoSetInfo.left
+                        anchors.leftMargin: 5
                         fillMode: Image.PreserveAspectFit
                         source: model.imageUrl
+
+                        MouseArea {
+                            hoverEnabled: true
+                            anchors.fill: parent
+                            onEntered: {
+                                legoSetImage.width = 100
+                                legoSetImage.height = 100
+                                rectDelegate.height = 100
+                            }
+                            onExited: {
+                                legoSetImage.width = 50
+                                legoSetImage.height = 50
+                                rectDelegate.height = 60
+                            }
+                        }
                     }
-                    ColumnLayout {
+                    Flow {
                         id: basicLegoSetInfos
                         anchors.left: legoSetImage.right
-                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: legoSetInfo.right
+                        spacing: 5
 
                         Text{
                             text : model.description
                             height: 12
-                            Layout.preferredWidth: 300
+                            width: legoSetInfo.width - legoSetImage.width - 5
+                            Layout.preferredWidth: legoSetInfo.width - legoSetImage.width - 5
+                            Layout.maximumWidth: legoSetInfo.width - legoSetImage.width - 5
                             font.pixelSize: 12
                             elide: Text.ElideRight
+                            clip: true
                         }
 
                         Text{
                             text : "Set no.: " + model.setNumber
-                                   + " | Year: " + model.year
-                                   + " | RRPrice: " + model.recommendedRetailPrice + " €"
                             height: 12
                             font.pixelSize: 12
                             clip: true
+                        }
+                        Text{
+                            text : "Year: " + model.year
+                            height: 12
+                            font.pixelSize: 12
+                            clip: true
+                        }
+                        Text{
+                            text : "RRPrice: " + model.recommendedRetailPrice + "€"
+                            height: 12
+                            font.pixelSize: 12
+                            clip: true
+                        }
+                        Text {
+                            id: link_brickmerge
+                            textFormat: Text.RichText
+                            text: '<html><a href="https://brickmerge.de/'+ model.setNumber + '">BM</a>&nbsp;<a href="https://brickset.com/sets/'+ model.setNumber + '">BS</a></html>'
+                                   //<html><style type="text/css"></style><a href="https://brickset.com/sets/'+ model.setNumber + '">BS</a></html>'
+                            onLinkActivated: Qt.openUrlExternally(link)
                         }
                     }
                 }

@@ -4,22 +4,40 @@
 
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
-    ,m_setNumber(-1)
-    ,m_imageName("None")
-    ,m_imageUrl("None")
-    ,m_description("None")
-    ,m_year(0)
-    ,m_recommendedRetailPrice(0)
-    ,m_purchasingPrice(0)
-    ,m_cheaperPercent(0)
-    ,m_seller("None")
-    ,m_purchaseDate(QDate::currentDate())
-    ,m_retailPrice(0)
-    ,m_profitEuros(0)
-    ,m_profitPercent(0)
-    ,m_saleDate(QDate(1900,1,1))
-    ,m_soldOver("")
-    ,m_buyer("")
+{
+    initParams();
+    createConnections();
+    setSetNumber(41599);
+}
+
+LegoSet::LegoSet(int setNumber, QObject *parent) : QObject(parent)
+{
+    initParams();
+    createConnections();
+    setSetNumber(setNumber);
+}
+
+void LegoSet::initParams()
+{
+    m_setNumber=-1;
+    m_imageName = "None";
+    m_imageUrl="None";
+    m_description="None";
+    m_year=0;
+    m_recommendedRetailPrice=0;
+    m_purchasingPrice=0;
+    m_cheaperPercent=0;
+    m_seller="None";
+    m_purchaseDate = QDate::currentDate();
+    m_retailPrice =0;
+    m_profitEuros =0;
+    m_profitPercent= 0;
+    m_saleDate =QDate(1900,1,1);
+    m_soldOver="";
+    m_buyer="";
+}
+
+void LegoSet::createConnections()
 {
     m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageName, this, &LegoSet::setImageName);
@@ -28,6 +46,7 @@ LegoSet::LegoSet(QObject *parent) : QObject(parent)
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::year, this, &LegoSet::setYear);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::recommendedRetailPrice, this, &LegoSet::setRecommendedRetailPrice);
 }
+
 
 int LegoSet::setNumber() const
 {
@@ -240,8 +259,6 @@ void LegoSet::setRecommendedRetailPrice(double recommendedRetailPrice)
 
     setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
 }
-
-
 
 double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
 {

@@ -8,3 +8,9 @@ src/Applications/BrickMoney/build-cl15-x64/
 src/Applications/build-BrickMoney-Qt_5_12_5_MSVC2017_64bit_2-Debug/
 src/Applications/build-BrickMoney-Qt_5_12_5_MSVC2017_64bit_2-Release/
 src/Applications/BrickMoney/CMakeLists.txt.user.4.10-pre1
+src/BrickMoneyDatabase/images/
+src/scripts/GenerateLegosetDatabase/BrickMoneyDatabase/images/
+src/scripts/GenerateLegosetDatabase/BrickMoneyDatabase/imagesUpdated/
+src/scripts/GenerateLegosetDatabase/images_pass_001/
+src/scripts/GenerateLegosetDatabase/generate_telemetry_docu.py
+src/scripts/GenerateLegosetDatabase/update_test_theme_images.py

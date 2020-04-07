@@ -197,11 +197,13 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     return false;
 }
 
-void LegoSetTableModel::addLegoSet()
+void LegoSetTableModel::addLegoSet(int setNumber)
 {
 	LOG_SCOPE_METHOD(L"");
 
-    m_dataSource->addLegoSet( new LegoSet());
+    LOG_INFO("SetNumber: " << setNumber);
+
+    m_dataSource->addLegoSet( new LegoSet(setNumber));
 }
 
 void LegoSetTableModel::removeLegoSet(int rowIndex)

@@ -29,6 +29,7 @@ class LegoSet : public QObject
 
 public:
     explicit LegoSet(QObject *parent = nullptr);
+    LegoSet(int setNumber, QObject *parent = nullptr);
 
     int setNumber() const;
     QString imageName() const;
@@ -83,7 +84,6 @@ private slots:
     void setYear(int year);
     void setRecommendedRetailPrice(double recommendedRetailPrice);
 
-
 private:
     LegoSetInfoGenerator* m_LegoSetInfoGenerator;
     int     m_setNumber;
@@ -103,6 +103,8 @@ private:
     QString m_soldOver;
     QString m_buyer;
 
+    void initParams();
+    void createConnections();
     double calcCheaperPercent(double rrp, double purchasingPrice);
     void setCheaperPercent(double cheaperPercent);
     double calcProfitEuros(double retailPrice, double purchasingPrice);

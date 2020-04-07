@@ -14,20 +14,21 @@ ApplicationWindow {
     width: 1600
     height: 480
     title: qsTr("BrickMoney - Die Software für LEGO Investment")
+    color: "lightblue"
 
     Rectangle {
         id: buttonBarChangeSetList
-        width: parent.width -10
-        //anchors.top: buttonBarManageSetList.bottom
-        anchors.topMargin: 5
+        width: addButton.width + zoomSlider.width  +10 // parent.width -10
+        y : 5
         anchors.left: parent.left
         anchors.leftMargin: 5
         height: 50
         // color: "#00000000"
-        radius: 8
-        border.width: 0
+        //radius: 8
+        border.width: 1
+        border.color: "black"
 
-        Button{
+        RoundButton{
             id: addButton
             text: "Add"
             highlighted: true
@@ -35,35 +36,20 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.leftMargin: 5
             height: 40
-            //enabled: _LegoSetIOManager.isProjectReady
-            onClicked: legoTable.addLegoSet()
-        }
-
-        Button{
-            id: deleteButton
-            text: "Delete"
-            highlighted: true
-            flat: false
-            enabled: legoTable.isSelected()
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: addButton.right
-            anchors.leftMargin: 5
-            height: 40
-            onClicked: legoTable.removeLegoSet()
-        }
-
-
-        Button{
-            id: clearSelectButton
-            text: "Clear Selection"
-            highlighted: true
-            flat: false
-            enabled: legoTable.isSelected()
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: deleteButton.right
-            anchors.leftMargin: 5
-            height: 40
-            onClicked: legoTable.clearSelection()
+            onClicked: {
+                input.openDialog()
+            }
+            NewLegoSetDialog{
+                id : input
+//                onInputDialogAccepted: {
+//                    console.log( "SetNumber : " + setNumber)
+//                    mLegoSetModel.addLegoSet(setNumber)
+//                }
+                onAddLegoSetNumber:{
+                    console.log( "onAddLegoSetNumber : " + setNumber)
+                    mLegoSetModel.addLegoSet(setNumber)
+                }
+            }
         }
 
          Slider {
@@ -76,7 +62,7 @@ ApplicationWindow {
             anchors.top: parent.top
             anchors.topMargin: 5
             anchors.leftMargin: 5
-            anchors.left: clearSelectButton.right
+            anchors.left: addButton.right
             from: 1
             value: 20
             to: 100
@@ -107,6 +93,16 @@ ApplicationWindow {
             //retailPrice: 0
             //buyer: "fff"
         }
+
+        LegoSet {
+            setNumber: 75212
+            purchasingPrice: 116.47
+            seller: "www.steinehelden.de"
+            purchaseDate: new Date('2018-07-07')
+        }
+
+        LegoSet {setNumber: 75208; purchasingPrice: 21.89; seller: "www.toysrus.de"; purchaseDate: new Date('2018-07-11') }
+
     }
      LegoList{
          id: legoTable

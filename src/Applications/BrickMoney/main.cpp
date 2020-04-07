@@ -2,6 +2,7 @@
 SET_LOGGER("BrickMoney.Main")
 
 //#include "LegoSetIOManager.h"
+#include "LegoSetInfoGenerator.h"
 #include "LegoSetTableModel.h"
 #include "LegoSet.h"
 
@@ -42,15 +43,13 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
-	QIcon icon(":/images/LogoBrickMoneyIcon_16.png");
-	icon.addFile(":/images/LogoBrickMoneyIcon_32.png");
-	icon.addFile(":/images/LogoBrickMoneyIcon_48.png");
-	icon.addFile(":/images/LogoBrickMoneyIcon_64.png");
-
-	app.setWindowIcon(icon);
+    QIcon appIcon(":/images/LogoBrickMoneyIcon_16.png");
+    appIcon.addFile(":/images/LogoBrickMoneyIcon_32.png");
+    appIcon.addFile(":/images/LogoBrickMoneyIcon_48.png");
+    appIcon.addFile(":/images/LogoBrickMoneyIcon_64.png");
+    app.setWindowIcon(appIcon);
 
     QCoreApplication::setApplicationName("BrickMoney");
-    QCoreApplication::setOrganizationName("Spielolamm");
 
     qRegisterMetaType<QDoubleValueArg *>("QDoubleValueArg *");
     qmlRegisterType<QmlDoubleValuePreview>("QmlUtils", 1, 0, "DoubleValuePreview");
@@ -64,6 +63,9 @@ int main(int argc, char *argv[])
 //    lego_io_manager.setLegoSetTableModel(lego_table_model);
 
     QQmlApplicationEngine engine;
+
+    LegoSetInfoGenerator gen;
+    engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);
 
 //    engine.rootContext()->setContextProperty("_LegoSetTableModel", lego_table_model.get());
 //    engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);

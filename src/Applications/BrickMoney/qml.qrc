@@ -12,5 +12,7 @@
         <file>LegoList.qml</file>
         <file>DatePickerTest.qml</file>
         <file>DatePicker.qml</file>
+        <file>NewLegoSetDialog.qml</file>
+        <file>NewLegoSetDialogPrototype.qml</file>
     </qresource>
 </RCC>
