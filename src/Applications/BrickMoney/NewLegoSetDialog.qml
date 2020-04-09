@@ -9,7 +9,9 @@ Item {
     }
 
     property alias setNumber: setNumberField.value
-    //signal inputDialogAccepted
+    property alias purchaseDate: purchaseDateLegoSet.selectedDate
+    property alias purchasingPrice: purchasingPriceLegoSet.value
+    property alias seller: sellerLegoSet.text
     signal addLegoSetNumber
 
     Dialog {
@@ -23,7 +25,6 @@ Item {
         focus: true
         modal: true
         title: "New Lego Set"
-        //standardButtons: Dialog.Ok | Dialog.Cancel
 
         ColumnLayout {
             id: inputDialogLayout
@@ -48,7 +49,6 @@ Item {
 
                 TextField {
                     id : setNumberField
-                    //anchors.fill: parent
                     width: 150
                     validator: IntValidator {bottom: 0; top: 2147483647;}
                     selectByMouse: true
@@ -60,7 +60,6 @@ Item {
                         LegoSetInfoGenerator.querySetNumber(value)
                     }
 
-                    // font.pixelSize: legoTableView.pixelSize
                     onEditingFinished: {
                         console.log("onEditingFinished")
                         LegoSetInfoGenerator.querySetNumber(value)
@@ -103,11 +102,9 @@ Item {
                     spacing: 2
                     Text { id: legsetName; text: "Name:"; font.pixelSize: 16 }
                     Text {
-
                         id: description
                         text: ""
                         font.pixelSize: 16
-                        //elide: Text.ElideRight
                         width: inputDialog.width - legoSetImage.width - inputDialogLayout.spacing - 1.2*legsetName.width
                         wrapMode: Text.Wrap
                     }
@@ -116,7 +113,39 @@ Item {
                     Text {id: year; text: ""; font.pixelSize: 16 }
 
                     Text {text: "RRP:"; font.pixelSize: 16 }
-                    Text {id: rrprice; text: ""; font.pixelSize: 16 }
+                    Text {id: rrprice; text: ""; property real value: parseFloat(text); font.pixelSize: 16 }
+                }
+            }
+
+            Row {
+                spacing: 2
+                Text { text: qsTr("Purchase Date:"); font.pixelSize: 16}
+                DatePicker{ id: purchaseDateLegoSet; width: purchasingPriceLegoSet.width  }
+
+                Text { text: qsTr("Purchasing Price €:"); font.pixelSize: 16}
+                DoubleSpinBox { id: purchasingPriceLegoSet; stepSize: 0.1; editable: true }
+            }
+
+            Row {
+                spacing: 2
+                Text { text: qsTr("Cheaper:"); font.pixelSize: 16}
+                TextField {
+                    id: cheaperLegoSet
+                    width: purchasingPriceLegoSet.width; readOnly: true; validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
+                    horizontalAlignment: TextInput.AlignHCenter
+                    text: {
+                        var number = _LegoSet.calcCheaperPercent(rrprice.value, purchasingPriceLegoSet.value)
+                        number =  number !== null ? number.toLocaleString(locale, 'f', 2) +" %" : 0.0;
+                        return number
+                    }
+                }
+                Text { text: qsTr("Seller:"); font.pixelSize: 16}
+                TextField {
+                    id: sellerLegoSet
+                    width: 300; height: 60; text: ""; selectByMouse: true
+                    verticalAlignment: TextInput.AlignTop; horizontalAlignment: TextInput.AlignLeft
+                    wrapMode: "WrapAtWordBoundaryOrAnywhere"
+                    font.pixelSize: 12
                 }
             }
 

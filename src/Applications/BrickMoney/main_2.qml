@@ -12,7 +12,7 @@ ApplicationWindow {
     id: mainWindow
     visible: true
     width: 1600
-    height: 480
+    height: 600
     title: qsTr("BrickMoney - Die Software für LEGO Investment")
     color: "lightblue"
 
@@ -41,13 +41,19 @@ ApplicationWindow {
             }
             NewLegoSetDialog{
                 id : input
-//                onInputDialogAccepted: {
-//                    console.log( "SetNumber : " + setNumber)
-//                    mLegoSetModel.addLegoSet(setNumber)
-//                }
+                Component {
+                  id: legoSetComp
+                  LegoSet {}
+                }
                 onAddLegoSetNumber:{
                     console.log( "onAddLegoSetNumber : " + setNumber)
-                    mLegoSetModel.addLegoSet(setNumber)
+                    var ds = mLegoSetModel.dataSource
+                    var legoSet = legoSetComp.createObject()
+                    legoSet.setNumber = setNumber
+                    legoSet.purchaseDate = purchaseDate
+                    legoSet.purchasingPrice = purchasingPrice
+                    legoSet.seller = seller
+                    ds.addLegoSet(legoSet)
                 }
             }
         }

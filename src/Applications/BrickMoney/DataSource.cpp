@@ -6,11 +6,6 @@ DataSource::DataSource(QObject *parent) : QObject(parent)
 
 }
 
-QList<LegoSet *> DataSource::dataItems()
-{
-    return m_legoSets;
-}
-
 void DataSource::addLegoSet(LegoSet *set)
 {
     emit preLegoSetAdded();

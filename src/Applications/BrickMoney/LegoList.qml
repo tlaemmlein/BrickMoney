@@ -13,15 +13,6 @@ Item {
     function isSelected(){ return false }
     function clearSelection() {}
 
-    Image {
-        id: legoSetImageLarge
-        // anchors.fill: parent
-        fillMode: Image.PreserveAspectFit
-//        source: model.imageUrl
-        z: 100
-        visible: false
-    }
-
 
     ListView {
         id : legoListView

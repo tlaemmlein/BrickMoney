@@ -11,8 +11,6 @@ class DataSource : public QObject
 public:
     explicit DataSource(QObject *parent = nullptr);
 
-    QList<LegoSet *> dataItems();
-
     Q_INVOKABLE void addLegoSet(LegoSet* set);
     Q_INVOKABLE void removeLegoSet(int index);
 

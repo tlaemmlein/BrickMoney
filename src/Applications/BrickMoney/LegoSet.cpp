@@ -129,6 +129,11 @@ QString LegoSet::buyer() const
     return m_buyer;
 }
 
+double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
+{
+    return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
+}
+
 
 void LegoSet::setSetNumber(int setNumber)
 {
@@ -260,10 +265,6 @@ void LegoSet::setRecommendedRetailPrice(double recommendedRetailPrice)
     setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
 }
 
-double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
-{
-    return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
-}
 
 void LegoSet::setCheaperPercent(double cheaperPercent)
 {

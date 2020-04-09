@@ -34,7 +34,7 @@ LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(pare
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
 {
-    return m_dataSource->dataItems().size();
+    return m_dataSource->legoSetCount();
 }
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
@@ -46,11 +46,11 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 {
 	LOG_SCOPE_METHOD(L"");
 
-    if (index.row() < 0 || index.row() >= m_dataSource->dataItems().size() )
+    if (index.row() < 0 || index.row() >= m_dataSource->legoSetCount() )
         return QVariant();
 
     //The index is valid
-    LegoSet *set = m_dataSource->dataItems().at(index.row());
+    LegoSet *set = m_dataSource->legoSetAt(index.row());
 
     if ( ImageNameRole == role)
         return set->imageName();
@@ -97,7 +97,7 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     if (!index.isValid() )
         return false;
 
-    LegoSet *set = m_dataSource->dataItems().at(index.row());
+    LegoSet *set = m_dataSource->legoSetAt(index.row());
     bool somethingChanged = false;
     QVector<int> changedRoles;
 
@@ -238,7 +238,7 @@ void LegoSetTableModel::setDataSource(DataSource *dataSource)
     m_dataSource = dataSource;
 
     connect(m_dataSource,&DataSource::preLegoSetAdded,this,[=](){
-        const int index = m_dataSource->dataItems().size();
+        const int index = m_dataSource->legoSetCount();
         beginInsertRows(QModelIndex(),index,index);
     });
 

@@ -70,7 +70,6 @@ private:
 
     DataSource* m_dataSource;
     bool m_signalConnected;
-    QQmlListProperty<LegoSet> m_legoSets;
     QHash<int, QByteArray> m_roles;
 };
 

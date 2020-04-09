@@ -48,6 +48,9 @@ public:
     QString soldOver() const;
     QString buyer() const;
 
+    Q_INVOKABLE double calcCheaperPercent(double rrp, double purchasingPrice);
+
+
 public slots:
     void setSetNumber(int setNumber);
     void setPurchasingPrice(double purchasingPrice);
@@ -105,7 +108,6 @@ private:
 
     void initParams();
     void createConnections();
-    double calcCheaperPercent(double rrp, double purchasingPrice);
     void setCheaperPercent(double cheaperPercent);
     double calcProfitEuros(double retailPrice, double purchasingPrice);
     void setProfitEuros(double profitEuros);

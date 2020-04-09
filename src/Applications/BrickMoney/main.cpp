@@ -67,6 +67,10 @@ int main(int argc, char *argv[])
     LegoSetInfoGenerator gen;
     engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);
 
+    LegoSet legoSet;
+    engine.rootContext()->setContextProperty("_LegoSet", &legoSet);
+
+
 //    engine.rootContext()->setContextProperty("_LegoSetTableModel", lego_table_model.get());
 //    engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
 
