@@ -39,7 +39,7 @@ void LegoSetInfoGenerator::querySetNumber(int num)
     emit setNumberNotFound();
 }
 
-void LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
+int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
 {
     LOG_SCOPE_METHOD(L"");
     LOG_INFO(QString("nextSetNumber %1").arg(currentSetNumber).toStdWString());
@@ -54,14 +54,15 @@ void LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
             {
                 LOG_INFO(QString("Found %1").arg(mLegoSetDatabase.at(nextIndex).setNumber).toStdWString());
                 sendSignals( mLegoSetDatabase.at(nextIndex) );
-                return;
+                return mLegoSetDatabase.at(nextIndex).setNumber;
             }
         }
     }
     emit setNumberNotFound();
+    return 0;
 }
 
-void LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
+int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
 {
     LOG_SCOPE_METHOD(L"");
     LOG_INFO(QString("previousSetNumber %1").arg(currentSetNumber).toStdWString());
@@ -76,11 +77,12 @@ void LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
             {
                 LOG_INFO(QString("Found %1").arg(mLegoSetDatabase.at(prevIndex).setNumber).toStdWString());
                 sendSignals( mLegoSetDatabase.at(prevIndex) );
-                return;
+                return mLegoSetDatabase.at(prevIndex).setNumber;
             }
         }
     }
     emit setNumberNotFound();
+    return 0;
 }
 
 LegoSetInfo LegoSetInfoGenerator::legoSetInfo() const

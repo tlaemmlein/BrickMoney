@@ -106,6 +106,8 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     {
         if (set->setNumber() != value.toInt() ) {
             set->setSetNumber(value.toInt());
+            changedRoles << ImageNameRole << ImageUrl<< DescriptionRole
+                         << YearRole << RecommendedRetailPriceRole << CheaperPercentRole;
             somethingChanged = true;
         }
         break;
@@ -114,8 +116,7 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     {
         if (! qFuzzyCompare(set->purchasingPrice(), value.toDouble())) {
             set->setPurchasingPrice(value.toDouble());
-            changedRoles << CheaperPercentRole;
-            changedRoles << ProfitEuros << ProfitPercent;
+            changedRoles << CheaperPercentRole << ProfitEuros << ProfitPercent;
             somethingChanged = true;
         }
         break;

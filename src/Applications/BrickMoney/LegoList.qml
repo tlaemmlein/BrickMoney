@@ -238,7 +238,7 @@ Item {
 
         delegate: Rectangle {
             id : rectDelegate
-            height: 60
+            height: 80
             border.color: "black"
             width: parent.width
 
@@ -327,13 +327,13 @@ Item {
                             anchors.fill: parent
                             onEntered: {
                                 legoSetImage.width = 100
-                                legoSetImage.height = 100
-                                rectDelegate.height = 100
+                                legoSetImage.height = 120
+                                rectDelegate.height = 120
                             }
                             onExited: {
                                 legoSetImage.width = 50
                                 legoSetImage.height = 50
-                                rectDelegate.height = 60
+                                rectDelegate.height = 80
                             }
                         }
                     }
@@ -343,9 +343,55 @@ Item {
                         anchors.right: legoSetInfo.right
                         spacing: 5
 
+                        Row {
+                            id: setNumberRow
+                            height: 25
+                            Label {
+                                text: qsTr("LEGO set no:")
+                                anchors.verticalCenter: parent.verticalCenter
+                                elide: Label.ElideRight
+                                font.pixelSize: 12
+                                height: setNumberRow.height
+                            }
+
+                            Button {
+                                id: prevLegoSetButton
+                                text:"<"
+                                font.pixelSize: 12
+                                height: setNumberRow.height
+                                onClicked: model.setNumber = LegoSetInfoGenerator.previousSetNumber(setNumberField.value)
+                            }
+
+                            TextField {
+                                id : setNumberField
+                                objectName: "setNumberField"
+                                font.pixelSize: 12
+                                width: 100
+                                height: setNumberRow.height
+                                validator: IntValidator {bottom: 0; top: 2147483647;}
+                                selectByMouse: true
+                                property int value: parseInt(text)
+                                text: model.setNumber
+                                horizontalAlignment: TextInput.AlignHCenter
+
+                                onEditingFinished:  model.setNumber = value
+                                Keys.onUpPressed:   model.setNumber = LegoSetInfoGenerator.nextSetNumber(value)
+                                Keys.onDownPressed: model.setNumber = LegoSetInfoGenerator.previousSetNumber(value)
+                            }
+
+                            Button {
+                                id: nextLegoSetButton
+                                text:">"
+                                font.pixelSize: 12
+                                height: setNumberRow.height
+                                onClicked: model.setNumber = LegoSetInfoGenerator.nextSetNumber(setNumberField.value)
+                            }
+                        }
+
+
                         Text{
                             text : model.description
-                            height: 12
+                            height: 14
                             width: legoSetInfo.width - legoSetImage.width - 5
                             Layout.preferredWidth: legoSetInfo.width - legoSetImage.width - 5
                             Layout.maximumWidth: legoSetInfo.width - legoSetImage.width - 5
@@ -354,12 +400,6 @@ Item {
                             clip: true
                         }
 
-                        Text{
-                            text : "Set no.: " + model.setNumber
-                            height: 12
-                            font.pixelSize: 12
-                            clip: true
-                        }
                         Text{
                             text : "Year: " + model.year
                             height: 12

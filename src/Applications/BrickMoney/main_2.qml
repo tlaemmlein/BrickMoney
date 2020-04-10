@@ -50,12 +50,10 @@ ApplicationWindow {
                     mLegoSetModel.addLegoSet(setNumber)
                     var ds = mLegoSetModel.dataSource
                     var legoSet = ds.legoSetAt(ds.legoSetCount -1)
-                    //var legoSet = legoSetComp.createObject()
                     //legoSet.setNumber = setNumber
                     legoSet.purchaseDate = purchaseDate
                     legoSet.purchasingPrice = purchasingPrice
                     legoSet.seller = seller
-                    //ds.addLegoSet(legoSet)
                 }
             }
         }

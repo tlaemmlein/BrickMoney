@@ -51,8 +51,8 @@ public:
 
 public:
     Q_INVOKABLE void querySetNumber(int num);
-    Q_INVOKABLE void nextSetNumber(int currentSetNumber);
-    Q_INVOKABLE void previousSetNumber(int currentSetNumber);
+    Q_INVOKABLE int nextSetNumber(int currentSetNumber);
+    Q_INVOKABLE int previousSetNumber(int currentSetNumber);
 
     LegoSetInfo legoSetInfo() const;
 
