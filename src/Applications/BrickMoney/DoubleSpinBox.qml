@@ -39,6 +39,7 @@ Item {
             stepSize: doublespinbox.stepSize * factor
             to : doublespinbox.to * factor
             from : doublespinbox.from * factor
+            clip: true
 
             onValueChanged:
             {

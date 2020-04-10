@@ -387,6 +387,7 @@ Item {
                     width: legoListView.purchasingWidth
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
+                    from: 0.0
                     value: model.purchasingPrice
                     stepSize: 0.1; editable: true
                     onValueChanged: {
@@ -435,6 +436,7 @@ Item {
                     width: legoListView.retailPriceWidth
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
+                    from: 0.0
                     value: model.retailPrice
                     stepSize: 0.1; editable: true
                     onValueChanged: {

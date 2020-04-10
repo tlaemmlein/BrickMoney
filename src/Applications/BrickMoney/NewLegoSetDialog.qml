@@ -104,7 +104,7 @@ Item {
                 DatePicker{ id: purchaseDateLegoSet; width: purchasingPriceLegoSet.width  }
 
                 Text { text: qsTr("Purchasing Price €:"); font.pixelSize: 16}
-                DoubleSpinBox { id: purchasingPriceLegoSet; stepSize: 0.1; editable: true }
+                DoubleSpinBox { id: purchasingPriceLegoSet; stepSize: 0.1; from: 0.0; editable: true }
             }
 
             Row {
