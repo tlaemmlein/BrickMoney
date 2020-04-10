@@ -287,6 +287,7 @@ Item {
                                 focus: true
                                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
                                 Keys.onEnterPressed: confirmRemoveDialog.accept()
+                                Keys.onReturnPressed: confirmRemoveDialog.accept()
                             }
                             Button {
                                 text: qsTr("No")
