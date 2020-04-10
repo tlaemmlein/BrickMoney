@@ -7,8 +7,6 @@ Item {
     id: datePicker
     property date selectedDate: new Date()
     property var locale: Qt.locale()
-    //x: 10
-    //y: 10
     width: 100
     height: 30
 

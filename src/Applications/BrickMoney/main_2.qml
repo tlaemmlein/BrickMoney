@@ -61,17 +61,18 @@ ApplicationWindow {
          Slider {
             Text {
                 id: zoomText
-                text: qsTr("Zoom")
+                text: zoomSlider.value +"%"
             }
             id: zoomSlider
-            wheelEnabled: false
+            wheelEnabled: true
             anchors.top: parent.top
             anchors.topMargin: 5
             anchors.leftMargin: 5
             anchors.left: addButton.right
-            from: 1
-            value: 20
-            to: 100
+            stepSize: 10
+            from: 10
+            value: 100
+            to: 300
         }
 
     }
@@ -118,30 +119,11 @@ ApplicationWindow {
          anchors.topMargin: 5
          anchors.right: parent.right
          anchors.rightMargin: 5
-//         height: parent.height -15
          height: parent.height - buttonBarChangeSetList.height -15
-                 // - buttonBarManageSetList.height -15
 
          model: mLegoSetModel
-         rowHeight: zoomSlider.value
+         zoom: zoomSlider.value
      }
-
-//     LegoTable {
-//         id: legoTable
-//         anchors.left: parent.left
-//         anchors.leftMargin: 5
-//         anchors.top: buttonBarChangeSetList.bottom
-//         anchors.topMargin: 5
-//         anchors.right: parent.right
-//         anchors.rightMargin: 5
-////         height: parent.height -15
-//         height: parent.height - buttonBarChangeSetList.height -15
-//                 // - buttonBarManageSetList.height -15
-
-//         model: mLegoSetModel
-//         rowHeight: zoomSlider.value
-//     }
-
 }
 
 
