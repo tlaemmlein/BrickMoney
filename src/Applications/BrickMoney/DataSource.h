@@ -13,12 +13,9 @@ public:
 
     Q_INVOKABLE void addLegoSet(LegoSet* set);
     Q_INVOKABLE void removeLegoSet(int index);
-
-    int legoSetCount();
-
-    LegoSet *legoSetAt(int index);
-
-    void clearLegoSets();
+    Q_INVOKABLE int legoSetCount();
+    Q_INVOKABLE LegoSet *legoSetAt(int index);
+    Q_INVOKABLE void clearLegoSets();
 
 signals:
     void preLegoSetAdded();

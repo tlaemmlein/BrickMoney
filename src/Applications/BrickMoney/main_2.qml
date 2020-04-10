@@ -46,14 +46,16 @@ ApplicationWindow {
                   LegoSet {}
                 }
                 onAddLegoSetNumber:{
-                    console.log( "onAddLegoSetNumber : " + setNumber)
+                    //console.log( "onAddLegoSetNumber : " + setNumber)
+                    mLegoSetModel.addLegoSet(setNumber)
                     var ds = mLegoSetModel.dataSource
-                    var legoSet = legoSetComp.createObject()
-                    legoSet.setNumber = setNumber
+                    var legoSet = ds.legoSetAt(ds.legoSetCount -1)
+                    //var legoSet = legoSetComp.createObject()
+                    //legoSet.setNumber = setNumber
                     legoSet.purchaseDate = purchaseDate
                     legoSet.purchasingPrice = purchasingPrice
                     legoSet.seller = seller
-                    ds.addLegoSet(legoSet)
+                    //ds.addLegoSet(legoSet)
                 }
             }
         }

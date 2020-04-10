@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.12
 Item {
     id : rootId
     function openDialog(){
-        inputDialog.open()
+        newLegoSetDialog.open()
     }
 
     property alias setNumber: setNumberField.value
@@ -15,7 +15,8 @@ Item {
     signal addLegoSetNumber
 
     Dialog {
-        id: inputDialog
+        id: newLegoSetDialog
+        objectName: "newLegoSetDialog"
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
@@ -41,10 +42,7 @@ Item {
                 Button {
                     id: prevLegoSetButton
                     text:"<"
-                    onClicked: {
-                        console.log("prevLegoSetButton");
-                        LegoSetInfoGenerator.previousSetNumber(setNumberField.value)
-                    }
+                    onClicked: LegoSetInfoGenerator.previousSetNumber(setNumberField.value)
                 }
 
                 TextField {
@@ -56,34 +54,17 @@ Item {
                     text: "41632"
                     horizontalAlignment: TextInput.AlignHCenter
 
-                    Component.onCompleted: {
-                        LegoSetInfoGenerator.querySetNumber(value)
-                    }
+                    Component.onCompleted: LegoSetInfoGenerator.querySetNumber(value)
 
-                    onEditingFinished: {
-                        console.log("onEditingFinished")
-                        LegoSetInfoGenerator.querySetNumber(value)
-                    }
-                    Keys.onUpPressed:
-                    {
-                        console.log("Key up");
-                        LegoSetInfoGenerator.nextSetNumber(value)
-                    }
-                    Keys.onDownPressed:
-                    {
-                        console.log("Key down");
-                        LegoSetInfoGenerator.previousSetNumber(value)
-                    }
-
+                    onEditingFinished:  LegoSetInfoGenerator.querySetNumber(value)
+                    Keys.onUpPressed:   LegoSetInfoGenerator.nextSetNumber(value)
+                    Keys.onDownPressed: LegoSetInfoGenerator.previousSetNumber(value)
                 }
 
                 Button {
                     id: nextLegoSetButton
                     text:">"
-                    onClicked: {
-                        console.log("nextLegoSetButton");
-                        LegoSetInfoGenerator.nextSetNumber(setNumberField.value)
-                    }
+                    onClicked: LegoSetInfoGenerator.nextSetNumber(setNumberField.value)
                 }
 
             }
@@ -105,7 +86,7 @@ Item {
                         id: description
                         text: ""
                         font.pixelSize: 16
-                        width: inputDialog.width - legoSetImage.width - inputDialogLayout.spacing - 1.2*legsetName.width
+                        width: newLegoSetDialog.width - legoSetImage.width - inputDialogLayout.spacing - 1.2*legsetName.width
                         wrapMode: Text.Wrap
                     }
 
@@ -156,10 +137,7 @@ Item {
                     id: addLegoSetButton
                     text:"Add"
                     background: Rectangle { id: addLegoSetRect; color: "lightblue";  radius: addLegoSetButton.radius; opacity: .8; border.width: 0;}
-                    onClicked: {
-                        console.log("addLegoSetButton");
-                        rootId.addLegoSetNumber()
-                    }
+                    onClicked: rootId.addLegoSetNumber()
                     onHoveredChanged: {
                         if (hovered){
                             addLegoSetRect.opacity = 1
@@ -178,10 +156,8 @@ Item {
                     id: addAndCloseLegoSetButton
                     text:"Add && Close"
                     background: Rectangle { id: addAndCloseLegoSetRect; color: "orange";  radius: addAndCloseLegoSetButton.radius; opacity: .8; border.width: 0; }
-                    onClicked: {
-                        console.log("addAndCloseLegoSetButton");
-                        inputDialog.accept()
-                    }
+                    onClicked: newLegoSetDialog.accept()
+
                     onHoveredChanged: {
                         if (hovered){
                             addAndCloseLegoSetRect.opacity = 1
@@ -200,10 +176,7 @@ Item {
                     id: closeLegoSetButton
                     text:"Close"
                     background: Rectangle { id: closeLegoSetRect; color: "red";  radius: closeLegoSetButton.radius; opacity: .8; border.width: 0; }
-                    onClicked: {
-                        console.log("closeLegoSetButton");
-                        inputDialog.reject()
-                    }
+                    onClicked: newLegoSetDialog.reject()
                     onHoveredChanged: {
                         if (hovered){
                             closeLegoSetRect.opacity = 1
@@ -222,7 +195,7 @@ Item {
         }
 
         Component.onCompleted: {
-            console.log("onCompleted")
+            console.log(objectName + ":onCompleted")
             LegoSetInfoGenerator.setNumber.connect(onLegoSetNumber)
             LegoSetInfoGenerator.imageUrl.connect(onLegoSetImageUrl)
             LegoSetInfoGenerator.description.connect(onLegoSetDescription)
@@ -233,48 +206,35 @@ Item {
 
         function onLegoSetNumber(setnum)
         {
-            console.log("onLegoSetNumber: "  +setnum)
             if ( setnum !== setNumberField.value)  {
                 setNumberField.text = setnum
             }
         }
 
         function onLegoSetImageUrl(imageUrl) {
-            console.log("onLegoSetImageUrl: "  +imageUrl)
             legoSetImage.source = imageUrl
         }
 
         function onLegoSetDescription(desc) {
-            console.log("onLegoSetDescription: " + desc)
             description.text = desc
         }
 
         function onLegoSetYear(value) {
-            console.log("onLegoSetYear: " + value)
             year.text = value
         }
 
         function onLegoSetRRPrice(value) {
-            console.log("onLegoSetRRPrice: " + value)
             rrprice.text = value +"€"
         }
 
         function onSetNumberNotFound() {
-            console.log("onSetNumberNotFound")
             legoSetImage.source = "qrc:/images/Empty.svg"
             description.text = "n.a."
             year.text = "n.a."
             rrprice.text = "n.a."
         }
 
-        onAccepted: {
-            console.log("Accepted adding lego set")
-            rootId.addLegoSetNumber()
-
-        }
-        onRejected: {
-            console.log("Rejected adding lego set")
-        }
+        onAccepted: rootId.addLegoSetNumber()
     }
 }
 

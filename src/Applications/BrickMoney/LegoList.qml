@@ -275,10 +275,7 @@ Item {
                         modal: true
                         title: "Do you want to remove the LegoSet " + index + "?"
 
-                        function setActiveFocusToYesButton() {
-                            console.log(objectName +": setActiveFocus")
-                            yesRemoveButton.forceActiveFocus()
-                        }
+                        function setActiveFocusToYesButton() { yesRemoveButton.forceActiveFocus(); }
                         width: 450
 
                         footer:
@@ -286,15 +283,10 @@ Item {
                             id: dialogBox
                             Button {
                                 id: yesRemoveButton
-                                objectName: "yesRemoveButton"
-                                text: "Yes"
+                                text: qsTr("Yes")
                                 focus: true
                                 DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                                Keys.onEnterPressed: {
-                                    console.log(objectName + ": enter pressed")
-                                    confirmRemoveDialog.accept()
-                                }
-                                Component.onCompleted: console.log(objectName + ": onCompleted")
+                                Keys.onEnterPressed: confirmRemoveDialog.accept()
                             }
                             Button {
                                 text: qsTr("No")
@@ -302,20 +294,8 @@ Item {
                             }
                         }
 
-                        onAccepted:
-                        {
-                            console.log(objectName + ": Yes clicked")
-                            legoListView.model.removeLegoSet(index)
-                            confirmRemoveDialog.destroy()
-                        }
-                        onRejected:
-                        {
-                            console.log(objectName + ": No clicked");
-                            confirmRemoveDialog.destroy();
-                        }
-
-                        Component.onCompleted: console.log(objectName + ":onCompleted")
-                        Component.onDestruction: console.log(objectName + ":onDestruction")
+                        onAccepted: { legoListView.model.removeLegoSet(index); confirmRemoveDialog.destroy() }
+                        onRejected: confirmRemoveDialog.destroy();
                     }
                 }
 
