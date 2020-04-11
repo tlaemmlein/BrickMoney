@@ -15,5 +15,6 @@
         <file>NewLegoSetDialog.qml</file>
         <file>NewLegoSetDialogPrototype.qml</file>
         <file>DialogButtonBoxTest.qml</file>
+        <file>ListViewScrollbars.qml</file>
     </qresource>
 </RCC>

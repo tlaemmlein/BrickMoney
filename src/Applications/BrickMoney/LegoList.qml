@@ -35,13 +35,18 @@ Item {
         property int saleDateWidth: 100 * legoListView.zFactor
         property int soldOverWidth: 150 * legoListView.zFactor
         property int buyerWidth: 150 * legoListView.zFactor
+        property int rowSpacing: 2
 
         property int fontPixelSize: 12 * legoListView.zFactor
 
         headerPositioning: ListView.OverlayHeader
 
-        ScrollBar.vertical: ScrollBar { }
-        ScrollBar.horizontal: ScrollBar { active: true}
+        contentWidth: selLegoSetWidth+legoSetInfoWidth+purchasingWidth+cheaperWidth
+                      +sellerWidth+purchaseDateWidth+retailPriceWidth+profitEurosWidth+profitPercentWidth
+                      +saleDateWidth+soldOverWidth+buyerWidth+12*rowSpacing
+        flickableDirection: Flickable.HorizontalAndVerticalFlick
+        ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
+        ScrollBar.horizontal: ScrollBar {contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
 
         header: Rectangle {
             id: headerItem
@@ -52,7 +57,7 @@ Item {
 
             Row{
                 anchors.fill: parent
-                spacing: 2
+                spacing: legoListView.rowSpacing
 
                 Rectangle {
                     id: selectionHeader
@@ -260,7 +265,7 @@ Item {
 
             Row{
                 anchors.fill: parent
-                spacing: 2
+                spacing: legoListView.rowSpacing
                 Rectangle {
                     width: legoListView.selLegoSetWidth
                     anchors {
