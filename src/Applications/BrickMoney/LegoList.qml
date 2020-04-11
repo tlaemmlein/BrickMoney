@@ -36,9 +36,12 @@ Item {
         property int soldOverWidth: 150 * legoListView.zFactor
         property int buyerWidth: 150 * legoListView.zFactor
 
-        property int fontPixelSize: 10 * legoListView.zFactor
+        property int fontPixelSize: 12 * legoListView.zFactor
 
         headerPositioning: ListView.OverlayHeader
+
+        ScrollBar.vertical: ScrollBar { }
+        ScrollBar.horizontal: ScrollBar { active: true}
 
         header: Rectangle {
             id: headerItem
@@ -252,7 +255,7 @@ Item {
 
         delegate: Rectangle {
             id : rectDelegate
-            height: 80 * legoListView.zFactor
+            height: 65 * legoListView.zFactor
             border.color: "black"
 
             Row{
@@ -476,6 +479,7 @@ Item {
                     DatePicker{
                         id: purchaseDateLegoSet
                         anchors.fill: parent
+                        fontPixelSize: legoListView.fontPixelSize
                         selectedDate: model.purchaseDate
                     }
                 }
@@ -535,6 +539,7 @@ Item {
                     DatePicker{
                         id: saleDateLegoSet
                         anchors.fill: parent
+                        fontPixelSize: legoListView.fontPixelSize
                         selectedDate: model.saleDate
                     }
                 }

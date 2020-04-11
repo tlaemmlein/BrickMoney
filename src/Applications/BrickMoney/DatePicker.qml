@@ -7,14 +7,17 @@ Item {
     id: datePicker
     property date selectedDate: new Date()
     property var locale: Qt.locale()
+    property int fontPixelSize: 12
     width: 100
     height: 30
+
 
 
     Button {
         id: textDate
         anchors.fill: parent
         text:  datePicker.selectedDate.toLocaleDateString(datePicker.locale, Locale.ShortFormat)
+        font.pixelSize: datePicker.fontPixelSize
         onClicked:{
             calPopup.open()
         }
