@@ -51,7 +51,7 @@ Item {
                     validator: IntValidator {bottom: 0; top: 2147483647;}
                     selectByMouse: true
                     property int value: parseInt(text)
-                    text: "41632"
+                    text: "21155"
                     horizontalAlignment: TextInput.AlignHCenter
 
                     Component.onCompleted: LegoSetInfoGenerator.querySetNumber(value)
@@ -115,6 +115,9 @@ Item {
                     width: purchasingPriceLegoSet.width; readOnly: true; validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
                     horizontalAlignment: TextInput.AlignHCenter
                     text: {
+                        if (_LegoSet === null){
+                            return
+                        }
                         var number = _LegoSet.calcCheaperPercent(rrprice.value, purchasingPriceLegoSet.value)
                         number =  number !== null ? number.toLocaleString(locale, 'f', 2) +" %" : 0.0;
                         return number
@@ -203,6 +206,8 @@ Item {
             LegoSetInfoGenerator.recommendedRetailPrice.connect(onLegoSetRRPrice)
             LegoSetInfoGenerator.setNumberNotFound.connect(onSetNumberNotFound)
         }
+
+        Component.onDestruction: console.log(objectName + ":onDestruction")
 
         function onLegoSetNumber(setnum)
         {

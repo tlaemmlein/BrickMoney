@@ -32,7 +32,7 @@ void LegoSet::initParams()
     m_retailPrice =0;
     m_profitEuros =0;
     m_profitPercent= 0;
-    m_saleDate =QDate(1900,1,1);
+    m_saleDate = QDate::currentDate();
     m_soldOver="";
     m_buyer="";
 }
