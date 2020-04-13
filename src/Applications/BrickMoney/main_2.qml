@@ -5,15 +5,21 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
 import de.brickmoney.models 0.1
+import de.brickmoney.settings 0.1
 import Qt.labs.platform 1.1 as QP
 
 ApplicationWindow {
     id: mainWindow
+    objectName: "mainWindow"
     visible: true
     width: 1600
     height: 600
     title: qsTr("BrickMoney Vers. 0.1 - The software for LEGO Investment")
     color: "lightblue"
+
+    Component.onCompleted: {
+        console.log(objectName + ":onCompleted")
+    }
 
     menuBar: MenuBar{
         Menu {
@@ -104,6 +110,9 @@ ApplicationWindow {
                 text: zoomSlider.value +"%"
             }
             id: zoomSlider
+            objectName: "zoomSlider"
+            Component.onDestruction: BrickMoneySettings.zoomFactor = value
+
             wheelEnabled: true
             anchors.top: parent.top
             anchors.topMargin: 5
@@ -111,7 +120,7 @@ ApplicationWindow {
             anchors.left: addButton.right
             stepSize: 10
             from: 10
-            value: 100
+            value: BrickMoneySettings.zoomFactor
             to: 300
         }
 

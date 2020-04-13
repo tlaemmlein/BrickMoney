@@ -19,6 +19,8 @@ add_executable(${PROJECT_NAME}
     main.cpp
     qml.qrc
     QmlValuePreview.h
+    BrickMoneySettings.cpp
+    BrickMoneySettings.h
     DataSource.cpp
     DataSource.h
     LegoSet.cpp

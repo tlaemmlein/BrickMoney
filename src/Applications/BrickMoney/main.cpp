@@ -1,7 +1,7 @@
 #include "Logging.h"
 SET_LOGGER("BrickMoney.Main")
 
-//#include "LegoSetIOManager.h"
+#include "BrickMoneySettings.h"
 #include "LegoSetInfoGenerator.h"
 #include "LegoSetTableModel.h"
 #include "LegoSet.h"
@@ -56,11 +56,15 @@ int main(int argc, char *argv[])
 
     qmlRegisterType<LegoSet>("de.brickmoney.models", 0, 1, "LegoSet");
     qmlRegisterType<LegoSetTableModel>("de.brickmoney.models", 0, 1, "LegoSetTableModel");
-//    qmlRegisterType<LegoSetIOManager>("LegoSetIOManager", 0, 1, "LegoSetIOManager");
 
-//    QSharedPointer<LegoSetTableModel> lego_table_model = QSharedPointer<LegoSetTableModel>(new LegoSetTableModel);
-//    LegoSetIOManager lego_io_manager;
-//    lego_io_manager.setLegoSetTableModel(lego_table_model);
+    //BrickMoneySettings::Inst();
+
+    qmlRegisterSingletonType<BrickMoneySettings>("de.brickmoney.settings", 0, 1, "BrickMoneySettings",
+                                                 [](QQmlEngine *engine, QJSEngine *scriptEngine)->QObject *{
+                                                     Q_UNUSED(engine)
+                                                     Q_UNUSED(scriptEngine)
+                                                     return new BrickMoneySettings;
+                                                 });
 
     QQmlApplicationEngine engine;
 
@@ -69,10 +73,6 @@ int main(int argc, char *argv[])
 
     LegoSet legoSet;
     engine.rootContext()->setContextProperty("_LegoSet", &legoSet);
-
-
-//    engine.rootContext()->setContextProperty("_LegoSetTableModel", lego_table_model.get());
-//    engine.rootContext()->setContextProperty("_LegoSetIOManager", &lego_io_manager);
 
     engine.load(QUrl(QStringLiteral("qrc:/main_2.qml")));
     if (engine.rootObjects().isEmpty())
