@@ -5,7 +5,6 @@ import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
 import de.brickmoney.models 0.1
-import de.brickmoney.settings 0.1
 import Qt.labs.platform 1.1 as QP
 
 ApplicationWindow {
@@ -28,27 +27,30 @@ ApplicationWindow {
                 id : saveActionId
                 text: qsTr("&Save project")
                 icon.source: "qrc:/images/save.svg"
-                //enabled: false
+                enabled: BrickMoneySettings.brickMoneyIsDirty
                 onTriggered: {
                     console.log("Clicked on save")
-                    saveFileDialog.open()
+                    mLegoSetModel.dataSource.saveLegoSets()
                 }
             }
             Action {
                 id : saveAsActionId
                 text: qsTr("&Save project as...")
-                //icon.source: "qrc:/images/save.svg"
-                onTriggered: {console.log("Clicked on save as")}
+                onTriggered: {
+                    console.log("Clicked on save as")
+                    saveAsFileDialog.open()
+                }
             }
         }
     }
 
     QP.FileDialog {
-         id: saveFileDialog
+         id: saveAsFileDialog
          objectName: "saveFileDialog"
+         title: qsTr("Save BrickMoney project as...")
          nameFilters: ["CSV files (*.csv)"]
          fileMode: QP.FileDialog.SaveFile
-         folder: QP.StandardPaths.writableLocation(QP.StandardPaths.DocumentsLocation)
+         folder: BrickMoneySettings.brickMoneyFilePath
          onAccepted: {
              console.log(objectName + ": onAccepted: You choose: " + currentFile)
              var ds = mLegoSetModel.dataSource
@@ -62,8 +64,25 @@ ApplicationWindow {
     header: ToolBar {
            Row {
                anchors.fill: parent
+               spacing: 4
                ToolButton{ action: saveActionId }
-               ToolButton{ action: saveAsActionId }
+               ToolButton{ id: saveAsTbId; action: saveAsActionId }
+
+               Rectangle {
+                   border.color: "black"
+                   color: "black"
+                   width: 3
+                   anchors.top: saveAsTbId.top
+                   anchors.bottom: saveAsTbId.bottom
+               }
+
+               Text{
+                   id: brickMoneyFilePathText
+                   text: BrickMoneySettings.brickMoneyFilePath
+                   anchors.verticalCenter: parent.verticalCenter
+                   //verticalAlignment: Text.AlignVCenter
+                   font.pixelSize: 14
+               }
            }
        }
 

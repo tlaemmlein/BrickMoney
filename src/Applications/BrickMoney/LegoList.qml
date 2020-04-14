@@ -486,6 +486,7 @@ Item {
                         anchors.fill: parent
                         fontPixelSize: legoListView.fontPixelSize
                         selectedDate: model.purchaseDate
+                        onSelectedDateChanged: model.purchaseDate = selectedDate
                     }
                 }
 
@@ -546,6 +547,7 @@ Item {
                         anchors.fill: parent
                         fontPixelSize: legoListView.fontPixelSize
                         selectedDate: model.saleDate
+                        onSelectedDateChanged: model.saleDate = selectedDate
                     }
                 }
 

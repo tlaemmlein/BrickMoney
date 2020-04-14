@@ -1,6 +1,7 @@
 #include "LegoSet.h"
 
 #include "LegoSetInfoGenerator.h"
+#include "BrickMoneySettings.h"
 
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
@@ -143,6 +144,7 @@ void LegoSet::setSetNumber(int setNumber)
     m_LegoSetInfoGenerator->querySetNumber(setNumber);
 
     m_setNumber = setNumber;
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
     emit setNumberChanged(m_setNumber);
 }
 
@@ -158,6 +160,7 @@ void LegoSet::setPurchasingPrice(double purchasingPrice)
     setCheaperPercent( calcCheaperPercent(m_recommendedRetailPrice, m_purchasingPrice));
     setProfitEuros( calcProfitEuros(m_retailPrice, m_purchasingPrice));
     setProfitPercent( calcProfitPercent(m_retailPrice, m_purchasingPrice));
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setSeller(QString seller)
@@ -167,6 +170,7 @@ void LegoSet::setSeller(QString seller)
 
     m_seller = seller;
     emit sellerChanged(m_seller);
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setPurchaseDate(QDate purchaseDate)
@@ -176,6 +180,7 @@ void LegoSet::setPurchaseDate(QDate purchaseDate)
 
     m_purchaseDate = purchaseDate;
     emit purchaseDateChanged(m_purchaseDate);
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setRetailPrice(double retailPrice)
@@ -188,6 +193,7 @@ void LegoSet::setRetailPrice(double retailPrice)
 
     setProfitEuros( calcProfitEuros(m_retailPrice, m_purchasingPrice));
     setProfitPercent( calcProfitPercent(m_retailPrice, m_purchasingPrice));
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setSaleDate(QDate saleDate)
@@ -197,6 +203,7 @@ void LegoSet::setSaleDate(QDate saleDate)
 
     m_saleDate = saleDate;
     emit saleDateChanged(m_saleDate);
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setSoldOver(QString soldOver)
@@ -206,6 +213,7 @@ void LegoSet::setSoldOver(QString soldOver)
 
     m_soldOver = soldOver;
     emit soldOverChanged(m_soldOver);
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSet::setBuyer(QString buyer)
@@ -215,6 +223,7 @@ void LegoSet::setBuyer(QString buyer)
 
     m_buyer = buyer;
     emit buyerChanged(m_buyer);
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 

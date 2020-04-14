@@ -57,16 +57,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<LegoSet>("de.brickmoney.models", 0, 1, "LegoSet");
     qmlRegisterType<LegoSetTableModel>("de.brickmoney.models", 0, 1, "LegoSetTableModel");
 
-    //BrickMoneySettings::Inst();
-
-    qmlRegisterSingletonType<BrickMoneySettings>("de.brickmoney.settings", 0, 1, "BrickMoneySettings",
-                                                 [](QQmlEngine *engine, QJSEngine *scriptEngine)->QObject *{
-                                                     Q_UNUSED(engine)
-                                                     Q_UNUSED(scriptEngine)
-                                                     return new BrickMoneySettings;
-                                                 });
-
     QQmlApplicationEngine engine;
+
+    engine.rootContext()->setContextProperty("BrickMoneySettings", BrickMoneySettings::Inst());
 
     LegoSetInfoGenerator gen;
     engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);

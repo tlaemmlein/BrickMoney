@@ -17,6 +17,7 @@ public:
     Q_INVOKABLE LegoSet *legoSetAt(int index);
     Q_INVOKABLE void clearLegoSets();
 
+    Q_INVOKABLE void saveLegoSets();
     Q_INVOKABLE void saveLegoSets(const QString& fileUrlPath);
 
 signals:
@@ -29,6 +30,8 @@ private:
     QList<LegoSet*> m_legoSets;
 
     QString toLocalFile(const QString& fileUrl);
+
+    bool saveLegoSetsImpl(const QString& filePath);
 };
 
 

@@ -45,7 +45,7 @@ Item {
             selectedDate: datePicker.selectedDate
             onClicked:  {
                 datePicker.selectedDate = cal.selectedDate
-                //datePicker.selectedDateChanged(cal.selectedDate) //emit signal to be sure
+                datePicker.selectedDateChanged(cal.selectedDate) //emit signal to be sure
                 calPopup.close()
             }
         }

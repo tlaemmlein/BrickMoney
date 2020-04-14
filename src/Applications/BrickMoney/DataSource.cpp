@@ -3,6 +3,7 @@ SET_LOGGER("BrickMoney.DataSource")
 
 #include "DataSource.h"
 #include "LegoSet.h"
+#include "BrickMoneySettings.h"
 
 #include <QFile>
 #include <QTextStream>
@@ -42,19 +43,45 @@ void DataSource::clearLegoSets()
     m_legoSets.clear();
 }
 
+void DataSource::saveLegoSets()
+{
+    LOG_SCOPE_METHOD(L"");
+    saveLegoSetsImpl(BrickMoneySettings::Inst()->brickMoneyFilePath());
+}
+
 void DataSource::saveLegoSets(const QString &fileUrlPath)
 {
     LOG_SCOPE_METHOD(L"");
     const QString localFilePath = toLocalFile(fileUrlPath);
+    if (saveLegoSetsImpl(localFilePath))
+        BrickMoneySettings::Inst()->setBrickMoneyFilePath(localFilePath);
+}
 
-    LOG_INFO("Start to save to " << localFilePath.toStdWString());
+QString DataSource::toLocalFile(const QString &fileUrl)
+{
+    QUrl url(fileUrl);
 
-    QFile cvsData(localFilePath);
+    return url.toLocalFile();
+}
+
+bool DataSource::saveLegoSetsImpl(const QString& filePath)
+{
+    LOG_SCOPE_METHOD(L"");
+
+    if ( filePath.isEmpty())
+    {
+        LOG_ERROR("The brick money file path is empty");
+        return false;
+    }
+
+    LOG_INFO("Start to save to " << filePath.toStdWString());
+
+    QFile cvsData(filePath);
 
     if ( !cvsData.open(QFile::WriteOnly))
     {
-        LOG_ERROR("Could not save to " << localFilePath.toStdWString());
-        return;
+        LOG_ERROR("Could not save to " << filePath.toStdWString());
+        return false;
     }
 
     QTextStream output(&cvsData);
@@ -62,7 +89,7 @@ void DataSource::saveLegoSets(const QString &fileUrlPath)
 
     const QChar del = ';';
 
-    for(const auto& set : m_legoSets)
+    for(const auto& set: m_legoSets)
     {
         output << set->setNumber() << del
                << set->purchasingPrice() << del
@@ -73,11 +100,6 @@ void DataSource::saveLegoSets(const QString &fileUrlPath)
                << set->soldOver() << del
                << set->buyer() << "\n";
     }
-}
-
-QString DataSource::toLocalFile(const QString &fileUrl)
-{
-    QUrl url(fileUrl);
-
-    return url.toLocalFile();
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+    return true;
 }
