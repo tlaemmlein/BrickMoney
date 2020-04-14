@@ -30,6 +30,7 @@ class LegoSet : public QObject
 public:
     explicit LegoSet(QObject *parent = nullptr);
     LegoSet(int setNumber, QObject *parent = nullptr);
+	~LegoSet();
 
     int setNumber() const;
     QString imageName() const;

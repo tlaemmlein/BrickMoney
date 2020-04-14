@@ -19,6 +19,7 @@ void DataSource::addLegoSet(LegoSet *set)
     emit preLegoSetAdded();
     m_legoSets.append(set);
     emit postLegoSetAdded();
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void DataSource::removeLegoSet(int index)
@@ -26,6 +27,7 @@ void DataSource::removeLegoSet(int index)
     emit preLegoSetRemoved(index);
     m_legoSets.removeAt(index);
     emit postLegoSetRemoved();
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 int DataSource::legoSetCount()
@@ -41,6 +43,7 @@ LegoSet *DataSource::legoSetAt(int index)
 void DataSource::clearLegoSets()
 {
     m_legoSets.clear();
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void DataSource::saveLegoSets()

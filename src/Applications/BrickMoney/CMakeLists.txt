@@ -14,10 +14,26 @@ set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/../../Thirdparty)
 
 find_package(log4cplus HINTS ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/)
 
+set(QML_FILES
+    DatePicker.qml
+    DatePickerTest.qml
+    DialogButtonBoxTest.qml
+    DoubleSpinBox.qml
+    LegoList.qml
+    LegoTable.qml
+    LegoTableOld.qml
+    ListViewScrollbars.qml
+    main.qml
+    main_2.qml
+    NewLegoSetDialog.qml
+    NewLegoSetDialogPrototype.qml
+    )
+
 add_executable(${PROJECT_NAME}
     images/images.qrc
     main.cpp
     qml.qrc
+    ${QML_FILES}
     QmlValuePreview.h
     BrickMoneySettings.cpp
     BrickMoneySettings.h
@@ -32,6 +48,8 @@ add_executable(${PROJECT_NAME}
     Logging.h
     LegoSetInfoGenerator.cpp
     LegoSetInfoGenerator.h)
+
+source_group("QML Files" FILES ${QML_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets)

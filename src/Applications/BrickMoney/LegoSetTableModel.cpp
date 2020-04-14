@@ -204,7 +204,7 @@ void LegoSetTableModel::addLegoSet(int setNumber)
 
     LOG_INFO("SetNumber: " << setNumber);
 
-    m_dataSource->addLegoSet( new LegoSet(setNumber));
+    m_dataSource->addLegoSet( new LegoSet(setNumber, this));
 }
 
 void LegoSetTableModel::removeLegoSet(int rowIndex)

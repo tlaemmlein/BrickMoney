@@ -18,6 +18,10 @@ LegoSet::LegoSet(int setNumber, QObject *parent) : QObject(parent)
     setSetNumber(setNumber);
 }
 
+LegoSet::~LegoSet()
+{
+}
+
 void LegoSet::initParams()
 {
     m_setNumber=-1;
