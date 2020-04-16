@@ -45,46 +45,46 @@ ApplicationWindow {
     }
 
     QP.FileDialog {
-         id: saveAsFileDialog
-         objectName: "saveFileDialog"
-         title: qsTr("Save BrickMoney project as...")
-         nameFilters: ["CSV files (*.csv)"]
-         fileMode: QP.FileDialog.SaveFile
-         folder: BrickMoneySettings.brickMoneyFilePath
-         onAccepted: {
-             console.log(objectName + ": onAccepted: You choose: " + currentFile)
-             var ds = mLegoSetModel.dataSource
-             ds.saveLegoSets(currentFile)
+        id: saveAsFileDialog
+        objectName: "saveFileDialog"
+        title: qsTr("Save BrickMoney project as...")
+        nameFilters: ["CSV files (*.csv)"]
+        fileMode: QP.FileDialog.SaveFile
+        folder: BrickMoneySettings.brickMoneyFilePath
+        onAccepted: {
+            console.log(objectName + ": onAccepted: You choose: " + currentFile)
+            var ds = mLegoSetModel.dataSource
+            ds.saveLegoSets(currentFile)
         }
-         onRejected: {
-             console.log(objectName + ":Canceled")
-         }
-     }
+        onRejected: {
+            console.log(objectName + ":Canceled")
+        }
+    }
 
     header: ToolBar {
-           Row {
-               anchors.fill: parent
-               spacing: 4
-               ToolButton{ action: saveActionId }
-               ToolButton{ id: saveAsTbId; action: saveAsActionId }
+        Row {
+            anchors.fill: parent
+            spacing: 4
+            ToolButton{ action: saveActionId }
+            ToolButton{ id: saveAsTbId; action: saveAsActionId }
 
-               Rectangle {
-                   border.color: "black"
-                   color: "black"
-                   width: 3
-                   anchors.top: saveAsTbId.top
-                   anchors.bottom: saveAsTbId.bottom
-               }
+            Rectangle {
+                border.color: "black"
+                color: "black"
+                width: 3
+                anchors.top: saveAsTbId.top
+                anchors.bottom: saveAsTbId.bottom
+            }
 
-               Text{
-                   id: brickMoneyFilePathText
-                   text: BrickMoneySettings.brickMoneyFilePath
-                   anchors.verticalCenter: parent.verticalCenter
-                   //verticalAlignment: Text.AlignVCenter
-                   font.pixelSize: 14
-               }
-           }
-       }
+            Text{
+                id: brickMoneyFilePathText
+                text: BrickMoneySettings.brickMoneyFilePath
+                anchors.verticalCenter: parent.verticalCenter
+                //verticalAlignment: Text.AlignVCenter
+                font.pixelSize: 14
+            }
+        }
+    }
 
     Rectangle {
         id: buttonBarChangeSetList
@@ -123,7 +123,7 @@ ApplicationWindow {
             }
         }
 
-         Slider {
+        Slider {
             Text {
                 id: zoomText
                 text: zoomSlider.value +"%"
@@ -145,8 +145,31 @@ ApplicationWindow {
 
     }
 
+    MessageDialog {
+        id: messageDialogQuit
+        text: qsTr("The document has been modified.")
+        informativeText: qsTr("Do you want to save your changes?")
+        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        onYes: {
+            mLegoSetModel.dataSource.saveLegoSets()
+            Qt.quit()
+        }
+        onNo: Qt.quit()
+    }
 
-     LegoSetTableModel {
+    onClosing:{
+        close.accepted = false
+        onTriggered:
+        {
+            if (BrickMoneySettings.brickMoneyIsDirty === true) {
+                messageDialogQuit.open()
+            } else {
+                Qt.quit()
+            }
+        }
+    }
+
+    LegoSetTableModel {
         id: mLegoSetModel
 
         LegoSet {
@@ -166,19 +189,19 @@ ApplicationWindow {
 
     }
 
-     LegoList{
-         id: legoTable
-         anchors.left: parent.left
-         anchors.leftMargin: 5
-         anchors.top: buttonBarChangeSetList.bottom
-         anchors.topMargin: 5
-         anchors.right: parent.right
-         anchors.rightMargin: 5
-         height: parent.height - buttonBarChangeSetList.height -15
+    LegoList{
+        id: legoTable
+        anchors.left: parent.left
+        anchors.leftMargin: 5
+        anchors.top: buttonBarChangeSetList.bottom
+        anchors.topMargin: 5
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        height: parent.height - buttonBarChangeSetList.height -15
 
-         model: mLegoSetModel
-         zoom: zoomSlider.value
-     }
+        model: mLegoSetModel
+        zoom: zoomSlider.value
+    }
 }
 
 
