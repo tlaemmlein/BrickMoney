@@ -112,9 +112,7 @@ ApplicationWindow {
                 objectName: "newLegoSetDialog"
                 onAddLegoSetNumber:{
                     console.log(objectName + ":onAddLegoSetNumber")
-                    mLegoSetModel.addLegoSet(setNumber)
-                    var ds = mLegoSetModel.dataSource
-                    var legoSet = ds.legoSetAt(ds.legoSetCount -1)
+                    var legoSet = mLegoSetModel.addLegoSet(setNumber)
                     legoSet.purchaseDate = purchaseDate
                     legoSet.purchasingPrice = purchasingPrice
                     legoSet.seller = seller
@@ -174,18 +172,17 @@ ApplicationWindow {
 
         LegoSet {
             setNumber: 41599
-            purchasingPrice: 7.71
-            seller: "Karstadt München"
-            purchaseDate: new Date('2019-04-15')
-            retailPrice: 1000.95
-            saleDate: new Date('2019-08-11')
-            soldOver: "www.ebay.de"
-            buyer: "Max Mustermann, Musterstraße1, 123456 Musterstadt"
+            purchasingPrice: 1
+            seller: "Seller 1"
+            purchaseDate: new Date('2019-04-01')
+            retailPrice: 2
+            saleDate: new Date('2019-04-02')
+            soldOver: "Sold 1"
+            buyer: "Buyer 1" 
         }
 
-        LegoSet { setNumber: 70608; purchasingPrice: 8.99; seller: "Karstadt München" }
-        LegoSet { setNumber: 75212; purchasingPrice: 116.47; seller: "www.steinehelden.de" ;purchaseDate: new Date('2018-07-07') }
-        LegoSet {setNumber: 75208; purchasingPrice: 21.89; seller: "www.toysrus.de"; purchaseDate: new Date('2018-07-11') }
+        //LegoSet { setNumber: 70608; purchasingPrice: 3; seller: "Karstadt München"; retailPrice: 4 }
+        //LegoSet { setNumber: 75212; purchasingPrice: 5; seller: "www.steinehelden.de"; retailPrice: 6; purchaseDate: new Date('2018-07-07') }
 
     }
 
