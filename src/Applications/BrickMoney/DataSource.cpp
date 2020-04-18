@@ -8,6 +8,8 @@ SET_LOGGER("BrickMoney.DataSource")
 #include <QFile>
 #include <QTextStream>
 #include <QUrl>
+#include <QDate>
+#include <QFileInfo>
 
 DataSource::DataSource(QObject *parent) : QObject(parent)
 {
@@ -60,8 +62,70 @@ void DataSource::saveLegoSets(const QString &fileUrlPath)
         BrickMoneySettings::Inst()->setBrickMoneyFilePath(localFilePath);
 }
 
+void DataSource::loadLegoSets(const QString &fileUrlPath)
+{
+    LOG_SCOPE_METHOD(L"");
+
+    const QString filePath = toLocalFile(fileUrlPath);
+
+    if ( filePath.isEmpty())
+    {
+        LOG_ERROR(__FUNCTION__ << ": The brick money file path is empty. " << filePath.toStdWString());
+        return;
+    }
+
+    LOG_INFO("Start to load from " << filePath.toStdWString());
+
+    QFile cvsData(filePath);
+
+    if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
+    {
+        LOG_ERROR("Could not read from " << filePath.toStdWString());
+        return;
+    }
+
+    QTextStream input(&cvsData);
+    input.setCodec("UTF-8");
+
+    const QChar del = ';';
+
+    const int expectedCols = 8;
+
+    while (!input.atEnd()) {
+        QString line = input.readLine();
+        QStringList row = line.split(del);
+        if (row.size() != expectedCols)
+            continue;
+
+        LegoSet* set = new LegoSet(this);
+
+        set->setSetNumber(row.at(0).toInt());
+        set->setPurchasingPrice(row.at(1).toDouble());
+        set->setSeller(row.at(2));
+        set->setPurchaseDate(QDate::fromString(row.at(3)));
+        set->setRetailPrice(row.at(4).toDouble());
+        set->setSaleDate(QDate::fromString(row.at(5)));
+        set->setSoldOver(row.at(6));
+        set->setBuyer(row.at(7));
+
+        addLegoSet(set);
+    }
+
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+    BrickMoneySettings::Inst()->setBrickMoneyFilePath(filePath);
+}
+
 QString DataSource::toLocalFile(const QString &fileUrl)
 {
+    LOG_INFO("fileUrl " << fileUrl.toStdWString());
+    QFileInfo info(fileUrl);
+
+    if ( info.exists() )
+    {
+        LOG_INFO("exists");
+        return fileUrl;
+    }
+
     QUrl url(fileUrl);
 
     return url.toLocalFile();

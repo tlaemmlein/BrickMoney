@@ -5,5 +5,6 @@
         <file>LogoBrickMoneySquare.svg</file>
         <file>Trash.svg</file>
         <file>save.svg</file>
+        <file>load.svg</file>
     </qresource>
 </RCC>

@@ -19,6 +19,7 @@ public:
 
     Q_INVOKABLE void saveLegoSets();
     Q_INVOKABLE void saveLegoSets(const QString& fileUrlPath);
+    Q_INVOKABLE void loadLegoSets(const QString& fileUrlPath);
 
 signals:
     void preLegoSetAdded();

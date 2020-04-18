@@ -24,13 +24,23 @@ ApplicationWindow {
         Menu {
             title:qsTr("&File")
             Action {
+                id : loadActionId
+                text: qsTr("&Load project")
+                icon.source: "qrc:/images/load.svg"
+                onTriggered: {
+                    console.log("Clicked on load")
+                    loadFileDialog.open()
+                }
+            }
+            MenuSeparator {}
+            Action {
                 id : saveActionId
                 text: qsTr("&Save project")
                 icon.source: "qrc:/images/save.svg"
                 enabled: BrickMoneySettings.brickMoneyIsDirty
                 onTriggered: {
                     console.log("Clicked on save")
-                    mLegoSetModel.dataSource.saveLegoSets()
+                    LegoSetTableModelGeneral.dataSource.saveLegoSets()
                 }
             }
             Action {
@@ -45,6 +55,24 @@ ApplicationWindow {
     }
 
     QP.FileDialog {
+        id: loadFileDialog
+        objectName: "loadFileDialog"
+        title: qsTr("Load BrickMoney project...")
+        nameFilters: ["CSV files (*.csv)"]
+        fileMode: QP.FileDialog.OpenFile
+        folder: BrickMoneySettings.brickMoneyFilePath
+        onAccepted: {
+            console.log(objectName + ": onAccepted: You choose: " + currentFile)
+            LegoSetTableModelGeneral.clearAll()
+            var ds = LegoSetTableModelGeneral.dataSource
+            ds.loadLegoSets(currentFile)
+        }
+        onRejected: {
+            console.log(objectName + ":Canceled")
+        }
+    }
+
+    QP.FileDialog {
         id: saveAsFileDialog
         objectName: "saveFileDialog"
         title: qsTr("Save BrickMoney project as...")
@@ -53,7 +81,7 @@ ApplicationWindow {
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
             console.log(objectName + ": onAccepted: You choose: " + currentFile)
-            var ds = mLegoSetModel.dataSource
+            var ds = LegoSetTableModelGeneral.dataSource
             ds.saveLegoSets(currentFile)
         }
         onRejected: {
@@ -65,6 +93,7 @@ ApplicationWindow {
         Row {
             anchors.fill: parent
             spacing: 4
+            ToolButton { action: loadActionId }
             ToolButton{ action: saveActionId }
             ToolButton{ id: saveAsTbId; action: saveAsActionId }
 
@@ -112,7 +141,7 @@ ApplicationWindow {
                 objectName: "newLegoSetDialog"
                 onAddLegoSetNumber:{
                     console.log(objectName + ":onAddLegoSetNumber")
-                    var legoSet = mLegoSetModel.addLegoSet(setNumber)
+                    var legoSet = LegoSetTableModelGeneral.addLegoSet(setNumber)
                     legoSet.purchaseDate = purchaseDate
                     legoSet.purchasingPrice = purchasingPrice
                     legoSet.seller = seller
@@ -149,7 +178,7 @@ ApplicationWindow {
         informativeText: qsTr("Do you want to save your changes?")
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
-            mLegoSetModel.dataSource.saveLegoSets()
+            LegoSetTableModelGeneral.dataSource.saveLegoSets()
             Qt.quit()
         }
         onNo: Qt.quit()
@@ -167,25 +196,6 @@ ApplicationWindow {
         }
     }
 
-    LegoSetTableModel {
-        id: mLegoSetModel
-
-        LegoSet {
-            setNumber: 41599
-            purchasingPrice: 1
-            seller: "Seller 1"
-            purchaseDate: new Date('2019-04-01')
-            retailPrice: 2
-            saleDate: new Date('2019-04-02')
-            soldOver: "Sold 1"
-            buyer: "Buyer 1" 
-        }
-
-        //LegoSet { setNumber: 70608; purchasingPrice: 3; seller: "Karstadt München"; retailPrice: 4 }
-        //LegoSet { setNumber: 75212; purchasingPrice: 5; seller: "www.steinehelden.de"; retailPrice: 6; purchaseDate: new Date('2018-07-07') }
-
-    }
-
     LegoList{
         id: legoTable
         anchors.left: parent.left
@@ -196,7 +206,7 @@ ApplicationWindow {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: mLegoSetModel
+        model: LegoSetTableModelGeneral
         zoom: zoomSlider.value
     }
 }

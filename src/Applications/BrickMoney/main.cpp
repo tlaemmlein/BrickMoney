@@ -61,6 +61,9 @@ int main(int argc, char *argv[])
 
     engine.rootContext()->setContextProperty("BrickMoneySettings", BrickMoneySettings::Inst());
 
+    LegoSetTableModel model;
+    engine.rootContext()->setContextProperty("LegoSetTableModelGeneral", &model);
+
     LegoSetInfoGenerator gen;
     engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);
 
@@ -70,6 +73,8 @@ int main(int argc, char *argv[])
     engine.load(QUrl(QStringLiteral("qrc:/main_2.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
+
+    model.dataSource()->loadLegoSets(BrickMoneySettings::Inst()->brickMoneyFilePath());
 
     return app.exec();
 }
