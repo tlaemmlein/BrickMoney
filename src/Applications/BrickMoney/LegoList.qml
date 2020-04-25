@@ -6,26 +6,28 @@ import de.brickmoney.models 0.1
 Item {
     property alias model : legoListView.model
     property alias zoom : legoListView.zoom
-
-    function addLegoSet() {
-        legoListView.model.addLegoSet()
+    enum ViewSettings {
+        Details,
+        Compact
     }
-    function removeLegoSet(){}
-    function isSelected(){ return false }
-    function clearSelection() {}
-
+    property int viewSettings: LegoList.ViewSettings.Details
 
     ListView {
         id : legoListView
         anchors.fill: parent
         clip: true
+
+        Component.onCompleted: console.log("ViewSetting " + viewSettings)
+
         property int zoom
         property real zFactor: zoom/100
         property var locale: Qt.locale()
 
+        property int delegateHeight: viewSettings === LegoList.ViewSettings.Details ? 66 : 22
+
         property int selLegoSetWidth: 20 * legoListView.zFactor
-        property int legoSetInfoWidth: 350 * legoListView.zFactor
-        property int purchasingWidth: 100 * legoListView.zFactor
+        property int legoSetInfoWidth: viewSettings === LegoList.ViewSettings.Details ? 350 * legoListView.zFactor : 220 * legoListView.zFactor
+        property int purchasingWidth: 120 * legoListView.zFactor
         property int cheaperWidth: 80 * legoListView.zFactor
         property int sellerWidth: 150 * legoListView.zFactor
         property int purchaseDateWidth: 100 * legoListView.zFactor
@@ -112,7 +114,7 @@ Item {
                         bottom: parent.bottom
                     }
                     Text {
-                        text: qsTr("Cheaper")
+                        text: qsTr("Cheaper %")
                         anchors.fill: parent
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment:  Text.AlignVCenter
@@ -260,7 +262,7 @@ Item {
 
         delegate: Rectangle {
             id : rectDelegate
-            height: 65 * legoListView.zFactor
+            height: legoListView.delegateHeight * legoListView.zFactor
             border.color: "black"
 
             Row{
@@ -325,10 +327,10 @@ Item {
                     }
                 }
 
-
                 Rectangle {
-                    id: legoSetInfo
+                    id: legoSetInfoDetails
                     width: legoListView.legoSetInfoWidth
+                    visible: viewSettings === LegoList.ViewSettings.Details
                     anchors {
                         top: parent.top
                         bottom: parent.bottom
@@ -340,7 +342,7 @@ Item {
                         id: legoSetImage
                         width: 50 * legoListView.zFactor
                         height: 50 * legoListView.zFactor
-                        anchors.left: legoSetInfo.left
+                        anchors.left: legoSetInfoDetails.left
                         anchors.leftMargin: 5
                         fillMode: Image.PreserveAspectFit
                         source: model.imageUrl
@@ -348,7 +350,7 @@ Item {
                     Flow {
                         id: basicLegoSetInfos
                         anchors.left: legoSetImage.right
-                        anchors.right: legoSetInfo.right
+                        anchors.right: legoSetInfoDetails.right
                         spacing: 5
 
                         Row {
@@ -400,9 +402,9 @@ Item {
                         Text{
                             text : model.description
                             height: 14 * legoListView.zFactor
-                            width: legoSetInfo.width - legoSetImage.width - 5
-                            Layout.preferredWidth: legoSetInfo.width - legoSetImage.width - 5
-                            Layout.maximumWidth: legoSetInfo.width - legoSetImage.width - 5
+                            width: legoSetInfoDetails.width - legoSetImage.width - 5
+                            Layout.preferredWidth: legoSetInfoDetails.width - legoSetImage.width - 5
+                            Layout.maximumWidth: legoSetInfoDetails.width - legoSetImage.width - 5
                             font.pixelSize: legoListView.fontPixelSize
                             elide: Text.ElideRight
                             clip: true
@@ -432,6 +434,43 @@ Item {
                     }
                 }
 
+                Rectangle {
+                    id: legoSetInfoCompact
+                    width: legoListView.legoSetInfoWidth
+                    visible: viewSettings === LegoList.ViewSettings.Compact
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color : "white"
+                    border.color: "black"
+
+                    Row {
+                        anchors.fill: parent
+                        spacing: 5
+
+                        Text {
+                            text: qsTr("Set:") + model.setNumber
+                            height: 12 * legoListView.zFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: legoListView.fontPixelSize
+                            clip: true
+                        }
+                        Text{
+                            text : qsTr("Year: ") + model.year
+                            height: 12 * legoListView.zFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: legoListView.fontPixelSize
+                            clip: true
+                        }
+                        Text{
+                            text : qsTr("RRPrice: ") + model.recommendedRetailPrice + "€"
+                            height: 12 * legoListView.zFactor
+                            anchors.verticalCenter: parent.verticalCenter
+                            font.pixelSize: legoListView.fontPixelSize
+                            clip: true
+                        }
+                    }
+                }
+
                 DoubleSpinBox {
                     id: purchasingPriceLegoSet
                     width: legoListView.purchasingWidth
@@ -452,11 +491,12 @@ Item {
                     font.pixelSize: legoListView.fontPixelSize
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
+                    horizontalAlignment: Qt.AlignRight
                     readOnly: true
                     validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
                     text: {
                         var number = model.cheaperPercent
-                        number =  number !== null ? number.toLocaleString(locale, 'f', 2) +" %" : 0.0;
+                        number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
                         return number
                     }
                 }
@@ -511,7 +551,7 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     readOnly: true
-                    horizontalAlignment: TextInput.AlignHCenter
+                    horizontalAlignment: TextInput.AlignRight
                     validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
                     text: {
                         var number = model.profitEuros
@@ -527,11 +567,11 @@ Item {
                     anchors.top: parent.top
                     anchors.bottom: parent.bottom
                     readOnly: true
-                    horizontalAlignment: TextInput.AlignHCenter
+                    horizontalAlignment: TextInput.AlignRight
                     validator: DoubleValidator {bottom: -2147483647.0; top: 2147483647.0;}
                     text: {
                         var number = model.profitPercent
-                        number =  number !== null ? number.toLocaleString(locale, 'f', 2) +"%" : 0.0;
+                        number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
                         return number
                     }
                 }

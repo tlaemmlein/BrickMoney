@@ -41,6 +41,22 @@ Item {
             from : doublespinbox.from * factor
             clip: true
 
+            contentItem: TextInput {
+                    z: 2
+                    text: spinbox.textFromValue(spinbox.value, spinbox.locale)
+
+                    font: spinbox.font
+//                    color: "#21be2b"
+//                    selectionColor: "#21be2b"
+//                    selectedTextColor: "#ffffff"
+                    horizontalAlignment: Qt.AlignRight
+                    verticalAlignment: Qt.AlignVCenter
+
+                    readOnly: !spinbox.editable
+                    validator: spinbox.validator
+                    inputMethodHints: Qt.ImhFormattedNumbersOnly
+                }
+
             onValueChanged:
             {
                 if (init)

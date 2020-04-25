@@ -170,6 +170,23 @@ ApplicationWindow {
             to: 300
         }
 
+        RowLayout{
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.leftMargin: 5
+            anchors.left: zoomSlider.right
+
+            RadioButton {
+                checked: true
+                text: qsTr("Details")
+                onClicked: legoList.viewSettings = LegoList.ViewSettings.Details
+            }
+            RadioButton {
+                text: qsTr("Compact")
+                onClicked: legoList.viewSettings = LegoList.ViewSettings.Compact
+            }
+        }
+
     }
 
     MessageDialog {
@@ -197,7 +214,7 @@ ApplicationWindow {
     }
 
     LegoList{
-        id: legoTable
+        id: legoList
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.top: buttonBarChangeSetList.bottom
