@@ -11,6 +11,8 @@ std::unique_ptr<BrickMoneySettings> BrickMoneySettings::smInstance = nullptr;
 
 const QString BrickMoneySettings::ZoomFactorName("general/zoomFactor");
 const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
+const QString BrickMoneySettings::ViewSettingsName("general/viewSettings");
+const QString BrickMoneySettings::MainWindowName("general/mainWindow");
 
 BrickMoneySettings *BrickMoneySettings::Inst()
 {
@@ -29,9 +31,11 @@ BrickMoneySettings::BrickMoneySettings()
 
     m_Settings = new QSettings(settingsFilePath, QSettings::IniFormat, this);
 
-	m_zoomFactor = m_Settings->value(ZoomFactorName, 150).toInt();
+    m_zoomFactor = m_Settings->value(ZoomFactorName, 150).toInt();
     m_brickMoneyFilePath = m_Settings->value(BrickMoneyName, "").toString();
     m_brickMoneyIsDirty = false;
+    m_viewSettings = m_Settings->value(ViewSettingsName, 0).toInt();
+    m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
 }
 
 
@@ -53,6 +57,16 @@ QString BrickMoneySettings::brickMoneyFilePath() const
 bool BrickMoneySettings::brickMoneyIsDirty() const
 {
     return m_brickMoneyIsDirty;
+}
+
+int BrickMoneySettings::viewSettings() const
+{
+    return m_viewSettings;
+}
+
+QRect BrickMoneySettings::mainWindow() const
+{
+    return m_mainWindow;
 }
 
 void BrickMoneySettings::setZoomFactor(int zoomFactor)
@@ -82,5 +96,25 @@ void BrickMoneySettings::setBrickMoneyIsDirty(bool brickMoneyIsDirty)
 
     m_brickMoneyIsDirty = brickMoneyIsDirty;
     emit brickMoneyIsDirtyChanged(m_brickMoneyIsDirty);
+}
+
+void BrickMoneySettings::setViewSettings(int viewSettings)
+{
+    if (m_viewSettings == viewSettings)
+        return;
+
+    m_viewSettings = viewSettings;
+    m_Settings->setValue(ViewSettingsName, m_viewSettings);
+    emit viewSettingsChanged(m_viewSettings);
+}
+
+void BrickMoneySettings::setMainWindow(QRect mainWindow)
+{
+    if (m_mainWindow == mainWindow)
+        return;
+
+    m_mainWindow = mainWindow;
+    m_Settings->setValue(MainWindowName, m_mainWindow);
+    emit mainWindowChanged(m_mainWindow);
 }
 

@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
 import de.brickmoney.models 0.1
 import Qt.labs.platform 1.1 as QP
+import Qt.labs.settings 1.1
 
 ApplicationWindow {
     id: mainWindow
@@ -13,11 +14,16 @@ ApplicationWindow {
     visible: true
     width: 1600
     height: 600
-    title: qsTr("BrickMoney Vers. 0.1 - The software for LEGO Investment")
+    title: qsTr("BrickMoney Vers. 0.2 - The software for LEGO Investment")
     color: "lightblue"
 
     Component.onCompleted: {
         console.log(objectName + ":onCompleted")
+        var rect = BrickMoneySettings.mainWindow
+        mainWindow.x = rect.x
+        mainWindow.y = rect.y
+        mainWindow.width = rect.width
+        mainWindow.height = rect.height
     }
 
     menuBar: MenuBar{
@@ -117,7 +123,7 @@ ApplicationWindow {
 
     Rectangle {
         id: buttonBarChangeSetList
-        width: addButton.width + zoomSlider.width  +10
+        width: childrenRect.width + 20
         y : 5
         anchors.left: parent.left
         anchors.leftMargin: 5
@@ -125,68 +131,76 @@ ApplicationWindow {
         border.width: 1
         border.color: "black"
 
-        RoundButton{
-            id: addButton
-            text: "Add"
-            highlighted: true
+        Row{
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 5
-            height: 40
-            onClicked: {
-                newLegoSetDialog.openDialog()
+            spacing: 5
+
+            RoundButton{
+                id: addButton
+                text: "Add"
+                highlighted: true
+                anchors.verticalCenter: parent.verticalCenter
+                height: 40
+                onClicked: {
+                    newLegoSetDialog.openDialog()
+                }
+                NewLegoSetDialog{
+                    id : newLegoSetDialog
+                    objectName: "newLegoSetDialog"
+                    onAddLegoSetNumber:{
+                        console.log(objectName + ":onAddLegoSetNumber")
+                        var legoSet = LegoSetTableModelGeneral.addLegoSet(setNumber)
+                        legoSet.purchaseDate = purchaseDate
+                        legoSet.purchasingPrice = purchasingPrice
+                        legoSet.seller = seller
+                        console.log(objectName + "seller: " + seller)
+                    }
+                }
             }
-            NewLegoSetDialog{
-                id : newLegoSetDialog
-                objectName: "newLegoSetDialog"
-                onAddLegoSetNumber:{
-                    console.log(objectName + ":onAddLegoSetNumber")
-                    var legoSet = LegoSetTableModelGeneral.addLegoSet(setNumber)
-                    legoSet.purchaseDate = purchaseDate
-                    legoSet.purchasingPrice = purchasingPrice
-                    legoSet.seller = seller
-                    console.log(objectName + "seller: " + seller)
+
+            Slider {
+                Text {
+                    id: zoomText
+                    text: zoomSlider.value +"%"
+                }
+                id: zoomSlider
+                objectName: "zoomSlider"
+                Component.onDestruction: BrickMoneySettings.zoomFactor = value
+
+                wheelEnabled: true
+                anchors.verticalCenter: parent.verticalCenter
+                stepSize: 10
+                from: 10
+                value: BrickMoneySettings.zoomFactor
+                to: 300
+            }
+
+            RadioButton {
+                anchors.verticalCenter: parent.verticalCenter
+                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Details
+                text: qsTr("Details")
+                onCheckedChanged: {
+                    if (checked){
+                        legoList.viewSettings = LegoList.ViewSettings.Details
+                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
+                    }
+                }
+            }
+
+            RadioButton {
+                anchors.verticalCenter: parent.verticalCenter
+                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Compact
+                text: qsTr("Compact")
+                onCheckedChanged: {
+                    if (checked){
+                        legoList.viewSettings = LegoList.ViewSettings.Compact
+                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Compact
+                    }
                 }
             }
         }
-
-        Slider {
-            Text {
-                id: zoomText
-                text: zoomSlider.value +"%"
-            }
-            id: zoomSlider
-            objectName: "zoomSlider"
-            Component.onDestruction: BrickMoneySettings.zoomFactor = value
-
-            wheelEnabled: true
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.leftMargin: 5
-            anchors.left: addButton.right
-            stepSize: 10
-            from: 10
-            value: BrickMoneySettings.zoomFactor
-            to: 300
-        }
-
-        RowLayout{
-            anchors.top: parent.top
-            anchors.topMargin: 5
-            anchors.leftMargin: 5
-            anchors.left: zoomSlider.right
-
-            RadioButton {
-                checked: true
-                text: qsTr("Details")
-                onClicked: legoList.viewSettings = LegoList.ViewSettings.Details
-            }
-            RadioButton {
-                text: qsTr("Compact")
-                onClicked: legoList.viewSettings = LegoList.ViewSettings.Compact
-            }
-        }
-
     }
 
     MessageDialog {
@@ -208,6 +222,7 @@ ApplicationWindow {
             if (BrickMoneySettings.brickMoneyIsDirty === true) {
                 messageDialogQuit.open()
             } else {
+                BrickMoneySettings.mainWindow = Qt.rect(mainWindow.x, mainWindow.y, mainWindow.width, mainWindow.height)
                 Qt.quit()
             }
         }

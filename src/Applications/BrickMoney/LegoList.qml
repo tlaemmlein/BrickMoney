@@ -39,7 +39,7 @@ Item {
         property int buyerWidth: 150 * legoListView.zFactor
         property int rowSpacing: 2
 
-        property int fontPixelSize: 12 * legoListView.zFactor
+        property int fontPixelSize: 11 * legoListView.zFactor
 
         headerPositioning: ListView.OverlayHeader
 
@@ -281,6 +281,7 @@ Item {
                         id: removeLegoSetButton
                         Image {
                             anchors.fill: parent
+                            anchors.margins: 1
                             source: "qrc:/images/Trash.svg"
                             fillMode: Image.PreserveAspectFit
                         }
@@ -423,12 +424,15 @@ Item {
                             clip: true
                         }
                         Text {
-                            id: link_brickmerge
+                            id: link_brick_sites
                             textFormat: Text.RichText
                             height: 12 * legoListView.zFactor
                             font.pixelSize: legoListView.fontPixelSize
-                            text: '<html><a href="https://brickmerge.de/'+ model.setNumber + '">BM</a>&nbsp;<a href="https://brickset.com/sets/'+ model.setNumber + '">BS</a></html>'
-                                   //<html><style type="text/css"></style><a href="https://brickset.com/sets/'+ model.setNumber + '">BS</a></html>'
+                            text: '<html>'
+                                  +'<a href="https://brickmerge.de/'+ model.setNumber + '">BM</a>'
+                                  +'&nbsp;<a href="https://brickset.com/sets/'+ model.setNumber + '">BS</a>'
+                                  +'&nbsp;<a href="https://www.brickwatch.net/de-DE/set/'+ model.setNumber + '">BW</a>'
+                                  +'</html>'
                             onLinkActivated: Qt.openUrlExternally(link)
                         }
                     }
