@@ -97,6 +97,31 @@ ApplicationWindow {
         }
     }
 
+    MessageDialog {
+        id: messageDialogQuit
+        text: qsTr("The document has been modified.")
+        informativeText: qsTr("Do you want to save your changes?")
+        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
+        onYes: {
+            LegoSetTableModelGeneral.dataSource.saveLegoSets()
+            Qt.quit()
+        }
+        onNo: Qt.quit()
+    }
+
+    onClosing:{
+        close.accepted = false
+        onTriggered:
+        {
+            if (BrickMoneySettings.brickMoneyIsDirty === true) {
+                messageDialogQuit.open()
+            } else {
+                BrickMoneySettings.mainWindow = Qt.rect(mainWindow.x, mainWindow.y, mainWindow.width, mainWindow.height)
+                Qt.quit()
+            }
+        }
+    }
+
     header: ToolBar {
         Row {
             anchors.fill: parent
@@ -123,126 +148,60 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-        id: buttonBarChangeSetList
-        width: childrenRect.width + 20
-        y : 5
-        anchors.left: parent.left
-        anchors.leftMargin: 5
-        height: 50
-        border.width: 1
-        border.color: "black"
+    footer: TabBar {
+        id : mTabBar
+        width: parent.width
 
-        Row{
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 5
-            spacing: 5
-
-            RoundButton{
-                id: addButton
-                text: "Add"
-                highlighted: true
-                anchors.verticalCenter: parent.verticalCenter
-                height: 40
-                onClicked: {
-                    newLegoSetDialog.openDialog()
-                }
-                NewLegoSetDialog{
-                    id : newLegoSetDialog
-                    objectName: "newLegoSetDialog"
-                    onAddLegoSetNumber:{
-                        console.log(objectName + ":onAddLegoSetNumber")
-                        var legoSet = LegoSetTableModelGeneral.addLegoSet(setNumber)
-                        legoSet.purchaseDate = purchaseDate
-                        legoSet.purchasingPrice = purchasingPrice
-                        legoSet.seller = seller
-                        console.log(objectName + "seller: " + seller)
-                    }
-                }
+        TabButton {
+            text : qsTr("Overview")
+            onClicked: {
+                mSwipeId.currentIndex = 0
+                console.log("mSwipeId.currentIndex = 0")
             }
-
-            Slider {
-                Text {
-                    id: zoomText
-                    text: zoomSlider.value +"%"
-                }
-                id: zoomSlider
-                objectName: "zoomSlider"
-                Component.onDestruction: BrickMoneySettings.zoomFactor = value
-
-                wheelEnabled: true
-                anchors.verticalCenter: parent.verticalCenter
-                stepSize: 10
-                from: 10
-                value: BrickMoneySettings.zoomFactor
-                to: 300
+        }
+        TabButton {
+            text : qsTr("In Stock")
+            onClicked: {
+                mSwipeId.currentIndex = 1
+                console.log("mSwipeId.currentIndex = 1")
             }
-
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Details
-                text: qsTr("Details")
-                onCheckedChanged: {
-                    if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Details
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
-                    }
-                }
+        }
+        TabButton {
+            text : qsTr("Active")
+            onClicked: {
+                mSwipeId.currentIndex = 2
+                console.log("mSwipeId.currentIndex = 2")
             }
-
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Compact
-                text: qsTr("Compact")
-                onCheckedChanged: {
-                    if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Compact
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Compact
-                    }
-                }
+        }
+        TabButton {
+            text : qsTr("Sold")
+            onClicked: {
+                mSwipeId.currentIndex = 3
+                console.log("mSwipeId.currentIndex = 3")
             }
+        }
+
+    }
+
+
+    SwipeView {
+        id : mSwipeId
+        anchors.fill: parent
+        currentIndex: 0
+        Overview{
+            id: overviewId
+        }
+        InStock {
+            id: inStockId
+        }
+        Active {
+            id: activeId
+        }
+        Sold {
+            id: soldId
         }
     }
 
-    MessageDialog {
-        id: messageDialogQuit
-        text: qsTr("The document has been modified.")
-        informativeText: qsTr("Do you want to save your changes?")
-        standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
-        onYes: {
-            LegoSetTableModelGeneral.dataSource.saveLegoSets()
-            Qt.quit()
-        }
-        onNo: Qt.quit()
-    }
-
-    onClosing:{
-        close.accepted = false
-        onTriggered:
-        {
-            if (BrickMoneySettings.brickMoneyIsDirty === true) {
-                messageDialogQuit.open()
-            } else {
-                BrickMoneySettings.mainWindow = Qt.rect(mainWindow.x, mainWindow.y, mainWindow.width, mainWindow.height)
-                Qt.quit()
-            }
-        }
-    }
-
-    LegoList{
-        id: legoList
-        anchors.left: parent.left
-        anchors.leftMargin: 5
-        anchors.top: buttonBarChangeSetList.bottom
-        anchors.topMargin: 5
-        anchors.right: parent.right
-        anchors.rightMargin: 5
-        height: parent.height - buttonBarChangeSetList.height -15
-
-        model: LegoSetTableModelGeneral
-        zoom: zoomSlider.value
-    }
 }
 
 

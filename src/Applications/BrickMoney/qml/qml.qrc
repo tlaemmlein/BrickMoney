@@ -1,6 +1,10 @@
 <RCC>
     <qresource prefix="/qml">
+        <file>Active.qml</file>
+        <file>InStock.qml</file>
         <file>LegoList.qml</file>
+        <file>Overview.qml</file>
+        <file>Sold.qml</file>
         <file>main.qml</file>
         <file>helper/DatePicker.qml</file>
         <file>helper/DoubleSpinBox.qml</file>

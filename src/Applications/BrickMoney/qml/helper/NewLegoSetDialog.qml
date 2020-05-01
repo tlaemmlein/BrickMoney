@@ -75,7 +75,7 @@ Item {
                     width: 150
                     height: 150
                     fillMode: Image.PreserveAspectFit
-                    source: "qrc:/images/Empty.svg"
+                    source: "qrc:/images/empty.svg"
                 }
 
                 Grid{
