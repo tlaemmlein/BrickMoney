@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import de.brickmoney.models 0.1
+import "helper/"
 
 Item {
     property alias model : legoListView.model
@@ -282,7 +283,7 @@ Item {
                         Image {
                             anchors.fill: parent
                             anchors.margins: 1
-                            source: "qrc:/images/Trash.svg"
+                            source: "qrc:/images/trash.svg"
                             fillMode: Image.PreserveAspectFit
                         }
                         anchors.fill: parent

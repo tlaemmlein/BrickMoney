@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     LegoSet legoSet;
     engine.rootContext()->setContextProperty("_LegoSet", &legoSet);
 
-    engine.load(QUrl(QStringLiteral("qrc:/main_2.qml")));
+    engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
 

@@ -1,7 +1,7 @@
 #include "Logging.h"
 SET_LOGGER("BrickMoney.DataSource")
 
-#include "DataSource.h"
+#include "LegoSetDataSource.h"
 #include "LegoSet.h"
 #include "BrickMoneySettings.h"
 
@@ -11,12 +11,12 @@ SET_LOGGER("BrickMoney.DataSource")
 #include <QDate>
 #include <QFileInfo>
 
-DataSource::DataSource(QObject *parent) : QObject(parent)
+LegoSetDataSource::LegoSetDataSource(QObject *parent) : QObject(parent)
 {
 
 }
 
-void DataSource::addLegoSet(LegoSet *set)
+void LegoSetDataSource::addLegoSet(LegoSet *set)
 {
     emit preLegoSetAdded();
     m_legoSets.append(set);
@@ -24,7 +24,7 @@ void DataSource::addLegoSet(LegoSet *set)
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-void DataSource::removeLegoSet(int index)
+void LegoSetDataSource::removeLegoSet(int index)
 {
     emit preLegoSetRemoved(index);
     m_legoSets.removeAt(index);
@@ -32,29 +32,29 @@ void DataSource::removeLegoSet(int index)
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-int DataSource::legoSetCount()
+int LegoSetDataSource::legoSetCount()
 {
     return m_legoSets.count();
 }
 
-LegoSet *DataSource::legoSetAt(int index)
+LegoSet *LegoSetDataSource::legoSetAt(int index)
 {
     return m_legoSets[index];
 }
 
-void DataSource::clearLegoSets()
+void LegoSetDataSource::clearLegoSets()
 {
     m_legoSets.clear();
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-void DataSource::saveLegoSets()
+void LegoSetDataSource::saveLegoSets()
 {
     LOG_SCOPE_METHOD(L"");
     saveLegoSetsImpl(BrickMoneySettings::Inst()->brickMoneyFilePath());
 }
 
-void DataSource::saveLegoSets(const QString &fileUrlPath)
+void LegoSetDataSource::saveLegoSets(const QString &fileUrlPath)
 {
     LOG_SCOPE_METHOD(L"");
     const QString localFilePath = toLocalFile(fileUrlPath);
@@ -62,7 +62,7 @@ void DataSource::saveLegoSets(const QString &fileUrlPath)
         BrickMoneySettings::Inst()->setBrickMoneyFilePath(localFilePath);
 }
 
-void DataSource::loadLegoSets(const QString &fileUrlPath)
+void LegoSetDataSource::loadLegoSets(const QString &fileUrlPath)
 {
     LOG_SCOPE_METHOD(L"");
 
@@ -115,7 +115,7 @@ void DataSource::loadLegoSets(const QString &fileUrlPath)
     BrickMoneySettings::Inst()->setBrickMoneyFilePath(filePath);
 }
 
-QString DataSource::toLocalFile(const QString &fileUrl)
+QString LegoSetDataSource::toLocalFile(const QString &fileUrl)
 {
     LOG_INFO("fileUrl " << fileUrl.toStdWString());
     QFileInfo info(fileUrl);
@@ -131,7 +131,7 @@ QString DataSource::toLocalFile(const QString &fileUrl)
     return url.toLocalFile();
 }
 
-bool DataSource::saveLegoSetsImpl(const QString& filePath)
+bool LegoSetDataSource::saveLegoSetsImpl(const QString& filePath)
 {
     LOG_SCOPE_METHOD(L"");
 

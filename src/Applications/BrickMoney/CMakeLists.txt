@@ -15,41 +15,57 @@ set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/../../Thirdparty)
 find_package(log4cplus HINTS ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/)
 
 set(QML_FILES
-    DatePicker.qml
-    DatePickerTest.qml
-    DialogButtonBoxTest.qml
-    DoubleSpinBox.qml
-    LegoList.qml
-    LegoTable.qml
-    LegoTableOld.qml
-    ListViewScrollbars.qml
-    main.qml
-    main_2.qml
-    NewLegoSetDialog.qml
-    NewLegoSetDialogPrototype.qml
-    )
+    qml/LegoList.qml
+    qml/main.qml
+    qml/helper/DatePicker.qml
+    qml/helper/DoubleSpinBox.qml
+    qml/helper/NewLegoSetDialog.qml
+    qml/sandbox/DatePickerTest.qml
+    qml/sandbox/DialogButtonBoxTest.qml
+    qml/sandbox/ListViewScrollbars.qml
+)
+
+set(QML_HELPER_FILES
+    qml/helper/DatePicker.qml
+    qml/helper/DoubleSpinBox.qml
+    qml/helper/NewLegoSetDialog.qml
+)
+
+set(QML_SANDBOX_FILES
+    qml/sandbox/DatePickerTest.qml
+    qml/sandbox/DialogButtonBoxTest.qml
+    qml/sandbox/ListViewScrollbars.qml
+)
+
+set(SRC_FILES
+    src/BrickMoneySettings.cpp
+    src/BrickMoneySettings.h
+    src/LegoSetDataSource.cpp
+    src/LegoSetDataSource.h
+    src/LegoSet.cpp
+    src/LegoSet.h
+    src/LegoSetInfoGenerator.cpp
+    src/LegoSetInfoGenerator.h
+    src/LegoSetTableModel.cpp
+    src/LegoSetTableModel.h
+    src/Logging.h
+    src/main.cpp
+    src/QmlValuePreview.h
+)
 
 add_executable(${PROJECT_NAME}
     images/images.qrc
-    main.cpp
-    qml.qrc
+    qml/qml.qrc
+    ${SRC_FILES}
     ${QML_FILES}
-    QmlValuePreview.h
-    BrickMoneySettings.cpp
-    BrickMoneySettings.h
-    DataSource.cpp
-    DataSource.h
-    LegoSet.cpp
-    LegoSet.h
-    LegoSetTableModel.cpp
-    LegoSetTableModel.h
-    LegoSetIOManager.cpp
-    LegoSetIOManager.h
-    Logging.h
-    LegoSetInfoGenerator.cpp
-    LegoSetInfoGenerator.h)
+    ${QML_HELPER_FILES}
+    ${QML_SANDBOX_FILES}
+)
 
-source_group("QML Files" FILES ${QML_FILES})
+source_group("Qml Files" FILES ${QML_FILES})
+source_group("Qml Files" FILES ${QML_FILES})
+source_group("Qml/helper Files" FILES ${QML_HELPER_FILES})
+source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets)

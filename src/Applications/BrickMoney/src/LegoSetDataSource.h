@@ -5,11 +5,11 @@
 
 class LegoSet;
 
-class DataSource : public QObject
+class LegoSetDataSource : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSource(QObject *parent = nullptr);
+    explicit LegoSetDataSource(QObject *parent = nullptr);
 
     Q_INVOKABLE void addLegoSet(LegoSet* set);
     Q_INVOKABLE void removeLegoSet(int index);

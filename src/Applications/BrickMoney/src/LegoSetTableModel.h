@@ -2,7 +2,7 @@
 #define LEGOSET_TABLE_MODEL_H
 
 #include "LegoSet.h"
-#include "DataSource.h"
+#include "LegoSetDataSource.h"
 
 #include <QAbstractTableModel>
 #include <QQmlListProperty>
@@ -10,7 +10,7 @@
 class LegoSetTableModel : public QAbstractTableModel
 {
     Q_OBJECT
-    Q_PROPERTY(DataSource* dataSource READ dataSource WRITE setDataSource NOTIFY dataSourceChanged)
+    Q_PROPERTY(LegoSetDataSource* dataSource READ dataSource WRITE setDataSource NOTIFY dataSourceChanged)
     Q_PROPERTY(QQmlListProperty<LegoSet> legoSets READ legoSets NOTIFY legoSetsChanged)
 
     Q_CLASSINFO("DefaultProperty", "legoSets")
@@ -47,9 +47,9 @@ public:
 
     QHash<int, QByteArray> roleNames() const override;
 
-    void setDataSource(DataSource* dataSource);
+    void setDataSource(LegoSetDataSource* dataSource);
 
-    DataSource *dataSource() const;
+    LegoSetDataSource *dataSource() const;
 
     QQmlListProperty<LegoSet> legoSets();
 
@@ -58,7 +58,7 @@ public:
     Q_INVOKABLE void clearAll();
 
 signals:
-    void dataSourceChanged(DataSource* dataSource);
+    void dataSourceChanged(LegoSetDataSource* dataSource);
 
     void legoSetsChanged(QQmlListProperty<LegoSet> legoSets);
 
@@ -68,7 +68,7 @@ private:
     static LegoSet* legoSet(QQmlListProperty<LegoSet>*, int);
     static void clearLegoSets(QQmlListProperty<LegoSet>*);
 
-    DataSource* m_dataSource;
+    LegoSetDataSource* m_dataSource;
     bool m_signalConnected;
     QHash<int, QByteArray> m_roles;
 };

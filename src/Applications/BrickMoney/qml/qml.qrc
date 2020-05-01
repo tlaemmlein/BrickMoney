@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>LegoList.qml</file>
+        <file>main.qml</file>
+        <file>helper/DatePicker.qml</file>
+        <file>helper/DoubleSpinBox.qml</file>
+        <file>helper/NewLegoSetDialog.qml</file>
+        <file>sandbox/DatePickerTest.qml</file>
+        <file>sandbox/DialogButtonBoxTest.qml</file>
+        <file>sandbox/ListViewScrollbars.qml</file>
+    </qresource>
+</RCC>

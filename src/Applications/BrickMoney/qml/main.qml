@@ -7,6 +7,8 @@ import QtQuick.Layouts 1.12
 import de.brickmoney.models 0.1
 import Qt.labs.platform 1.1 as QP
 import Qt.labs.settings 1.1
+import "helper/"
+
 
 ApplicationWindow {
     id: mainWindow

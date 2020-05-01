@@ -12,7 +12,7 @@ LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(pare
     , m_signalConnected(false)
 {
     setObjectName("LegoSetTableModel");
-    setDataSource( new DataSource(this));
+    setDataSource( new LegoSetDataSource(this));
 
     m_roles[ImageNameRole]="imageName";
     m_roles[ImageUrl]="imageUrl";
@@ -233,7 +233,7 @@ QHash<int, QByteArray> LegoSetTableModel::roleNames() const
     return m_roles;
 }
 
-void LegoSetTableModel::setDataSource(DataSource *dataSource)
+void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 {
     beginResetModel();
 
@@ -242,20 +242,20 @@ void LegoSetTableModel::setDataSource(DataSource *dataSource)
 
     m_dataSource = dataSource;
 
-    connect(m_dataSource,&DataSource::preLegoSetAdded,this,[=](){
+    connect(m_dataSource,&LegoSetDataSource::preLegoSetAdded,this,[=](){
         const int index = m_dataSource->legoSetCount();
         beginInsertRows(QModelIndex(),index,index);
     });
 
-    connect(m_dataSource,&DataSource::postLegoSetAdded,this,[=](){
+    connect(m_dataSource,&LegoSetDataSource::postLegoSetAdded,this,[=](){
         endInsertRows();
     });
 
-    connect(m_dataSource,&DataSource::preLegoSetRemoved,this,[=](int index){
+    connect(m_dataSource,&LegoSetDataSource::preLegoSetRemoved,this,[=](int index){
         beginRemoveRows(QModelIndex(), index, index);
     });
 
-    connect(m_dataSource,&DataSource::postLegoSetRemoved,this,[=](){
+    connect(m_dataSource,&LegoSetDataSource::postLegoSetRemoved,this,[=](){
         endRemoveRows();
     });
 
@@ -264,7 +264,7 @@ void LegoSetTableModel::setDataSource(DataSource *dataSource)
     endResetModel();
 }
 
-DataSource *LegoSetTableModel::dataSource() const
+LegoSetDataSource *LegoSetTableModel::dataSource() const
 {
     return m_dataSource;
 }

@@ -1,10 +1,14 @@
 <RCC>
     <qresource prefix="/images">
-        <file>Empty.svg</file>
-        <file>WonderWoman.png</file>
-        <file>LogoBrickMoneySquare.svg</file>
-        <file>Trash.svg</file>
-        <file>save.svg</file>
+        <file>empty.svg</file>
         <file>load.svg</file>
+        <file>logoBrickMoneyIcon_16.png</file>
+        <file>logoBrickMoneyIcon_32.png</file>
+        <file>logoBrickMoneyIcon_48.png</file>
+        <file>logoBrickMoneyIcon_64.png</file>
+        <file>logoBrickMoneySquare.svg</file>
+        <file>save.svg</file>
+        <file>trash.svg</file>
+        <file>wonderWoman.png</file>
     </qresource>
 </RCC>
