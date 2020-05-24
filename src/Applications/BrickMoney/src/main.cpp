@@ -2,6 +2,7 @@
 SET_LOGGER("BrickMoney.Main")
 
 #include "BrickMoneySettings.h"
+#include "BrickMoneyProject.h"
 #include "LegoSetInfoGenerator.h"
 #include "LegoSetTableModel.h"
 #include "LegoSet.h"
@@ -20,7 +21,7 @@ SET_LOGGER("BrickMoney.Main")
 using namespace log4cplus;
 using namespace log4cplus::helpers;
 
-// Ref: https://stackoverflow.com/questions/11785157/replacing-winmain-with-main-function-in-win32-programs
+//Ref: https://stackoverflow.com/questions/11785157/replacing-winmain-with-main-function-in-win32-programs
 #ifdef _MSC_VER
 #    pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
@@ -30,10 +31,10 @@ int main(int argc, char *argv[])
     // Initialization and deinitialization.
     log4cplus::Initializer initializer;
 
+    log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
+
     SharedObjectPtr<Appender> console_appender(new ConsoleAppender(false, true));
     console_appender->setName(LOG4CPLUS_TEXT("BrickMoneyConsole"));
-
-    log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
     console_appender->setLayout(std::unique_ptr<Layout>(new PatternLayout(pattern)));
     Logger::getRoot().addAppender(console_appender);
 
@@ -58,14 +59,14 @@ int main(int argc, char *argv[])
     qmlRegisterType<QmlDoubleValuePreview>("QmlUtils", 1, 0, "DoubleValuePreview");
 
     qmlRegisterType<LegoSet>("de.brickmoney.models", 0, 1, "LegoSet");
-    qmlRegisterType<LegoSetTableModel>("de.brickmoney.models", 0, 1, "LegoSetTableModel");
-
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("BrickMoneySettings", BrickMoneySettings::Inst());
+    engine.rootContext()->setContextProperty("BrickMoneyProject", BrickMoneyProject::Inst());
 
-    LegoSetTableModel model;
-    engine.rootContext()->setContextProperty("LegoSetTableModelGeneral", &model);
+	engine.rootContext()->setContextProperty("InStockLegoSetTableModel", BrickMoneyProject::Inst()->getInStockModel());
+	engine.rootContext()->setContextProperty("ForSaleLegoSetTableModel", BrickMoneyProject::Inst()->getForSaleModel());
+	engine.rootContext()->setContextProperty("SoldLegoSetTableModel", BrickMoneyProject::Inst()->getSoldModel());
 
     LegoSetInfoGenerator gen;
     engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);
@@ -77,7 +78,11 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty())
         return -1;
 
-    model.dataSource()->loadLegoSets(BrickMoneySettings::Inst()->brickMoneyFilePath());
+	if ( BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath() ) )
+	{
+		BrickMoneyProject::Inst()->load();
+	}
+	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
 
     return app.exec();
 }
