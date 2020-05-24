@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/qml">
-        <file>Active.qml</file>
+        <file>ForSale.qml</file>
         <file>InStock.qml</file>
         <file>LegoList.qml</file>
         <file>Overview.qml</file>

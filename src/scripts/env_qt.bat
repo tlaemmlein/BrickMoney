@@ -5,7 +5,7 @@ rem
 
 echo Setting up a Qt environment...
 
-set QTDIR=C:\Qt\Qt5.12.5-win64\5.12.5\msvc2017_64
+set QTDIR=C:\Qt\Qt5.14.2-win64-msvc2017\5.14.2\msvc2017_64
 echo -- QTDIR set to %QTDIR%
 set PATH=%QTDIR%\bin;%PATH%
 echo -- Added %QTDIR%\bin to PATH

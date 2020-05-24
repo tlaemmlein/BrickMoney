@@ -4,7 +4,6 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
-import de.brickmoney.models 0.1
 import Qt.labs.platform 1.1 as QP
 import Qt.labs.settings 1.1
 import "helper/"
@@ -17,7 +16,6 @@ ApplicationWindow {
     width: 1600
     height: 600
     title: qsTr("BrickMoney Vers. 0.2 - The software for LEGO Investment")
-    color: "lightblue"
 
     Component.onCompleted: {
         console.log(objectName + ":onCompleted")
@@ -48,7 +46,7 @@ ApplicationWindow {
                 enabled: BrickMoneySettings.brickMoneyIsDirty
                 onTriggered: {
                     console.log("Clicked on save")
-                    LegoSetTableModelGeneral.dataSource.saveLegoSets()
+                    BrickMoneyProject.save()
                 }
             }
             Action {
@@ -66,14 +64,21 @@ ApplicationWindow {
         id: loadFileDialog
         objectName: "loadFileDialog"
         title: qsTr("Load BrickMoney project...")
-        nameFilters: ["CSV files (*.csv)"]
+        nameFilters: ["JSON files (*.json)"]
         fileMode: QP.FileDialog.OpenFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
             console.log(objectName + ": onAccepted: You choose: " + currentFile)
-            LegoSetTableModelGeneral.clearAll()
-            var ds = LegoSetTableModelGeneral.dataSource
-            ds.loadLegoSets(currentFile)
+
+            if ( !BrickMoneyProject.checkBrickMoneyProject(currentFile ) )
+            {
+                // TODO Error saveAsFileDialog
+                console.error(objectName + ": onAccepted: Unable to load BrickMoney project from " + currentFile + ".")
+                return
+            }
+
+            BrickMoneySettings.brickMoneyFilePath = currentFile
+            BrickMoneyProject.load()
         }
         onRejected: {
             console.log(objectName + ":Canceled")
@@ -84,13 +89,13 @@ ApplicationWindow {
         id: saveAsFileDialog
         objectName: "saveFileDialog"
         title: qsTr("Save BrickMoney project as...")
-        nameFilters: ["CSV files (*.csv)"]
+        nameFilters: ["JSON files (*.json)"]
         fileMode: QP.FileDialog.SaveFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
             console.log(objectName + ": onAccepted: You choose: " + currentFile)
-            var ds = LegoSetTableModelGeneral.dataSource
-            ds.saveLegoSets(currentFile)
+            BrickMoneySettings.brickMoneyFilePath = currentFile
+            BrickMoneyProject.save()
         }
         onRejected: {
             console.log(objectName + ":Canceled")
@@ -103,7 +108,7 @@ ApplicationWindow {
         informativeText: qsTr("Do you want to save your changes?")
         standardButtons: StandardButton.Yes | StandardButton.No | StandardButton.Cancel
         onYes: {
-            LegoSetTableModelGeneral.dataSource.saveLegoSets()
+            BrickMoneyProject.save()
             Qt.quit()
         }
         onNo: Qt.quit()
@@ -152,8 +157,11 @@ ApplicationWindow {
         id : mTabBar
         width: parent.width
 
+        currentIndex: mSwipeId.currentIndex
+
         TabButton {
             text : qsTr("Overview")
+            //width: implicitWidth
             onClicked: {
                 mSwipeId.currentIndex = 0
                 console.log("mSwipeId.currentIndex = 0")
@@ -161,13 +169,15 @@ ApplicationWindow {
         }
         TabButton {
             text : qsTr("In Stock")
+            //width: implicitWidth
             onClicked: {
                 mSwipeId.currentIndex = 1
                 console.log("mSwipeId.currentIndex = 1")
             }
         }
         TabButton {
-            text : qsTr("Active")
+            text : qsTr("For Sale")
+            //width: implicitWidth
             onClicked: {
                 mSwipeId.currentIndex = 2
                 console.log("mSwipeId.currentIndex = 2")
@@ -175,26 +185,26 @@ ApplicationWindow {
         }
         TabButton {
             text : qsTr("Sold")
+            //width: implicitWidth
             onClicked: {
                 mSwipeId.currentIndex = 3
                 console.log("mSwipeId.currentIndex = 3")
             }
         }
-
     }
-
 
     SwipeView {
         id : mSwipeId
         anchors.fill: parent
         currentIndex: 0
+
         Overview{
             id: overviewId
         }
         InStock {
             id: inStockId
         }
-        Active {
+        ForSale {
             id: activeId
         }
         Sold {

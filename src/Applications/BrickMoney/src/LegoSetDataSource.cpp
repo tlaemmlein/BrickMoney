@@ -5,11 +5,18 @@ SET_LOGGER("BrickMoney.DataSource")
 #include "LegoSet.h"
 #include "BrickMoneySettings.h"
 
-#include <QFile>
-#include <QTextStream>
-#include <QUrl>
 #include <QDate>
-#include <QFileInfo>
+#include <QJsonObject>
+
+const QString LegoSetDataSource::SetNumberName = "SetNumber";
+const QString LegoSetDataSource::PurchasingPriceName = "PurchasingPrice";
+const QString LegoSetDataSource::SellerName = "Seller";
+const QString LegoSetDataSource::PurchaseDateName = "PurchaseDate";
+const QString LegoSetDataSource::RetailPriceName = "RetailPrice";
+const QString LegoSetDataSource::SaleDateName = "SaleDate";
+const QString LegoSetDataSource::SoldOverName = "SolderOver";
+const QString LegoSetDataSource::BuyerName = "Buyer";
+
 
 LegoSetDataSource::LegoSetDataSource(QObject *parent) : QObject(parent)
 {
@@ -48,125 +55,77 @@ void LegoSetDataSource::clearLegoSets()
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-void LegoSetDataSource::saveLegoSets()
+bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 {
-    LOG_SCOPE_METHOD(L"");
-    saveLegoSetsImpl(BrickMoneySettings::Inst()->brickMoneyFilePath());
+	LOG_SCOPE_METHOD(L"");
+
+	clearLegoSets();
+
+	for (int index = 0; index < legoSetArray.size(); ++index) {
+
+		QJsonObject obj = legoSetArray[index].toObject();
+		
+		//We need a set number!
+		if (!obj.contains(SetNumberName))
+			continue;
+
+		LegoSet* set = new LegoSet(this);
+		set->setSetNumber(legoSetArray[index][SetNumberName].toInt());
+
+		if (obj.contains(PurchasingPriceName) && obj[PurchasingPriceName].isDouble())
+			set->setPurchasingPrice(obj[PurchasingPriceName].toDouble());
+
+		if (obj.contains(SellerName) && obj[SellerName].isString())
+			set->setSeller(obj[SellerName].toString());
+
+		if (obj.contains(PurchaseDateName) && obj[PurchaseDateName].isString())
+			set->setPurchaseDate(QDate::fromString(obj[PurchaseDateName].toString()));
+
+		if (obj.contains(RetailPriceName) && obj[RetailPriceName].isDouble())
+			set->setRetailPrice(obj[RetailPriceName].toDouble());
+
+		if (obj.contains(SaleDateName) && obj[SaleDateName].isString())
+			set->setSaleDate(QDate::fromString(obj[SaleDateName].toString()));
+
+		if (obj.contains(SoldOverName) && obj[SoldOverName].isString())
+			set->setSoldOver((obj[SoldOverName].toString()));
+
+		if (obj.contains(BuyerName) && obj[BuyerName].isString())
+			set->setBuyer((obj[BuyerName].toString()));
+
+		addLegoSet(set);
+	}
+
+	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+	return true;
 }
 
-void LegoSetDataSource::saveLegoSets(const QString &fileUrlPath)
-{
-    LOG_SCOPE_METHOD(L"");
-    const QString localFilePath = toLocalFile(fileUrlPath);
-    if (saveLegoSetsImpl(localFilePath))
-        BrickMoneySettings::Inst()->setBrickMoneyFilePath(localFilePath);
-}
-
-void LegoSetDataSource::loadLegoSets(const QString &fileUrlPath)
-{
-    LOG_SCOPE_METHOD(L"");
-
-    const QString filePath = toLocalFile(fileUrlPath);
-
-    if ( filePath.isEmpty())
-    {
-        LOG_ERROR(__FUNCTION__ << ": The brick money file path is empty. " << filePath.toStdWString());
-        return;
-    }
-
-    LOG_INFO("Start to load from " << filePath.toStdWString());
-
-    QFile cvsData(filePath);
-
-    if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
-    {
-        LOG_ERROR("Could not read from " << filePath.toStdWString());
-        return;
-    }
-
-    QTextStream input(&cvsData);
-    input.setCodec("UTF-8");
-
-    const QChar del = ';';
-
-    const int expectedCols = 8;
-
-    while (!input.atEnd()) {
-        QString line = input.readLine();
-        QStringList row = line.split(del);
-        if (row.size() != expectedCols)
-            continue;
-
-        LegoSet* set = new LegoSet(this);
-
-        set->setSetNumber(row.at(0).toInt());
-        set->setPurchasingPrice(row.at(1).toDouble());
-        set->setSeller(row.at(2));
-        set->setPurchaseDate(QDate::fromString(row.at(3)));
-        set->setRetailPrice(row.at(4).toDouble());
-        set->setSaleDate(QDate::fromString(row.at(5)));
-        set->setSoldOver(row.at(6));
-        set->setBuyer(row.at(7));
-
-        addLegoSet(set);
-    }
-
-    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
-    BrickMoneySettings::Inst()->setBrickMoneyFilePath(filePath);
-}
-
-QString LegoSetDataSource::toLocalFile(const QString &fileUrl)
-{
-    LOG_INFO("fileUrl " << fileUrl.toStdWString());
-    QFileInfo info(fileUrl);
-
-    if ( info.exists() )
-    {
-        LOG_INFO("exists");
-        return fileUrl;
-    }
-
-    QUrl url(fileUrl);
-
-    return url.toLocalFile();
-}
-
-bool LegoSetDataSource::saveLegoSetsImpl(const QString& filePath)
+bool LegoSetDataSource::write(QJsonArray &legoSetArray)
 {
     LOG_SCOPE_METHOD(L"");
 
-    if ( filePath.isEmpty())
-    {
-        LOG_ERROR("The brick money file path is empty");
-        return false;
-    }
+	for (const auto& set : m_legoSets)
+	{
+		QJsonObject obj;
+		obj[SetNumberName] = set->setNumber();
+		obj[PurchasingPriceName] = set->purchasingPrice();
+		if (!set->seller().isEmpty())
+			obj[SellerName] = set->seller();
 
-    LOG_INFO("Start to save to " << filePath.toStdWString());
+		obj[PurchaseDateName] = set->purchaseDate().toString();
+		obj[RetailPriceName] = set->retailPrice();
+		obj[SaleDateName] = set->saleDate().toString();
 
-    QFile cvsData(filePath);
+		if (!set->soldOver().isEmpty())
+			obj[SoldOverName] = set->soldOver();
 
-    if ( !cvsData.open(QFile::WriteOnly))
-    {
-        LOG_ERROR("Could not save to " << filePath.toStdWString());
-        return false;
-    }
+		if (!set->buyer().isEmpty())
+			obj[BuyerName] = set->buyer();
 
-    QTextStream output(&cvsData);
-    output.setCodec("UTF-8");
-
-    const QChar del = ';';
-
-    for(const auto& set: m_legoSets)
-    {
-        output << set->setNumber() << del
-               << set->purchasingPrice() << del
-               << set->seller() << del
-               << set->purchaseDate().toString() << del
-               << set->retailPrice() << del
-               << set->saleDate().toString() << del
-               << set->soldOver() << del
-               << set->buyer() << "\n";
-    }
-    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
-    return true;
+		legoSetArray.append(obj);
+	}
+	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+	return true;
 }
+
+

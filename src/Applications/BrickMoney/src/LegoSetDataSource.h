@@ -2,6 +2,7 @@
 #define DATASOURCE_H
 
 #include <QObject>
+#include <QJsonArray>
 
 class LegoSet;
 
@@ -17,9 +18,8 @@ public:
     Q_INVOKABLE LegoSet *legoSetAt(int index);
     Q_INVOKABLE void clearLegoSets();
 
-    Q_INVOKABLE void saveLegoSets();
-    Q_INVOKABLE void saveLegoSets(const QString& fileUrlPath);
-    Q_INVOKABLE void loadLegoSets(const QString& fileUrlPath);
+	bool read(const QJsonArray& legoSetArray);
+	bool write(QJsonArray& legoSetArray);
 
 signals:
     void preLegoSetAdded();
@@ -30,9 +30,14 @@ signals:
 private:
     QList<LegoSet*> m_legoSets;
 
-    QString toLocalFile(const QString& fileUrl);
-
-    bool saveLegoSetsImpl(const QString& filePath);
+	static const QString SetNumberName;
+	static const QString PurchasingPriceName;
+	static const QString SellerName;
+	static const QString PurchaseDateName;
+	static const QString RetailPriceName;
+	static const QString SaleDateName;
+	static const QString SoldOverName;
+	static const QString BuyerName;
 };
 
 

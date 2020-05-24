@@ -14,6 +14,7 @@ const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
 const QString BrickMoneySettings::ViewSettingsName("general/viewSettings");
 const QString BrickMoneySettings::MainWindowName("general/mainWindow");
 
+
 BrickMoneySettings *BrickMoneySettings::Inst()
 {
     if(!smInstance)
@@ -117,4 +118,3 @@ void BrickMoneySettings::setMainWindow(QRect mainWindow)
     m_Settings->setValue(MainWindowName, m_mainWindow);
     emit mainWindowChanged(m_mainWindow);
 }
-

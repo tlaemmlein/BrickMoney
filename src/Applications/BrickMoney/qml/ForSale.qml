@@ -1,39 +1,18 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import de.brickmoney.models 0.1
 import "helper/"
 
 Rectangle {
-    id: inStock
-    objectName: "inStock"
-    color: "#0511F2"
+    id: forSale
+    objectName: "forSale"
+    color: "#494FBF"
 
     Component.onCompleted: {
         console.log(objectName + ":onCompleted")
     }
     Component.onDestruction:  {
         console.log(objectName + ":onDestruction")
-		if ( newLegoSetDialog != null) {
-			newLegoSetDialog.destroy()
-		}
-    }
-
-    Component {
-        id: newLegoSetComp
-        NewLegoSetDialog{
-            id : newLegoSetDialog
-            objectName: "newLegoSetDialog"
-            onAddLegoSetNumber:{
-                console.log(objectName + ":onAddLegoSetNumber")
-                var legoSet = InStockLegoSetTableModel.addLegoSet(setNumber)
-                legoSet.purchaseDate = purchaseDate
-                legoSet.purchasingPrice = purchasingPrice
-                legoSet.seller = seller
-                console.log(objectName + "seller: " + seller)
-            }
-        }
-
     }
 
     Rectangle {
@@ -51,30 +30,6 @@ Rectangle {
             anchors.left: parent.left
             anchors.leftMargin: 5
             spacing: 5
-			Text {
-			  text: qsTr("In Stock")
-			  font.pointSize: 24
-			  verticalAlignment : Text.AlignVCenter
-			}
-
-            Rectangle {
-                border.color: buttonBarChangeSetList.color
-                color: buttonBarChangeSetList.color
-                width: 15
-				height: addButton.height
-            }
-
-            RoundButton{
-                id: addButton
-                text: qsTr("Add")
-                highlighted: true
-                anchors.verticalCenter: parent.verticalCenter
-                height: 40
-                onClicked: {
-                    var dg = newLegoSetComp.createObject(this)
-                    dg.openDialog()
-                }
-            }
 
             Slider {
                 Text {
@@ -129,7 +84,8 @@ Rectangle {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: InStockLegoSetTableModel
+        model: ForSaleLegoSetTableModel
         zoom: zoomSlider.value
     }
 }
+

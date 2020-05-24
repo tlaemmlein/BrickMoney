@@ -1,5 +1,5 @@
 import QtQuick 2.12
 
 Rectangle {
-    color: "blue"
+    color: "#403BD9"
 }

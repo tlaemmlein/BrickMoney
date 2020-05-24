@@ -17,6 +17,10 @@ find_package(log4cplus HINTS ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/)
 set(QML_FILES
     qml/LegoList.qml
     qml/main.qml
+	qml/ForSale.qml
+	qml/InStock.qml
+	qml/Overview.qml
+	qml/Sold.qml
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
     qml/helper/NewLegoSetDialog.qml
@@ -40,6 +44,8 @@ set(QML_SANDBOX_FILES
 set(SRC_FILES
     src/BrickMoneySettings.cpp
     src/BrickMoneySettings.h
+    src/BrickMoneyProject.cpp
+    src/BrickMoneyProject.h
     src/LegoSetDataSource.cpp
     src/LegoSetDataSource.h
     src/LegoSet.cpp

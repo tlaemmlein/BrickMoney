@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
-import de.brickmoney.models 0.1
 import "helper/"
 
 Item {
@@ -17,6 +16,7 @@ Item {
         id : legoListView
         anchors.fill: parent
         clip: true
+        cacheBuffer: 1000
 
         Component.onCompleted: console.log("ViewSetting " + viewSettings)
 
