@@ -6,30 +6,14 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QFile>
 #include <QDir>
 #include <QUrl>
-#include <QQmlListProperty>
+#include <QFontMetrics>
+#include <QGuiApplication>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)
 {
     setObjectName("LegoSetTableModel");
     setDataSource( new LegoSetDataSource(this));
-
-    m_roles[ImageNameRole]="imageName";
-    m_roles[ImageUrl]="imageUrl";
-    m_roles[SetNumberRole]="setNumber";
-    m_roles[DescriptionRole]="description";
-    m_roles[YearRole]="year";
-    m_roles[RecommendedRetailPriceRole]="recommendedRetailPrice";
-    m_roles[PurchasingPriceRole]="purchasingPrice";
-    m_roles[CheaperPercentRole]="cheaperPercent";
-    m_roles[SellerRole]="seller";
-    m_roles[PurchaseDateRole]="purchaseDate";
-    m_roles[RetailPrice]="retailPrice";
-    m_roles[ProfitEuros]="profitEuros";
-    m_roles[ProfitPercent]="profitPercent";
-    m_roles[SaleDate]="saleDate";
-    m_roles[SoldOver]="soldOver";
-    m_roles[Buyer]="buyer";
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
@@ -39,10 +23,10 @@ int LegoSetTableModel::rowCount(const QModelIndex &) const
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return m_roles.size();
+    return 2;
 }
 
-QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
+QVariant LegoSetTableModel::data(const QModelIndex &index, int /*role*/) const
 {
 	LOG_SCOPE_METHOD(L"");
 
@@ -52,40 +36,46 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     //The index is valid
     LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    if ( ImageNameRole == role)
-        return set->imageName();
-    if ( ImageUrl == role)
-        return set->imageUrl();
-    if ( SetNumberRole == role)
-        return set->setNumber();
-    if ( DescriptionRole == role)
-        return set->description();
-    if ( YearRole == role)
-        return set->year();
-    if ( RecommendedRetailPriceRole == role)
-        return set->recommendedRetailPrice();
-    if ( PurchasingPriceRole == role)
-        return set->purchasingPrice();
-    if ( CheaperPercentRole == role)
-        return set->cheaperPercent();
-    if ( SellerRole == role)
-        return set->seller();
-    if ( PurchaseDateRole == role)
-        return set->purchaseDate();
-    if ( RetailPrice == role)
-        return set->retailPrice();
-    if ( ProfitEuros == role)
-        return set->profitEuros();
-    if (ProfitPercent == role)
-        return set->profitPercent();
-    if (SaleDate == role)
-        return set->saleDate();
-    if (SoldOver == role)
-        return set->soldOver();
-    if (Buyer == role)
-        return set->buyer();
+    if ( index.column() == 0)
+        return set->id();
 
-    return QVariant();
+    return QString("%1").arg(set->setNumber());
+}
+
+QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    if (orientation == Qt::Horizontal) {
+        // section is interpreted as column
+        return LegoSet::HeaderInfo.value(section);
+    } else {
+        return QString();
+    }
+
+}
+
+int LegoSetTableModel::columnWidth(int c, const QFont *font)
+{
+    if (!m_columnWidths[c]) {
+        QString header = LegoSet::HeaderInfo.value(c);
+        QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
+        QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
+        int ret = fm.horizontalAdvance(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;
+        for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
+            LegoSet* set = m_dataSource->legoSetAt(r);
+            QString cell;
+            switch (c) {
+            case 0: cell = QString("%0").arg(set->id()); break;
+            case 1: cell = QString("%0").arg(set->setNumber()); break;
+            default: cell ="";
+            }
+            ret = qMax(ret, fm.horizontalAdvance(cell));
+        }
+        m_columnWidths[c] = ret;
+    }
+    return m_columnWidths[c];
 }
 
 
@@ -97,105 +87,9 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     if (!index.isValid() )
         return false;
 
-    LegoSet *set = m_dataSource->legoSetAt(index.row());
-    bool somethingChanged = false;
-    QVector<int> changedRoles;
+    //LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    switch (static_cast<LegoSetRoles>(role)) {
-    case LegoSetTableModel::SetNumberRole:
-    {
-        if (set->setNumber() != value.toInt() ) {
-            set->setSetNumber(value.toInt());
-            changedRoles << ImageNameRole << ImageUrl<< DescriptionRole
-                         << YearRole << RecommendedRetailPriceRole << CheaperPercentRole;
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::PurchasingPriceRole:
-    {
-        if (! qFuzzyCompare(set->purchasingPrice(), value.toDouble())) {
-            set->setPurchasingPrice(value.toDouble());
-            changedRoles << CheaperPercentRole << ProfitEuros << ProfitPercent;
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::CheaperPercentRole:
-    {
-//        if (! qFuzzyCompare(set->cheaperPercent(), value.toDouble())) {
-//            set->setPurchasingPrice(value.toDouble());
-            somethingChanged = true;
-//        }
-        break;
-    }
-    case LegoSetTableModel::SellerRole:
-    {
-        if (set->seller() != value.toString() ) {
-            set->setSeller(value.toString());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::PurchaseDateRole:
-    {
-        if (set->purchaseDate() != value.toDate() ) {
-            set->setPurchaseDate(value.toDate());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::RetailPrice:
-    {
-        if (! qFuzzyCompare(set->retailPrice(), value.toDouble())) {
-            set->setRetailPrice(value.toDouble());
-            changedRoles << ProfitEuros << ProfitPercent;
-            somethingChanged = true;
-        }
-        break;
-    }
-    case LegoSetTableModel::ProfitEuros:
-    {
-        somethingChanged = true;
-        break;
-    }
-    case ProfitPercent:
-    {
-        somethingChanged = true;
-        break;
-    }
-    case SaleDate:
-    {
-        if (set->saleDate() != value.toDate() ) {
-            set->setSaleDate(value.toDate());
-            somethingChanged = true;
-        }
-        break;
-    }
-    case SoldOver:
-    {
-        if (set->soldOver() != value.toString()) {
-            set->setSoldOver((value.toString()));
-            somethingChanged = true;
-        }
-        break;
-    }
-    case Buyer:
-    {
-        if (set->buyer() != value.toString()) {
-            set->setBuyer((value.toString()));
-            somethingChanged = true;
-        }
-        break;
-    }
-    }
-
-    if( somethingChanged){
-        changedRoles << role;
-        emit dataChanged(index,index,changedRoles);
-        return true;
-    }
-    return false;
+    return true;
 }
 
 LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
@@ -227,11 +121,6 @@ void LegoSetTableModel::clearAll()
     endResetModel();
 }
 
-
-QHash<int, QByteArray> LegoSetTableModel::roleNames() const
-{
-    return m_roles;
-}
 
 void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 {
@@ -269,33 +158,4 @@ LegoSetDataSource *LegoSetTableModel::dataSource() const
     return m_dataSource;
 }
 
-void LegoSetTableModel::appendLegoSet(QQmlListProperty<LegoSet> *list, LegoSet *set)
-{
-    reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->addLegoSet(set);
-}
-
-int LegoSetTableModel::legoSetCount(QQmlListProperty<LegoSet> *list)
-{
-    return reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->legoSetCount();
-}
-
-LegoSet *LegoSetTableModel::legoSet(QQmlListProperty<LegoSet> *list, int index)
-{
-    return reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->legoSetAt(index);
-}
-
-void LegoSetTableModel::clearLegoSets(QQmlListProperty<LegoSet> *list)
-{
-    reinterpret_cast<LegoSetTableModel *> (list->data)->dataSource()->clearLegoSets();
-}
-
-
-QQmlListProperty<LegoSet> LegoSetTableModel::legoSets()
-{
-    return QQmlListProperty<LegoSet>(this, this,
-                                    &LegoSetTableModel::appendLegoSet,
-                                    &LegoSetTableModel::legoSetCount,
-                                    &LegoSetTableModel::legoSet,
-                                    &LegoSetTableModel::clearLegoSets);
-}
 

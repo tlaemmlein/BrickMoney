@@ -3,12 +3,21 @@
 #include "LegoSetInfoGenerator.h"
 #include "BrickMoneySettings.h"
 
+int LegoSet::IDCOUNTER = 0;
+
+const QMap<int, QString> LegoSet::HeaderInfo = {
+    {0, {"ID"}},
+    {1, {"Setnumber"}}
+};
+
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
 {
     initParams();
     createConnections();
     setSetNumber(41599);
+    m_id = LegoSet::IDCOUNTER;
+    ++LegoSet::IDCOUNTER;
 }
 
 LegoSet::LegoSet(int setNumber, QObject *parent) : QObject(parent)
@@ -16,10 +25,17 @@ LegoSet::LegoSet(int setNumber, QObject *parent) : QObject(parent)
     initParams();
     createConnections();
     setSetNumber(setNumber);
+    m_id = LegoSet::IDCOUNTER;
+    ++LegoSet::IDCOUNTER;
 }
 
 LegoSet::~LegoSet()
 {
+}
+
+int LegoSet::id() const
+{
+    return m_id;
 }
 
 void LegoSet::initParams()

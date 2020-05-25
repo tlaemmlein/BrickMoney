@@ -16,23 +16,19 @@ find_package(log4cplus HINTS ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/)
 
 set(QML_FILES
     qml/LegoList.qml
+    qml/LegoTable.qml
     qml/main.qml
-	qml/ForSale.qml
-	qml/InStock.qml
-	qml/Overview.qml
-	qml/Sold.qml
-    qml/helper/DatePicker.qml
-    qml/helper/DoubleSpinBox.qml
-    qml/helper/NewLegoSetDialog.qml
-    qml/sandbox/DatePickerTest.qml
-    qml/sandbox/DialogButtonBoxTest.qml
-    qml/sandbox/ListViewScrollbars.qml
+    qml/ForSale.qml
+    qml/InStock.qml
+    qml/Overview.qml
+    qml/Sold.qml
 )
 
 set(QML_HELPER_FILES
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
     qml/helper/NewLegoSetDialog.qml
+    qml/helper/SortableColumnHeading.qml
 )
 
 set(QML_SANDBOX_FILES

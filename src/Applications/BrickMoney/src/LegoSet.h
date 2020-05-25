@@ -9,6 +9,7 @@ class LegoSetInfoGenerator;
 class LegoSet : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int id READ id)
     Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
     Q_PROPERTY(QString imageName READ imageName NOTIFY imageNameChanged)
     Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
@@ -32,6 +33,9 @@ public:
     LegoSet(int setNumber, QObject *parent = nullptr);
 	~LegoSet();
 
+    static const QMap<int, QString> HeaderInfo;
+
+    int id() const;
     int setNumber() const;
     QString imageName() const;
     QString imageUrl() const;
@@ -90,6 +94,8 @@ private slots:
 
 private:
     LegoSetInfoGenerator* m_LegoSetInfoGenerator;
+    static int IDCOUNTER;
+    int     m_id;
     int     m_setNumber;
     QString m_imageName;
     QString m_imageUrl;

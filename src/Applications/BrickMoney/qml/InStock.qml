@@ -7,7 +7,7 @@ import "helper/"
 Rectangle {
     id: inStock
     objectName: "inStock"
-    color: "#0511F2"
+    //color: "#0511F2"
 
     Component.onCompleted: {
         console.log(objectName + ":onCompleted")
@@ -119,7 +119,7 @@ Rectangle {
         }
     }
 
-    LegoList{
+    LegoTable{
         id: legoList
         anchors.left: parent.left
         anchors.leftMargin: 5
@@ -130,6 +130,6 @@ Rectangle {
         height: parent.height - buttonBarChangeSetList.height -15
 
         model: InStockLegoSetTableModel
-        zoom: zoomSlider.value
+        //zoom: zoomSlider.value
     }
 }

@@ -3,6 +3,7 @@
         <file>ForSale.qml</file>
         <file>InStock.qml</file>
         <file>LegoList.qml</file>
+        <file>LegoTable.qml</file>
         <file>Overview.qml</file>
         <file>Sold.qml</file>
         <file>main.qml</file>
@@ -12,5 +13,6 @@
         <file>sandbox/DatePickerTest.qml</file>
         <file>sandbox/DialogButtonBoxTest.qml</file>
         <file>sandbox/ListViewScrollbars.qml</file>
+        <file>helper/SortableColumnHeading.qml</file>
     </qresource>
 </RCC>

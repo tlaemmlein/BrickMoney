@@ -25,7 +25,7 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent)
 void LegoSetInfoGenerator::querySetNumber(int num)
 {
     LOG_SCOPE_METHOD(L"");
-    LOG_INFO(QString("querySetNumber %1").arg(num).toStdWString());
+    LOG_TRACE(QString("querySetNumber %1").arg(num).toStdWString());
 
     for(const LegoSetInfo& info : mLegoSetDatabase)
     {
