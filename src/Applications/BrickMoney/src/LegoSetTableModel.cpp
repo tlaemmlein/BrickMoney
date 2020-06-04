@@ -23,7 +23,7 @@ int LegoSetTableModel::rowCount(const QModelIndex &) const
 
 int LegoSetTableModel::columnCount(const QModelIndex &) const
 {
-    return 2;
+    return LegoSetProperty::COUNT;
 }
 
 QVariant LegoSetTableModel::data(const QModelIndex &index, int /*role*/) const
@@ -36,10 +36,9 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int /*role*/) const
     //The index is valid
     LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    if ( index.column() == 0)
-        return set->id();
+    auto c = index.column();
 
-    return QString("%1").arg(set->setNumber());
+    return set->getVariant(LegoSetProperty(c));
 }
 
 QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -49,17 +48,19 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 
     if (orientation == Qt::Horizontal) {
         // section is interpreted as column
-        return LegoSet::HeaderInfo.value(section);
+        return getName(LegoSetProperty(section));
     } else {
         return QString();
     }
 
+    return QString();
 }
 
 int LegoSetTableModel::columnWidth(int c, const QFont *font)
 {
     if (!m_columnWidths[c]) {
-        QString header = LegoSet::HeaderInfo.value(c);
+        QString header = getName(LegoSetProperty(c));
+
         QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
         QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
         int ret = fm.horizontalAdvance(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;

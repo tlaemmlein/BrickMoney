@@ -74,18 +74,19 @@ Rectangle {
         }
     }
 
-//    LegoList{
-//        id: legoList
-//        anchors.left: parent.left
-//        anchors.leftMargin: 5
-//        anchors.top: buttonBarChangeSetList.bottom
-//        anchors.topMargin: 5
-//        anchors.right: parent.right
-//        anchors.rightMargin: 5
-//        height: parent.height - buttonBarChangeSetList.height -15
 
-//        model: ForSaleLegoSetTableModel
-//        zoom: zoomSlider.value
-//    }
+    LegoTable{
+        id: legoList
+        anchors.left: parent.left
+        anchors.leftMargin: 5
+        anchors.top: buttonBarChangeSetList.bottom
+        anchors.topMargin: 5
+        anchors.right: parent.right
+        anchors.rightMargin: 5
+        height: parent.height - buttonBarChangeSetList.height -15
+
+        model: ForSaleLegoSetTableModel
+    }
+
 }
 

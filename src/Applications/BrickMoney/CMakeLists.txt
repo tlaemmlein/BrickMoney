@@ -51,6 +51,7 @@ set(SRC_FILES
     src/LegoSetTableModel.cpp
     src/LegoSetTableModel.h
     src/Logging.h
+    src/magic_enum.h
     src/main.cpp
     src/QmlValuePreview.h
 )

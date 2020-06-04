@@ -1,15 +1,21 @@
 #include "LegoSet.h"
+#include "magic_enum.h"
 
 #include "LegoSetInfoGenerator.h"
 #include "BrickMoneySettings.h"
 
 int LegoSet::IDCOUNTER = 0;
 
-const QMap<int, QString> LegoSet::HeaderInfo = {
-    {0, {"ID"}},
-    {1, {"Setnumber"}}
-};
 
+QString getName(LegoSetProperty prop)
+{
+    return magic_enum::enum_name(prop).data();
+}
+
+QVariant LegoSet::getVariant(LegoSetProperty prop)
+{
+    return this->property(getName(prop).toUtf8());
+}
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)
 {

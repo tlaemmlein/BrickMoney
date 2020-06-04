@@ -6,6 +6,29 @@
 
 class LegoSetInfoGenerator;
 
+enum LegoSetProperty {
+    id = 0,
+    setNumber,
+    imageUrl,
+    description,
+    year,
+    recommendedRetailPrice,
+    purchasingPrice,
+    cheaperPercent,
+    seller,
+    purchaseDate,
+    retailPrice,
+    profitEuros,
+    profitPercent,
+    saleDate,
+    soldOver,
+    buyer,
+    COUNT
+};
+
+QString getName(LegoSetProperty prop);
+
+
 class LegoSet : public QObject
 {
     Q_OBJECT
@@ -29,11 +52,12 @@ class LegoSet : public QObject
     Q_PROPERTY(QString buyer READ buyer WRITE setBuyer NOTIFY buyerChanged)
 
 public:
+
+    QVariant getVariant(LegoSetProperty prop);
+
     explicit LegoSet(QObject *parent = nullptr);
     LegoSet(int setNumber, QObject *parent = nullptr);
 	~LegoSet();
-
-    static const QMap<int, QString> HeaderInfo;
 
     int id() const;
     int setNumber() const;

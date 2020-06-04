@@ -53,7 +53,7 @@ private:
     LegoSetDataSource* m_dataSource;
     bool m_signalConnected;
 
-    QVector<int> m_columnWidths = QVector<int>(LegoSet::HeaderInfo.size());
+    QVector<int> m_columnWidths = QVector<int>(LegoSetProperty::COUNT);
 };
 
 
