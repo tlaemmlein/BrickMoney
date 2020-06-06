@@ -3,6 +3,7 @@
 
 #include "LegoSetDataSource.h"
 #include "LegoSetTableModel.h"
+#include "LegoSetSortFilterTableModel.h"
 
 #include <QObject>
 
@@ -20,12 +21,17 @@ public:
     QString brickMoneyFilePath() const;
     Q_INVOKABLE bool checkBrickMoneyProject(const QString& brickMoneyFilePath);
 
-	LegoSetDataSource* getDataSourceInStock() const;
-	LegoSetTableModel* getInStockModel();
+    LegoSetDataSource* getDataSourceInStock() const;
+    LegoSetTableModel* getInStockModel();
+    LegoSetSortFilterTableModel* getInStockSortModel();
+
 	LegoSetDataSource* getDataSourceForSale() const;
-	LegoSetTableModel* getForSaleModel();
-	LegoSetDataSource* getDataSourceSold() const;
+    LegoSetTableModel* getForSaleModel();
+    LegoSetSortFilterTableModel* getForSaleSortModel();
+
+    LegoSetDataSource* getDataSourceSold() const;
 	LegoSetTableModel* getSoldModel();
+    LegoSetSortFilterTableModel* getSoldSortModel();
 
 public slots:
     void load();
@@ -50,11 +56,16 @@ private:
 
 
     LegoSetDataSource* m_DataSourceInStock;
-	LegoSetTableModel  m_InStockModel;
+    LegoSetTableModel  m_InStockModel;
+    LegoSetSortFilterTableModel* m_InStockSortModel;
+
     LegoSetDataSource* m_DataSourceForSale;
-	LegoSetTableModel  m_ForSaleModel;
+    LegoSetTableModel  m_ForSaleModel;
+    LegoSetSortFilterTableModel* m_ForSaleSortModel;
+
     LegoSetDataSource* m_DataSourceSold;
-	LegoSetTableModel  m_SoldModel;
+    LegoSetTableModel  m_SoldModel;
+    LegoSetSortFilterTableModel* m_SoldSortModel;
 
     QString m_brickMoneyFilePath;
 

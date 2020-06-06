@@ -16,10 +16,15 @@ class LegoSetTableModel : public QAbstractTableModel
 
 public:
     enum class Role {
-        Sort = Qt::UserRole
+        Sort = Qt::UserRole,
+        Number,
+        Type
     };
 
     explicit LegoSetTableModel(QObject *parent= nullptr);
+    ~LegoSetTableModel();
+
+    QHash<int, QByteArray> roleNames() const override;
 
     int rowCount(const QModelIndex & = QModelIndex()) const override;
 
@@ -54,6 +59,7 @@ private:
     bool m_signalConnected;
 
     QVector<int> m_columnWidths = QVector<int>(LegoSetProperty::COUNT);
+    QHash<int, QByteArray> m_roleNames;
 };
 
 

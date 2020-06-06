@@ -131,10 +131,15 @@ BrickMoneyProject::BrickMoneyProject()
 {
     m_DataSourceInStock = new LegoSetDataSource(this);
 	m_InStockModel.setDataSource(m_DataSourceInStock);
+    m_InStockSortModel = new LegoSetSortFilterTableModel(&m_InStockModel);
+
     m_DataSourceForSale = new LegoSetDataSource(this);
 	m_ForSaleModel.setDataSource(m_DataSourceForSale);
+    m_ForSaleSortModel = new LegoSetSortFilterTableModel(&m_ForSaleModel);
+
     m_DataSourceSold = new LegoSetDataSource(this);
 	m_SoldModel.setDataSource(m_DataSourceSold);
+    m_SoldSortModel = new LegoSetSortFilterTableModel(&m_SoldModel);
 
     connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, this, &BrickMoneyProject::setBrickMoneyFilePath);
 	setBrickMoneyFilePath(BrickMoneySettings::Inst()->brickMoneyFilePath());
@@ -166,7 +171,12 @@ LegoSetDataSource * BrickMoneyProject::getDataSourceInStock() const
 
 LegoSetTableModel * BrickMoneyProject::getInStockModel()
 {
-	return &m_InStockModel;
+    return &m_InStockModel;
+}
+
+LegoSetSortFilterTableModel *BrickMoneyProject::getInStockSortModel()
+{
+    return m_InStockSortModel;
 }
 
 LegoSetDataSource * BrickMoneyProject::getDataSourceForSale() const
@@ -176,7 +186,12 @@ LegoSetDataSource * BrickMoneyProject::getDataSourceForSale() const
 
 LegoSetTableModel * BrickMoneyProject::getForSaleModel()
 {
-	return &m_ForSaleModel;
+    return &m_ForSaleModel;
+}
+
+LegoSetSortFilterTableModel *BrickMoneyProject::getForSaleSortModel()
+{
+    return m_ForSaleSortModel;
 }
 
 LegoSetDataSource * BrickMoneyProject::getDataSourceSold() const
@@ -186,7 +201,12 @@ LegoSetDataSource * BrickMoneyProject::getDataSourceSold() const
 
 LegoSetTableModel * BrickMoneyProject::getSoldModel()
 {
-	return &m_SoldModel;
+    return &m_SoldModel;
+}
+
+LegoSetSortFilterTableModel *BrickMoneyProject::getSoldSortModel()
+{
+    return m_SoldSortModel;
 }
 
 void BrickMoneyProject::setBrickMoneyFilePath(const QString& brickMoneyFilePath)

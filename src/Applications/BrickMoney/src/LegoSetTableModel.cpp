@@ -14,6 +14,21 @@ LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(pare
 {
     setObjectName("LegoSetTableModel");
     setDataSource( new LegoSetDataSource(this));
+    m_roleNames = QAbstractTableModel::roleNames();
+    // TODO loop over the QMetaEnum
+    m_roleNames.insert(int(Role::Sort), QByteArray("sort"));
+    m_roleNames.insert(int(Role::Number), QByteArray("number"));
+    m_roleNames.insert(int(Role::Type), QByteArray("type"));
+}
+
+LegoSetTableModel::~LegoSetTableModel()
+{
+
+}
+
+QHash<int, QByteArray> LegoSetTableModel::roleNames() const
+{
+    return m_roleNames;
 }
 
 int LegoSetTableModel::rowCount(const QModelIndex &) const
@@ -26,7 +41,7 @@ int LegoSetTableModel::columnCount(const QModelIndex &) const
     return LegoSetProperty::COUNT;
 }
 
-QVariant LegoSetTableModel::data(const QModelIndex &index, int /*role*/) const
+QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 {
 	LOG_SCOPE_METHOD(L"");
 
@@ -38,7 +53,54 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int /*role*/) const
 
     auto c = index.column();
 
-    return set->getVariant(LegoSetProperty(c));
+    switch (role) {
+    case Qt::DisplayRole:
+        return set->getVariant(LegoSetProperty(c));
+    case Qt::InitialSortOrderRole: {
+        bool numeric = false;
+        set->getVariant(LegoSetProperty(c)).toFloat(&numeric);
+        if (numeric)
+            return Qt::DescendingOrder;
+        return Qt::AscendingOrder;
+    }
+    case int(LegoSetTableModel::Role::Sort):
+        return set->getVariant(LegoSetProperty(c));
+    case int(LegoSetTableModel::Role::Number):
+        return set->getVariant(LegoSetProperty(c)).toDouble();
+    case int(LegoSetTableModel::Role::Type):
+    {
+        // TODO this is silly: make a virtual in the Category perhaps?
+        LegoSetProperty prop = LegoSetProperty(c);
+        switch (prop) {
+        case id:
+        case setNumber:
+        case description:
+        case cheaperPercent:
+        case year:
+        case recommendedRetailPrice:
+        case profitEuros:
+        case profitPercent:
+            return QLatin1String("readonly");
+        case imageUrl:
+            return QLatin1String("image");
+        case seller:
+        case soldOver:
+        case buyer:
+            return QLatin1String("text");
+        case purchasingPrice:
+        case retailPrice:
+            return QLatin1String("double");
+        case purchaseDate:
+        case saleDate:
+            return QLatin1String("date");
+        default:
+            return QLatin1String("string");
+        }
+    }
+    default:
+        return QVariant();
+    }
+    return QVariant();
 }
 
 QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -80,7 +142,7 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
 }
 
 
-bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &/*value*/, int role)
 {
 	LOG_SCOPE_METHOD(L"");
 

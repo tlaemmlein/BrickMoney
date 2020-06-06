@@ -85,7 +85,7 @@ Rectangle {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: ForSaleLegoSetTableModel
+        model: ForSaleLegoSetTableSortModel
     }
 
 }

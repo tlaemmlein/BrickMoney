@@ -1,6 +1,8 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.12
+import Qt.labs.qmlmodels 1.0
+
 import "helper/"
 
 Item {
@@ -14,16 +16,18 @@ Item {
         z: 1
         spacing: 4
         Repeater {
+            id: headerRepeater
             model: legoTableView.model.columnCount()
-            Rectangle {
-                width: legoTableView.model.columnWidth(index); height: parent.height
-                color: "orange"
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: 4
-                    width: parent.width - 4
-                    text: legoTableView.model.headerData(index, Qt.Horizontal)
+            SortableColumnHeading {
+                //table: legoTableView
+                initialWidth: Math.min(600, legoTableView.model.columnWidth(index)); height: parent.height
+                text: legoTableView.model.headerData(index, Qt.Horizontal)
+                initialSortOrder: legoTableView.model.initialSortOrder(index)
+                onSorting: {
+                    for (var i = 0; i < headerRepeater.model; ++i)
+                        if (i !== index)
+                            headerRepeater.itemAt(i).stopSorting()
+                    legoTableView.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
                 }
             }
         }
@@ -40,16 +44,39 @@ Item {
 
         columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
 
-        delegate: Rectangle {
-            color: "#EEE"
-            implicitHeight: text.implicitHeight
-            Text {
-                id: text
-                text: model.display
-                width: parent.width
-                horizontalAlignment : Text.AlignRight
-                elide: column == 49 ? Text.ElideLeft : Text.ElideRight
-                font.preferShaping: false
+        delegate:
+            DelegateChooser {
+            role: "type"
+
+            DelegateChoice {
+                roleValue: "image"
+                Rectangle {
+                    color: "white"
+                    implicitHeight: imageID.implicitHeight
+
+                    Image {
+                        id: imageID
+                        width: parent.width
+                        //height: 50
+                        fillMode: Image.PreserveAspectFit
+                        source: model.display
+                    }
+                }
+            }
+
+            DelegateChoice{
+                Rectangle {
+                    color: "#EEE"
+                    implicitHeight: text.implicitHeight
+                    Text {
+                        id: text
+                        text: model.display
+                        width: parent.width
+                        horizontalAlignment : Text.AlignRight
+                        elide: column == 49 ? Text.ElideLeft : Text.ElideRight
+                        font.preferShaping: false
+                    }
+                }
             }
         }
     }

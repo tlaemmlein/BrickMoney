@@ -99,7 +99,7 @@ Rectangle {
                 text: qsTr("Details")
                 onCheckedChanged: {
                     if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Details
+                        //legoList.viewSettings = LegoList.ViewSettings.Details
                         BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
                     }
                 }
@@ -129,7 +129,7 @@ Rectangle {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: InStockLegoSetTableModel
+        model: InStockLegoSetTableSortModel
         //zoom: zoomSlider.value
     }
 }

@@ -50,6 +50,8 @@ set(SRC_FILES
     src/LegoSetInfoGenerator.h
     src/LegoSetTableModel.cpp
     src/LegoSetTableModel.h
+    src/LegoSetSortFilterTableModel.cpp
+    src/LegoSetSortFilterTableModel.h
     src/Logging.h
     src/magic_enum.h
     src/main.cpp
@@ -83,7 +85,12 @@ COMMAND ${_qt5Core_install_prefix}/bin/windeployqt.exe
    # windeployqt is not able to deploy Qt/labs/platform! Hence we do it by own.
 COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${_qt5Core_install_prefix}/qml/Qt/labs/platform
-         $<TARGET_FILE_DIR:BrickMoney>/Qt/labs/platform)
+         $<TARGET_FILE_DIR:${PROJECT_NAME}>/Qt/labs/platform
+  # windeployqt is not able to deploy Qt/labs/qmlmodels! Hence we do it by own.
+COMMAND ${CMAKE_COMMAND} -E copy_directory
+      ${_qt5Core_install_prefix}/qml/Qt/labs/qmlmodels
+       $<TARGET_FILE_DIR:${PROJECT_NAME}>/Qt/labs/qmlmodels
+         )
 
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
