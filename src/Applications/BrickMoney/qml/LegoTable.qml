@@ -7,6 +7,14 @@ import "helper/"
 
 Item {
     property alias model : legoTableView.model
+    property alias contentY : legoTableView.contentY
+    function resizeCols() {
+        for ( var index = 0; index < legoTableView.model.columnCount(); ++index) {
+            var width = Math.min(600, legoTableView.model.columnWidth(index))
+            headerRepeater.itemAt(index).setWidth(width)
+        }
+        legoTableView.forceLayout()
+    }
 
     Row {
         id: header
@@ -42,7 +50,7 @@ Item {
         ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
         ScrollBar.horizontal: ScrollBar {contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
 
-        columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
+        columnWidthProvider: function(column) { return headerRepeater.itemAt(column).width }
 
         delegate:
             DelegateChooser {

@@ -128,13 +128,10 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
         int ret = fm.horizontalAdvance(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;
         for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
             LegoSet* set = m_dataSource->legoSetAt(r);
-            QString cell;
-            switch (c) {
-            case 0: cell = QString("%0").arg(set->id()); break;
-            case 1: cell = QString("%0").arg(set->setNumber()); break;
-            default: cell ="";
-            }
-            ret = qMax(ret, fm.horizontalAdvance(cell));
+            QString val = "image";
+            if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
+                val = set->getVariant(LegoSetProperty(c)).toString();
+            ret = qMax(ret, fm.horizontalAdvance(val));
         }
         m_columnWidths[c] = ret;
     }

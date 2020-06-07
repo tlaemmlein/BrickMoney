@@ -99,7 +99,7 @@ Rectangle {
                 text: qsTr("Details")
                 onCheckedChanged: {
                     if (checked){
-                        //legoList.viewSettings = LegoList.ViewSettings.Details
+                        //legoTable.viewSettings = LegoList.ViewSettings.Details
                         BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
                     }
                 }
@@ -111,16 +111,28 @@ Rectangle {
                 text: qsTr("Compact")
                 onCheckedChanged: {
                     if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Compact
+                        legoTable.viewSettings = LegoList.ViewSettings.Compact
                         BrickMoneySettings.viewSettings = LegoList.ViewSettings.Compact
                     }
                 }
+            }
+
+            Button {
+                id: resizeCols
+                text: qsTr("Resize cols")
+                onClicked: legoTable.resizeCols()
+            }
+
+            TextField {
+                id: tfFilter
+                implicitWidth: parent.width / 4
+                onTextEdited: legoTable.contentY = 0
             }
         }
     }
 
     LegoTable{
-        id: legoList
+        id: legoTable
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.top: buttonBarChangeSetList.bottom
@@ -129,7 +141,10 @@ Rectangle {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: InStockLegoSetTableSortModel
+        model: {
+                 InStockLegoSetTableSortModel.filterText = tfFilter.text
+                 return InStockLegoSetTableSortModel
+        }
         //zoom: zoomSlider.value
     }
 }
