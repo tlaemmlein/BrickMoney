@@ -29,7 +29,7 @@ Rectangle {
     Text {
         id: upDownIndicator
         anchors.right: parent.right
-        anchors.margins: 8
+        anchors.margins: 4
         anchors.verticalCenter: parent.verticalCenter
         text: "^"
         visible: false

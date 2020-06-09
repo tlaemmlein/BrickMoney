@@ -9,8 +9,10 @@ Item {
     property alias model : legoTableView.model
     property alias contentY : legoTableView.contentY
     function resizeCols() {
+        console.log("resizeCols")
         for ( var index = 0; index < legoTableView.model.columnCount(); ++index) {
             var width = Math.min(600, legoTableView.model.columnWidth(index))
+            console.log("w: " + width)
             headerRepeater.itemAt(index).setWidth(width)
         }
         legoTableView.forceLayout()
@@ -59,7 +61,7 @@ Item {
             DelegateChoice {
                 roleValue: "image"
                 Rectangle {
-                    color: "white"
+                    color: "transparent"
                     implicitHeight: imageID.implicitHeight
 
                     Image {
@@ -71,6 +73,22 @@ Item {
                     }
                 }
             }
+
+            DelegateChoice {
+                roleValue: "date"
+                Rectangle {
+                    color: "white"
+                    border.color: "black"
+                    DatePicker{
+                        //width: parent.width
+                        anchors.fill: parent
+                        //fontPixelSize: legoListView.fontPixelSize
+                        selectedDate: model.display
+                        onSelectedDateChanged: model.display = selectedDate
+                    }
+                }
+            }
+
 
             DelegateChoice{
                 Rectangle {

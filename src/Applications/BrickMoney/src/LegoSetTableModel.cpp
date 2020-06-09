@@ -120,7 +120,8 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 
 int LegoSetTableModel::columnWidth(int c, const QFont *font)
 {
-    if (!m_columnWidths[c]) {
+    qDebug() << __FUNCTION__;
+    //if (!m_columnWidths[c]) {
         QString header = getName(LegoSetProperty(c));
 
         QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
@@ -131,10 +132,12 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
                 val = set->getVariant(LegoSetProperty(c)).toString();
+            qDebug() << val;
             ret = qMax(ret, fm.horizontalAdvance(val));
         }
+        qDebug() << "c: " << c << " ret: " << ret;
         m_columnWidths[c] = ret;
-    }
+    //}
     return m_columnWidths[c];
 }
 

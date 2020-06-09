@@ -157,80 +157,57 @@ ApplicationWindow {
         id : mTabBar
         width: parent.width
 
-        //currentIndex: mSwipeId.currentIndex
+        currentIndex: mSwipeId.currentIndex
 
         TabButton {
             text : qsTr("Overview")
-            //width: implicitWidth
             onClicked: {
-                mStackID.pop()
-                mStackID.push("qrc:/qml/Overview.qml")
-                //mSwipeId.currentIndex = 0
+                mSwipeId.currentIndex = 0
                 //console.log("mSwipeId.currentIndex = 0")
             }
         }
         TabButton {
             text : qsTr("In Stock")
-            //width: implicitWidth
             onClicked: {
-                mStackID.pop()
-                mStackID.push("qrc:/qml/InStock.qml")
-
-//                mSwipeId.currentIndex = 1
-//                console.log("mSwipeId.currentIndex = 1")
+                mSwipeId.currentIndex = 1
+                //console.log("mSwipeId.currentIndex = 1")
             }
         }
         TabButton {
             text : qsTr("For Sale")
-            //width: implicitWidth
             onClicked: {
-                mStackID.pop()
-                mStackID.push("qrc:/qml/ForSale.qml")
-
-                //                mSwipeId.currentIndex = 2
-//                console.log("mSwipeId.currentIndex = 2")
+                mSwipeId.currentIndex = 2
+                //console.log("mSwipeId.currentIndex = 2")
             }
         }
         TabButton {
             text : qsTr("Sold")
-            //width: implicitWidth
             onClicked: {
-                mStackID.pop()
-                mStackID.push("qrc:/qml/Sold.qml")
-
-                //                mSwipeId.currentIndex = 3
-//                console.log("mSwipeId.currentIndex = 3")
+                mSwipeId.currentIndex = 3
+                //console.log("mSwipeId.currentIndex = 3")
             }
         }
     }
 
-//    SwipeView {
-//        id : mSwipeId
-//        anchors.fill: parent
-//        currentIndex: 0
-
-//        Overview{
-//            id: overviewId
-//        }
-//        InStock {
-//            id: inStockId
-//        }
-//        ForSale {
-//            id: activeId
-//        }
-//        Sold {
-//            id: soldId
-//        }
-//    }
-
-    StackView {
-        id: mStackID
+    SwipeView {
+        id : mSwipeId
+        Component.onCompleted: contentItem.interactive = false
         anchors.fill: parent
-        initialItem: Overview {
+        currentIndex: 0
 
+        Overview{
+            id: overviewId
+        }
+        InStock {
+            id: inStockId
+        }
+        ForSale {
+            id: activeId
+        }
+        Sold {
+            id: soldId
         }
     }
-
 }
 
 
