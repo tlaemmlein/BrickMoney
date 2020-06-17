@@ -26,6 +26,7 @@ signals:
     void postLegoSetAdded();
     void preLegoSetRemoved(int index);
     void postLegoSetRemoved();
+	void resetLegoSets();
 
 private:
     QList<LegoSet*> m_legoSets;

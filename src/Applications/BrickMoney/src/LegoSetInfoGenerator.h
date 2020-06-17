@@ -50,7 +50,7 @@ public:
     explicit LegoSetInfoGenerator(QObject *parent = nullptr);
 
 public:
-    Q_INVOKABLE void querySetNumber(int num);
+    Q_INVOKABLE bool querySetNumber(int num);
     Q_INVOKABLE int nextSetNumber(int currentSetNumber);
     Q_INVOKABLE int previousSetNumber(int currentSetNumber);
 

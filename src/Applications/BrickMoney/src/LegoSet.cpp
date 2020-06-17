@@ -21,7 +21,7 @@ LegoSet::LegoSet(QObject *parent) : QObject(parent)
 {
     initParams();
     createConnections();
-    setSetNumber(41599);
+    setSetNumber(0);
     m_id = LegoSet::IDCOUNTER;
     ++LegoSet::IDCOUNTER;
 }

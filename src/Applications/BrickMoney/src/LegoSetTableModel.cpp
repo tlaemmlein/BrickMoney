@@ -8,6 +8,7 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QUrl>
 #include <QFontMetrics>
 #include <QGuiApplication>
+#include <QDebug>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)
@@ -120,7 +121,6 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 
 int LegoSetTableModel::columnWidth(int c, const QFont *font)
 {
-    qDebug() << __FUNCTION__;
     //if (!m_columnWidths[c]) {
         QString header = getName(LegoSetProperty(c));
 
@@ -132,12 +132,12 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
                 val = set->getVariant(LegoSetProperty(c)).toString();
-            qDebug() << val;
+            //qDebug() << val;
             ret = qMax(ret, fm.horizontalAdvance(val));
         }
-        qDebug() << "c: " << c << " ret: " << ret;
         m_columnWidths[c] = ret;
     //}
+    //qDebug() << "c: " << c << " ret: " << ret;
     return m_columnWidths[c];
 }
 
@@ -181,7 +181,10 @@ void LegoSetTableModel::clearAll()
 
     beginResetModel();
     m_dataSource->clearLegoSets();
+    for ( int i = 0; i < m_columnWidths.size(); ++i)
+        m_columnWidths[i] = 0;
     endResetModel();
+	emit modelReset();
 }
 
 
@@ -211,9 +214,14 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
         endRemoveRows();
     });
 
+	connect(m_dataSource, &LegoSetDataSource::resetLegoSets, this, [=]() {
+		emit modelReset();
+	});
+
     m_signalConnected = true;
 
     endResetModel();
+	emit modelReset();
 }
 
 LegoSetDataSource *LegoSetTableModel::dataSource() const

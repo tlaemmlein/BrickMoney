@@ -22,7 +22,7 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent)
     fillDatabase(legoSetDatabaseFilePath);
 }
 
-void LegoSetInfoGenerator::querySetNumber(int num)
+bool LegoSetInfoGenerator::querySetNumber(int num)
 {
     LOG_SCOPE_METHOD(L"");
     LOG_TRACE(QString("querySetNumber %1").arg(num).toStdWString());
@@ -32,11 +32,12 @@ void LegoSetInfoGenerator::querySetNumber(int num)
         if (info.setNumber == num)
         {
             sendSignals(info);
-            return;
+            return true;
         }
     }
 
     emit setNumberNotFound();
+	return false;
 }
 
 int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)

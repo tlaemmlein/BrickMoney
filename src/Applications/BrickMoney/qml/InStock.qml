@@ -118,6 +118,12 @@ Rectangle {
             }
 
             Button {
+                id: forceLayoutBt
+                text: qsTr("force Layout")
+                onClicked: legoTable.forceLayout()
+            }
+
+            Button {
                 id: resizeCols
                 text: qsTr("Resize cols")
                 onClicked: legoTable.resizeCols()

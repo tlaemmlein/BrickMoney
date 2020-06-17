@@ -2,6 +2,7 @@
 SET_LOGGER("BrickMoney.DataSource")
 
 #include "LegoSetDataSource.h"
+#include "LegoSetInfoGenerator.h"
 #include "LegoSet.h"
 #include "BrickMoneySettings.h"
 
@@ -60,17 +61,30 @@ bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 	LOG_SCOPE_METHOD(L"");
 
 	clearLegoSets();
+	
+	LegoSetInfoGenerator gen;
 
 	for (int index = 0; index < legoSetArray.size(); ++index) {
 
 		QJsonObject obj = legoSetArray[index].toObject();
 		
-		//We need a set number!
 		if (!obj.contains(SetNumberName))
+		{
+			LOG_ERROR("We need a set number!");
 			continue;
+		}
+
+		const int setNum = obj[SetNumberName].toInt();
+
+		if (!gen.querySetNumber(setNum))
+		{
+			LOG_ERROR("Could not found the set number " << setNum << " in the database.");
+			continue;
+		}
+			
 
 		LegoSet* set = new LegoSet(this);
-		set->setSetNumber(legoSetArray[index][SetNumberName].toInt());
+		set->setSetNumber(setNum);
 
 		if (obj.contains(PurchasingPriceName) && obj[PurchasingPriceName].isDouble())
 			set->setPurchasingPrice(obj[PurchasingPriceName].toDouble());
@@ -97,6 +111,7 @@ bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 	}
 
 	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+	emit resetLegoSets();
 	return true;
 }
 

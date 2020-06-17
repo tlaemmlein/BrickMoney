@@ -51,6 +51,7 @@ public:
 
 signals:
     void dataSourceChanged(LegoSetDataSource* dataSource);
+	void modelReset();
 
 
 private:
