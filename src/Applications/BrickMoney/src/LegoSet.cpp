@@ -7,14 +7,49 @@
 int LegoSet::IDCOUNTER = 0;
 
 
-QString getName(LegoSetProperty prop)
+QString displayName(LegoSetProperty prop)
 {
-    return magic_enum::enum_name(prop).data();
+    switch (prop) {
+    case id:
+        return QT_TR_NOOP("ID");
+    case setNumber:
+        return QT_TR_NOOP("Set");
+    case imageUrl:
+        return QT_TR_NOOP("Image");
+    case description:
+        return QT_TR_NOOP("Description");
+    case year:
+        return QT_TR_NOOP("Year");
+    case recommendedRetailPrice:
+        return QT_TR_NOOP("RRPrice €");
+    case purchasingPrice:
+        return QT_TR_NOOP("Purchasing Price €");
+    case cheaperPercent:
+        return QT_TR_NOOP("Cheaper %");
+    case seller:
+        return QT_TR_NOOP("Seller");
+    case purchaseDate:
+        return QT_TR_NOOP("Purchase Date");
+    case retailPrice:
+        return QT_TR_NOOP("Retail Price €");
+    case profitEuros:
+        return QT_TR_NOOP("Profit €");
+    case profitPercent:
+        return QT_TR_NOOP("Profit %");
+    case saleDate:
+        return QT_TR_NOOP("Sale Date");
+    case soldOver:
+        return QT_TR_NOOP("Sold over");
+    case buyer:
+        return QT_TR_NOOP("Buyer");
+    case COUNT:
+        return "Count";
+    }
 }
 
 QVariant LegoSet::getVariant(LegoSetProperty prop)
 {
-    return this->property(getName(prop).toUtf8());
+    return this->property(magic_enum::enum_name(prop).data());
 }
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)

@@ -26,7 +26,7 @@ enum LegoSetProperty {
     COUNT
 };
 
-QString getName(LegoSetProperty prop);
+QString displayName(LegoSetProperty prop);
 
 
 class LegoSet : public QObject

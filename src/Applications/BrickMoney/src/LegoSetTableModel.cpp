@@ -111,7 +111,7 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 
     if (orientation == Qt::Horizontal) {
         // section is interpreted as column
-        return getName(LegoSetProperty(section));
+        return displayName(LegoSetProperty(section));
     } else {
         return QString();
     }
@@ -122,7 +122,7 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
 int LegoSetTableModel::columnWidth(int c, const QFont *font)
 {
     //if (!m_columnWidths[c]) {
-        QString header = getName(LegoSetProperty(c));
+        QString header = displayName(LegoSetProperty(c));
 
         QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
         QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
