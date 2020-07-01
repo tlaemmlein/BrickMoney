@@ -76,47 +76,6 @@ Rectangle {
                 }
             }
 
-            Slider {
-                Text {
-                    id: zoomText
-                    text: zoomSlider.value +"%"
-                }
-                id: zoomSlider
-                objectName: "zoomSlider"
-                Component.onDestruction: BrickMoneySettings.zoomFactor = value
-
-                wheelEnabled: true
-                anchors.verticalCenter: parent.verticalCenter
-                stepSize: 10
-                from: 10
-                value: BrickMoneySettings.zoomFactor
-                to: 300
-            }
-
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Details
-                text: qsTr("Details")
-                onCheckedChanged: {
-                    if (checked){
-                        //legoTable.viewSettings = LegoList.ViewSettings.Details
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
-                    }
-                }
-            }
-
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Compact
-                text: qsTr("Compact")
-                onCheckedChanged: {
-                    if (checked){
-                        legoTable.viewSettings = LegoList.ViewSettings.Compact
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Compact
-                    }
-                }
-            }
-
             Button {
                 id: forceLayoutBt
                 text: qsTr("force Layout")
