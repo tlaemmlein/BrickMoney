@@ -45,6 +45,8 @@ QString displayName(LegoSetProperty prop)
     case COUNT:
         return "Count";
     }
+
+    return "";
 }
 
 QVariant LegoSet::getVariant(LegoSetProperty prop)
