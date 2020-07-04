@@ -30,7 +30,8 @@ Item {
             model: legoTableView.model.columnCount()
             SortableColumnHeading {
                 //table: legoTableView
-                initialWidth: Math.min(600, legoTableView.model.columnWidth(index)); height: parent.height
+                initialWidth: Math.min(600, legoTableView.model.columnWidth(index))
+                height: parent.height
                 text: legoTableView.model.headerData(index, Qt.Horizontal)
                 initialSortOrder: legoTableView.model.initialSortOrder(index)
                 onSorting: {
@@ -104,6 +105,26 @@ Item {
                 }
             }
 
+            DelegateChoice {
+                roleValue: "readonlydouble"
+                Rectangle {
+                    color: "#EEE"
+                    implicitHeight: textDouble.implicitHeight
+                    Text {
+                        id: textDouble
+                        anchors.fill: parent
+                        horizontalAlignment : Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
+                        elide: column == 49 ? Text.ElideLeft : Text.ElideRight
+                        font.preferShaping: false
+                        text: {
+                            var number = model.display
+                            number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
+                            return number
+                        }
+                    }
+                }
+            }
 
             DelegateChoice{
                 Rectangle {
@@ -112,8 +133,9 @@ Item {
                     Text {
                         id: text
                         text: model.display
-                        width: parent.width
+                        anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
+                        verticalAlignment: Text.AlignVCenter
                         elide: column == 49 ? Text.ElideLeft : Text.ElideRight
                         font.preferShaping: false
                     }

@@ -76,12 +76,13 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
         case id:
         case setNumber:
         case description:
-        case cheaperPercent:
         case year:
+            return QLatin1String("readonly");
+        case cheaperPercent:
         case recommendedRetailPrice:
         case profitEuros:
         case profitPercent:
-            return QLatin1String("readonly");
+            return QLatin1String("readonlydouble");
         case imageUrl:
             return QLatin1String("image");
         case seller:
@@ -132,8 +133,12 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
                 val = set->getVariant(LegoSetProperty(c)).toString();
-            //qDebug() << val;
+            if ( LegoSetProperty(c) == LegoSetProperty::purchaseDate
+                 || LegoSetProperty(c) == LegoSetProperty::saleDate)
+                val += "Date";
+            qDebug() << val;
             ret = qMax(ret, fm.horizontalAdvance(val));
+            qDebug() << ret;
         }
         m_columnWidths[c] = ret;
     //}
