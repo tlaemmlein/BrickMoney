@@ -109,9 +109,9 @@ Item {
                 roleValue: "readonlydouble"
                 Rectangle {
                     color: "#EEE"
-                    implicitHeight: textDouble.implicitHeight
+                    implicitHeight: textReadOnlyDouble.implicitHeight
                     Text {
-                        id: textDouble
+                        id: textReadOnlyDouble
                         anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
@@ -125,6 +125,41 @@ Item {
                     }
                 }
             }
+
+            DelegateChoice {
+                roleValue: "double"
+                Rectangle {
+                    color: "#EEE"
+                    implicitHeight: textDouble.implicitHeight
+                    TextField {
+                        id: textDouble
+                        background: Rectangle {
+                            color:   textDouble.activeFocus ? "white" : "transparent"
+                            border.color: textDouble.activeFocus ? "#21be2b" : "transparent"
+                        }
+
+                        anchors.fill: parent
+                        horizontalAlignment: Qt.AlignRight
+                        validator: DoubleValidator {bottom: 0.0; top: 1000000.0;}
+                        selectByMouse: true
+                        font.pixelSize: 12
+                        property double value: parseFloat(text)
+                        text: {
+                            var number = model.display
+                            number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
+                            return number
+                        }
+                        onEditingFinished:  model.display = value
+                        Keys.onEscapePressed: focus = false
+                        onActiveFocusChanged: {
+                            if (activeFocus) {
+                                selectAll()
+                            }
+                        }
+                    }
+                }
+            }
+
 
             DelegateChoice{
                 Rectangle {

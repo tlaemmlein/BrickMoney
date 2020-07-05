@@ -29,7 +29,7 @@ QString displayName(LegoSetProperty prop)
     case seller:
         return QT_TR_NOOP("Seller");
     case purchaseDate:
-        return QT_TR_NOOP("PDate");
+        return QT_TR_NOOP("Purchase Date");
     case retailPrice:
         return QT_TR_NOOP("Retail Price €");
     case profitEuros:

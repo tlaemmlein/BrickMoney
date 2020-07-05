@@ -136,9 +136,9 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             if ( LegoSetProperty(c) == LegoSetProperty::purchaseDate
                  || LegoSetProperty(c) == LegoSetProperty::saleDate)
                 val += "Date";
-            qDebug() << val;
+            //qDebug() << val;
             ret = qMax(ret, fm.horizontalAdvance(val));
-            qDebug() << ret;
+            //qDebug() << ret;
         }
         m_columnWidths[c] = ret;
     //}
