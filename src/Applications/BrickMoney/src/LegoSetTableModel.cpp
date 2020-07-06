@@ -56,18 +56,18 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case Qt::DisplayRole:
-        return set->getVariant(LegoSetProperty(c));
+        return set->data(LegoSetProperty(c));
     case Qt::InitialSortOrderRole: {
         bool numeric = false;
-        set->getVariant(LegoSetProperty(c)).toFloat(&numeric);
+        set->data(LegoSetProperty(c)).toFloat(&numeric);
         if (numeric)
             return Qt::DescendingOrder;
         return Qt::AscendingOrder;
     }
     case int(LegoSetTableModel::Role::Sort):
-        return set->getVariant(LegoSetProperty(c));
+        return set->data(LegoSetProperty(c));
     case int(LegoSetTableModel::Role::Number):
-        return set->getVariant(LegoSetProperty(c)).toDouble();
+        return set->data(LegoSetProperty(c)).toDouble();
     case int(LegoSetTableModel::Role::Type):
     {
         // TODO this is silly: make a virtual in the Category perhaps?
@@ -132,7 +132,7 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             LegoSet* set = m_dataSource->legoSetAt(r);
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
-                val = set->getVariant(LegoSetProperty(c)).toString();
+                val = set->data(LegoSetProperty(c)).toString();
             if ( LegoSetProperty(c) == LegoSetProperty::purchaseDate
                  || LegoSetProperty(c) == LegoSetProperty::saleDate)
                 val += "Date";
@@ -147,18 +147,30 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
 }
 
 
-bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant &/*value*/, int role)
+bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant & value, int role)
 {
 	LOG_SCOPE_METHOD(L"");
 
-    LOG_TRACE("role: " << role << " r: " << index.row() << " c: " << index.column());
+	const int row = index.row();
+	const int col = index.column();
+
+    LOG_TRACE("role: " << role << " r: " << row << " c: " << col);
     if (!index.isValid() )
         return false;
 
-    //LegoSet *set = m_dataSource->legoSetAt(index.row());
+    LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    return true;
+    if (set->setData(LegoSetProperty(col), value))
+	{
+		QModelIndex startOfRow = this->index(row, 0);
+		QModelIndex endOfRow = this->index(row, LegoSetProperty::COUNT-1);
+		emit dataChanged(startOfRow, endOfRow);
+		return true;
+	}
+
+	return false;
 }
+
 
 LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
 {

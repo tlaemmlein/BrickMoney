@@ -49,9 +49,14 @@ QString displayName(LegoSetProperty prop)
     return "";
 }
 
-QVariant LegoSet::getVariant(LegoSetProperty prop)
+QVariant LegoSet::data(LegoSetProperty prop)
 {
     return this->property(magic_enum::enum_name(prop).data());
+}
+
+bool LegoSet::setData(LegoSetProperty prop, const QVariant& data)
+{
+	return this->setProperty(magic_enum::enum_name(prop).data(), data);
 }
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)

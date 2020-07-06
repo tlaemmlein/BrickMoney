@@ -149,7 +149,7 @@ Item {
                             number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
                             return number
                         }
-                        onEditingFinished:  model.display = value
+                        onEditingFinished:  {model.display = value; focus = false}
                         Keys.onEscapePressed: focus = false
                         onActiveFocusChanged: {
                             if (activeFocus) {

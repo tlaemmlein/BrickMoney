@@ -53,7 +53,9 @@ class LegoSet : public QObject
 
 public:
 
-    QVariant getVariant(LegoSetProperty prop);
+    QVariant data(LegoSetProperty prop);
+
+	bool setData(LegoSetProperty prop, const QVariant& data);
 
     explicit LegoSet(QObject *parent = nullptr);
     LegoSet(int setNumber, QObject *parent = nullptr);
