@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.4
 import QtQuick.Layouts 1.12
 import Qt.labs.qmlmodels 1.0
+import QtQml 2.15
 
 import "helper/"
 
@@ -52,6 +53,7 @@ Item {
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
         ScrollBar.horizontal: ScrollBar {contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
+		property var locale: Qt.locale()
 
 		Component.onCompleted: {
             model.modelReset.connect(refresh)
@@ -140,17 +142,19 @@ Item {
 
                         anchors.fill: parent
                         horizontalAlignment: Qt.AlignRight
-                        validator: DoubleValidator {bottom: 0.0; top: 1000000.0;}
+                        validator: DoubleValidator {bottom: 0.0; top: 1000000.0; decimals: 2}
                         selectByMouse: true
                         font.pixelSize: 12
-                        property double value: parseFloat(text)
+						property string initValue
                         text: {
                             var number = model.display
+							console.log("locale: " +locale)
                             number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
+							initValue = number
                             return number
                         }
-                        onEditingFinished:  {model.display = value; focus = false}
-                        Keys.onEscapePressed: focus = false
+                        onEditingFinished:  {model.display = Number.fromLocaleString(locale, text); focus = false}
+                        Keys.onEscapePressed:{ text = initValue; focus = false }
                         onActiveFocusChanged: {
                             if (activeFocus) {
                                 selectAll()
