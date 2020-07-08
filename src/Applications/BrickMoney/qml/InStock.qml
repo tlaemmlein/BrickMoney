@@ -7,7 +7,6 @@ import "helper/"
 Rectangle {
     id: inStock
     objectName: "inStock"
-    //color: "#0511F2"
 
     Component.onCompleted: {
         console.log(objectName + ":onCompleted")
@@ -53,7 +52,8 @@ Rectangle {
             spacing: 5
 			Text {
 			  text: qsTr("In Stock")
-			  font.pointSize: 24
+              font.pointSize: 14
+              height: 0.8 * buttonBarChangeSetList.height
 			  verticalAlignment : Text.AlignVCenter
 			}
 
@@ -67,29 +67,87 @@ Rectangle {
             RoundButton{
                 id: addButton
                 text: qsTr("Add")
+                background: Rectangle { id: addButtonRect; color: "lightgreen";  radius: addButton.radius; opacity: .8; border.width: 0;}
+                onHoveredChanged: {
+                    if (hovered){
+                        addButtonRect.opacity = 1
+                        addButtonRect.border.width = 1
+                    } else {
+                        addButtonRect.opacity = .8
+                        addButtonRect.border.width = 0
+                        addButtonRect.color = "lightgreen"
+                    }
+                }
+                onPressed:  addButtonRect.color = "lightgrey"
+                onReleased: addButtonRect.color = "lightgreen"
+
                 highlighted: true
                 anchors.verticalCenter: parent.verticalCenter
-                height: 40
+                height: 0.8 * buttonBarChangeSetList.height
                 onClicked: {
                     var dg = newLegoSetComp.createObject(this)
                     dg.openDialog()
                 }
             }
 
-            Button {
+            RoundButton{
                 id: forceLayoutBt
-                text: qsTr("force Layout")
+                text: qsTr("Force Layout")
+                background: Rectangle { id: forceLayoutLegoSetRect; color: "lightblue";  radius: forceLayoutBt.radius; opacity: .8; border.width: 0;}
+                onHoveredChanged: {
+                    if (hovered){
+                        forceLayoutLegoSetRect.opacity = 1
+                        forceLayoutLegoSetRect.border.width = 1
+                    } else {
+                        forceLayoutLegoSetRect.opacity = .8
+                        forceLayoutLegoSetRect.border.width = 0
+                        forceLayoutLegoSetRect.color = "lightblue"
+                    }
+                }
+                onPressed:  forceLayoutLegoSetRect.color = "lightgrey"
+                onReleased: forceLayoutLegoSetRect.color = "lightblue"
+
                 onClicked: legoTable.forceLayout()
+                highlighted: true
+                anchors.verticalCenter: parent.verticalCenter
+                height: 0.8 * buttonBarChangeSetList.height
             }
 
-            Button {
+            RoundButton{
                 id: resizeCols
-                text: qsTr("Resize cols")
+                text: qsTr("Resize Cols")
+
+                background: Rectangle { id: resizeColsRect; color: "lightblue";  radius: resizeCols.radius; opacity: .8; border.width: 0;}
+                onHoveredChanged: {
+                    if (hovered){
+                        resizeColsRect.opacity = 1
+                        resizeColsRect.border.width = 1
+                    } else {
+                        resizeColsRect.opacity = .8
+                        resizeColsRect.border.width = 0
+                        resizeColsRect.color = "lightblue"
+                    }
+                }
+                onPressed:  resizeColsRect.color = "lightgrey"
+                onReleased: resizeColsRect.color = "lightblue"
+
+                highlighted: true
+                anchors.verticalCenter: parent.verticalCenter
+                height: 0.8 * buttonBarChangeSetList.height
                 onClicked: legoTable.resizeCols()
+            }
+
+            Text {
+              text: qsTr("Filter:")
+              font.pointSize: 14
+              height: 0.8 * buttonBarChangeSetList.height
+              verticalAlignment : Text.AlignVCenter
             }
 
             TextField {
                 id: tfFilter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 0.8 * buttonBarChangeSetList.height
                 implicitWidth: parent.width / 4
                 onTextEdited: legoTable.contentY = 0
             }
@@ -110,6 +168,5 @@ Rectangle {
                  InStockLegoSetTableSortModel.filterText = tfFilter.text
                  return InStockLegoSetTableSortModel
         }
-        //zoom: zoomSlider.value
     }
 }

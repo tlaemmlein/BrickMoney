@@ -18,6 +18,15 @@ Item {
         legoTableView.forceLayout()
     }
 
+    QtObject {
+        id: theme
+        property font tableFont: Qt.font({
+            //family: 'Encode Sans',
+            //weight: Font.Black,
+            //italic: false,
+            pointSize: 8
+        })
+    }
 
     Row {
         id: header
@@ -31,7 +40,7 @@ Item {
             model: legoTableView.model.columnCount()
             SortableColumnHeading {
                 //table: legoTableView
-                initialWidth: Math.min(600, legoTableView.model.columnWidth(index))
+                initialWidth: Math.min(600, legoTableView.model.columnWidth(index, theme.tableFont))
                 height: parent.height
                 text: legoTableView.model.headerData(index, Qt.Horizontal)
                 initialSortOrder: legoTableView.model.initialSortOrder(index)
@@ -63,7 +72,7 @@ Item {
 		function refresh() {
             console.log("refresh")
             for ( var index = 0; index < model.columnCount(); ++index) {
-                var width = Math.min(600, model.columnWidth(index))
+                var width = Math.min(600, model.columnWidth(index, theme.tableFont))
                 //console.log(index + " " + width)
                 headerRepeater.itemAt(index).setWidth(width)
             }
@@ -118,7 +127,7 @@ Item {
                         horizontalAlignment : Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         elide: column == 49 ? Text.ElideLeft : Text.ElideRight
-                        font.preferShaping: false
+                        font: theme.tableFont
                         text: {
                             var number = model.display
                             number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
@@ -144,7 +153,7 @@ Item {
                         horizontalAlignment: Qt.AlignRight
                         validator: DoubleValidator {bottom: 0.0; top: 1000000.0; decimals: 2}
                         selectByMouse: true
-                        font.pixelSize: 12
+                        font: theme.tableFont
 						property string initValue
                         text: {
                             var number = model.display
@@ -178,9 +187,12 @@ Item {
                         anchors.fill: parent
                         horizontalAlignment: Qt.AlignRight
                         selectByMouse: true
-                        font.pixelSize: 12
+                        font: theme.tableFont
 						property string initValue
-                        text: { initValue = model.display; return initValue}
+                        text: {
+                            initValue = model.display
+                            return initValue
+                        }
                         onEditingFinished:  {model.display = text; focus = false}
                         Keys.onEscapePressed:{ text = initValue; focus = false }
                         onActiveFocusChanged: {
@@ -199,11 +211,11 @@ Item {
                     Text {
                         id: text
                         text: model.display
+                        font: theme.tableFont
                         anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
                         elide: column == 49 ? Text.ElideLeft : Text.ElideRight
-                        font.preferShaping: false
                     }
                 }
             }

@@ -127,24 +127,44 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
 
         QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
         QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
+
         int ret = fm.horizontalAdvance(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;
         for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
             LegoSet* set = m_dataSource->legoSetAt(r);
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
+            {
                 val = set->data(LegoSetProperty(c)).toString();
-            //qDebug() << val;
-            ret = qMax(ret, fm.horizontalAdvance(val));
-			if (LegoSetProperty(c) == LegoSetProperty::purchaseDate
-				|| LegoSetProperty(c) == LegoSetProperty::saleDate)
-				ret += 20;
-			if (LegoSetProperty(c) == LegoSetProperty::buyer
-				|| LegoSetProperty(c) == LegoSetProperty::seller
-				|| LegoSetProperty(c) == LegoSetProperty::soldOver)
-				ret += 25;
+            }
 
-			//qDebug() << ret;
+            if (LegoSetProperty(c) == LegoSetProperty::recommendedRetailPrice
+                || LegoSetProperty(c) == LegoSetProperty::purchasingPrice
+                || LegoSetProperty(c) == LegoSetProperty::cheaperPercent
+                || LegoSetProperty(c) == LegoSetProperty::retailPrice
+                || LegoSetProperty(c) == LegoSetProperty::profitEuros
+                || LegoSetProperty(c) == LegoSetProperty::profitPercent)
+            {
+                double d = set->data(LegoSetProperty(c)).toDouble();
+                val = QString::number(d, 'f', 2);
+            }
+            //qDebug() << val;
+
+            ret = qMax(ret, fm.horizontalAdvance(val));
+
+            //qDebug() << ret;
         }
+        int additionalWidth = 0;
+        if (LegoSetProperty(c) == LegoSetProperty::purchaseDate
+            || LegoSetProperty(c) == LegoSetProperty::saleDate)
+            additionalWidth = 10;
+        if (LegoSetProperty(c) == LegoSetProperty::description
+            || LegoSetProperty(c) == LegoSetProperty::buyer
+            || LegoSetProperty(c) == LegoSetProperty::seller
+            || LegoSetProperty(c) == LegoSetProperty::soldOver)
+            additionalWidth = 20;
+        ret += additionalWidth;
+        //qDebug() << "result: " << ret;
+
         m_columnWidths[c] = ret;
     //}
     //qDebug() << "c: " << c << " ret: " << ret;
