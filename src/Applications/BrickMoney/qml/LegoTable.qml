@@ -111,9 +111,9 @@ Item {
                 roleValue: "readonlydouble"
                 Rectangle {
                     color: "#EEE"
-                    implicitHeight: textReadOnlyDouble.implicitHeight
+                    implicitHeight: textReadOnlyDoubleID.implicitHeight
                     Text {
-                        id: textReadOnlyDouble
+                        id: textReadOnlyDoubleID
                         anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
@@ -132,12 +132,12 @@ Item {
                 roleValue: "double"
                 Rectangle {
                     color: "#EEE"
-                    implicitHeight: textDouble.implicitHeight
+                    implicitHeight: textDoubleID.implicitHeight
                     TextField {
-                        id: textDouble
+                        id: textDoubleID
                         background: Rectangle {
-                            color:   textDouble.activeFocus ? "white" : "transparent"
-                            border.color: textDouble.activeFocus ? "#21be2b" : "transparent"
+                            color:   textDoubleID.activeFocus ? "white" : "transparent"
+                            border.color: textDoubleID.activeFocus ? "#21be2b" : "transparent"
                         }
 
                         anchors.fill: parent
@@ -163,6 +163,34 @@ Item {
                 }
             }
 
+            DelegateChoice {
+                roleValue: "text"
+                Rectangle {
+                    color: "#EEE"
+                    implicitHeight: textID.implicitHeight
+                    TextField {
+                        id: textID
+                        background: Rectangle {
+                            color:   textID.activeFocus ? "white" : "transparent"
+                            border.color: textID.activeFocus ? "#21be2b" : "transparent"
+                        }
+
+                        anchors.fill: parent
+                        horizontalAlignment: Qt.AlignRight
+                        selectByMouse: true
+                        font.pixelSize: 12
+						property string initValue
+                        text: { initValue = model.display; return initValue}
+                        onEditingFinished:  {model.display = text; focus = false}
+                        Keys.onEscapePressed:{ text = initValue; focus = false }
+                        onActiveFocusChanged: {
+                            if (activeFocus) {
+                                selectAll()
+                            }
+                        }
+                    }
+                }
+            }
 
             DelegateChoice{
                 Rectangle {

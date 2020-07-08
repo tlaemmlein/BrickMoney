@@ -133,12 +133,17 @@ int LegoSetTableModel::columnWidth(int c, const QFont *font)
             QString val = "image";
             if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
                 val = set->data(LegoSetProperty(c)).toString();
-            if ( LegoSetProperty(c) == LegoSetProperty::purchaseDate
-                 || LegoSetProperty(c) == LegoSetProperty::saleDate)
-                val += "Date";
             //qDebug() << val;
             ret = qMax(ret, fm.horizontalAdvance(val));
-            //qDebug() << ret;
+			if (LegoSetProperty(c) == LegoSetProperty::purchaseDate
+				|| LegoSetProperty(c) == LegoSetProperty::saleDate)
+				ret += 20;
+			if (LegoSetProperty(c) == LegoSetProperty::buyer
+				|| LegoSetProperty(c) == LegoSetProperty::seller
+				|| LegoSetProperty(c) == LegoSetProperty::soldOver)
+				ret += 25;
+
+			//qDebug() << ret;
         }
         m_columnWidths[c] = ret;
     //}
