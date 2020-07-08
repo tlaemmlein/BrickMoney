@@ -160,15 +160,15 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant & value
 
     LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    if (set->setData(LegoSetProperty(col), value))
+	if (!set->setData(LegoSetProperty(col), value))
 	{
-		QModelIndex startOfRow = this->index(row, 0);
-		QModelIndex endOfRow = this->index(row, LegoSetProperty::COUNT-1);
-		emit dataChanged(startOfRow, endOfRow);
-		return true;
+		return false;
 	}
 
-	return false;
+	QModelIndex startOfRow = this->index(row, 0);
+	QModelIndex endOfRow = this->index(row, LegoSetProperty::COUNT - 1);
+	emit dataChanged(startOfRow, endOfRow);
+	return true;
 }
 
 

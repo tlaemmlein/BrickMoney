@@ -56,6 +56,9 @@ QVariant LegoSet::data(LegoSetProperty prop)
 
 bool LegoSet::setData(LegoSetProperty prop, const QVariant& data)
 {
+	if (this->property(magic_enum::enum_name(prop).data()) == data)
+		return false;
+
 	return this->setProperty(magic_enum::enum_name(prop).data(), data);
 }
 

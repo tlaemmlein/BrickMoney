@@ -148,7 +148,6 @@ Item {
 						property string initValue
                         text: {
                             var number = model.display
-							console.log("locale: " +locale)
                             number =  number !== null ? number.toLocaleString(locale, 'f', 2) : 0.0;
 							initValue = number
                             return number
