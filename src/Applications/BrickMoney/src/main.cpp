@@ -47,12 +47,6 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
-    QIcon appIcon(":/images/LogoBrickMoneyIcon_16.png");
-    appIcon.addFile(":/images/LogoBrickMoneyIcon_32.png");
-    appIcon.addFile(":/images/LogoBrickMoneyIcon_48.png");
-    appIcon.addFile(":/images/LogoBrickMoneyIcon_64.png");
-    app.setWindowIcon(appIcon);
-
     QCoreApplication::setApplicationName("BrickMoney");
 
     qRegisterMetaType<QDoubleValueArg *>("QDoubleValueArg *");

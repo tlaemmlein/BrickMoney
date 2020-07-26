@@ -65,6 +65,7 @@ add_executable(${PROJECT_NAME}
     ${QML_FILES}
     ${QML_HELPER_FILES}
     ${QML_SANDBOX_FILES}
+    images/BrickMoney.rc
 )
 
 source_group("Qml Files" FILES ${QML_FILES})
