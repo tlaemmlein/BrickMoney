@@ -15,10 +15,10 @@ ApplicationWindow {
     visible: true
     width: 1600
     height: 600
-    //title: qsTr("BrickMoney Vers. 0.2 - The software for LEGO Investment")
+    title: qsTr("BrickMoney Vers. 0.2 - The software for LEGO Investment")
 
     Component.onCompleted: {
-        console.log(objectName + ":onCompleted")
+        //console.log(objectName + ":onCompleted")
         var rect = BrickMoneySettings.mainWindow
         mainWindow.x = rect.x
         mainWindow.y = rect.y
@@ -34,7 +34,7 @@ ApplicationWindow {
                 text: qsTr("&Load project")
                 icon.source: "qrc:/images/load.svg"
                 onTriggered: {
-                    console.log("Clicked on load")
+                    //console.log("Clicked on load")
                     loadFileDialog.open()
                 }
             }
@@ -45,7 +45,7 @@ ApplicationWindow {
                 icon.source: "qrc:/images/save.svg"
                 enabled: BrickMoneySettings.brickMoneyIsDirty
                 onTriggered: {
-                    console.log("Clicked on save")
+                    //console.log("Clicked on save")
                     BrickMoneyProject.save()
                 }
             }
@@ -53,7 +53,7 @@ ApplicationWindow {
                 id : saveAsActionId
                 text: qsTr("&Save project as...")
                 onTriggered: {
-                    console.log("Clicked on save as")
+                    //console.log("Clicked on save as")
                     saveAsFileDialog.open()
                 }
             }
@@ -68,7 +68,7 @@ ApplicationWindow {
         fileMode: QP.FileDialog.OpenFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
-            console.log(objectName + ": onAccepted: You choose: " + currentFile)
+            //console.log(objectName + ": onAccepted: You choose: " + currentFile)
 
             if ( !BrickMoneyProject.checkBrickMoneyProject(currentFile ) )
             {
@@ -81,7 +81,7 @@ ApplicationWindow {
             BrickMoneyProject.load()
         }
         onRejected: {
-            console.log(objectName + ":Canceled")
+            //console.log(objectName + ":Canceled")
         }
     }
 
@@ -93,12 +93,12 @@ ApplicationWindow {
         fileMode: QP.FileDialog.SaveFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
-            console.log(objectName + ": onAccepted: You choose: " + currentFile)
+            //console.log(objectName + ": onAccepted: You choose: " + currentFile)
             BrickMoneySettings.brickMoneyFilePath = currentFile
             BrickMoneyProject.save()
         }
         onRejected: {
-            console.log(objectName + ":Canceled")
+            //console.log(objectName + ":Canceled")
         }
     }
 

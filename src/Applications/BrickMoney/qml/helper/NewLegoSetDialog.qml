@@ -198,7 +198,7 @@ Item {
         }
 
         Component.onCompleted: {
-            console.log(objectName + ":onCompleted")
+            //console.log(objectName + ":onCompleted")
             LegoSetInfoGenerator.setNumber.connect(onLegoSetNumber)
             LegoSetInfoGenerator.imageUrl.connect(onLegoSetImageUrl)
             LegoSetInfoGenerator.description.connect(onLegoSetDescription)
@@ -207,7 +207,7 @@ Item {
             LegoSetInfoGenerator.setNumberNotFound.connect(onSetNumberNotFound)
         }
 
-        Component.onDestruction: console.log(objectName + ":onDestruction")
+        //Component.onDestruction: console.log(objectName + ":onDestruction")
 
         function onLegoSetNumber(setnum)
         {

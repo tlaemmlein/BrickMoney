@@ -18,7 +18,7 @@ Item {
         clip: true
         cacheBuffer: 1000
 
-        Component.onCompleted: console.log("ViewSetting " + viewSettings)
+        //Component.onCompleted: console.log("ViewSetting " + viewSettings)
 
         property int zoom
         property real zFactor: zoom/100

@@ -10,7 +10,7 @@ Item {
     property alias model : legoTableView.model
     property alias contentY : legoTableView.contentY
     function resizeCols() {
-        console.log("resizeCols")
+        //console.log("resizeCols")
 		legoTableView.refresh()
     }
 
@@ -70,7 +70,7 @@ Item {
 
 
 		function refresh() {
-            console.log("refresh")
+            //console.log("refresh")
             for ( var index = 0; index < model.columnCount(); ++index) {
                 var width = Math.min(600, model.columnWidth(index, theme.tableFont))
                 //console.log(index + " " + width)

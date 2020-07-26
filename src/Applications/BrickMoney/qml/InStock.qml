@@ -9,10 +9,10 @@ Rectangle {
     objectName: "inStock"
 
     Component.onCompleted: {
-        console.log(objectName + ":onCompleted")
+        //console.log(objectName + ":onCompleted")
     }
     Component.onDestruction:  {
-        console.log(objectName + ":onDestruction")
+        //console.log(objectName + ":onDestruction")
 		if ( newLegoSetDialog != null) {
 			newLegoSetDialog.destroy()
 		}
@@ -24,12 +24,12 @@ Rectangle {
             id : newLegoSetDialog
             objectName: "newLegoSetDialog"
             onAddLegoSetNumber:{
-                console.log(objectName + ":onAddLegoSetNumber")
+                //console.log(objectName + ":onAddLegoSetNumber")
                 var legoSet = InStockLegoSetTableModel.addLegoSet(setNumber)
                 legoSet.purchaseDate = purchaseDate
                 legoSet.purchasingPrice = purchasingPrice
                 legoSet.seller = seller
-                console.log(objectName + "seller: " + seller)
+                //console.log(objectName + "seller: " + seller)
             }
         }
 

@@ -9,10 +9,10 @@ Rectangle {
     color: "#494FBF"
 
     Component.onCompleted: {
-        console.log(objectName + ":onCompleted")
+        //console.log(objectName + ":onCompleted")
     }
     Component.onDestruction:  {
-        console.log(objectName + ":onDestruction")
+        //console.log(objectName + ":onDestruction")
     }
 
     Rectangle {
