@@ -1,20 +1,18 @@
-In Stock, For Sale und Sold funktionieren (zeigen die Anzahl der Sets an)
-Löschen
-Verschieben
-Übersetzung
-Schönes Icon
-In Stock: Nur bis Seller sichtbar
-For Sale: Spalte "For Sale Date" hinzufügen
-Sold: Alles sichtbar
+TODO:
 
-Load und Save Project funktionieren
+* In Stock, For Sale und Sold funktionieren (zeigen die Anzahl der Sets an)
+* Löschen
+* Verschieben
+* Übersetzung
+* In Stock: Nur bis Seller sichtbar
+* For Sale: Spalte "For Sale Date" hinzufügen
+* Sold: Alles sichtbar
+* Load und Save Project funktionieren
+* Installer für Windows
+* Overview: Zeigt die Anzahl der kompletten und jeweiligen Zustände Sets an + Ein bisschen Statistik
 
-Installer für Windows
+DONE:
 
-Overview: Zeigt die Anzahl der kompletten und jeweiligen Zustände Sets an
-Ein bisschen Statistik
-
-Fertig!
-
+* Schönes Application Icon
 
 
