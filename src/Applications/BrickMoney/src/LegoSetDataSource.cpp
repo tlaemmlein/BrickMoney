@@ -22,6 +22,7 @@ const QString LegoSetDataSource::BuyerName = "Buyer";
 
 
 LegoSetDataSource::LegoSetDataSource(QObject *parent) : QObject(parent)
+    , m_SelectedLegoSets(0)
 {
 
 }
@@ -30,15 +31,42 @@ void LegoSetDataSource::addLegoSet(LegoSet *set)
 {
     emit preLegoSetAdded();
     m_legoSets.append(set);
+    connectSelection(set);
     emit postLegoSetAdded();
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-void LegoSetDataSource::removeLegoSet(int index)
+QString LegoSetDataSource::getSelectedLegoSetIDs()
 {
-    emit preLegoSetRemoved(index);
-    m_legoSets.removeAt(index);
-    emit postLegoSetRemoved();
+    QString IDs;
+
+    for (const auto& set : m_legoSets)
+    {
+        if (set->isSelected())
+            IDs += QString::number(set->id()) + " ";
+    }
+
+    return IDs;
+}
+
+
+void LegoSetDataSource::removeSelectedLegoSets()
+{
+    QVector<LegoSet*> selectedSets;
+
+    for (const auto& set : m_legoSets)
+        if (set->isSelected())
+            selectedSets.push_back(set);
+
+    for (const auto& set : selectedSets)
+    {
+        int index = m_legoSets.indexOf(set);
+        emit preLegoSetRemoved(index);
+        m_legoSets.removeAt(index);
+        emit postLegoSetRemoved();
+    }
+    m_SelectedLegoSets = 0;
+    emit selectionIsDirtyChanged(false);
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
@@ -55,6 +83,7 @@ LegoSet *LegoSetDataSource::legoSetAt(int index)
 void LegoSetDataSource::clearLegoSets()
 {
     m_legoSets.clear();
+    m_SelectedLegoSets = 0;
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
@@ -148,7 +177,29 @@ bool LegoSetDataSource::write(QJsonArray &legoSetArray)
 		legoSetArray.append(obj);
 	}
 	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
-	return true;
+    return true;
+}
+
+bool LegoSetDataSource::selectionIsDirty()
+{
+    return m_SelectedLegoSets > 0;
 }
 
 
+void LegoSetDataSource::connectSelection(LegoSet *set)
+{
+    connect(set, &LegoSet::isSelectedChanged, [&](bool selected) {
+        const int previous = m_SelectedLegoSets;
+        m_SelectedLegoSets = selected ? ++m_SelectedLegoSets : --m_SelectedLegoSets;
+        if (previous == 0)
+            emit selectionIsDirtyChanged(true);
+        if (previous == 1 && m_SelectedLegoSets == 0)
+            emit selectionIsDirtyChanged(false);
+    } );
+
+    if (set->isSelected())
+    {
+        ++m_SelectedLegoSets;
+        emit selectionIsDirtyChanged(true);
+    }
+}

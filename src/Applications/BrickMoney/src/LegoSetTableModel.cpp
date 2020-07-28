@@ -200,14 +200,18 @@ LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
 
     m_dataSource->addLegoSet( set );
 
-	return set;
+    return set;
 }
 
-void LegoSetTableModel::removeLegoSet(int rowIndex)
+QString LegoSetTableModel::getSelectedLegoSetIDs()
 {
-	LOG_SCOPE_METHOD(L"");
+    return m_dataSource->getSelectedLegoSetIDs();
+}
 
-    m_dataSource->removeLegoSet(rowIndex);
+void LegoSetTableModel::removeSelectedLegoSets()
+{
+    LOG_SCOPE_METHOD(L"");
+    m_dataSource->removeSelectedLegoSets();
 }
 
 void LegoSetTableModel::clearAll()
@@ -220,6 +224,11 @@ void LegoSetTableModel::clearAll()
         m_columnWidths[i] = 0;
     endResetModel();
 	emit modelReset();
+}
+
+bool LegoSetTableModel::selectionIsDirty() const
+{
+    return m_SelectionIsDirty;
 }
 
 
@@ -252,6 +261,13 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 	connect(m_dataSource, &LegoSetDataSource::resetLegoSets, this, [=]() {
 		emit modelReset();
 	});
+
+    connect(m_dataSource, &LegoSetDataSource::selectionIsDirtyChanged, [&] (bool isDirty) {
+        m_SelectionIsDirty = isDirty;
+        emit selectionIsDirtyChanged(isDirty);
+        });
+
+    m_SelectionIsDirty = m_dataSource->selectionIsDirty();
 
     m_signalConnected = true;
 

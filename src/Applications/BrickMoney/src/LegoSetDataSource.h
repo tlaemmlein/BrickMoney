@@ -12,14 +12,17 @@ class LegoSetDataSource : public QObject
 public:
     explicit LegoSetDataSource(QObject *parent = nullptr);
 
-    Q_INVOKABLE void addLegoSet(LegoSet* set);
-    Q_INVOKABLE void removeLegoSet(int index);
-    Q_INVOKABLE int legoSetCount();
-    Q_INVOKABLE LegoSet *legoSetAt(int index);
-    Q_INVOKABLE void clearLegoSets();
+    void addLegoSet(LegoSet* set);
+    QString getSelectedLegoSetIDs();
+    void removeSelectedLegoSets();
+    int legoSetCount();
+    LegoSet *legoSetAt(int index);
+    void clearLegoSets();
 
 	bool read(const QJsonArray& legoSetArray);
 	bool write(QJsonArray& legoSetArray);
+
+    bool selectionIsDirty();
 
 signals:
     void preLegoSetAdded();
@@ -27,6 +30,8 @@ signals:
     void preLegoSetRemoved(int index);
     void postLegoSetRemoved();
 	void resetLegoSets();
+
+    void selectionIsDirtyChanged(bool);
 
 private:
     QList<LegoSet*> m_legoSets;
@@ -40,8 +45,11 @@ private:
 	static const QString SaleDateName;
 	static const QString SoldOverName;
 	static const QString BuyerName;
+
+    int m_SelectedLegoSets;
+
+    void connectSelection(LegoSet *set);
+
 };
-
-
 
 #endif // DATASOURCE_H

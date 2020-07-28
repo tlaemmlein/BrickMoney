@@ -207,7 +207,7 @@ Item {
 						property string initValue
                         text: {
                             initValue = model.display
-                            return initValue
+                            return model.display
                         }
                         onEditingFinished:  {model.display = text; focus = false}
                         Keys.onEscapePressed:{ text = initValue; focus = false }

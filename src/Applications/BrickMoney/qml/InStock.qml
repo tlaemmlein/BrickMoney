@@ -74,6 +74,32 @@ Rectangle {
             }
 
             BrickMoneyRoundButton {
+                id: deleteLegoSets
+                enabled: InStockLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Delete")
+                pressedColor: "lightgrey"
+                releasedColor: "red"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    var dg = confirmDeleteDialogComp.createObject(this)
+                    dg.open()
+                    dg.setActiveFocusToYesButton()
+                }
+
+                Component {
+                    id: confirmDeleteDialogComp
+                    DialogToConfirmTheDeletion{
+                        id: confirmDeleteDialog
+                        width: 450
+                        dialogTitle: qsTr("Do you want to delete the LegoSet(s)?")
+                        contentText: "ID(s): " + InStockLegoSetTableModel.getSelectedLegoSetIDs()
+                        onAccepted: {InStockLegoSetTableModel.removeSelectedLegoSets(); confirmDeleteDialog.destroy(); }
+                        onRejected: confirmDeleteDialog.destroy()
+                    }
+                }
+            }
+
+            BrickMoneyRoundButton {
                 id: forceLayoutBt
                 text: qsTr("Force Layout")
                 pressedColor: "lightgrey"
@@ -105,6 +131,7 @@ Rectangle {
                 implicitWidth: parent.width / 4
                 onTextEdited: legoTable.contentY = 0
             }
+
         }
     }
 

@@ -15,5 +15,6 @@
         <file>sandbox/ListViewScrollbars.qml</file>
         <file>helper/SortableColumnHeading.qml</file>
         <file>helper/BrickMoneyRoundButton.qml</file>
+        <file>helper/DialogToConfirmTheDeletion.qml</file>
     </qresource>
 </RCC>

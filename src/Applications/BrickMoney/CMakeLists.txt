@@ -28,6 +28,7 @@ set(QML_HELPER_FILES
     qml/helper/BrickMoneyRoundButton.qml
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
+    qml/helper/DialogToConfirmTheDeletion.qml
     qml/helper/NewLegoSetDialog.qml
     qml/helper/SortableColumnHeading.qml
 )

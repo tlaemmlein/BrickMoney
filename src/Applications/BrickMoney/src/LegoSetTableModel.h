@@ -10,6 +10,7 @@ class LegoSetTableModel : public QAbstractTableModel
 {
     Q_OBJECT
     Q_PROPERTY(LegoSetDataSource* dataSource READ dataSource WRITE setDataSource NOTIFY dataSourceChanged)
+    Q_PROPERTY(bool SelectionIsDirty READ selectionIsDirty NOTIFY selectionIsDirtyChanged)
 
     Q_CLASSINFO("DefaultProperty", "legoSets")
 
@@ -46,13 +47,17 @@ public:
 
 
     Q_INVOKABLE LegoSet* addLegoSet(int setNumber);
-    Q_INVOKABLE void removeLegoSet(int rowIndex);
+    Q_INVOKABLE QString getSelectedLegoSetIDs();
+    Q_INVOKABLE void removeSelectedLegoSets();
     Q_INVOKABLE void clearAll();
+
+    bool selectionIsDirty() const;
 
 signals:
     void dataSourceChanged(LegoSetDataSource* dataSource);
 	void modelReset();
 
+    void selectionIsDirtyChanged(bool SelectionIsDirty);
 
 private:
 
@@ -61,6 +66,7 @@ private:
 
     QVector<int> m_columnWidths = QVector<int>(LegoSetProperty::COUNT);
     QHash<int, QByteArray> m_roleNames;
+    bool m_SelectionIsDirty;
 };
 
 
