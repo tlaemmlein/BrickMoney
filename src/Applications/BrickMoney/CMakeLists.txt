@@ -25,6 +25,7 @@ set(QML_FILES
 )
 
 set(QML_HELPER_FILES
+    qml/helper/BrickMoneyRoundButton.qml
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
     qml/helper/NewLegoSetDialog.qml

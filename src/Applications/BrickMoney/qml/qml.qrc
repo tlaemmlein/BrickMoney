@@ -14,5 +14,6 @@
         <file>sandbox/DialogButtonBoxTest.qml</file>
         <file>sandbox/ListViewScrollbars.qml</file>
         <file>helper/SortableColumnHeading.qml</file>
+        <file>helper/BrickMoneyRoundButton.qml</file>
     </qresource>
 </RCC>

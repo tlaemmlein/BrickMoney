@@ -64,75 +64,29 @@ Rectangle {
 				height: addButton.height
             }
 
-            RoundButton{
+            BrickMoneyRoundButton {
                 id: addButton
                 text: qsTr("Add")
-                background: Rectangle { id: addButtonRect; color: "lightgreen";  radius: addButton.radius; opacity: .8; border.width: 0;}
-                onHoveredChanged: {
-                    if (hovered){
-                        addButtonRect.opacity = 1
-                        addButtonRect.border.width = 1
-                    } else {
-                        addButtonRect.opacity = .8
-                        addButtonRect.border.width = 0
-                        addButtonRect.color = "lightgreen"
-                    }
-                }
-                onPressed:  addButtonRect.color = "lightgrey"
-                onReleased: addButtonRect.color = "lightgreen"
-
-                highlighted: true
-                anchors.verticalCenter: parent.verticalCenter
+                pressedColor: "lightgrey"
+                releasedColor: "lightgreen"
                 height: 0.8 * buttonBarChangeSetList.height
-                onClicked: {
-                    var dg = newLegoSetComp.createObject(this)
-                    dg.openDialog()
-                }
+                onClicked: { var dg = newLegoSetComp.createObject(this); dg.openDialog() }
             }
 
-            RoundButton{
+            BrickMoneyRoundButton {
                 id: forceLayoutBt
                 text: qsTr("Force Layout")
-                background: Rectangle { id: forceLayoutLegoSetRect; color: "lightblue";  radius: forceLayoutBt.radius; opacity: .8; border.width: 0;}
-                onHoveredChanged: {
-                    if (hovered){
-                        forceLayoutLegoSetRect.opacity = 1
-                        forceLayoutLegoSetRect.border.width = 1
-                    } else {
-                        forceLayoutLegoSetRect.opacity = .8
-                        forceLayoutLegoSetRect.border.width = 0
-                        forceLayoutLegoSetRect.color = "lightblue"
-                    }
-                }
-                onPressed:  forceLayoutLegoSetRect.color = "lightgrey"
-                onReleased: forceLayoutLegoSetRect.color = "lightblue"
-
-                onClicked: legoTable.forceLayout()
-                highlighted: true
-                anchors.verticalCenter: parent.verticalCenter
+                pressedColor: "lightgrey"
+                releasedColor: "lightblue"
                 height: 0.8 * buttonBarChangeSetList.height
+                onClicked: legoTable.forceLayout()
             }
 
-            RoundButton{
+            BrickMoneyRoundButton {
                 id: resizeCols
                 text: qsTr("Resize Cols")
-
-                background: Rectangle { id: resizeColsRect; color: "lightblue";  radius: resizeCols.radius; opacity: .8; border.width: 0;}
-                onHoveredChanged: {
-                    if (hovered){
-                        resizeColsRect.opacity = 1
-                        resizeColsRect.border.width = 1
-                    } else {
-                        resizeColsRect.opacity = .8
-                        resizeColsRect.border.width = 0
-                        resizeColsRect.color = "lightblue"
-                    }
-                }
-                onPressed:  resizeColsRect.color = "lightgrey"
-                onReleased: resizeColsRect.color = "lightblue"
-
-                highlighted: true
-                anchors.verticalCenter: parent.verticalCenter
+                pressedColor: "lightgrey"
+                releasedColor: "lightblue"
                 height: 0.8 * buttonBarChangeSetList.height
                 onClicked: legoTable.resizeCols()
             }

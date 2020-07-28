@@ -136,62 +136,28 @@ Item {
             Row {
                 spacing: 5
 
-                RoundButton {
+                BrickMoneyRoundButton {
                     id: addLegoSetButton
-                    text:"Add"
-                    background: Rectangle { id: addLegoSetRect; color: "lightblue";  radius: addLegoSetButton.radius; opacity: .8; border.width: 0;}
+                    text: qsTr("Add")
+                    pressedColor: "lightgrey"
+                    releasedColor: "lightblue"
                     onClicked: rootId.addLegoSetNumber()
-                    onHoveredChanged: {
-                        if (hovered){
-                            addLegoSetRect.opacity = 1
-                            addLegoSetRect.border.width = 1
-                        } else {
-                            addLegoSetRect.opacity = .8
-                            addLegoSetRect.border.width = 0
-                            addLegoSetRect.color = "lightblue"
-                        }
-                    }
-                    onPressed:  addLegoSetRect.color = "lightgrey"
-                    onReleased: addLegoSetRect.color = "lightblue"
-
                 }
-                RoundButton {
+
+                BrickMoneyRoundButton {
                     id: addAndCloseLegoSetButton
-                    text:"Add && Close"
-                    background: Rectangle { id: addAndCloseLegoSetRect; color: "orange";  radius: addAndCloseLegoSetButton.radius; opacity: .8; border.width: 0; }
+                    text: qsTr("Add && Close")
+                    pressedColor: "lightgrey"
+                    releasedColor: "orange"
                     onClicked: newLegoSetDialog.accept()
-
-                    onHoveredChanged: {
-                        if (hovered){
-                            addAndCloseLegoSetRect.opacity = 1
-                            addAndCloseLegoSetRect.border.width = 1
-                        } else {
-                            addAndCloseLegoSetRect.opacity = .8
-                            addAndCloseLegoSetRect.border.width = 0
-                            addAndCloseLegoSetRect.color = "orange"
-                        }
-                    }
-                    onPressed:  addAndCloseLegoSetRect.color = "lightgrey"
-                    onReleased: addAndCloseLegoSetRect.color = "orange"
-
                 }
-                RoundButton {
+
+                BrickMoneyRoundButton {
                     id: closeLegoSetButton
-                    text:"Close"
-                    background: Rectangle { id: closeLegoSetRect; color: "red";  radius: closeLegoSetButton.radius; opacity: .8; border.width: 0; }
+                    text: qsTr("Close")
+                    pressedColor: "lightgrey"
+                    releasedColor: "red"
                     onClicked: newLegoSetDialog.reject()
-                    onHoveredChanged: {
-                        if (hovered){
-                            closeLegoSetRect.opacity = 1
-                            closeLegoSetRect.border.width = 1
-                        } else {
-                            closeLegoSetRect.opacity = .8
-                            closeLegoSetRect.border.width = 0
-                            closeLegoSetRect.color = "red"
-                        }
-                    }
-                    onPressed:  closeLegoSetRect.color = "lightgrey"
-                    onReleased: closeLegoSetRect.color = "red"
                 }
 
             }
