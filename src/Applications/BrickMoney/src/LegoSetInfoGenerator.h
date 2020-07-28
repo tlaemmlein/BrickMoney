@@ -59,7 +59,6 @@ public:
 signals:
     void setNumberNotFound();
     void setNumber(int setNumber);
-    void imageName(QString imageName);
     void imageUrl(QString imageUrl);
     void description(QString description);
     void year(int year);

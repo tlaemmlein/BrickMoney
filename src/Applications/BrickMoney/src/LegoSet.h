@@ -7,7 +7,8 @@
 class LegoSetInfoGenerator;
 
 enum LegoSetProperty {
-    id = 0,
+    isSelected = 0,
+    id,
     setNumber,
     imageUrl,
     description,
@@ -33,8 +34,8 @@ class LegoSet : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int id READ id)
+    Q_PROPERTY(bool isSelected READ isSelected WRITE setIsSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
-    Q_PROPERTY(QString imageName READ imageName NOTIFY imageNameChanged)
     Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(int year READ year NOTIFY yearChanged)
@@ -62,8 +63,8 @@ public:
 	~LegoSet();
 
     int id() const;
+    bool isSelected() const;
     int setNumber() const;
-    QString imageName() const;
     QString imageUrl() const;
     QString description() const;
     int year() const;
@@ -82,7 +83,9 @@ public:
     Q_INVOKABLE double calcCheaperPercent(double rrp, double purchasingPrice);
 
 
+
 public slots:
+    void setIsSelected(bool isSelected);
     void setSetNumber(int setNumber);
     void setPurchasingPrice(double purchasingPrice);
     void setSeller(QString seller);
@@ -92,9 +95,10 @@ public slots:
     void setSoldOver(QString soldOver);
     void setBuyer(QString buyer);
 
+
 signals:
+    void isSelectedChanged(bool isSelected);
     void setNumberChanged(int setNumber);
-    void imageNameChanged(QString imageName);
     void imageUrlChanged(QString imageUrl);
     void descriptionChanged(QString description);
     void yearChanged(int year);
@@ -111,8 +115,8 @@ signals:
     void soldOverChanged(QString soldOver);
     void buyerChanged(QString buyer);
 
+
 private slots:
-    void setImageName(QString imageName);
     void setImageUrl(QString imageUrl);
     void setDescription(QString description);
     void setYear(int year);
@@ -122,8 +126,8 @@ private:
     LegoSetInfoGenerator* m_LegoSetInfoGenerator;
     static int IDCOUNTER;
     int     m_id;
+    bool    m_isSelected;
     int     m_setNumber;
-    QString m_imageName;
     QString m_imageUrl;
     QString m_description;
     int     m_year;

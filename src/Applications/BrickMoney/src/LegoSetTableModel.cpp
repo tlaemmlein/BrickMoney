@@ -52,27 +52,29 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
     //The index is valid
     LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-    auto c = index.column();
+    int colIndex = index.column();
 
     switch (role) {
     case Qt::DisplayRole:
-        return set->data(LegoSetProperty(c));
+        return set->data(LegoSetProperty(colIndex));
     case Qt::InitialSortOrderRole: {
         bool numeric = false;
-        set->data(LegoSetProperty(c)).toFloat(&numeric);
+        set->data(LegoSetProperty(colIndex)).toFloat(&numeric);
         if (numeric)
             return Qt::DescendingOrder;
         return Qt::AscendingOrder;
     }
     case int(LegoSetTableModel::Role::Sort):
-        return set->data(LegoSetProperty(c));
+        return set->data(LegoSetProperty(colIndex));
     case int(LegoSetTableModel::Role::Number):
-        return set->data(LegoSetProperty(c)).toDouble();
+        return set->data(LegoSetProperty(colIndex)).toDouble();
     case int(LegoSetTableModel::Role::Type):
     {
         // TODO this is silly: make a virtual in the Category perhaps?
-        LegoSetProperty prop = LegoSetProperty(c);
+        LegoSetProperty prop = LegoSetProperty(colIndex);
         switch (prop) {
+        case isSelected:
+            return QLatin1String("selection");
         case id:
         case setNumber:
         case description:
@@ -120,55 +122,46 @@ QVariant LegoSetTableModel::headerData(int section, Qt::Orientation orientation,
     return QString();
 }
 
-int LegoSetTableModel::columnWidth(int c, const QFont *font)
+int LegoSetTableModel::columnWidth(int colIndex, const QFont *font)
 {
-    //if (!m_columnWidths[c]) {
-        QString header = displayName(LegoSetProperty(c));
+    QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
+    QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
 
-        QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
-        QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
+    QString header = displayName(LegoSetProperty(colIndex));
 
-        int ret = fm.horizontalAdvance(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;
-        for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
-            LegoSet* set = m_dataSource->legoSetAt(r);
-            QString val = "image";
-            if ( LegoSetProperty(c) != LegoSetProperty::imageUrl)
-            {
-                val = set->data(LegoSetProperty(c)).toString();
-            }
-
-            if (LegoSetProperty(c) == LegoSetProperty::recommendedRetailPrice
-                || LegoSetProperty(c) == LegoSetProperty::purchasingPrice
-                || LegoSetProperty(c) == LegoSetProperty::cheaperPercent
-                || LegoSetProperty(c) == LegoSetProperty::retailPrice
-                || LegoSetProperty(c) == LegoSetProperty::profitEuros
-                || LegoSetProperty(c) == LegoSetProperty::profitPercent)
-            {
-                double d = set->data(LegoSetProperty(c)).toDouble();
-                val = QString::number(d, 'f', 2);
-            }
-            //qDebug() << val;
-
-            ret = qMax(ret, fm.horizontalAdvance(val));
-
-            //qDebug() << ret;
+    int colWidth = fm.horizontalAdvance(header + QLatin1String(" ^")) + 8;
+    for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
+        LegoSet* set = m_dataSource->legoSetAt(r);
+        QString val = "image";
+        if ( LegoSetProperty(colIndex) != LegoSetProperty::imageUrl)
+        {
+            val = set->data(LegoSetProperty(colIndex)).toString();
         }
-        int additionalWidth = 0;
-        if (LegoSetProperty(c) == LegoSetProperty::purchaseDate
-            || LegoSetProperty(c) == LegoSetProperty::saleDate)
-            additionalWidth = 10;
-        if (LegoSetProperty(c) == LegoSetProperty::description
-            || LegoSetProperty(c) == LegoSetProperty::buyer
-            || LegoSetProperty(c) == LegoSetProperty::seller
-            || LegoSetProperty(c) == LegoSetProperty::soldOver)
-            additionalWidth = 20;
-        ret += additionalWidth;
-        //qDebug() << "result: " << ret;
 
-        m_columnWidths[c] = ret;
-    //}
-    //qDebug() << "c: " << c << " ret: " << ret;
-    return m_columnWidths[c];
+        if (LegoSetProperty(colIndex) == LegoSetProperty::recommendedRetailPrice
+            || LegoSetProperty(colIndex) == LegoSetProperty::purchasingPrice
+            || LegoSetProperty(colIndex) == LegoSetProperty::cheaperPercent
+            || LegoSetProperty(colIndex) == LegoSetProperty::retailPrice
+            || LegoSetProperty(colIndex) == LegoSetProperty::profitEuros
+            || LegoSetProperty(colIndex) == LegoSetProperty::profitPercent)
+        {
+            double d = set->data(LegoSetProperty(colIndex)).toDouble();
+            val = QString::number(d, 'f', 2);
+        }
+
+        colWidth = qMax(colWidth, fm.horizontalAdvance(val));
+    }
+    int additionalWidth = 0;
+    if (LegoSetProperty(colIndex) == LegoSetProperty::purchaseDate
+        || LegoSetProperty(colIndex) == LegoSetProperty::saleDate)
+        additionalWidth = 10;
+    if (LegoSetProperty(colIndex) == LegoSetProperty::description
+        || LegoSetProperty(colIndex) == LegoSetProperty::buyer
+        || LegoSetProperty(colIndex) == LegoSetProperty::seller
+        || LegoSetProperty(colIndex) == LegoSetProperty::soldOver)
+        additionalWidth = 20;
+    colWidth += additionalWidth;
+    return colWidth;
 }
 
 
@@ -177,21 +170,21 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant & value
 	LOG_SCOPE_METHOD(L"");
 
 	const int row = index.row();
-	const int col = index.column();
+    int colIndex = index.column();
 
-    LOG_TRACE("role: " << role << " r: " << row << " c: " << col);
+    LOG_TRACE("role: " << role << " r: " << row << " c: " << colIndex);
     if (!index.isValid() )
         return false;
 
     LegoSet *set = m_dataSource->legoSetAt(index.row());
 
-	if (!set->setData(LegoSetProperty(col), value))
+    if (!set->setData(LegoSetProperty(colIndex), value))
 	{
 		return false;
 	}
 
-	QModelIndex startOfRow = this->index(row, 0);
-	QModelIndex endOfRow = this->index(row, LegoSetProperty::COUNT - 1);
+    QModelIndex startOfRow = this->index(row, 0);
+    QModelIndex endOfRow = this->index(row, columnCount() - 1);
 	emit dataChanged(startOfRow, endOfRow);
 	return true;
 }

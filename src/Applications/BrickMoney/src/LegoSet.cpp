@@ -12,6 +12,8 @@ QString displayName(LegoSetProperty prop)
     switch (prop) {
     case id:
         return QT_TR_NOOP("ID");
+    case isSelected:
+        return QT_TR_NOOP("Sel");
     case setNumber:
         return QT_TR_NOOP("Set");
     case imageUrl:
@@ -91,8 +93,8 @@ int LegoSet::id() const
 
 void LegoSet::initParams()
 {
+    m_isSelected = false;
     m_setNumber=-1;
-    m_imageName = "None";
     m_imageUrl="None";
     m_description="None";
     m_year=0;
@@ -112,11 +114,15 @@ void LegoSet::initParams()
 void LegoSet::createConnections()
 {
     m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
-    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageName, this, &LegoSet::setImageName);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageUrl, this, &LegoSet::setImageUrl);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::description, this, &LegoSet::setDescription);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::year, this, &LegoSet::setYear);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::recommendedRetailPrice, this, &LegoSet::setRecommendedRetailPrice);
+}
+
+bool LegoSet::isSelected() const
+{
+    return m_isSelected;
 }
 
 
@@ -125,11 +131,6 @@ int LegoSet::setNumber() const
     return m_setNumber;
 }
 
-
-QString LegoSet::imageName() const
-{
-    return m_imageName;
-}
 
 QString LegoSet::imageUrl() const
 {
@@ -206,6 +207,15 @@ double LegoSet::calcCheaperPercent(double rrp, double purchasingPrice)
     return (purchasingPrice == 0.0) ? 0.0 : ( (1.0 - purchasingPrice/rrp) * 100.0);
 }
 
+void LegoSet::setIsSelected(bool isSelected)
+{
+    if (m_isSelected == isSelected)
+        return;
+
+    m_isSelected = isSelected;
+    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
+    emit isSelectedChanged(m_isSelected);
+}
 
 void LegoSet::setSetNumber(int setNumber)
 {
@@ -298,14 +308,6 @@ void LegoSet::setBuyer(QString buyer)
 }
 
 
-void LegoSet::setImageName(QString imageName)
-{
-    if (m_imageName == imageName)
-        return;
-
-    m_imageName = imageName;
-    emit imageNameChanged(m_imageName);
-}
 
 void LegoSet::setImageUrl(QString imageUrl)
 {

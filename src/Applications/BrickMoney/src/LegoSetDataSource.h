@@ -31,8 +31,9 @@ signals:
 private:
     QList<LegoSet*> m_legoSets;
 
-	static const QString SetNumberName;
-	static const QString PurchasingPriceName;
+    static const QString IsSelectedName;
+    static const QString SetNumberName;
+    static const QString PurchasingPriceName;
 	static const QString SellerName;
 	static const QString PurchaseDateName;
 	static const QString RetailPriceName;

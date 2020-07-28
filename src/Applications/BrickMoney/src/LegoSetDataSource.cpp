@@ -9,6 +9,8 @@ SET_LOGGER("BrickMoney.DataSource")
 #include <QDate>
 #include <QJsonObject>
 
+
+const QString LegoSetDataSource::IsSelectedName = "IsSelected";
 const QString LegoSetDataSource::SetNumberName = "SetNumber";
 const QString LegoSetDataSource::PurchasingPriceName = "PurchasingPrice";
 const QString LegoSetDataSource::SellerName = "Seller";
@@ -86,7 +88,10 @@ bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 		LegoSet* set = new LegoSet(this);
 		set->setSetNumber(setNum);
 
-		if (obj.contains(PurchasingPriceName) && obj[PurchasingPriceName].isDouble())
+        if (obj.contains(IsSelectedName) && obj[IsSelectedName].isBool())
+            set->setIsSelected(obj[IsSelectedName].toBool());
+
+        if (obj.contains(PurchasingPriceName) && obj[PurchasingPriceName].isDouble())
 			set->setPurchasingPrice(obj[PurchasingPriceName].toDouble());
 
 		if (obj.contains(SellerName) && obj[SellerName].isString())
@@ -122,7 +127,10 @@ bool LegoSetDataSource::write(QJsonArray &legoSetArray)
 	for (const auto& set : m_legoSets)
 	{
 		QJsonObject obj;
-		obj[SetNumberName] = set->setNumber();
+        obj[SetNumberName] = set->setNumber();
+
+        obj[IsSelectedName] = set->isSelected();
+
 		obj[PurchasingPriceName] = set->purchasingPrice();
 		if (!set->seller().isEmpty())
 			obj[SellerName] = set->seller();

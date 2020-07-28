@@ -85,6 +85,21 @@ Item {
             DelegateChooser {
             role: "type"
 
+            DelegateChoice{
+                roleValue: "selection"
+                Rectangle {
+                    color: "#EEE"
+                    implicitHeight: selectionBox.implicitHeight
+                    CheckBox {
+                        id: selectionBox
+                        font: theme.tableFont
+                        checked: model.display
+                        anchors.fill: parent
+                        onCheckedChanged: model.display = checked
+                    }
+                }
+            }
+
             DelegateChoice {
                 roleValue: "image"
                 Rectangle {
@@ -126,6 +141,7 @@ Item {
                         anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
                         verticalAlignment: Text.AlignVCenter
+                        rightPadding: 2
                         elide: column == 49 ? Text.ElideLeft : Text.ElideRight
                         font: theme.tableFont
                         text: {
@@ -214,6 +230,7 @@ Item {
                         font: theme.tableFont
                         anchors.fill: parent
                         horizontalAlignment : Text.AlignRight
+                        rightPadding: 2
                         verticalAlignment: Text.AlignVCenter
                         elide: column == 49 ? Text.ElideLeft : Text.ElideRight
                     }
