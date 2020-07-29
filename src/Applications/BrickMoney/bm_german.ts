@@ -709,7 +709,7 @@
     <message>
         <location filename="qml/main.qml" line="70"/>
         <source>German</source>
-        <translation type="unfinished">Deutsch</translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="75"/>
