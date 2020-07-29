@@ -12,6 +12,8 @@ std::unique_ptr<BrickMoneySettings> BrickMoneySettings::smInstance = nullptr;
 const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
 const QString BrickMoneySettings::MainWindowName("general/mainWindow");
 const QString BrickMoneySettings::MainIsMaximizedName("general/mainIsMaximized");
+const QString BrickMoneySettings::LanguageName("general/language");
+
 
 BrickMoneySettings *BrickMoneySettings::Inst()
 {
@@ -34,6 +36,7 @@ BrickMoneySettings::BrickMoneySettings()
     m_brickMoneyIsDirty = false;
     m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
     m_mainIsMaximized = m_Settings->value(MainIsMaximizedName, true).toBool();
+    m_language = m_Settings->value(LanguageName, "german").toString();
 }
 
 
@@ -60,6 +63,11 @@ QRect BrickMoneySettings::mainWindow() const
 bool BrickMoneySettings::mainIsMaximized() const
 {
     return m_mainIsMaximized;
+}
+
+QString BrickMoneySettings::language() const
+{
+    return m_language;
 }
 
 void BrickMoneySettings::setBrickMoneyFilePath(QString brickMoneyFilePath)
@@ -99,4 +107,14 @@ void BrickMoneySettings::setMainIsMaximized(bool mainIsMaximized)
     m_mainIsMaximized = mainIsMaximized;
     m_Settings->setValue(MainIsMaximizedName, m_mainIsMaximized);
     emit mainIsMaximizedChanged(m_mainIsMaximized);
+}
+
+void BrickMoneySettings::setLanguage(QString language)
+{
+    if (m_language == language)
+        return;
+
+    m_language = language;
+    m_Settings->setValue(LanguageName, m_language);
+    emit languageChanged(m_language);
 }

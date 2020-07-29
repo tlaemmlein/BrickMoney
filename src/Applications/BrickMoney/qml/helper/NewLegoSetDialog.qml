@@ -20,12 +20,12 @@ Item {
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-        width: 600
+        width: 650
         parent: Overlay.overlay
 
         focus: true
         modal: true
-        title: "New Lego Set"
+        title: qsTr("New Lego Set")
 
         ColumnLayout {
             id: inputDialogLayout
@@ -34,7 +34,7 @@ Item {
             Row {
                 height: 30
                 Label {
-                    text: "LEGO set number: "
+                    text: qsTr("LEGO set number: ")
                     anchors.verticalCenter: parent.verticalCenter
                     elide: Label.ElideRight
                 }
@@ -90,10 +90,10 @@ Item {
                         wrapMode: Text.Wrap
                     }
 
-                    Text {text: "Year:"; font.pixelSize: 16 }
+                    Text {text: qsTr("Year:"); font.pixelSize: 16 }
                     Text {id: year; text: ""; font.pixelSize: 16 }
 
-                    Text {text: "RRP:"; font.pixelSize: 16 }
+                    Text {text: qsTr("RRP:"); font.pixelSize: 16 }
                     Text {id: rrprice; text: ""; property real value: parseFloat(text); font.pixelSize: 16 }
                 }
             }

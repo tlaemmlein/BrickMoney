@@ -7,50 +7,6 @@
 int LegoSet::IDCOUNTER = 0;
 
 
-QString displayName(LegoSetProperty prop)
-{
-    switch (prop) {
-    case id:
-        return QT_TR_NOOP("ID");
-    case isSelected:
-        return QT_TR_NOOP("Sel");
-    case setNumber:
-        return QT_TR_NOOP("Set");
-    case imageUrl:
-        return QT_TR_NOOP("Image");
-    case description:
-        return QT_TR_NOOP("Description");
-    case year:
-        return QT_TR_NOOP("Year");
-    case recommendedRetailPrice:
-        return QT_TR_NOOP("RRPrice €");
-    case purchasingPrice:
-        return QT_TR_NOOP("Purchasing Price €");
-    case cheaperPercent:
-        return QT_TR_NOOP("Cheaper %");
-    case seller:
-        return QT_TR_NOOP("Seller");
-    case purchaseDate:
-        return QT_TR_NOOP("Purchase Date");
-    case retailPrice:
-        return QT_TR_NOOP("Retail Price €");
-    case profitEuros:
-        return QT_TR_NOOP("Profit €");
-    case profitPercent:
-        return QT_TR_NOOP("Profit %");
-    case saleDate:
-        return QT_TR_NOOP("Sale Date");
-    case soldOver:
-        return QT_TR_NOOP("Sold over");
-    case buyer:
-        return QT_TR_NOOP("Buyer");
-    case COUNT:
-        return "Count";
-    }
-
-    return "";
-}
-
 QVariant LegoSet::data(LegoSetProperty prop)
 {
     return this->property(magic_enum::enum_name(prop).data());
@@ -61,7 +17,51 @@ bool LegoSet::setData(LegoSetProperty prop, const QVariant& data)
 	if (this->property(magic_enum::enum_name(prop).data()) == data)
 		return false;
 
-	return this->setProperty(magic_enum::enum_name(prop).data(), data);
+    return this->setProperty(magic_enum::enum_name(prop).data(), data);
+}
+
+QString LegoSet::displayName(LegoSetProperty prop)
+{
+    switch (prop) {
+    case LegoSetProperty::id:
+        return tr("ID");
+    case LegoSetProperty::isSelected:
+        return tr("Sel");
+    case LegoSetProperty::setNumber:
+        return tr("Set");
+    case LegoSetProperty::imageUrl:
+        return tr("Image");
+    case LegoSetProperty::description:
+        return tr("Description");
+    case LegoSetProperty::year:
+        return tr("Year");
+    case LegoSetProperty::recommendedRetailPrice:
+        return tr("RRPrice €");
+    case LegoSetProperty::purchasingPrice:
+        return tr("Purchasing Price €");
+    case LegoSetProperty::cheaperPercent:
+        return tr("Cheaper %");
+    case LegoSetProperty::seller:
+        return tr("Seller");
+    case LegoSetProperty::purchaseDate:
+        return tr("Purchase Date");
+    case LegoSetProperty::retailPrice:
+        return tr("Retail Price €");
+    case LegoSetProperty::profitEuros:
+        return tr("Profit €");
+    case LegoSetProperty::profitPercent:
+        return tr("Profit %");
+    case LegoSetProperty::saleDate:
+        return tr("Sale Date");
+    case LegoSetProperty::soldOver:
+        return tr("Sold over");
+    case LegoSetProperty::buyer:
+        return tr("Buyer");
+    case COUNT:
+        return "Count";
+    }
+
+    return "";
 }
 
 LegoSet::LegoSet(QObject *parent) : QObject(parent)

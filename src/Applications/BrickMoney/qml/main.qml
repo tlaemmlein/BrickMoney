@@ -1,7 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Dialogs 1.3
 import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
 import Qt.labs.platform 1.1 as QP
@@ -63,6 +63,21 @@ ApplicationWindow {
                 }
             }
         }
+        Menu {
+           title:qsTr("&Language")
+           Action {
+               id : germanLangActionId
+               text: qsTr("German")
+               onTriggered: BrickMoneyTrans.selectLanguage("german")
+           }
+           Action {
+               id : englishLangActionId
+               text: qsTr("English")
+               onTriggered: BrickMoneyTrans.selectLanguage("english")
+           }
+
+        }
+
     }
 
     QP.FileDialog {
@@ -134,6 +149,7 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+
         Row {
             anchors.fill: parent
             spacing: 4
@@ -156,6 +172,8 @@ ApplicationWindow {
                 //verticalAlignment: Text.AlignVCenter
                 font.pixelSize: 14
             }
+            ToolButton { action: germanLangActionId}
+            ToolButton { action: englishLangActionId}
         }
     }
 

@@ -2,13 +2,17 @@ cmake_minimum_required(VERSION 3.1)
 
 project(BrickMoney LANGUAGES CXX)
 
+# Managing translations require LinguistTools module
+# The cmake function is defined in the Qt installation tree:
+# i.e. Qt5.9.1/5.9.1/gcc_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake
+# Reference: https://doc.qt.io/qt-5/cmake-manual.html#qt5linguisttools-macros
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 Widgets LinguistTools REQUIRED)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-find_package(Qt5 COMPONENTS Core Quick QuickControls2 Widgets REQUIRED)
 
 set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/../../Thirdparty)
 
@@ -44,6 +48,8 @@ set(SRC_FILES
     src/BrickMoneySettings.h
     src/BrickMoneyProject.cpp
     src/BrickMoneyProject.h
+    src/BrickMoneyTrans.cpp
+    src/BrickMoneyTrans.h
     src/LegoSetDataSource.cpp
     src/LegoSetDataSource.h
     src/LegoSet.cpp
@@ -60,6 +66,25 @@ set(SRC_FILES
     src/QmlValuePreview.h
 )
 
+# Call lupdate to generate (or update already existing) ts files from source
+# code (.cpp and .ui) code AND generate qm files. We can call it with a source
+# directory OR individual files to search for strings to translate. The ts files
+# are generated in the source directory and the qm files are created in the
+# build directory, as it should, because we don't want to pollute our source
+# directory with generated binary files.
+#
+# Recall that the ts files are edited by translators, while qm files are just
+# binary representation of the ts file for perfomance and size optimization.
+#
+# Using a source file list:
+# qt5_create_translation(QM_FILES
+#     translatemainwindow.cpp translatemainwindow.ui
+#     english.ts french.ts
+# )
+#
+# Using a source directory:
+qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} bm_german.ts)
+
 add_executable(${PROJECT_NAME}
     images/BrickMoney.rc
     images/images.qrc
@@ -68,7 +93,9 @@ add_executable(${PROJECT_NAME}
     ${QML_FILES}
     ${QML_HELPER_FILES}
     ${QML_SANDBOX_FILES}
+    ${QM_FILES}
 )
+
 
 source_group("Qml Files" FILES ${QML_FILES})
 source_group("Qml Files" FILES ${QML_FILES})

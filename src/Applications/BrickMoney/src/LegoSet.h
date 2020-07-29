@@ -27,9 +27,6 @@ enum LegoSetProperty {
     COUNT
 };
 
-QString displayName(LegoSetProperty prop);
-
-
 class LegoSet : public QObject
 {
     Q_OBJECT
@@ -58,6 +55,8 @@ public:
 
 	bool setData(LegoSetProperty prop, const QVariant& data);
 
+    static QString displayName(LegoSetProperty prop);
+
     explicit LegoSet(QObject *parent = nullptr);
     LegoSet(int setNumber, QObject *parent = nullptr);
 	~LegoSet();
@@ -84,8 +83,6 @@ public:
 
     Q_INVOKABLE double calcCheaperPercent(double rrp, double purchasingPrice);
 
-
-
 public slots:
     void setIsSelected(bool isSelected);
     void setSetNumber(int setNumber);
@@ -96,7 +93,6 @@ public slots:
     void setSaleDate(QDate saleDate);
     void setSoldOver(QString soldOver);
     void setBuyer(QString buyer);
-
 
 signals:
     void isSelectedChanged(bool isSelected);
@@ -153,8 +149,5 @@ private:
     double calcProfitPercent(double retailPrice, double purchasingPrice);
     void setProfitPercent(double profitPercent);
 };
-
-
-
 
 #endif // LEGOSET_H

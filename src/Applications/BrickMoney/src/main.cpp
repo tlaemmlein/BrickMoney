@@ -3,6 +3,7 @@ SET_LOGGER("BrickMoney.Main")
 
 #include "BrickMoneySettings.h"
 #include "BrickMoneyProject.h"
+#include "BrickMoneyTrans.h"
 #include "LegoSetInfoGenerator.h"
 #include "LegoSetTableModel.h"
 #include "LegoSet.h"
@@ -74,6 +75,10 @@ int main(int argc, char *argv[])
 
     LegoSet legoSet;
     engine.rootContext()->setContextProperty("_LegoSet", &legoSet);
+
+    BrickMoneyTrans bmTrans(&engine);
+    bmTrans.selectLanguage(BrickMoneySettings::Inst()->language());
+    engine.rootContext()->setContextProperty("BrickMoneyTrans", &bmTrans);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     if (engine.rootObjects().isEmpty())
