@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>ForSale.qml</file>
         <file>InStock.qml</file>
-        <file>LegoList.qml</file>
         <file>LegoTable.qml</file>
         <file>Overview.qml</file>
         <file>Sold.qml</file>
