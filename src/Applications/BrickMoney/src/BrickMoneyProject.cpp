@@ -164,6 +164,29 @@ bool BrickMoneyProject::checkBrickMoneyProject(const QString& brickMoneyFilePath
     return true;
 }
 
+bool BrickMoneyProject::moveSelectedLegoSets(LegoSetTableModel *from, LegoSetTableModel *to)
+{
+    if (from == to)
+    {
+        LOG_ERROR("It makes no sense to move the selected LegoSets to the self model");
+        return false;
+    }
+
+    LegoSetDataSource* fromDS = from->dataSource();
+	LegoSetDataSource* toDS = to->dataSource();
+
+	for (auto set : fromDS->getSelectedLegoSets())
+	{
+		LegoSet* clone = new LegoSet();
+		*clone = *set;
+		toDS->addLegoSet(clone);
+	}
+
+	fromDS->removeSelectedLegoSets();
+
+    return true;
+}
+
 LegoSetDataSource * BrickMoneyProject::getDataSourceInStock() const
 {
 	return m_DataSourceInStock;

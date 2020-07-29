@@ -1,11 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import de.brickmoney.styles 1.0
 import "helper/"
 
 Rectangle {
     id: forSale
     objectName: "forSale"
+    color: BrickMoneyStyle.forSaleColor
 
     Component.onCompleted: {
         //console.log(objectName + ":onCompleted")
@@ -45,7 +47,7 @@ Rectangle {
 
             BrickMoneyRoundButton {
                 id: deleteLegoSets
-                enabled: ForSaleLegoSetTableModel.SelectionIsDirty
+                visible: ForSaleLegoSetTableModel.SelectionIsDirty
                 text: qsTr("Delete")
                 pressedColor: "lightgrey"
                 releasedColor: "red"
@@ -68,6 +70,31 @@ Rectangle {
                     }
                 }
             }
+
+            BrickMoneyRoundButton {
+                id: moveToInStock
+                visible: ForSaleLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Move to In Stock")
+                pressedColor: "lightgrey"
+                releasedColor: BrickMoneyStyle.inStockColor
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    BrickMoneyProject.moveSelectedLegoSets(ForSaleLegoSetTableModel, InStockLegoSetTableModel)
+                }
+            }
+
+            BrickMoneyRoundButton {
+                id: moveToSold
+                visible: ForSaleLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Move to Sold")
+                pressedColor: "lightgrey"
+                releasedColor: BrickMoneyStyle.soldColor
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    BrickMoneyProject.moveSelectedLegoSets(ForSaleLegoSetTableModel, SoldLegoSetTableModel)
+                }
+            }
+
             BrickMoneyRoundButton {
                 id: forceLayoutBt
                 text: qsTr("Force Layout")

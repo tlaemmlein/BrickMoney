@@ -17,6 +17,7 @@ SET_LOGGER("BrickMoney.Main")
 #include <QAbstractTableModel>
 #include <QQmlContext>
 #include <QIcon>
+#include <QDate>
 
 using namespace log4cplus;
 using namespace log4cplus::helpers;
@@ -51,6 +52,8 @@ int main(int argc, char *argv[])
 
     qRegisterMetaType<QDoubleValueArg *>("QDoubleValueArg *");
     qmlRegisterType<QmlDoubleValuePreview>("QmlUtils", 1, 0, "DoubleValuePreview");
+
+    qmlRegisterSingletonType(QUrl("qrc:/qml/helper/BrickMoneyStyle.qml"), "de.brickmoney.styles", 1, 0, "BrickMoneyStyle");
 
     qmlRegisterType<LegoSet>("de.brickmoney.models", 0, 1, "LegoSet");
     QQmlApplicationEngine engine;

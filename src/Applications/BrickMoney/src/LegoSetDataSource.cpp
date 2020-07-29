@@ -36,21 +36,7 @@ void LegoSetDataSource::addLegoSet(LegoSet *set)
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
-QString LegoSetDataSource::getSelectedLegoSetIDs()
-{
-    QString IDs;
-
-    for (const auto& set : m_legoSets)
-    {
-        if (set->isSelected())
-            IDs += QString::number(set->id()) + " ";
-    }
-
-    return IDs;
-}
-
-
-void LegoSetDataSource::removeSelectedLegoSets()
+QVector<LegoSet *> LegoSetDataSource::getSelectedLegoSets()
 {
     QVector<LegoSet*> selectedSets;
 
@@ -58,7 +44,13 @@ void LegoSetDataSource::removeSelectedLegoSets()
         if (set->isSelected())
             selectedSets.push_back(set);
 
-    for (const auto& set : selectedSets)
+    return selectedSets;
+}
+
+
+void LegoSetDataSource::removeSelectedLegoSets()
+{
+    for (const auto& set : getSelectedLegoSets())
     {
         int index = m_legoSets.indexOf(set);
         emit preLegoSetRemoved(index);

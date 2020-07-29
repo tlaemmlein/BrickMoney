@@ -86,6 +86,26 @@ LegoSet::~LegoSet()
 {
 }
 
+LegoSet &LegoSet::operator=(const LegoSet &other)
+{
+	// check for self-assignment
+	if (&other == this)
+		return *this;
+
+	this->setIsSelected(other.isSelected());
+	this->setSetNumber(other.setNumber());
+	this->setIsSelected(other.isSelected());
+	this->setPurchasingPrice(other.purchasingPrice());
+	this->setPurchaseDate(other.purchaseDate());
+	this->setSeller(other.seller());
+	this->setRetailPrice(other.retailPrice());
+	this->setSaleDate(other.saleDate());
+	this->setSoldOver(other.soldOver());
+	this->setBuyer(other.buyer());
+
+	return *this;
+}
+
 int LegoSet::id() const
 {
     return m_id;

@@ -62,6 +62,8 @@ public:
     LegoSet(int setNumber, QObject *parent = nullptr);
 	~LegoSet();
 
+    LegoSet& operator=(const LegoSet& other);
+
     int id() const;
     bool isSelected() const;
     int setNumber() const;

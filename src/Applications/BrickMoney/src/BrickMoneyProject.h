@@ -21,6 +21,8 @@ public:
     QString brickMoneyFilePath() const;
     Q_INVOKABLE bool checkBrickMoneyProject(const QString& brickMoneyFilePath);
 
+    Q_INVOKABLE bool moveSelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
+
     LegoSetDataSource* getDataSourceInStock() const;
     LegoSetTableModel* getInStockModel();
     LegoSetSortFilterTableModel* getInStockSortModel();

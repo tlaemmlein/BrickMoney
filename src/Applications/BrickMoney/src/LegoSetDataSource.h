@@ -13,7 +13,7 @@ public:
     explicit LegoSetDataSource(QObject *parent = nullptr);
 
     void addLegoSet(LegoSet* set);
-    QString getSelectedLegoSetIDs();
+    QVector<LegoSet*> getSelectedLegoSets();
     void removeSelectedLegoSets();
     int legoSetCount();
     LegoSet *legoSetAt(int index);

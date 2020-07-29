@@ -25,6 +25,7 @@ set(QML_FILES
 
 set(QML_HELPER_FILES
     qml/helper/BrickMoneyRoundButton.qml
+    qml/helper/BrickMoneyStyle.qml
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
     qml/helper/DialogToConfirmTheDeletion.qml
@@ -60,13 +61,13 @@ set(SRC_FILES
 )
 
 add_executable(${PROJECT_NAME}
+    images/BrickMoney.rc
     images/images.qrc
     qml/qml.qrc
     ${SRC_FILES}
     ${QML_FILES}
     ${QML_HELPER_FILES}
     ${QML_SANDBOX_FILES}
-    images/BrickMoney.rc
 )
 
 source_group("Qml Files" FILES ${QML_FILES})

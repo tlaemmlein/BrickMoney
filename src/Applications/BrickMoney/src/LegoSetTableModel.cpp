@@ -206,7 +206,13 @@ LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
 
 QString LegoSetTableModel::getSelectedLegoSetIDs()
 {
-    return m_dataSource->getSelectedLegoSetIDs();
+    QString IDs;
+    for (const auto& set : m_dataSource->getSelectedLegoSets())
+    {
+        IDs += QString::number(set->id()) + " ";
+    }
+
+    return IDs;
 }
 
 void LegoSetTableModel::removeSelectedLegoSets()
