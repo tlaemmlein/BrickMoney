@@ -1,7 +1,7 @@
 TODO:
 
 * In Stock, For Sale und Sold funktionieren (zeigen die Anzahl der Sets an)
-* Löschen
+
 * Verschieben
 * Übersetzung
 * In Stock: Nur bis Seller sichtbar
@@ -14,5 +14,6 @@ TODO:
 DONE:
 
 * Schönes Application Icon
+* Löschen
 
 

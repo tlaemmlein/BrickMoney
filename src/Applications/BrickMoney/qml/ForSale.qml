@@ -6,7 +6,6 @@ import "helper/"
 Rectangle {
     id: forSale
     objectName: "forSale"
-    color: "#494FBF"
 
     Component.onCompleted: {
         //console.log(objectName + ":onCompleted")
@@ -30,53 +29,84 @@ Rectangle {
             anchors.left: parent.left
             anchors.leftMargin: 5
             spacing: 5
-
-            Slider {
-                Text {
-                    id: zoomText
-                    text: zoomSlider.value +"%"
-                }
-                id: zoomSlider
-                objectName: "zoomSlider"
-                Component.onDestruction: BrickMoneySettings.zoomFactor = value
-
-                wheelEnabled: true
-                anchors.verticalCenter: parent.verticalCenter
-                stepSize: 10
-                from: 10
-                value: BrickMoneySettings.zoomFactor
-                to: 300
+            Text {
+              text: qsTr("For Sale")
+              font.pointSize: 14
+              height: 0.8 * buttonBarChangeSetList.height
+              verticalAlignment : Text.AlignVCenter
             }
 
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Details
-                text: qsTr("Details")
-                onCheckedChanged: {
-                    if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Details
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Details
+            Rectangle {
+                border.color: buttonBarChangeSetList.color
+                color: buttonBarChangeSetList.color
+                width: 15
+                height: deleteLegoSets.height
+            }
+
+            BrickMoneyRoundButton {
+                id: deleteLegoSets
+                enabled: ForSaleLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Delete")
+                pressedColor: "lightgrey"
+                releasedColor: "red"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    var dg = confirmDeleteDialogComp.createObject(this)
+                    dg.open()
+                    dg.setActiveFocusToYesButton()
+                }
+
+                Component {
+                    id: confirmDeleteDialogComp
+                    DialogToConfirmTheDeletion{
+                        id: confirmDeleteDialog
+                        width: 450
+                        dialogTitle: qsTr("Do you want to delete the LegoSet(s)?")
+                        contentText: "ID(s): " + ForSaleLegoSetTableModel.getSelectedLegoSetIDs()
+                        onAccepted: {ForSaleLegoSetTableModel.removeSelectedLegoSets(); confirmDeleteDialog.destroy(); }
+                        onRejected: confirmDeleteDialog.destroy()
                     }
                 }
             }
-
-            RadioButton {
-                anchors.verticalCenter: parent.verticalCenter
-                checked: BrickMoneySettings.viewSettings === LegoList.ViewSettings.Compact
-                text: qsTr("Compact")
-                onCheckedChanged: {
-                    if (checked){
-                        legoList.viewSettings = LegoList.ViewSettings.Compact
-                        BrickMoneySettings.viewSettings = LegoList.ViewSettings.Compact
-                    }
-                }
+            BrickMoneyRoundButton {
+                id: forceLayoutBt
+                text: qsTr("Force Layout")
+                pressedColor: "lightgrey"
+                releasedColor: "lightblue"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: legoTable.forceLayout()
             }
+
+            BrickMoneyRoundButton {
+                id: resizeCols
+                text: qsTr("Resize Cols")
+                pressedColor: "lightgrey"
+                releasedColor: "lightblue"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: legoTable.resizeCols()
+            }
+
+            Text {
+              text: qsTr("Filter:")
+              font.pointSize: 14
+              height: 0.8 * buttonBarChangeSetList.height
+              verticalAlignment : Text.AlignVCenter
+            }
+
+            TextField {
+                id: tfFilter
+                anchors.verticalCenter: parent.verticalCenter
+                height: 0.8 * buttonBarChangeSetList.height
+                implicitWidth: parent.width / 4
+                onTextEdited: legoTable.contentY = 0
+            }
+
         }
     }
 
 
     LegoTable{
-        id: legoList
+        id: legoTable
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.top: buttonBarChangeSetList.bottom
@@ -85,7 +115,10 @@ Rectangle {
         anchors.rightMargin: 5
         height: parent.height - buttonBarChangeSetList.height -15
 
-        model: ForSaleLegoSetTableSortModel
+        model: {
+                 ForSaleLegoSetTableSortModel.filterText = tfFilter.text
+                 return ForSaleLegoSetTableSortModel
+        }
     }
 
 }

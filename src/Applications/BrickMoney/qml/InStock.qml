@@ -7,6 +7,7 @@ import "helper/"
 Rectangle {
     id: inStock
     objectName: "inStock"
+    color: "#FAF8EB"
 
     Component.onCompleted: {
         //console.log(objectName + ":onCompleted")
