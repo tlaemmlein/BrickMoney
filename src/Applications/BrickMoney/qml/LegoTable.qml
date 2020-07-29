@@ -34,7 +34,7 @@ Item {
         height: 40
         x: -legoTableView.contentX
         z: 1
-        spacing: 4
+        spacing: 3
         Repeater {
             id: headerRepeater
             model: legoTableView.model.columnCount()
@@ -58,7 +58,7 @@ Item {
         anchors.fill: parent
         anchors.topMargin: header.height
         clip: true
-        columnSpacing: 4; rowSpacing: 4
+        columnSpacing: 3; rowSpacing: 3
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
         ScrollBar.horizontal: ScrollBar {contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
@@ -88,7 +88,7 @@ Item {
             DelegateChoice{
                 roleValue: "selection"
                 Rectangle {
-                    color: "#EEE"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: selectionBox.implicitHeight
                     CheckBox {
                         id: selectionBox
@@ -103,7 +103,7 @@ Item {
             DelegateChoice {
                 roleValue: "image"
                 Rectangle {
-                    color: "transparent"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: imageID.implicitHeight
 
                     Image {
@@ -119,8 +119,7 @@ Item {
             DelegateChoice {
                 roleValue: "date"
                 Rectangle {
-                    color: "white"
-                    border.color: "black"
+                    border.color: BrickMoneyStyle.borderColor
                     DatePicker{
                         //width: parent.width
                         anchors.fill: parent
@@ -134,7 +133,7 @@ Item {
             DelegateChoice {
                 roleValue: "readonlydouble"
                 Rectangle {
-                    color: "#EEE"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: textReadOnlyDoubleID.implicitHeight
                     Text {
                         id: textReadOnlyDoubleID
@@ -156,7 +155,7 @@ Item {
             DelegateChoice {
                 roleValue: "double"
                 Rectangle {
-                    color: "#EEE"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: textDoubleID.implicitHeight
                     TextField {
                         id: textDoubleID
@@ -191,7 +190,7 @@ Item {
             DelegateChoice {
                 roleValue: "text"
                 Rectangle {
-                    color: "#EEE"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: textID.implicitHeight
                     TextField {
                         id: textID
@@ -222,7 +221,7 @@ Item {
 
             DelegateChoice{
                 Rectangle {
-                    color: "#EEE"
+                    border.color: BrickMoneyStyle.borderColor
                     implicitHeight: text.implicitHeight
                     Text {
                         id: text

@@ -3,9 +3,10 @@ import QtQuick 2.0
 
 QtObject {
     //The color scheme is based on
-    // https://color.adobe.com/de/COS---Pastel-color-theme-8134085
-    property color overviewColor: "#CAE3FC"
-    property color inStockColor:  "#FAF8EB"
-    property color forSaleColor:  "#E1DDF0"
-    property color soldColor:     "#BAE0BE"
+    // https://www.behance.net/gallery/100120767/CTR-NITRO-FUELED-Environment-concepts?tracking_source=for_you_feed_featured_category
+    property color overviewColor: "#1455D9"
+    property color inStockColor:  "#084DA6" //"#FAF8EB"
+    property color forSaleColor:  "#0C87F2"
+    property color soldColor:     "#3DBFF2"
+    property color borderColor:   "white"
 }
