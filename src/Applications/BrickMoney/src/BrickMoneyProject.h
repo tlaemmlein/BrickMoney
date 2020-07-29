@@ -23,6 +23,9 @@ public:
 
     Q_INVOKABLE bool moveSelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
 
+    Q_INVOKABLE bool copySelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
+
+
     LegoSetDataSource* getDataSourceInStock() const;
     LegoSetTableModel* getInStockModel();
     LegoSetSortFilterTableModel* getInStockSortModel();

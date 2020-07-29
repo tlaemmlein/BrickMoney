@@ -173,16 +173,32 @@ bool BrickMoneyProject::moveSelectedLegoSets(LegoSetTableModel *from, LegoSetTab
     }
 
     LegoSetDataSource* fromDS = from->dataSource();
-	LegoSetDataSource* toDS = to->dataSource();
+    LegoSetDataSource* toDS = to->dataSource();
 
-	for (auto set : fromDS->getSelectedLegoSets())
-	{
-		LegoSet* clone = new LegoSet();
-		*clone = *set;
-		toDS->addLegoSet(clone);
-	}
+    for (auto set : fromDS->getSelectedLegoSets())
+    {
+        LegoSet* clone = new LegoSet();
+        *clone = *set;
+        toDS->addLegoSet(clone);
+    }
 
 	fromDS->removeSelectedLegoSets();
+
+    return true;
+}
+
+bool BrickMoneyProject::copySelectedLegoSets(LegoSetTableModel *from, LegoSetTableModel *to)
+{
+    LegoSetDataSource* fromDS = from->dataSource();
+    LegoSetDataSource* toDS = to->dataSource();
+
+    for (auto set : fromDS->getSelectedLegoSets())
+    {
+        LegoSet* clone = new LegoSet();
+        *clone = *set;
+        toDS->addLegoSet(clone);
+        set->setIsSelected(false);
+    }
 
     return true;
 }

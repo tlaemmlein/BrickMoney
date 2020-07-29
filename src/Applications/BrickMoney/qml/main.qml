@@ -19,11 +19,16 @@ ApplicationWindow {
 
     Component.onCompleted: {
         //console.log(objectName + ":onCompleted")
-        var rect = BrickMoneySettings.mainWindow
-        mainWindow.x = rect.x
-        mainWindow.y = rect.y
-        mainWindow.width = rect.width
-        mainWindow.height = rect.height
+        if (BrickMoneySettings.mainIsMaximized){
+            showMaximized()
+        }
+        else {
+            var rect = BrickMoneySettings.mainWindow
+            mainWindow.x = rect.x
+            mainWindow.y = rect.y
+            mainWindow.width = rect.width
+            mainWindow.height = rect.height
+        }
     }
 
     menuBar: MenuBar{
@@ -122,6 +127,7 @@ ApplicationWindow {
                 messageDialogQuit.open()
             } else {
                 BrickMoneySettings.mainWindow = Qt.rect(mainWindow.x, mainWindow.y, mainWindow.width, mainWindow.height)
+                BrickMoneySettings.mainIsMaximized = (Window.Maximized === mainWindow.visibility)
                 Qt.quit()
             }
         }

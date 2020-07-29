@@ -140,7 +140,7 @@ Item {
                     id: addLegoSetButton
                     text: qsTr("Add")
                     pressedColor: "lightgrey"
-                    releasedColor: "lightblue"
+                    releasedColor: "lightgreen"
                     onClicked: rootId.addLegoSetNumber()
                 }
 

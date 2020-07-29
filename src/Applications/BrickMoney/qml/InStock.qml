@@ -76,6 +76,31 @@ Rectangle {
             }
 
             BrickMoneyRoundButton {
+                id: copyAndPaste
+                visible: InStockLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Copy && Paste")
+                pressedColor: "lightgrey"
+                releasedColor: "orange"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    BrickMoneyProject.copySelectedLegoSets(InStockLegoSetTableModel, InStockLegoSetTableModel)
+                }
+            }
+
+
+            BrickMoneyRoundButton {
+                id: moveToForSale
+                visible: InStockLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Move to For Sale")
+                pressedColor: "lightgrey"
+                releasedColor: BrickMoneyStyle.forSaleColor
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    BrickMoneyProject.moveSelectedLegoSets(InStockLegoSetTableModel, ForSaleLegoSetTableModel)
+                }
+            }
+
+            BrickMoneyRoundButton {
                 id: deleteLegoSets
                 visible: InStockLegoSetTableModel.SelectionIsDirty
                 text: qsTr("Delete")
@@ -98,18 +123,6 @@ Rectangle {
                         onAccepted: {InStockLegoSetTableModel.removeSelectedLegoSets(); confirmDeleteDialog.destroy(); }
                         onRejected: confirmDeleteDialog.destroy()
                     }
-                }
-            }
-
-            BrickMoneyRoundButton {
-                id: moveToForSale
-                visible: InStockLegoSetTableModel.SelectionIsDirty
-                text: qsTr("Move to For Sale")
-                pressedColor: "lightgrey"
-                releasedColor: BrickMoneyStyle.forSaleColor
-                height: 0.8 * buttonBarChangeSetList.height
-                onClicked: {
-                    BrickMoneyProject.moveSelectedLegoSets(InStockLegoSetTableModel, ForSaleLegoSetTableModel)
                 }
             }
 

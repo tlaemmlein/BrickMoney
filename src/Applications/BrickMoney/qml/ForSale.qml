@@ -46,28 +46,14 @@ Rectangle {
             }
 
             BrickMoneyRoundButton {
-                id: deleteLegoSets
+                id: copyAndPaste
                 visible: ForSaleLegoSetTableModel.SelectionIsDirty
-                text: qsTr("Delete")
+                text: qsTr("Copy && Paste")
                 pressedColor: "lightgrey"
-                releasedColor: "red"
+                releasedColor: "orange"
                 height: 0.8 * buttonBarChangeSetList.height
                 onClicked: {
-                    var dg = confirmDeleteDialogComp.createObject(this)
-                    dg.open()
-                    dg.setActiveFocusToYesButton()
-                }
-
-                Component {
-                    id: confirmDeleteDialogComp
-                    DialogToConfirmTheDeletion{
-                        id: confirmDeleteDialog
-                        width: 450
-                        dialogTitle: qsTr("Do you want to delete the LegoSet(s)?")
-                        contentText: "ID(s): " + ForSaleLegoSetTableModel.getSelectedLegoSetIDs()
-                        onAccepted: {ForSaleLegoSetTableModel.removeSelectedLegoSets(); confirmDeleteDialog.destroy(); }
-                        onRejected: confirmDeleteDialog.destroy()
-                    }
+                    BrickMoneyProject.copySelectedLegoSets(ForSaleLegoSetTableModel, ForSaleLegoSetTableModel)
                 }
             }
 
@@ -94,6 +80,33 @@ Rectangle {
                     BrickMoneyProject.moveSelectedLegoSets(ForSaleLegoSetTableModel, SoldLegoSetTableModel)
                 }
             }
+
+            BrickMoneyRoundButton {
+                id: deleteLegoSets
+                visible: ForSaleLegoSetTableModel.SelectionIsDirty
+                text: qsTr("Delete")
+                pressedColor: "lightgrey"
+                releasedColor: "red"
+                height: 0.8 * buttonBarChangeSetList.height
+                onClicked: {
+                    var dg = confirmDeleteDialogComp.createObject(this)
+                    dg.open()
+                    dg.setActiveFocusToYesButton()
+                }
+
+                Component {
+                    id: confirmDeleteDialogComp
+                    DialogToConfirmTheDeletion{
+                        id: confirmDeleteDialog
+                        width: 450
+                        dialogTitle: qsTr("Do you want to delete the LegoSet(s)?")
+                        contentText: "ID(s): " + ForSaleLegoSetTableModel.getSelectedLegoSetIDs()
+                        onAccepted: {ForSaleLegoSetTableModel.removeSelectedLegoSets(); confirmDeleteDialog.destroy(); }
+                        onRejected: confirmDeleteDialog.destroy()
+                    }
+                }
+            }
+
 
             BrickMoneyRoundButton {
                 id: forceLayoutBt

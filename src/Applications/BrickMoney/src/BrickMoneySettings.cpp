@@ -9,11 +9,9 @@ SET_LOGGER("BrickMoney.BrickMoneySettings")
 std::unique_ptr<BrickMoneySettings> BrickMoneySettings::smInstance = nullptr;
 
 
-const QString BrickMoneySettings::ZoomFactorName("general/zoomFactor");
 const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
-const QString BrickMoneySettings::ViewSettingsName("general/viewSettings");
 const QString BrickMoneySettings::MainWindowName("general/mainWindow");
-
+const QString BrickMoneySettings::MainIsMaximizedName("general/mainIsMaximized");
 
 BrickMoneySettings *BrickMoneySettings::Inst()
 {
@@ -32,11 +30,10 @@ BrickMoneySettings::BrickMoneySettings()
 
     m_Settings = new QSettings(settingsFilePath, QSettings::IniFormat, this);
 
-    m_zoomFactor = m_Settings->value(ZoomFactorName, 150).toInt();
     m_brickMoneyFilePath = m_Settings->value(BrickMoneyName, "").toString();
     m_brickMoneyIsDirty = false;
-    m_viewSettings = m_Settings->value(ViewSettingsName, 0).toInt();
     m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
+    m_mainIsMaximized = m_Settings->value(MainIsMaximizedName, true).toBool();
 }
 
 
@@ -44,11 +41,6 @@ BrickMoneySettings::~BrickMoneySettings()
 {
 }
 
-
-int BrickMoneySettings::zoomFactor() const
-{
-    return m_zoomFactor;
-}
 
 QString BrickMoneySettings::brickMoneyFilePath() const
 {
@@ -60,24 +52,14 @@ bool BrickMoneySettings::brickMoneyIsDirty() const
     return m_brickMoneyIsDirty;
 }
 
-int BrickMoneySettings::viewSettings() const
-{
-    return m_viewSettings;
-}
-
 QRect BrickMoneySettings::mainWindow() const
 {
     return m_mainWindow;
 }
 
-void BrickMoneySettings::setZoomFactor(int zoomFactor)
+bool BrickMoneySettings::mainIsMaximized() const
 {
-    if (m_zoomFactor == zoomFactor)
-        return;
-
-    m_zoomFactor = zoomFactor;
-    m_Settings->setValue(ZoomFactorName, m_zoomFactor);
-    emit zoomFactorChanged(m_zoomFactor);
+    return m_mainIsMaximized;
 }
 
 void BrickMoneySettings::setBrickMoneyFilePath(QString brickMoneyFilePath)
@@ -99,16 +81,6 @@ void BrickMoneySettings::setBrickMoneyIsDirty(bool brickMoneyIsDirty)
     emit brickMoneyIsDirtyChanged(m_brickMoneyIsDirty);
 }
 
-void BrickMoneySettings::setViewSettings(int viewSettings)
-{
-    if (m_viewSettings == viewSettings)
-        return;
-
-    m_viewSettings = viewSettings;
-    m_Settings->setValue(ViewSettingsName, m_viewSettings);
-    emit viewSettingsChanged(m_viewSettings);
-}
-
 void BrickMoneySettings::setMainWindow(QRect mainWindow)
 {
     if (m_mainWindow == mainWindow)
@@ -117,4 +89,14 @@ void BrickMoneySettings::setMainWindow(QRect mainWindow)
     m_mainWindow = mainWindow;
     m_Settings->setValue(MainWindowName, m_mainWindow);
     emit mainWindowChanged(m_mainWindow);
+}
+
+void BrickMoneySettings::setMainIsMaximized(bool mainIsMaximized)
+{
+    if (m_mainIsMaximized == mainIsMaximized)
+        return;
+
+    m_mainIsMaximized = mainIsMaximized;
+    m_Settings->setValue(MainIsMaximizedName, m_mainIsMaximized);
+    emit mainIsMaximizedChanged(m_mainIsMaximized);
 }
