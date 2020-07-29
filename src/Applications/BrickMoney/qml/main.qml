@@ -167,21 +167,21 @@ ApplicationWindow {
             }
         }
         TabButton {
-            text : qsTr("In Stock")
+            text : qsTr("In Stock") + " (" + InStockLegoSetTableModel.NumberOfLegoSets + ")"
             onClicked: {
                 mSwipeId.currentIndex = 1
                 //console.log("mSwipeId.currentIndex = 1")
             }
         }
         TabButton {
-            text : qsTr("For Sale")
+            text : qsTr("For Sale") + " (" + ForSaleLegoSetTableModel.NumberOfLegoSets + ")"
             onClicked: {
                 mSwipeId.currentIndex = 2
                 //console.log("mSwipeId.currentIndex = 2")
             }
         }
         TabButton {
-            text : qsTr("Sold")
+            text : qsTr("Sold") + " (" + SoldLegoSetTableModel.NumberOfLegoSets + ")"
             onClicked: {
                 mSwipeId.currentIndex = 3
                 //console.log("mSwipeId.currentIndex = 3")

@@ -12,6 +12,7 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)
+    , m_NumberOfLegoSets(0)
 {
     setObjectName("LegoSetTableModel");
     setDataSource( new LegoSetDataSource(this));
@@ -231,6 +232,11 @@ bool LegoSetTableModel::selectionIsDirty() const
     return m_SelectionIsDirty;
 }
 
+int LegoSetTableModel::numberOfLegoSets() const
+{
+    return m_NumberOfLegoSets;
+}
+
 
 void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 {
@@ -247,6 +253,8 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
     });
 
     connect(m_dataSource,&LegoSetDataSource::postLegoSetAdded,this,[=](){
+        m_NumberOfLegoSets = m_dataSource->legoSetCount();
+        emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
         endInsertRows();
     });
 
@@ -255,6 +263,8 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
     });
 
     connect(m_dataSource,&LegoSetDataSource::postLegoSetRemoved,this,[=](){
+        m_NumberOfLegoSets = m_dataSource->legoSetCount();
+        emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
         endRemoveRows();
     });
 
@@ -270,6 +280,9 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
     m_SelectionIsDirty = m_dataSource->selectionIsDirty();
 
     m_signalConnected = true;
+
+    m_NumberOfLegoSets = m_dataSource->legoSetCount();
+    emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
 
     endResetModel();
 	emit modelReset();
