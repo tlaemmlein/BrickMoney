@@ -19,7 +19,6 @@ set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/../../Thirdparty)
 find_package(log4cplus HINTS ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/)
 
 set(QML_FILES
-    qml/LegoTable.qml
     qml/main.qml
     qml/ForSale.qml
     qml/InStock.qml
@@ -28,11 +27,14 @@ set(QML_FILES
 )
 
 set(QML_HELPER_FILES
+    qml/helper/BrickMoneyFileDialog.qml
     qml/helper/BrickMoneyRoundButton.qml
     qml/helper/BrickMoneyStyle.qml
     qml/helper/DatePicker.qml
     qml/helper/DoubleSpinBox.qml
     qml/helper/DialogToConfirmTheDeletion.qml
+    qml/helper/ImportDialog.qml
+    qml/helper/LegoTable.qml
     qml/helper/NewLegoSetDialog.qml
     qml/helper/SortableColumnHeading.qml
 )

@@ -453,6 +453,19 @@
     </message>
 </context>
 <context>
+    <name>ImportDialog</name>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="18"/>
+        <source>Import Lego Sets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="32"/>
+        <source>Import Lego Sets from csv file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>InStock</name>
     <message>
         <location filename="qml/InStock.qml" line="56"/>
@@ -697,82 +710,92 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="qml/main.qml" line="18"/>
+        <location filename="qml/main.qml" line="16"/>
         <source>BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation>BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="36"/>
+        <location filename="qml/main.qml" line="44"/>
         <source>&amp;File</source>
         <translation>Datei</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="39"/>
+        <location filename="qml/main.qml" line="47"/>
         <source>&amp;Load project</source>
         <translation>Lade Projekt</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="49"/>
+        <location filename="qml/main.qml" line="57"/>
         <source>&amp;Save project</source>
         <translation>Speichere Projekt</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="59"/>
+        <location filename="qml/main.qml" line="67"/>
         <source>&amp;Save project as...</source>
         <translation>Speichere Projekt unter...</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="67"/>
+        <location filename="qml/main.qml" line="75"/>
+        <source>Data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/main.qml" line="78"/>
+        <source>Import...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="qml/main.qml" line="84"/>
         <source>&amp;Language</source>
         <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="70"/>
+        <location filename="qml/main.qml" line="87"/>
         <source>German</source>
         <translation>Deutsch</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="75"/>
+        <location filename="qml/main.qml" line="92"/>
         <source>English</source>
         <translation>Englisch</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="86"/>
+        <location filename="qml/main.qml" line="103"/>
         <source>Load BrickMoney project...</source>
         <translation>Lade BrickMoney Projekt...</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="111"/>
+        <location filename="qml/main.qml" line="128"/>
         <source>Save BrickMoney project as...</source>
         <translation>Speichere BrickMoney Projekt...</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="127"/>
+        <location filename="qml/main.qml" line="144"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument ist verändert worden.</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="128"/>
+        <location filename="qml/main.qml" line="145"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Du Deine Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="187"/>
+        <location filename="qml/main.qml" line="204"/>
         <source>Overview</source>
         <translation>Übersicht</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="194"/>
+        <location filename="qml/main.qml" line="211"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="201"/>
+        <location filename="qml/main.qml" line="218"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="qml/main.qml" line="208"/>
+        <location filename="qml/main.qml" line="225"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>

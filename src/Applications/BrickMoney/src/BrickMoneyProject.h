@@ -25,18 +25,20 @@ public:
 
     Q_INVOKABLE bool copySelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
 
+    Q_INVOKABLE bool importLegoSets(const QString& pathToCsvFile);
 
-    LegoSetDataSource* getDataSourceInStock() const;
+
     LegoSetTableModel* getInStockModel();
     LegoSetSortFilterTableModel* getInStockSortModel();
 
-	LegoSetDataSource* getDataSourceForSale() const;
     LegoSetTableModel* getForSaleModel();
     LegoSetSortFilterTableModel* getForSaleSortModel();
 
-    LegoSetDataSource* getDataSourceSold() const;
-	LegoSetTableModel* getSoldModel();
+    LegoSetTableModel* getSoldModel();
     LegoSetSortFilterTableModel* getSoldSortModel();
+
+    LegoSetTableModel* getImportModel();
+    LegoSetSortFilterTableModel* getImportSortModel();
 
 public slots:
     void load();
@@ -60,17 +62,17 @@ private:
     static const QString BrickMoneySold;
 
 
-    LegoSetDataSource* m_DataSourceInStock;
     LegoSetTableModel  m_InStockModel;
     LegoSetSortFilterTableModel* m_InStockSortModel;
 
-    LegoSetDataSource* m_DataSourceForSale;
     LegoSetTableModel  m_ForSaleModel;
     LegoSetSortFilterTableModel* m_ForSaleSortModel;
 
-    LegoSetDataSource* m_DataSourceSold;
     LegoSetTableModel  m_SoldModel;
     LegoSetSortFilterTableModel* m_SoldSortModel;
+
+    LegoSetTableModel  m_ImportModel;
+    LegoSetSortFilterTableModel* m_ImportSortModel;
 
     QString m_brickMoneyFilePath;
 

@@ -80,19 +80,19 @@ void BrickMoneyProject::load()
     if (jsonProject.contains(BrickMoneyInStock) && jsonProject[BrickMoneyInStock].isArray())
 	{
 		m_InStockModel.clearAll();
-		m_DataSourceInStock->read(jsonProject[BrickMoneyInStock].toArray());
+        m_InStockModel.dataSource()->read(jsonProject[BrickMoneyInStock].toArray());
 	}
 
     if (jsonProject.contains(BrickMoneyForSale) && jsonProject[BrickMoneyForSale].isArray())
 	{
 		m_ForSaleModel.clearAll();
-		m_DataSourceForSale->read(jsonProject[BrickMoneyForSale].toArray());
+        m_ForSaleModel.dataSource()->read(jsonProject[BrickMoneyForSale].toArray());
 	}
 
     if (jsonProject.contains(BrickMoneySold) && jsonProject[BrickMoneySold].isArray())
 	{
 		m_SoldModel.clearAll();
-		m_DataSourceSold->read(jsonProject[BrickMoneySold].toArray());
+        m_SoldModel.dataSource()->read(jsonProject[BrickMoneySold].toArray());
 	}
 }
 
@@ -111,16 +111,16 @@ void BrickMoneyProject::save()
     projectJObject[BrickMoneyLinkKey] = BrickMoneyLinkValue;
     projectJObject[BrickMoneyVersionKey] = BrickMoneyVersionValue;
 
-	QJsonArray inStock;
-	m_DataSourceInStock->write(inStock);
+    QJsonArray inStock;
+    m_InStockModel.dataSource()->write(inStock);
 	projectJObject[BrickMoneyInStock] = inStock;
 
 	QJsonArray forSale;
-	m_DataSourceForSale->write(forSale);
+    m_ForSaleModel.dataSource()->write(forSale);
 	projectJObject[BrickMoneyForSale] = forSale;
 
 	QJsonArray sold;
-	m_DataSourceSold->write(sold);
+    m_SoldModel.dataSource()->write(sold);
 	projectJObject[BrickMoneySold] = sold;
 
 	QJsonDocument projectDoc(projectJObject);
@@ -129,17 +129,18 @@ void BrickMoneyProject::save()
 
 BrickMoneyProject::BrickMoneyProject()
 {
-    m_DataSourceInStock = new LegoSetDataSource(this);
-	m_InStockModel.setDataSource(m_DataSourceInStock);
+    m_InStockModel.setDataSource(new LegoSetDataSource(this));
     m_InStockSortModel = new LegoSetSortFilterTableModel(&m_InStockModel);
 
-    m_DataSourceForSale = new LegoSetDataSource(this);
-	m_ForSaleModel.setDataSource(m_DataSourceForSale);
+    m_ForSaleModel.setDataSource(new LegoSetDataSource(this));
     m_ForSaleSortModel = new LegoSetSortFilterTableModel(&m_ForSaleModel);
 
-    m_DataSourceSold = new LegoSetDataSource(this);
-	m_SoldModel.setDataSource(m_DataSourceSold);
+    m_SoldModel.setDataSource(new LegoSetDataSource(this));
     m_SoldSortModel = new LegoSetSortFilterTableModel(&m_SoldModel);
+
+    m_ImportModel.setDataSource(new LegoSetDataSource(this));
+    m_ImportSortModel = new LegoSetSortFilterTableModel(&m_ImportModel);
+
 
     connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, this, &BrickMoneyProject::setBrickMoneyFilePath);
 	setBrickMoneyFilePath(BrickMoneySettings::Inst()->brickMoneyFilePath());
@@ -203,10 +204,27 @@ bool BrickMoneyProject::copySelectedLegoSets(LegoSetTableModel *from, LegoSetTab
     return true;
 }
 
-LegoSetDataSource * BrickMoneyProject::getDataSourceInStock() const
+bool BrickMoneyProject::importLegoSets(const QString &pathToCsvFile)
 {
-	return m_DataSourceInStock;
+    qDebug() << __FUNCTION__;
+    const QString local = toLocalFile(pathToCsvFile);
+    QFile cvsData(local);
+
+    if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
+    {
+        LOG_ERROR("Could not read from " << local.toStdWString());
+        return false;
+    }
+
+    QTextStream input(&cvsData);
+
+    m_ImportModel.clearAll();
+
+    m_ImportModel.dataSource()->loadDataFrom(';', input);
+
+    return m_ImportModel.numberOfLegoSets() > 0;
 }
+
 
 LegoSetTableModel * BrickMoneyProject::getInStockModel()
 {
@@ -218,10 +236,6 @@ LegoSetSortFilterTableModel *BrickMoneyProject::getInStockSortModel()
     return m_InStockSortModel;
 }
 
-LegoSetDataSource * BrickMoneyProject::getDataSourceForSale() const
-{
-	return m_DataSourceForSale;
-}
 
 LegoSetTableModel * BrickMoneyProject::getForSaleModel()
 {
@@ -233,10 +247,6 @@ LegoSetSortFilterTableModel *BrickMoneyProject::getForSaleSortModel()
     return m_ForSaleSortModel;
 }
 
-LegoSetDataSource * BrickMoneyProject::getDataSourceSold() const
-{
-	return m_DataSourceSold;
-}
 
 LegoSetTableModel * BrickMoneyProject::getSoldModel()
 {
@@ -246,6 +256,16 @@ LegoSetTableModel * BrickMoneyProject::getSoldModel()
 LegoSetSortFilterTableModel *BrickMoneyProject::getSoldSortModel()
 {
     return m_SoldSortModel;
+}
+
+LegoSetTableModel *BrickMoneyProject::getImportModel()
+{
+    return &m_ImportModel;
+}
+
+LegoSetSortFilterTableModel *BrickMoneyProject::getImportSortModel()
+{
+    return m_ImportSortModel;
 }
 
 void BrickMoneyProject::setBrickMoneyFilePath(const QString& brickMoneyFilePath)

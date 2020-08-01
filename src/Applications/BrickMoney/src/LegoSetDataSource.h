@@ -19,6 +19,9 @@ public:
     LegoSet *legoSetAt(int index);
     void clearLegoSets();
 
+
+    void loadDataFrom(const QChar& separator, QTextStream& in);
+
 	bool read(const QJsonArray& legoSetArray);
 	bool write(QJsonArray& legoSetArray);
 

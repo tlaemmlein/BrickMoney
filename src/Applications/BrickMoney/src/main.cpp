@@ -65,10 +65,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("InStockLegoSetTableModel", BrickMoneyProject::Inst()->getInStockModel());
     engine.rootContext()->setContextProperty("ForSaleLegoSetTableModel", BrickMoneyProject::Inst()->getForSaleModel());
     engine.rootContext()->setContextProperty("SoldLegoSetTableModel", BrickMoneyProject::Inst()->getSoldModel());
+    engine.rootContext()->setContextProperty("ImportLegoSetTableModel", BrickMoneyProject::Inst()->getImportModel());
 
     engine.rootContext()->setContextProperty("InStockLegoSetTableSortModel", BrickMoneyProject::Inst()->getInStockSortModel());
     engine.rootContext()->setContextProperty("ForSaleLegoSetTableSortModel", BrickMoneyProject::Inst()->getForSaleSortModel());
     engine.rootContext()->setContextProperty("SoldLegoSetTableSortModel", BrickMoneyProject::Inst()->getSoldSortModel());
+    engine.rootContext()->setContextProperty("ImportLegoSetTableSortModel", BrickMoneyProject::Inst()->getImportSortModel());
 
     LegoSetInfoGenerator gen;
     engine.rootContext()->setContextProperty("LegoSetInfoGenerator", &gen);

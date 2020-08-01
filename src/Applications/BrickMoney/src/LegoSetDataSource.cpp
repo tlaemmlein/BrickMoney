@@ -79,6 +79,41 @@ void LegoSetDataSource::clearLegoSets()
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
+void LegoSetDataSource::loadDataFrom(const QChar &sep, QTextStream &in)
+{
+    static const int NumberOfNeededParams = 8; // All except IsSelectedName;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList row = line.split(sep);
+        if (row.size() != NumberOfNeededParams)
+            continue;
+
+        const int setNum = row.at(0).toInt();
+        const double purchasingPrice = row.at(1).toDouble();
+        const QString seller = row.at(2);
+        const QDate purchaseDate = QDate::fromString(row.at(3));
+        const double retailPrice = row.at(4).toDouble();
+        const QDate saleDate = QDate::fromString(row.at(5));
+        const QString soldOver = row.at(6);
+        const QString buyer = row.at(7);
+
+        LegoSet* set = new LegoSet(this);
+        set->setSetNumber(setNum);
+
+        set->setIsSelected(true);
+        set->setPurchasingPrice(purchasingPrice);
+        set->setSeller(seller);
+        set->setPurchaseDate(purchaseDate);
+        set->setRetailPrice(retailPrice);
+        set->setSaleDate(saleDate);
+        set->setSoldOver(soldOver);
+        set->setBuyer(buyer);
+
+        addLegoSet(set);
+    }
+}
+
 bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 {
 	LOG_SCOPE_METHOD(L"");

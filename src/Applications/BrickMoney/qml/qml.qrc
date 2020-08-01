@@ -2,7 +2,6 @@
     <qresource prefix="/qml">
         <file>ForSale.qml</file>
         <file>InStock.qml</file>
-        <file>LegoTable.qml</file>
         <file>Overview.qml</file>
         <file>Sold.qml</file>
         <file>main.qml</file>
@@ -16,5 +15,8 @@
         <file>helper/BrickMoneyRoundButton.qml</file>
         <file>helper/DialogToConfirmTheDeletion.qml</file>
         <file>helper/BrickMoneyStyle.qml</file>
+        <file>helper/ImportDialog.qml</file>
+        <file>helper/BrickMoneyFileDialog.qml</file>
+        <file>helper/LegoTable.qml</file>
     </qresource>
 </RCC>

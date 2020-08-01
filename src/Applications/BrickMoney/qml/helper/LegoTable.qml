@@ -4,8 +4,6 @@ import QtQuick.Layouts 1.12
 import Qt.labs.qmlmodels 1.0
 import QtQml 2.15
 
-import "helper/"
-
 Item {
     property alias model : legoTableView.model
     property alias contentY : legoTableView.contentY
@@ -59,7 +57,10 @@ Item {
         anchors.topMargin: header.height
         clip: true
         columnSpacing: 3; rowSpacing: 3
-        ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
+        ScrollBar.vertical: ScrollBar {
+            interactive:true
+            contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2}
+        }
 		property var locale: Qt.locale()
 
 		Component.onCompleted: {

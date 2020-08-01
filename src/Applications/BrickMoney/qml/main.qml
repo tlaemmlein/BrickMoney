@@ -4,8 +4,6 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.1
 import QtQuick.Layouts 1.12
-import Qt.labs.platform 1.1 as QP
-import Qt.labs.settings 1.1
 import "helper/"
 
 
@@ -30,6 +28,16 @@ ApplicationWindow {
             mainWindow.height = rect.height
         }
     }
+
+    Component {
+        id: importLegoSetsComp
+        ImportDialog {
+            id: importLegoSetsDialog
+            onAccepted: importLegoSetsDialog.destroy()
+            onRejected: importLegoSetsDialog.destroy()
+        }
+    }
+
 
     menuBar: MenuBar{
         Menu {
@@ -64,6 +72,15 @@ ApplicationWindow {
             }
         }
         Menu {
+            title: qsTr("Data")
+            Action {
+                id: importDialogID
+                text: qsTr("Import...")
+                onTriggered: { var dg = importLegoSetsComp.createObject(mainWindow); dg.open() }
+            }
+        }
+
+        Menu {
            title:qsTr("&Language")
            Action {
                id : germanLangActionId
@@ -80,12 +97,12 @@ ApplicationWindow {
 
     }
 
-    QP.FileDialog {
+    BrickMoneyFileDialog {
         id: loadFileDialog
         objectName: "loadFileDialog"
         title: qsTr("Load BrickMoney project...")
         nameFilters: ["JSON files (*.json)"]
-        fileMode: QP.FileDialog.OpenFile
+        fileMode: BrickMoneyFileDialog.OpenFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
             //console.log(objectName + ": onAccepted: You choose: " + currentFile)
@@ -105,12 +122,12 @@ ApplicationWindow {
         }
     }
 
-    QP.FileDialog {
+    BrickMoneyFileDialog {
         id: saveAsFileDialog
         objectName: "saveFileDialog"
         title: qsTr("Save BrickMoney project as...")
         nameFilters: ["JSON files (*.json)"]
-        fileMode: QP.FileDialog.SaveFile
+        fileMode: BrickMoneyFileDialog.SaveFile
         folder: BrickMoneySettings.brickMoneyFilePath
         onAccepted: {
             //console.log(objectName + ": onAccepted: You choose: " + currentFile)
