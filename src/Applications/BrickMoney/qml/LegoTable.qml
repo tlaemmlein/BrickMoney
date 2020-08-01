@@ -59,9 +59,7 @@ Item {
         anchors.topMargin: header.height
         clip: true
         columnSpacing: 3; rowSpacing: 3
-        flickableDirection: Flickable.HorizontalAndVerticalFlick
         ScrollBar.vertical: ScrollBar { interactive:true; contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
-        ScrollBar.horizontal: ScrollBar {contentItem: Rectangle { color:"#c2c2c2"; radius: width / 2} }
 		property var locale: Qt.locale()
 
 		Component.onCompleted: {
