@@ -503,93 +503,113 @@
 <context>
     <name>LegoSet</name>
     <message>
-        <location filename="src/LegoSet.cpp" line="14"/>
+        <location filename="src/LegoSet.cpp" line="27"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="16"/>
+        <location filename="src/LegoSet.cpp" line="29"/>
         <source>Sel</source>
         <translation>Auswahl</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="18"/>
+        <location filename="src/LegoSet.cpp" line="31"/>
         <source>Set</source>
         <translation>Set</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="20"/>
+        <location filename="src/LegoSet.cpp" line="33"/>
         <source>Image</source>
         <translation>Bild</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="22"/>
+        <location filename="src/LegoSet.cpp" line="35"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="24"/>
+        <location filename="src/LegoSet.cpp" line="37"/>
         <source>Year</source>
         <translation>Jahr</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="26"/>
+        <location filename="src/LegoSet.cpp" line="39"/>
         <source>RRPrice €</source>
         <translation>UVP €</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="28"/>
+        <location filename="src/LegoSet.cpp" line="41"/>
         <source>Purchasing Price €</source>
         <translation>Einkaufspreis €</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="30"/>
+        <location filename="src/LegoSet.cpp" line="43"/>
         <source>Cheaper %</source>
         <translation>Günstiger %</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="32"/>
+        <location filename="src/LegoSet.cpp" line="45"/>
         <source>Seller</source>
         <translation>Verkäufer</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="34"/>
+        <location filename="src/LegoSet.cpp" line="47"/>
         <source>Purchase Date</source>
         <translation>Kauf Datum</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="36"/>
+        <location filename="src/LegoSet.cpp" line="49"/>
         <source>Retail Price €</source>
         <translation>Verkaufspreis €</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="38"/>
+        <location filename="src/LegoSet.cpp" line="51"/>
         <source>Profit €</source>
         <translation>Gewinn €</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="40"/>
+        <location filename="src/LegoSet.cpp" line="53"/>
         <source>Profit %</source>
         <translation>Gewinn %</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="42"/>
+        <location filename="src/LegoSet.cpp" line="55"/>
         <source>Sale Date</source>
         <translation>Verkaufsdatum</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="44"/>
+        <location filename="src/LegoSet.cpp" line="57"/>
         <source>Sold over</source>
         <translation>Verkauft über</translation>
     </message>
     <message>
-        <location filename="src/LegoSet.cpp" line="46"/>
+        <location filename="src/LegoSet.cpp" line="59"/>
         <source>Buyer</source>
         <translation>Käufer</translation>
     </message>
 </context>
 <context>
     <name>NewLegoSetDialog</name>
+    <message>
+        <location filename="qml/helper/NewLegoSetDialog.qml" line="28"/>
+        <source>New Lego Set</source>
+        <translation>Neues Lego Set</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/NewLegoSetDialog.qml" line="37"/>
+        <source>LEGO set number: </source>
+        <translation>Lego Set Nummer:</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/NewLegoSetDialog.qml" line="93"/>
+        <source>Year:</source>
+        <translation>Jahr:</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/NewLegoSetDialog.qml" line="96"/>
+        <source>RRP:</source>
+        <translation>UVP:</translation>
+    </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="103"/>
         <source>Purchase Date:</source>
