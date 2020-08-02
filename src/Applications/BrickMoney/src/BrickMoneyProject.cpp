@@ -204,7 +204,7 @@ bool BrickMoneyProject::copySelectedLegoSets(LegoSetTableModel *from, LegoSetTab
     return true;
 }
 
-bool BrickMoneyProject::importLegoSets(const QString &pathToCsvFile)
+bool BrickMoneyProject::loadDataFrom(const QString &pathToCsvFile)
 {
     qDebug() << __FUNCTION__;
     const QString local = toLocalFile(pathToCsvFile);
@@ -217,6 +217,7 @@ bool BrickMoneyProject::importLegoSets(const QString &pathToCsvFile)
     }
 
     QTextStream input(&cvsData);
+    input.setCodec("UTF-8");
 
     m_ImportModel.clearAll();
 

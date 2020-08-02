@@ -8,13 +8,13 @@ Dialog {
     Component.onCompleted: ImportLegoSetTableModel.clearAll()
 
     BrickMoneyFileDialog {
-        id: importFromCsvDialog
+        id: loadFromCsvDialog
         objectName: "importFileDialog"
         title: qsTr("Import from csv file...")
         nameFilters: ["CSV files (*.csv)"]
         fileMode: BrickMoneyFileDialog.OpenFile
         folder: BrickMoneySettings.brickMoneyFilePath
-        onAccepted: BrickMoneyProject.importLegoSets(currentFile)
+        onAccepted: BrickMoneyProject.loadDataFrom(currentFile)
     }
 
     implicitWidth: parent.width
@@ -23,7 +23,7 @@ Dialog {
     focus: true
     modal: true
     title: qsTr("Import Lego Sets")
-    standardButtons: Dialog.Cancel
+    standardButtons: Dialog.Close
 
     contentItem:
         Column {
@@ -46,12 +46,12 @@ Dialog {
                     spacing: 5
 
                     BrickMoneyRoundButton {
-                        id: importLegoSetsBtn
-                        text: qsTr("Import from csv file...")
+                        id: loadFromCsvBtn
+                        text: qsTr("Load from csv file...")
                         pressedColor: "lightgrey"
                         releasedColor: "orange"
                         height: 0.8 * buttonBarChangeSetList.height
-                        onClicked: importFromCsvDialog.open()
+                        onClicked: loadFromCsvDialog.open()
                     }
 
                     BrickMoneyRoundButton {

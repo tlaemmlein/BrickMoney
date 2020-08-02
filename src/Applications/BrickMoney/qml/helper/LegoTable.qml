@@ -14,6 +14,7 @@ Item {
 
     function forceLayout() {
         legoTableView.forceLayout()
+
     }
 
     QtObject {

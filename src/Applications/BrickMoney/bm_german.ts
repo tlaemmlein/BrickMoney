@@ -455,14 +455,64 @@
 <context>
     <name>ImportDialog</name>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="18"/>
-        <source>Import Lego Sets</source>
-        <translation type="unfinished"></translation>
+        <location filename="qml/helper/ImportDialog.qml" line="13"/>
+        <source>Import from csv file...</source>
+        <translation>Lade aus csv Datei...</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="32"/>
-        <source>Import Lego Sets from csv file.</source>
-        <translation type="unfinished"></translation>
+        <location filename="qml/helper/ImportDialog.qml" line="25"/>
+        <source>Import Lego Sets</source>
+        <translation>Lego Sets importieren</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="50"/>
+        <source>Load from csv file...</source>
+        <translation>Lade aus csv Datei...</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="53"/>
+        <source>SetNumber;</source>
+        <translation>Set Nummer</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="61"/>
+        <source>To In Stock</source>
+        <translation>Nach &quot;Auf Lager&quot;</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="71"/>
+        <source>To For Sale</source>
+        <translation>Nach &quot;Zum Verkauf&quot;</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="81"/>
+        <source>To Sold</source>
+        <translation>Nach &quot;Verkauft&quot;</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="91"/>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="106"/>
+        <source>Do you want to delete the LegoSet(s)?</source>
+        <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="116"/>
+        <source>Force Layout</source>
+        <translation>Layout erzwingen</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="126"/>
+        <source>Resize Cols</source>
+        <translation>Spaltengröße anpassen</translation>
+    </message>
+    <message>
+        <location filename="qml/helper/ImportDialog.qml" line="135"/>
+        <source>Filter:</source>
+        <translation>Filter:</translation>
     </message>
 </context>
 <context>
@@ -722,27 +772,27 @@
     <message>
         <location filename="qml/main.qml" line="47"/>
         <source>&amp;Load project</source>
-        <translation>Lade Projekt</translation>
+        <translation>Projekt laden</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="57"/>
         <source>&amp;Save project</source>
-        <translation>Speichere Projekt</translation>
+        <translation>Projekt speichern</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="67"/>
         <source>&amp;Save project as...</source>
-        <translation>Speichere Projekt unter...</translation>
+        <translation>Projekt speichern unter...</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="75"/>
         <source>Data</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="78"/>
         <source>Import...</source>
-        <translation type="unfinished"></translation>
+        <translation>Importieren...</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="84"/>
@@ -762,12 +812,12 @@
     <message>
         <location filename="qml/main.qml" line="103"/>
         <source>Load BrickMoney project...</source>
-        <translation>Lade BrickMoney Projekt...</translation>
+        <translation>BrickMoney Projekt laden...</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="128"/>
         <source>Save BrickMoney project as...</source>
-        <translation>Speichere BrickMoney Projekt...</translation>
+        <translation>BrickMoney Projekt speichern...</translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="144"/>

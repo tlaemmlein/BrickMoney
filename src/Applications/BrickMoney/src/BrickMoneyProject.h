@@ -25,7 +25,7 @@ public:
 
     Q_INVOKABLE bool copySelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
 
-    Q_INVOKABLE bool importLegoSets(const QString& pathToCsvFile);
+    Q_INVOKABLE bool loadDataFrom(const QString& pathToCsvFile);
 
 
     LegoSetTableModel* getInStockModel();

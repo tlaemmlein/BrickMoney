@@ -83,6 +83,10 @@ void LegoSetDataSource::loadDataFrom(const QChar &sep, QTextStream &in)
 {
     static const int NumberOfNeededParams = 8; // All except IsSelectedName;
 
+    QLocale locale;
+
+    const QString dateFormat = "dd.MM.yyyy"; // locale.dateFormat();
+
     while (!in.atEnd()) {
         QString line = in.readLine();
         QStringList row = line.split(sep);
@@ -90,11 +94,11 @@ void LegoSetDataSource::loadDataFrom(const QChar &sep, QTextStream &in)
             continue;
 
         const int setNum = row.at(0).toInt();
-        const double purchasingPrice = row.at(1).toDouble();
+        const double purchasingPrice = locale.toDouble(row.at(1));
         const QString seller = row.at(2);
-        const QDate purchaseDate = QDate::fromString(row.at(3));
-        const double retailPrice = row.at(4).toDouble();
-        const QDate saleDate = QDate::fromString(row.at(5));
+        const QDate purchaseDate = row.at(3).isEmpty() ? QDate::currentDate() : QDate::fromString(row.at(3), dateFormat);
+        const double retailPrice = locale.toDouble(row.at(4));
+        const QDate saleDate = row.at(5).isEmpty() ? QDate::currentDate() : QDate::fromString(row.at(5), dateFormat);
         const QString soldOver = row.at(6);
         const QString buyer = row.at(7);
 
