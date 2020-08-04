@@ -138,13 +138,6 @@ bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 
 		const int setNum = obj[SetNumberName].toInt();
 
-		if (!gen.querySetNumber(setNum))
-		{
-			LOG_ERROR("Could not found the set number " << setNum << " in the database.");
-			continue;
-		}
-			
-
 		LegoSet* set = new LegoSet(this);
 		set->setSetNumber(setNum);
 

@@ -470,47 +470,46 @@
         <translation>Lade aus csv Datei...</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="53"/>
         <source>SetNumber;</source>
-        <translation>Set Nummer</translation>
+        <translation type="vanished">Set Nummer</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="61"/>
+        <location filename="qml/helper/ImportDialog.qml" line="60"/>
         <source>To In Stock</source>
         <translation>Nach &quot;Auf Lager&quot;</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="71"/>
+        <location filename="qml/helper/ImportDialog.qml" line="70"/>
         <source>To For Sale</source>
         <translation>Nach &quot;Zum Verkauf&quot;</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="81"/>
+        <location filename="qml/helper/ImportDialog.qml" line="80"/>
         <source>To Sold</source>
         <translation>Nach &quot;Verkauft&quot;</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="91"/>
+        <location filename="qml/helper/ImportDialog.qml" line="90"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="106"/>
+        <location filename="qml/helper/ImportDialog.qml" line="105"/>
         <source>Do you want to delete the LegoSet(s)?</source>
         <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="116"/>
+        <location filename="qml/helper/ImportDialog.qml" line="115"/>
         <source>Force Layout</source>
         <translation>Layout erzwingen</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="126"/>
+        <location filename="qml/helper/ImportDialog.qml" line="125"/>
         <source>Resize Cols</source>
         <translation>Spaltengröße anpassen</translation>
     </message>
     <message>
-        <location filename="qml/helper/ImportDialog.qml" line="135"/>
+        <location filename="qml/helper/ImportDialog.qml" line="134"/>
         <source>Filter:</source>
         <translation>Filter:</translation>
     </message>
