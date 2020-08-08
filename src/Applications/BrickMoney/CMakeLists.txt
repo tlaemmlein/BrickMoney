@@ -14,7 +14,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(THIRDPARTY_DIR ${CMAKE_SOURCE_DIR}/../../Thirdparty)
+set(THIRDPARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Thirdparty)
 
 set(QML_FILES
     qml/main.qml
@@ -82,7 +82,7 @@ set(SRC_FILES
 # )
 #
 # Using a source directory:
-qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} bm_german.ts)
+qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} bm_german.ts)
 
 add_executable(${PROJECT_NAME}
     images/BrickMoney.rc
@@ -102,11 +102,11 @@ source_group("Qml/helper Files" FILES ${QML_HELPER_FILES})
 source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets BrickMoney::Logging)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/../../)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../)
 
-include(${CMAKE_SOURCE_DIR}/../../Packages/Logging/Logging.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../Packages/Logging/Logging.cmake)
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 COMMAND ${_qt5Core_install_prefix}/bin/windeployqt.exe
@@ -141,11 +141,12 @@ add_custom_command(
 
 message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
 message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 message(STATUS "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
-message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
-message(STATUS "DEBUG_SUFFIX: ${DEBUG_SUFFIX}")
 message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
 message(STATUS "_qt5Core_install_prefix: ${_qt5Core_install_prefix}")
 message(STATUS "Qt5_DIR: ${Qt5_DIR}")
 message(STATUS "THIRDPARTY_DIR: ${THIRDPARTY_DIR}")
+message(STATUS "TARGET_FILE_DIR: $<TARGET_FILE_DIR:${PROJECT_NAME}>")
+
 
