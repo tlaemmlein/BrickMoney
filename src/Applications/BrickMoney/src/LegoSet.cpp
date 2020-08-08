@@ -1,7 +1,7 @@
 #include "LegoSet.h"
 #include "magic_enum.h"
 
-#include "LegoSetInfoGenerator.h"
+#include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
 #include "BrickMoneySettings.h"
 
 int LegoSet::IDCOUNTER = 0;

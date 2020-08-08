@@ -2,9 +2,10 @@
 SET_LOGGER("BrickMoney.DataSource")
 
 #include "LegoSetDataSource.h"
-#include "LegoSetInfoGenerator.h"
 #include "LegoSet.h"
 #include "BrickMoneySettings.h"
+
+#include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
 
 #include <QDate>
 #include <QJsonObject>

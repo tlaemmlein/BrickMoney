@@ -4,11 +4,12 @@ SET_LOGGER("BrickMoney.Main")
 #include "BrickMoneySettings.h"
 #include "BrickMoneyProject.h"
 #include "BrickMoneyTrans.h"
-#include "LegoSetInfoGenerator.h"
 #include "LegoSetTableModel.h"
 #include "LegoSet.h"
 
 #include "QmlValuePreview.h"
+
+#include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
 
 #include <log4cplus/consoleappender.h>
 #include <log4cplus/initializer.h>

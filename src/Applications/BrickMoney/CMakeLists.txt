@@ -54,8 +54,6 @@ set(SRC_FILES
     src/LegoSetDataSource.h
     src/LegoSet.cpp
     src/LegoSet.h
-    src/LegoSetInfoGenerator.cpp
-    src/LegoSetInfoGenerator.h
     src/LegoSetTableModel.cpp
     src/LegoSetTableModel.h
     src/LegoSetSortFilterTableModel.cpp
@@ -102,9 +100,10 @@ source_group("Qml/helper Files" FILES ${QML_HELPER_FILES})
 source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets BrickMoney::Logging)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets
+    BrickMoney::Logging BrickMoney::LegoSetInfoGenerator)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../Packages/Logging/Logging.cmake)
 
@@ -137,6 +136,19 @@ add_custom_command(
                 ${THIRDPARTY_DIR}/OpenSSL/1.1.1d/vs2017-x64/bin/libssl-1_1-x64.dll
                 $<TARGET_FILE_DIR:${PROJECT_NAME}>/libssl-1_1-x64.dll)
 
+set( LOG4CPLUS_DLLS
+   ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusU.dll
+   ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusUD.dll
+)
+
+foreach( file_i ${LOG4CPLUS_DLLS})
+    add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    ARGS -E copy ${file_i} $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+endforeach( file_i )
 
 
 message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")

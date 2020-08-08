@@ -6,3 +6,4 @@ project(BrickMoneyProject)
 
 add_subdirectory(Applications/BrickMoney)
 add_subdirectory(Packages/Logging)
+add_subdirectory(Packages/LegoSetInfoGenerator)
