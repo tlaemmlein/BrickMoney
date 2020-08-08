@@ -13,6 +13,7 @@ class LegoSetSortFilterTableModel : public QSortFilterProxyModel
     Q_CLASSINFO("DefaultProperty", "data")
 public:
     LegoSetSortFilterTableModel(LegoSetTableModel* model, QObject *parent = nullptr);
+    Q_INVOKABLE void toggleAllNoneSelection(bool selection);
 
     QString filterText() const  {return m_filterText;}
     void setFilterText(QString filterText);

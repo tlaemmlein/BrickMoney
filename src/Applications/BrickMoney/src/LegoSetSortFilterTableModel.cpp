@@ -12,6 +12,11 @@ LegoSetSortFilterTableModel::LegoSetSortFilterTableModel(LegoSetTableModel* mode
     setFilterKeyColumn(-1); //With -1: Include all columns to filter
 }
 
+void LegoSetSortFilterTableModel::toggleAllNoneSelection(bool selection)
+{
+    m_LegoSetTableModel->toggleAllNoneSelection(selection);
+}
+
 void LegoSetSortFilterTableModel::setFilterText(QString filterText)
 {
     if (m_filterText == filterText)

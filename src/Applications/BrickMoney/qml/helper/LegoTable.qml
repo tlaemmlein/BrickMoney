@@ -27,31 +27,54 @@ Item {
         })
     }
 
-    Row {
+    Column{
         id: header
-        width: legoTableView.contentWidth
-        height: 40
-        x: -legoTableView.contentX
-        z: 1
         spacing: 3
-        Repeater {
-            id: headerRepeater
-            model: legoTableView.model.columnCount()
-            SortableColumnHeading {
-                //table: legoTableView
-                initialWidth: Math.min(600, legoTableView.model.columnWidth(index, theme.tableFont))
-                height: parent.height
-                text: legoTableView.model.headerData(index, Qt.Horizontal)
-                initialSortOrder: legoTableView.model.initialSortOrder(index)
-                onSorting: {
-                    for (var i = 0; i < headerRepeater.model; ++i)
-                        if (i !== index)
-                            headerRepeater.itemAt(i).stopSorting()
-                    legoTableView.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
+        Row {
+            id: headerFirst
+            width: legoTableView.contentWidth
+            height: 40
+            x: -legoTableView.contentX
+            z: 1
+            Rectangle {
+                width: selectAllNoneCb.width
+                height: headerFirst.height
+                color: "wheat"
+                CheckBox {
+                    id: selectAllNoneCb
+                    text: qsTr("All/None")
+                    onCheckedChanged: {model.toggleAllNoneSelection(checked); legoTableView.refresh();}
+                }
+            }
+        }
+
+        Row {
+
+            width: legoTableView.contentWidth
+            height: 40
+            x: -legoTableView.contentX
+            z: 1
+            spacing: 3
+            Repeater {
+                id: headerRepeater
+                model: legoTableView.model.columnCount()
+                SortableColumnHeading {
+                    //table: legoTableView
+                    initialWidth: Math.min(600, legoTableView.model.columnWidth(index, theme.tableFont))
+                    height: parent.height
+                    text: legoTableView.model.headerData(index, Qt.Horizontal)
+                    initialSortOrder: legoTableView.model.initialSortOrder(index)
+                    onSorting: {
+                        for (var i = 0; i < headerRepeater.model; ++i)
+                            if (i !== index)
+                                headerRepeater.itemAt(i).stopSorting()
+                        legoTableView.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
+                    }
                 }
             }
         }
     }
+
     TableView {
         id: legoTableView
         anchors.fill: parent

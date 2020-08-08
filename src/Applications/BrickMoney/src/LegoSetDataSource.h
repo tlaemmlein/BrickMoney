@@ -18,6 +18,8 @@ public:
     int legoSetCount();
     LegoSet *legoSetAt(int index);
     void clearLegoSets();
+    void toggleAllNoneSelection(bool selection);
+
 
 
     void loadDataFrom(const QChar& separator, QTextStream& in);

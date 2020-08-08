@@ -48,6 +48,7 @@ public:
 
 
     Q_INVOKABLE LegoSet* addLegoSet(int setNumber);
+    Q_INVOKABLE void toggleAllNoneSelection(bool selection);
     Q_INVOKABLE QString getSelectedLegoSetIDs();
     Q_INVOKABLE void removeSelectedLegoSets();
     Q_INVOKABLE void clearAll();

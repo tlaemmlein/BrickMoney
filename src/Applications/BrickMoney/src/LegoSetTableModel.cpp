@@ -204,6 +204,16 @@ LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
     return set;
 }
 
+
+void LegoSetTableModel::toggleAllNoneSelection(bool selection)
+{
+    qDebug() << __FUNCTION__;
+    //beginResetModel();
+    m_dataSource->toggleAllNoneSelection(selection);
+    //endResetModel();
+}
+
+
 QString LegoSetTableModel::getSelectedLegoSetIDs()
 {
     QString IDs;
@@ -279,6 +289,8 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 	});
 
     connect(m_dataSource, &LegoSetDataSource::selectionIsDirtyChanged, [&] (bool isDirty) {
+        if ( m_SelectionIsDirty == isDirty)
+            return;
         m_SelectionIsDirty = isDirty;
         emit selectionIsDirtyChanged(isDirty);
         });

@@ -79,6 +79,13 @@ void LegoSetDataSource::clearLegoSets()
     BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
 }
 
+void LegoSetDataSource::toggleAllNoneSelection(bool selection)
+{
+    for (const auto& set : m_legoSets)
+        set->setIsSelected(selection);
+}
+
+
 void LegoSetDataSource::loadDataFrom(const QChar &sep, QTextStream &in)
 {
     static const int NumberOfNeededParams = 8; // All except IsSelectedName;
