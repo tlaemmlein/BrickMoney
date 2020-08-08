@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE" sourcelanguage="en">
+<TS version="2.1">
 <context>
     <name>DatePickerTest</name>
     <message>
         <location filename="qml/sandbox/DatePickerTest.qml" line="12"/>
         <source>BrickMoney - Die Software für LEGO Investment</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -272,7 +272,7 @@
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="184"/>
         <source>Yes</source>
-        <translation type="unfinished">Ja</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="190"/>
@@ -282,7 +282,7 @@
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="196"/>
         <source>No</source>
-        <translation type="unfinished">Nein</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="202"/>
@@ -317,7 +317,7 @@
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="238"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Dialogs/DefaultMessageDialog.qml" line="244"/>
@@ -345,7 +345,7 @@
     <message>
         <location filename="qml/sandbox/DialogButtonBoxTest.qml" line="72"/>
         <source>No</source>
-        <translation>Nein</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -353,12 +353,12 @@
     <message>
         <location filename="qml/helper/DialogToConfirmTheDeletion.qml" line="25"/>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/DialogToConfirmTheDeletion.qml" line="32"/>
         <source>No</source>
-        <translation>Nein</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -391,7 +391,7 @@
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Controls/Private/EditMenu_base.qml" line="112"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="build-cl15-x64/Debug/QtQuick/Controls/Private/EditMenu_base.qml" line="123"/>
@@ -409,47 +409,47 @@
     <message>
         <location filename="qml/ForSale.qml" line="35"/>
         <source>For Sale</source>
-        <translation>Zum Verkauf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="51"/>
         <source>Copy &amp;&amp; Paste</source>
-        <translation>Kopieren &amp;&amp; Einfügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="63"/>
         <source>Move to In Stock</source>
-        <translation>Verschiebe nach &quot;Auf Lager&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="75"/>
         <source>Move to Sold</source>
-        <translation>Verschiebe nach &quot;Verkauft&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="87"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="102"/>
         <source>Do you want to delete the LegoSet(s)?</source>
-        <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="113"/>
         <source>Force Layout</source>
-        <translation>Layout erzwingen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="122"/>
         <source>Resize Cols</source>
-        <translation>Spaltengröße anpassen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/ForSale.qml" line="130"/>
         <source>Filter:</source>
-        <translation>Filter:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -457,61 +457,57 @@
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="13"/>
         <source>Import from csv file...</source>
-        <translation>Lade aus csv Datei...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="25"/>
         <source>Import Lego Sets</source>
-        <translation>Lego Sets importieren</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="50"/>
         <source>Load from csv file...</source>
-        <translation>Lade aus csv Datei...</translation>
-    </message>
-    <message>
-        <source>SetNumber;</source>
-        <translation type="vanished">Set Nummer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="60"/>
         <source>To In Stock</source>
-        <translation>Nach &quot;Auf Lager&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="70"/>
         <source>To For Sale</source>
-        <translation>Nach &quot;Zum Verkauf&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="80"/>
         <source>To Sold</source>
-        <translation>Nach &quot;Verkauft&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="90"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="105"/>
         <source>Do you want to delete the LegoSet(s)?</source>
-        <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="115"/>
         <source>Force Layout</source>
-        <translation>Layout erzwingen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="125"/>
         <source>Resize Cols</source>
-        <translation>Spaltengröße anpassen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/ImportDialog.qml" line="134"/>
         <source>Filter:</source>
-        <translation>Filter:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -519,47 +515,47 @@
     <message>
         <location filename="qml/InStock.qml" line="56"/>
         <source>In Stock</source>
-        <translation>Auf Lager</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="71"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="81"/>
         <source>Copy &amp;&amp; Paste</source>
-        <translation>Kopieren &amp;&amp; Einfügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="94"/>
         <source>Move to For Sale</source>
-        <translation>Verschiebe nach &quot;Zum Verkauf&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="106"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="121"/>
         <source>Do you want to delete the LegoSet(s)?</source>
-        <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="132"/>
         <source>Force Layout</source>
-        <translation>Layout erzwingen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="141"/>
         <source>Resize Cols</source>
-        <translation>Spaltengröße anpassen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/InStock.qml" line="149"/>
         <source>Filter:</source>
-        <translation>Filter:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -567,87 +563,87 @@
     <message>
         <location filename="src/LegoSet.cpp" line="27"/>
         <source>ID</source>
-        <translation>ID</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="29"/>
         <source>Sel</source>
-        <translation>Auswahl</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="31"/>
         <source>Set</source>
-        <translation>Set</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="33"/>
         <source>Image</source>
-        <translation>Bild</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="35"/>
         <source>Description</source>
-        <translation>Beschreibung</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="37"/>
         <source>Year</source>
-        <translation>Jahr</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="39"/>
         <source>RRPrice €</source>
-        <translation>UVP €</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="41"/>
         <source>Purchasing Price €</source>
-        <translation>Einkaufspreis €</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="43"/>
         <source>Cheaper %</source>
-        <translation>Günstiger %</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="45"/>
         <source>Seller</source>
-        <translation>Verkäufer</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="47"/>
         <source>Purchase Date</source>
-        <translation>Kauf Datum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="49"/>
         <source>Retail Price €</source>
-        <translation>Verkaufspreis €</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="51"/>
         <source>Profit €</source>
-        <translation>Gewinn €</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="53"/>
         <source>Profit %</source>
-        <translation>Gewinn %</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="55"/>
         <source>Sale Date</source>
-        <translation>Verkaufsdatum</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="57"/>
         <source>Sold over</source>
-        <translation>Verkauft über</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="src/LegoSet.cpp" line="59"/>
         <source>Buyer</source>
-        <translation>Käufer</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -655,57 +651,57 @@
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="28"/>
         <source>New Lego Set</source>
-        <translation>Neues Lego Set</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="37"/>
         <source>LEGO set number: </source>
-        <translation>Lego Set Nummer:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="93"/>
         <source>Year:</source>
-        <translation>Jahr:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="96"/>
         <source>RRP:</source>
-        <translation>UVP:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="103"/>
         <source>Purchase Date:</source>
-        <translation>Kauf Datum:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="106"/>
         <source>Purchasing Price €:</source>
-        <translation>Einkaufspreis:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="112"/>
         <source>Cheaper:</source>
-        <translation>Günstiger:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="126"/>
         <source>Seller:</source>
-        <translation>Verkäufer:</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="141"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="149"/>
         <source>Add &amp;&amp; Close</source>
-        <translation>Hinzufügen &amp;&amp; Schließen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/helper/NewLegoSetDialog.qml" line="157"/>
         <source>Close</source>
-        <translation>Schließen</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -713,47 +709,47 @@
     <message>
         <location filename="qml/Sold.qml" line="28"/>
         <source>Sold</source>
-        <translation>Verkauft</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="44"/>
         <source>Copy &amp;&amp; Paste</source>
-        <translation>Kopieren &amp;&amp; Einfügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="56"/>
         <source>Move to In Stock</source>
-        <translation>Verschiebe nach &quot;Auf Lager&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="68"/>
         <source>Move to For Sale</source>
-        <translation>Verschiebe nach &quot;Zum Verkauf&quot;</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="80"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="95"/>
         <source>Do you want to delete the LegoSet(s)?</source>
-        <translation>Wollen Sie die LegoSet(s) wirklisch löschen?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="105"/>
         <source>Force Layout</source>
-        <translation>Layout erzwingen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="114"/>
         <source>Resize Cols</source>
-        <translation>Spaltengröße anpassen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/Sold.qml" line="122"/>
         <source>Filter:</source>
-        <translation>Filter:</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -761,92 +757,92 @@
     <message>
         <location filename="qml/main.qml" line="16"/>
         <source>BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
-        <translation>BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="44"/>
         <source>&amp;File</source>
-        <translation>Datei</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="47"/>
         <source>&amp;Load project</source>
-        <translation>Projekt laden</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="57"/>
         <source>&amp;Save project</source>
-        <translation>Projekt speichern</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="67"/>
         <source>&amp;Save project as...</source>
-        <translation>Projekt speichern unter...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="75"/>
         <source>Data</source>
-        <translation>Daten</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="78"/>
         <source>Import...</source>
-        <translation>Importieren...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="84"/>
         <source>&amp;Language</source>
-        <translation>Sprache</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="87"/>
         <source>German</source>
-        <translation>Deutsch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="92"/>
         <source>English</source>
-        <translation>Englisch</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="103"/>
         <source>Load BrickMoney project...</source>
-        <translation>BrickMoney Projekt laden...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="128"/>
         <source>Save BrickMoney project as...</source>
-        <translation>BrickMoney Projekt speichern...</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="144"/>
         <source>The document has been modified.</source>
-        <translation>Das Dokument ist verändert worden.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="145"/>
         <source>Do you want to save your changes?</source>
-        <translation>Möchtest Du Deine Änderungen speichern?</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="204"/>
         <source>Overview</source>
-        <translation>Übersicht</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="211"/>
         <source>In Stock</source>
-        <translation>Auf Lager</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="218"/>
         <source>For Sale</source>
-        <translation>Zum Verkauf</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="qml/main.qml" line="225"/>
         <source>Sold</source>
-        <translation>Verkauft</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

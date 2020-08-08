@@ -1,4 +1,4 @@
-#include "Logging.h"
+#include "Packages/Logging/Logging.h"
 SET_LOGGER("BrickMoney.BrickMoneyProject")
 
 #include "BrickMoneyProject.h"
