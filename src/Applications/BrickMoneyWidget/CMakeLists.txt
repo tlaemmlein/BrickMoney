@@ -21,3 +21,12 @@ add_executable(${PROJECT_NAME}
  LegoSetModel.cpp LegoSetModel.h
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Widgets)
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+COMMAND ${_qt5Core_install_prefix}/bin/windeployqt.exe
+  --verbose 0
+  --force
+  --no-compiler-runtime
+  --qmldir ${_qt5Core_install_prefix}/qml
+   $<TARGET_FILE:${PROJECT_NAME}>)
+
