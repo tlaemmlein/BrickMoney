@@ -2,6 +2,7 @@
 SET_LOGGER("BrickMoney.DataSource")
 
 #include "LegoSetDataSource.h"
+
 #include "LegoSet.h"
 #include "BrickMoneyDataManager.h"
 

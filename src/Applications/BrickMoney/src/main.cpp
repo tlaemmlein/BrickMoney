@@ -2,11 +2,12 @@
 SET_LOGGER("BrickMoney.Main")
 
 #include "BrickMoneySettings.h"
-#include "BrickMoneyDataManager.h"
 #include "BrickMoneyProject.h"
 #include "BrickMoneyTrans.h"
 #include "LegoSetTableModel.h"
-#include "LegoSet.h"
+
+#include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
+#include "Packages/BrickMoneyData/LegoSet.h"
 
 #include "QmlValuePreview.h"
 
