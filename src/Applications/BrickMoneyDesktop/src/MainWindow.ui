@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="OverviewTab">
        <attribute name="title">
@@ -32,6 +32,26 @@
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QTableView" name="inStockTableView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="forSaleTab">
+       <attribute name="title">
+        <string>For Sale</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QTableView" name="forSaleTableView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="soldTab">
+       <attribute name="title">
+        <string>Sold</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QTableView" name="soldTableView"/>
         </item>
        </layout>
       </widget>
