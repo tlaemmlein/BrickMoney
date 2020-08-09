@@ -1,16 +1,9 @@
 
-project(BrickMoneyData)
+project(BrickMoneyProject)
 
 set(SRC_FILES
-    LegoSet.cpp
-    LegoSet.h
-    BrickMoneyDataManager.cpp
-    BrickMoneyDataManager.h
-    BrickMoneySettings.cpp
-    BrickMoneySettings.h
-    LegoSetDataSource.cpp
-    LegoSetDataSource.h
-    magic_enum.h
+    BrickMoneyProject.cpp
+    BrickMoneyProject.h
 )
 
 find_package(Qt5 COMPONENTS Core REQUIRED)
@@ -23,7 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC ${SRC_FILES} )
 add_library(BrickMoney::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core BrickMoney::Logging)
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetModels)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 include(${CMAKE_CURRENT_SOURCE_DIR}/../Logging/Logging.cmake)
 

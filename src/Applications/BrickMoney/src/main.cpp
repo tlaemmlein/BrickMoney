@@ -1,12 +1,12 @@
 #include "Packages/Logging/Logging.h"
 SET_LOGGER("BrickMoney.Main")
 
-#include "BrickMoneySettings.h"
-#include "BrickMoneyProject.h"
 #include "BrickMoneyTrans.h"
 
+#include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
 #include "Packages/BrickMoneyData/LegoSet.h"
+#include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 #include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
 #include "Packages/LegoSetModels/LegoSetTableModel.h"
 

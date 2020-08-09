@@ -44,10 +44,6 @@ set(QML_SANDBOX_FILES
 )
 
 set(SRC_FILES
-    src/BrickMoneySettings.cpp
-    src/BrickMoneySettings.h
-    src/BrickMoneyProject.cpp
-    src/BrickMoneyProject.h
     src/BrickMoneyTrans.cpp
     src/BrickMoneyTrans.h
     src/main.cpp
@@ -92,7 +88,8 @@ source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets
-    BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetModels BrickMoney::LegoSetInfoGenerator)
+    BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetModels BrickMoney::LegoSetInfoGenerator
+    BrickMoney::BrickMoneyProject)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
