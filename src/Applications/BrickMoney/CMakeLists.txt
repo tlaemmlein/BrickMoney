@@ -44,6 +44,8 @@ set(QML_SANDBOX_FILES
 )
 
 set(SRC_FILES
+    src/BrickMoneyDataManager.cpp
+    src/BrickMoneyDataManager.h
     src/BrickMoneySettings.cpp
     src/BrickMoneySettings.h
     src/BrickMoneyProject.cpp

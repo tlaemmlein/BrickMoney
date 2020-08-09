@@ -33,7 +33,6 @@ BrickMoneySettings::BrickMoneySettings()
     m_Settings = new QSettings(settingsFilePath, QSettings::IniFormat, this);
 
     m_brickMoneyFilePath = m_Settings->value(BrickMoneyName, "").toString();
-    m_brickMoneyIsDirty = false;
     m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
     m_mainIsMaximized = m_Settings->value(MainIsMaximizedName, true).toBool();
     m_language = m_Settings->value(LanguageName, "german").toString();
@@ -50,10 +49,6 @@ QString BrickMoneySettings::brickMoneyFilePath() const
     return m_brickMoneyFilePath;
 }
 
-bool BrickMoneySettings::brickMoneyIsDirty() const
-{
-    return m_brickMoneyIsDirty;
-}
 
 QRect BrickMoneySettings::mainWindow() const
 {
@@ -80,14 +75,6 @@ void BrickMoneySettings::setBrickMoneyFilePath(QString brickMoneyFilePath)
     emit brickMoneyFilePathChanged(m_brickMoneyFilePath);
 }
 
-void BrickMoneySettings::setBrickMoneyIsDirty(bool brickMoneyIsDirty)
-{
-    if (m_brickMoneyIsDirty == brickMoneyIsDirty)
-        return;
-
-    m_brickMoneyIsDirty = brickMoneyIsDirty;
-    emit brickMoneyIsDirtyChanged(m_brickMoneyIsDirty);
-}
 
 void BrickMoneySettings::setMainWindow(QRect mainWindow)
 {

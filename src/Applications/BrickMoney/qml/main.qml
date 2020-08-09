@@ -56,7 +56,7 @@ ApplicationWindow {
                 id : saveActionId
                 text: qsTr("&Save project")
                 icon.source: "qrc:/images/save.svg"
-                enabled: BrickMoneySettings.brickMoneyIsDirty
+                enabled: BrickMoneyDataManager.brickMoneyIsDirty
                 onTriggered: {
                     //console.log("Clicked on save")
                     BrickMoneyProject.save()
@@ -155,7 +155,7 @@ ApplicationWindow {
         close.accepted = false
         onTriggered:
         {
-            if (BrickMoneySettings.brickMoneyIsDirty === true) {
+            if (BrickMoneyDataManager.brickMoneyIsDirty === true) {
                 messageDialogQuit.open()
             } else {
                 BrickMoneySettings.mainWindow = Qt.rect(mainWindow.x, mainWindow.y, mainWindow.width, mainWindow.height)

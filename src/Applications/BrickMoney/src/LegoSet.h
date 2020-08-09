@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDate>
+#include <QVariant>
 
 class LegoSetInfoGenerator;
 

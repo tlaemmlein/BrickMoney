@@ -3,7 +3,7 @@ SET_LOGGER("BrickMoney.DataSource")
 
 #include "LegoSetDataSource.h"
 #include "LegoSet.h"
-#include "BrickMoneySettings.h"
+#include "BrickMoneyDataManager.h"
 
 #include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
 
@@ -34,7 +34,7 @@ void LegoSetDataSource::addLegoSet(LegoSet *set)
     m_legoSets.append(set);
     connectSelection(set);
     emit postLegoSetAdded();
-    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(true);
 }
 
 QVector<LegoSet *> LegoSetDataSource::getSelectedLegoSets()
@@ -60,7 +60,7 @@ void LegoSetDataSource::removeSelectedLegoSets()
     }
     m_SelectedLegoSets = 0;
     emit selectionIsDirtyChanged(false);
-    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(true);
 }
 
 int LegoSetDataSource::legoSetCount()
@@ -77,7 +77,7 @@ void LegoSetDataSource::clearLegoSets()
 {
     m_legoSets.clear();
     m_SelectedLegoSets = 0;
-    BrickMoneySettings::Inst()->setBrickMoneyIsDirty(true);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(true);
 }
 
 void LegoSetDataSource::loadDataFrom(const QChar &sep, QTextStream &in)
@@ -169,7 +169,7 @@ bool LegoSetDataSource::read(const QJsonArray& legoSetArray)
 		addLegoSet(set);
 	}
 
-	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
 	emit resetLegoSets();
 	return true;
 }
@@ -201,7 +201,7 @@ bool LegoSetDataSource::write(QJsonArray &legoSetArray)
 
 		legoSetArray.append(obj);
 	}
-	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
     return true;
 }
 

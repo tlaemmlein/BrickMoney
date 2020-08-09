@@ -2,6 +2,7 @@
 SET_LOGGER("BrickMoney.Main")
 
 #include "BrickMoneySettings.h"
+#include "BrickMoneyDataManager.h"
 #include "BrickMoneyProject.h"
 #include "BrickMoneyTrans.h"
 #include "LegoSetTableModel.h"
@@ -61,6 +62,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     engine.rootContext()->setContextProperty("BrickMoneySettings", BrickMoneySettings::Inst());
+    engine.rootContext()->setContextProperty("BrickMoneyDataManager", BrickMoneyDataManager::Inst());
     engine.rootContext()->setContextProperty("BrickMoneyProject", BrickMoneyProject::Inst());
 
     engine.rootContext()->setContextProperty("InStockLegoSetTableModel", BrickMoneyProject::Inst()->getInStockModel());
@@ -91,7 +93,7 @@ int main(int argc, char *argv[])
 	{
 		BrickMoneyProject::Inst()->load();
 	}
-	BrickMoneySettings::Inst()->setBrickMoneyIsDirty(false);
+    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
 
 
     return app.exec();
