@@ -50,10 +50,6 @@ set(SRC_FILES
     src/BrickMoneyProject.h
     src/BrickMoneyTrans.cpp
     src/BrickMoneyTrans.h
-    src/LegoSetTableModel.cpp
-    src/LegoSetTableModel.h
-    src/LegoSetSortFilterTableModel.cpp
-    src/LegoSetSortFilterTableModel.h
     src/main.cpp
     src/QmlValuePreview.h
 )
@@ -96,7 +92,7 @@ source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets
-    BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetInfoGenerator)
+    BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetModels BrickMoney::LegoSetInfoGenerator)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 

@@ -1,10 +1,10 @@
 #ifndef BRICKMONEYPROJECT_H
 #define BRICKMONEYPROJECT_H
 
-#include "LegoSetTableModel.h"
-#include "LegoSetSortFilterTableModel.h"
 
 #include "Packages/BrickMoneyData/LegoSetDataSource.h"
+#include "Packages/LegoSetModels/LegoSetTableModel.h"
+#include "Packages/LegoSetModels/LegoSetSortFilterTableModel.h"
 
 #include <QObject>
 
