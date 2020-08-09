@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="99.559418mm"
+   height="99.559418mm"
+   viewBox="0 0 99.559418 99.559418"
+   version="1.1"
+   id="svg4521"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="Empty.svg">
+  <defs
+     id="defs4515" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="87.572989"
+     inkscape:cy="433.45623"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:pagecheckerboard="true" />
+  <metadata
+     id="metadata4518">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-0.22029114,-197.22029)">
+    <path
+       style="opacity:1;fill:#e44061;fill-opacity:1;stroke:none;stroke-width:1.66518915;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 188.14453 0 A 188.14378 188.14378 0 0 0 0 188.14453 A 188.14378 188.14378 0 0 0 188.14453 376.28711 A 188.14378 188.14378 0 0 0 376.28711 188.14453 A 188.14378 188.14378 0 0 0 188.14453 0 z M 188.14453 37.628906 A 150.51503 150.51503 0 0 1 338.6582 188.14453 A 150.51503 150.51503 0 0 1 188.14453 338.6582 A 150.51503 150.51503 0 0 1 37.628906 188.14453 A 150.51503 150.51503 0 0 1 188.14453 37.628906 z "
+       transform="matrix(0.26458333,0,0,0.26458333,0.22029114,197.22029)"
+       id="path5066" />
+    <g
+       id="g5121"
+       transform="rotate(44.021891,-61.920367,140.1024)">
+      <rect
+         transform="rotate(0.006038)"
+         y="134.88902"
+         x="60.348068"
+         height="10"
+         width="65"
+         id="rect5087"
+         style="opacity:1;fill:#e44061;fill-opacity:1;stroke:none;stroke-width:0.44553262;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         transform="rotate(90.006038)"
+         y="-97.848068"
+         x="107.38902"
+         height="10"
+         width="65"
+         id="rect5087-0"
+         style="opacity:1;fill:#e44061;fill-opacity:1;stroke:none;stroke-width:0.44553259;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

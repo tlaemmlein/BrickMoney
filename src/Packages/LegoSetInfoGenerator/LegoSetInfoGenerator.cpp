@@ -95,7 +95,7 @@ void LegoSetInfoGenerator::fillDatabase(const QString& legoSetDatabaseFilePath)
 {
     if (!mIsDataBaseReady)
     {
-        LOG_INFO("fillDatabase");
+        LOG_INFO("Start filling the database");
 
         QFile cvsData(legoSetDatabaseFilePath);
 
@@ -135,6 +135,8 @@ void LegoSetInfoGenerator::fillDatabase(const QString& legoSetDatabaseFilePath)
         mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
 
         mIsDataBaseReady = true;
+
+        LOG_INFO("Completed database filling");
     }
 }
 

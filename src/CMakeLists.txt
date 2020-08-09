@@ -5,6 +5,7 @@ project(BrickMoneyProject)
 #enable_testing()
 
 add_subdirectory(Applications/BrickMoney)
+add_subdirectory(Applications/BrickMoneyDesktop)
 add_subdirectory(Packages/BrickMoneyData)
 add_subdirectory(Packages/BrickMoneyProject)
 add_subdirectory(Packages/LegoSetInfoGenerator)
