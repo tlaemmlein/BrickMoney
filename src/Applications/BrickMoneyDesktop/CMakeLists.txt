@@ -18,6 +18,8 @@ set(SRC_FILES
     src/MainWindow.h
     src/MainWindow.cpp
     src/MainWindow.ui
+    src/ImageDelegate.cpp
+    src/ImageDelegate.h
     )
 
 add_executable(${PROJECT_NAME}
