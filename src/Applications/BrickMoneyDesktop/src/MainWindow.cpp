@@ -3,8 +3,10 @@
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
 
-#include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
+#include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
+
+#include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 
 #include <QFileDialog>
 
@@ -44,7 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
             BrickMoneyProject::Inst()->load();
         }
     });
-    connect(ui->actionSave_Project, &QAction::triggered, [&]() { BrickMoneyProject::Inst()->save(); });
+    
+	connect(ui->actionSave_Project, &QAction::triggered, [&]() { BrickMoneyProject::Inst()->save(); });
+	connect(BrickMoneyDataManager::Inst(), &BrickMoneyDataManager::brickMoneyIsDirtyChanged, ui->actionSave_Project, &QAction::setEnabled);
+	ui->actionSave_Project->setEnabled(BrickMoneyDataManager::Inst()->brickMoneyIsDirty());
+
     connect(ui->actionSave_Project_as, &QAction::triggered, [&]() {
         QString brickMoneyFilePath = QFileDialog::getSaveFileUrl(this, tr("Save BrickMoney project as..."),
                                                                   BrickMoneySettings::Inst()->brickMoneyFilePath(),
