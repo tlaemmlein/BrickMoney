@@ -19,14 +19,29 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->inStockTableView->setModel(BrickMoneyProject::Inst()->getInStockSortModel());
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+	static const QString inStockTitle = tr("In Stock");
+	connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
+		ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(num) + ")");
+		});
+	ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
 
     ui->forSaleTableView->setModel(BrickMoneyProject::Inst()->getForSaleSortModel());
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+	static const QString forSaleTitle = tr("For Sale");
+	connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
+		ui->tabWidget->setTabText(mForSaleTabIndex, forSaleTitle + " (" + QString::number(num) + ")");
+		});
+	ui->tabWidget->setTabText(mForSaleTabIndex, forSaleTitle + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
 
     ui->soldTableView->setModel(BrickMoneyProject::Inst()->getSoldSortModel());
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+	static const QString soldTitle = tr("Sold");
+	connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
+		ui->tabWidget->setTabText(mSoldTabIndex, soldTitle + " (" + QString::number(num) + ")");
+		});
+	ui->tabWidget->setTabText(mSoldTabIndex, soldTitle + " (" + QString::number(BrickMoneyProject::Inst()->getSoldModel()->numberOfLegoSets()) +")");
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 
@@ -61,6 +76,8 @@ MainWindow::MainWindow(QWidget *parent) :
             BrickMoneyProject::Inst()->save();
         }
     });
+
+
 }
 
 MainWindow::~MainWindow()
