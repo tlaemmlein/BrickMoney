@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    QString m_postWindowTitel;
 };
 
 #endif // MAINWINDOW_H

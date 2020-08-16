@@ -98,7 +98,8 @@ void BrickMoneyProject::load()
 
 void BrickMoneyProject::save()
 {
-	QFile projectFile(toLocalFile(m_brickMoneyFilePath));
+	const QString localeFile = toLocalFile(m_brickMoneyFilePath);
+	QFile projectFile(localeFile);
 
 	if (!projectFile.open(QIODevice::WriteOnly)) {
 		LOG_ERROR("Couldn't open project file for writing.");

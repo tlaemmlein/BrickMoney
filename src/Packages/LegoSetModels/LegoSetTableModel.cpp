@@ -168,7 +168,7 @@ int LegoSetTableModel::columnWidth(int colIndex, const QFont *font)
 
 bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant & value, int role)
 {
-	LOG_SCOPE_METHOD(L"");
+    LOG_SCOPE_METHOD(L"");
 
 	const int row = index.row();
     int colIndex = index.column();

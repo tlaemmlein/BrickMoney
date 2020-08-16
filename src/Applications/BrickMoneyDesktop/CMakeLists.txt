@@ -20,6 +20,8 @@ set(SRC_FILES
     src/MainWindow.ui
     src/ImageDelegate.cpp
     src/ImageDelegate.h
+    src/CheckBoxDelegate.cpp
+    src/CheckBoxDelegate.h
     )
 
 add_executable(${PROJECT_NAME}
