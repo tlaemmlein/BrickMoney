@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 		ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(num) + ")");
 		});
 	ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
+	connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
+		BrickMoneyProject::Inst()->getInStockSortModel()->setFilterText(ui->inStockLineEdit->text());
+		});
 
     ui->forSaleTableView->setModel(BrickMoneyProject::Inst()->getForSaleSortModel());
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
@@ -33,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
 		ui->tabWidget->setTabText(mForSaleTabIndex, forSaleTitle + " (" + QString::number(num) + ")");
 		});
 	ui->tabWidget->setTabText(mForSaleTabIndex, forSaleTitle + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
+	connect(ui->forSaleLineEdit, &QLineEdit::editingFinished, [&]() {
+		BrickMoneyProject::Inst()->getForSaleSortModel()->setFilterText(ui->forSaleLineEdit->text());
+		});
 
     ui->soldTableView->setModel(BrickMoneyProject::Inst()->getSoldSortModel());
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
@@ -42,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
 		ui->tabWidget->setTabText(mSoldTabIndex, soldTitle + " (" + QString::number(num) + ")");
 		});
 	ui->tabWidget->setTabText(mSoldTabIndex, soldTitle + " (" + QString::number(BrickMoneyProject::Inst()->getSoldModel()->numberOfLegoSets()) +")");
+	connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
+		BrickMoneyProject::Inst()->getSoldSortModel()->setFilterText(ui->soldLineEdit->text());
+		});
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 
