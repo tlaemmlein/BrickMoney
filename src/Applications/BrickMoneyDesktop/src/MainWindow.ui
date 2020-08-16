@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="OverviewTab">
        <attribute name="title">
@@ -31,7 +31,14 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="0">
-         <widget class="QTableView" name="inStockTableView"/>
+         <widget class="QTableView" name="inStockTableView">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item row="0" column="0">
          <widget class="QFrame" name="inStockFrame">
@@ -152,7 +159,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="forSaleTableView"/>
+         <widget class="QTableView" name="forSaleTableView">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -211,7 +225,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableView" name="soldTableView"/>
+         <widget class="QTableView" name="soldTableView">
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="sortingEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
