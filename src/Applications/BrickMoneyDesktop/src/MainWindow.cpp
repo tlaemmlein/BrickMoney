@@ -9,6 +9,9 @@
 #include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 
 #include <QFileDialog>
+#include <QCloseEvent>
+#include <QMessageBox>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -92,5 +95,18 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent * event)
+{
+	if (BrickMoneyDataManager::Inst()->brickMoneyIsDirty())
+	{
+		QMessageBox::StandardButton reply;
+		reply = QMessageBox::question(this, tr("The document has been modified."), tr("Do you want to save your changes?"),
+			QMessageBox::Yes | QMessageBox::No);
+		if (reply == QMessageBox::Yes)
+			BrickMoneyProject::Inst()->save();
+	}
+	event->accept();
 }
 
