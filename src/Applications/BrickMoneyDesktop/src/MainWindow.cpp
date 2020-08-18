@@ -30,6 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
 		BrickMoneyProject::Inst()->getInStockSortModel()->setFilterText(ui->inStockLineEdit->text());
 		});
+	connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->moveToForSalePushButton, &QPushButton::setVisible);
+ 	ui->moveToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getInStockModel()->selectionIsDirty());
+	connect(ui->moveToForSalePushButton, &QPushButton::clicked, [&]() {
+		BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getInStockModel(), BrickMoneyProject::Inst()->getForSaleModel());
+		});
 
     ui->forSaleTableView->setModel(BrickMoneyProject::Inst()->getForSaleSortModel());
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
@@ -88,7 +93,6 @@ MainWindow::MainWindow(QWidget *parent) :
             BrickMoneyProject::Inst()->save();
         }
     });
-
 
 }
 
