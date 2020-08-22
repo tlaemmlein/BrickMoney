@@ -18,6 +18,12 @@ set(SRC_FILES
     src/InStock.h
     src/InStock.cpp
     src/InStock.ui
+    src/ForSale.h
+    src/ForSale.cpp
+    src/ForSale.ui
+    src/Sold.h
+    src/Sold.cpp
+    src/Sold.ui
     src/MainWindow.h
     src/MainWindow.cpp
     src/MainWindow.ui
