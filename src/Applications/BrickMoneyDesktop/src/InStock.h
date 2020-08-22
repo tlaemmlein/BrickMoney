@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+class LegoSetSortFilterTableModel;
+class LegoSetTableModel;
+
 namespace Ui {
 class InStock;
 }
@@ -20,6 +23,8 @@ signals:
 
 private:
     Ui::InStock *ui;
+    LegoSetSortFilterTableModel* mSortModel;
+    LegoSetTableModel* mModel;
 };
 
 #endif // INSTOCK_H

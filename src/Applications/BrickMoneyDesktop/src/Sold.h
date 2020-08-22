@@ -3,6 +3,10 @@
 
 #include <QWidget>
 
+class LegoSetSortFilterTableModel;
+class LegoSetTableModel;
+
+
 namespace Ui {
 class Sold;
 }
@@ -21,6 +25,9 @@ signals:
 
 private:
     Ui::Sold *ui;
+    LegoSetSortFilterTableModel* mSortModel;
+    LegoSetTableModel* mModel;
+
 };
 
 #endif // Sold_H

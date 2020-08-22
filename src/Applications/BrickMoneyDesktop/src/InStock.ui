@@ -31,9 +31,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="copyAndPastePushButton">
         <property name="text">
-         <string>PushButton</string>
+         <string>Copy &amp;&amp; Paste</string>
         </property>
        </widget>
       </item>

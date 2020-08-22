@@ -14,22 +14,33 @@ Sold::Sold(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->soldTableView->setModel(BrickMoneyProject::Inst()->getSoldSortModel());
+    mSortModel = BrickMoneyProject::Inst()->getSoldSortModel();
+    mModel = BrickMoneyProject::Inst()->getSoldModel();
+
+
+    ui->soldTableView->setModel(mSortModel);
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
-        BrickMoneyProject::Inst()->getSoldSortModel()->setFilterText(ui->soldLineEdit->text());
+        mSortModel->setFilterText(ui->soldLineEdit->text());
     });
-    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToInStockPushButton, &QPushButton::setVisible);
-    ui->fromSoldToInStockPushButton->setVisible(BrickMoneyProject::Inst()->getSoldModel()->selectionIsDirty());
+
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->copyAndPastePushButton, &QPushButton::setVisible);
+    ui->copyAndPastePushButton->setVisible(mModel->selectionIsDirty());
+    connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->copySelectedLegoSets(mModel, mModel);
+    });
+
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToInStockPushButton, &QPushButton::setVisible);
+    ui->fromSoldToInStockPushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromSoldToInStockPushButton, &QPushButton::clicked, [&]() {
-        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getSoldModel(), BrickMoneyProject::Inst()->getInStockModel());
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
         emit legoSetsMovedToInStock();
     });
-    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToForSalePushButton, &QPushButton::setVisible);
-    ui->fromSoldToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getSoldModel()->selectionIsDirty());
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToForSalePushButton, &QPushButton::setVisible);
+    ui->fromSoldToForSalePushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromSoldToForSalePushButton, &QPushButton::clicked, [&]() {
-        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getSoldModel(), BrickMoneyProject::Inst()->getForSaleModel());
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });
 }

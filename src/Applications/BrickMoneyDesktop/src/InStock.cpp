@@ -14,18 +14,30 @@ InStock::InStock(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->inStockTableView->setModel(BrickMoneyProject::Inst()->getInStockSortModel());
+    mSortModel = BrickMoneyProject::Inst()->getInStockSortModel();
+    mModel = BrickMoneyProject::Inst()->getInStockModel();
+
+    ui->inStockTableView->setModel(mSortModel);
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
-        BrickMoneyProject::Inst()->getInStockSortModel()->setFilterText(ui->inStockLineEdit->text());
+        mSortModel->setFilterText(ui->inStockLineEdit->text());
     });
-    connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromInStockToForSalePushButton, &QPushButton::setVisible);
-    ui->fromInStockToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getInStockModel()->selectionIsDirty());
+
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->copyAndPastePushButton, &QPushButton::setVisible);
+    ui->copyAndPastePushButton->setVisible(mModel->selectionIsDirty());
+    connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->copySelectedLegoSets(mModel, mModel);
+    });
+
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromInStockToForSalePushButton, &QPushButton::setVisible);
+    ui->fromInStockToForSalePushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
-        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getInStockModel(), BrickMoneyProject::Inst()->getForSaleModel());
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });
+
+
 }
 
 InStock::~InStock()

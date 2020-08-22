@@ -3,6 +3,9 @@
 
 #include <QWidget>
 
+class LegoSetSortFilterTableModel;
+class LegoSetTableModel;
+
 namespace Ui {
 class ForSale;
 }
@@ -21,6 +24,8 @@ signals:
 
 private:
     Ui::ForSale *ui;
+    LegoSetSortFilterTableModel* mSortModel;
+    LegoSetTableModel* mModel;
 };
 
 #endif // ForSale_H

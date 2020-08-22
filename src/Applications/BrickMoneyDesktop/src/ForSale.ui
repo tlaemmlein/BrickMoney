@@ -22,11 +22,18 @@
      <property name="frameShadow">
       <enum>QFrame::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QLabel" name="forSaleLabel">
         <property name="text">
          <string>For Sale</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="copyAndPastePushButton">
+        <property name="text">
+         <string>Copy &amp;&amp; Paste</string>
         </property>
        </widget>
       </item>
