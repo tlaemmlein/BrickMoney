@@ -30,10 +30,11 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
 		BrickMoneyProject::Inst()->getInStockSortModel()->setFilterText(ui->inStockLineEdit->text());
 		});
-	connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->moveToForSalePushButton, &QPushButton::setVisible);
- 	ui->moveToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getInStockModel()->selectionIsDirty());
-	connect(ui->moveToForSalePushButton, &QPushButton::clicked, [&]() {
+    connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromInStockToForSalePushButton, &QPushButton::setVisible);
+    ui->fromInStockToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getInStockModel()->selectionIsDirty());
+    connect(ui->fromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
 		BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getInStockModel(), BrickMoneyProject::Inst()->getForSaleModel());
+        ui->tabWidget->setCurrentIndex(mForSaleTabIndex);
 		});
 
     ui->forSaleTableView->setModel(BrickMoneyProject::Inst()->getForSaleSortModel());
@@ -46,7 +47,21 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->tabWidget->setTabText(mForSaleTabIndex, forSaleTitle + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
 	connect(ui->forSaleLineEdit, &QLineEdit::editingFinished, [&]() {
 		BrickMoneyProject::Inst()->getForSaleSortModel()->setFilterText(ui->forSaleLineEdit->text());
-		});
+        });
+    connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromForSaleToInStockPushButton, &QPushButton::setVisible);
+    ui->fromForSaleToInStockPushButton->setVisible(BrickMoneyProject::Inst()->getForSaleModel()->selectionIsDirty());
+    connect(ui->fromForSaleToInStockPushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getForSaleModel(), BrickMoneyProject::Inst()->getInStockModel());
+        ui->tabWidget->setCurrentIndex(mInStockTabIndex);
+
+    });
+    connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromForSaleToSoldPushButton, &QPushButton::setVisible);
+    ui->fromForSaleToSoldPushButton->setVisible(BrickMoneyProject::Inst()->getForSaleModel()->selectionIsDirty());
+    connect(ui->fromForSaleToSoldPushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getForSaleModel(), BrickMoneyProject::Inst()->getSoldModel());
+        ui->tabWidget->setCurrentIndex(mSoldTabIndex);
+    });
+
 
     ui->soldTableView->setModel(BrickMoneyProject::Inst()->getSoldSortModel());
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
@@ -59,6 +74,18 @@ MainWindow::MainWindow(QWidget *parent) :
 	connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
 		BrickMoneyProject::Inst()->getSoldSortModel()->setFilterText(ui->soldLineEdit->text());
 		});
+    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToInStockPushButton, &QPushButton::setVisible);
+    ui->fromSoldToInStockPushButton->setVisible(BrickMoneyProject::Inst()->getSoldModel()->selectionIsDirty());
+    connect(ui->fromSoldToInStockPushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getSoldModel(), BrickMoneyProject::Inst()->getInStockModel());
+        ui->tabWidget->setCurrentIndex(mInStockTabIndex);
+    });
+    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromSoldToForSalePushButton, &QPushButton::setVisible);
+    ui->fromSoldToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getSoldModel()->selectionIsDirty());
+    connect(ui->fromSoldToForSalePushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getSoldModel(), BrickMoneyProject::Inst()->getForSaleModel());
+        ui->tabWidget->setCurrentIndex(mForSaleTabIndex);
+    });
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 

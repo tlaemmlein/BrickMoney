@@ -57,7 +57,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="moveToForSalePushButton">
+            <widget class="QPushButton" name="fromInStockToForSalePushButton">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -126,6 +126,20 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="fromForSaleToInStockPushButton">
+             <property name="text">
+              <string>Move to In Stock</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="fromForSaleToSoldPushButton">
+             <property name="text">
+              <string>Move to Sold</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLabel" name="forSaleFilterLabel">
              <property name="text">
               <string>Filter:</string>
@@ -188,6 +202,20 @@
             <widget class="QLabel" name="soldLabel">
              <property name="text">
               <string>Sold</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="fromSoldToInStockPushButton">
+             <property name="text">
+              <string>Move to In Stock</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="fromSoldToForSalePushButton">
+             <property name="text">
+              <string>Move to For Sale</string>
              </property>
             </widget>
            </item>
