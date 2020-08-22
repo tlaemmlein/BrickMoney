@@ -19,23 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->inStockTableView->setModel(BrickMoneyProject::Inst()->getInStockSortModel());
-    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
-    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
 	static const QString inStockTitle = tr("In Stock");
 	connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
 		ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(num) + ")");
 		});
 	ui->tabWidget->setTabText(mInStockTabIndex, inStockTitle + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
-	connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
-		BrickMoneyProject::Inst()->getInStockSortModel()->setFilterText(ui->inStockLineEdit->text());
-		});
-    connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::selectionIsDirtyChanged, ui->fromInStockToForSalePushButton, &QPushButton::setVisible);
-    ui->fromInStockToForSalePushButton->setVisible(BrickMoneyProject::Inst()->getInStockModel()->selectionIsDirty());
-    connect(ui->fromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
-		BrickMoneyProject::Inst()->moveSelectedLegoSets(BrickMoneyProject::Inst()->getInStockModel(), BrickMoneyProject::Inst()->getForSaleModel());
-        ui->tabWidget->setCurrentIndex(mForSaleTabIndex);
-		});
+    connect(ui->inStockWidget, &InStock::legoSetsMovedToForSale, [&]() { ui->tabWidget->setCurrentIndex(mForSaleTabIndex); });
 
     ui->forSaleTableView->setModel(BrickMoneyProject::Inst()->getForSaleSortModel());
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));

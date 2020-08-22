@@ -15,6 +15,9 @@ set(THIRDPARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Thirdparty)
 
 set(SRC_FILES
     src/main.cpp
+    src/InStock.h
+    src/InStock.cpp
+    src/InStock.ui
     src/MainWindow.h
     src/MainWindow.cpp
     src/MainWindow.ui
