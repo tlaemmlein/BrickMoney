@@ -31,6 +31,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="numOfSelectedLabel">
+        <property name="text">
+         <string>Num Of Selected</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="copyAndPastePushButton">
         <property name="text">
          <string>Copy &amp;&amp; Paste</string>

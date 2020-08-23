@@ -24,15 +24,27 @@ InStock::InStock(QWidget *parent) :
         mSortModel->setFilterText(ui->inStockLineEdit->text());
     });
 
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->copyAndPastePushButton, &QPushButton::setVisible);
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, [&] (bool isDirty) {
+        ui->numOfSelectedLabel->setVisible(isDirty);
+        ui->copyAndPastePushButton->setVisible(isDirty);
+        ui->fromInStockToForSalePushButton->setVisible(isDirty);
+    });
+
+    ui->numOfSelectedLabel->setVisible(mModel->selectionIsDirty());
+    static const QString selectedText = tr("selected");
+    connect(mModel, &LegoSetTableModel::numberOfSelectedLegoSetsChanged, [&] (int num) {
+        ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText);
+        });
+    ui->numOfSelectedLabel->setText(QString::number(mModel->numberOfSelectedLegoSets()) + " " + selectedText);
+
     ui->copyAndPastePushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->copySelectedLegoSets(mModel, mModel);
     });
 
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromInStockToForSalePushButton, &QPushButton::setVisible);
     ui->fromInStockToForSalePushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });

@@ -14,6 +14,7 @@ public:
 
     void addLegoSet(LegoSet* set);
     QVector<LegoSet*> getSelectedLegoSets();
+    int getNumberSelectedLegoSets();
     void removeSelectedLegoSets();
     int legoSetCount();
     LegoSet *legoSetAt(int index);
@@ -35,6 +36,7 @@ signals:
 	void resetLegoSets();
 
     void selectionIsDirtyChanged(bool);
+    void numberSelectedLegoSetsChanged(int);
 
 private:
     QList<LegoSet*> m_legoSets;
@@ -50,6 +52,7 @@ private:
 	static const QString BuyerName;
 
     int m_SelectedLegoSets;
+    void setNumberSelectedLegoSets(int num);
 
     void connectSelection(LegoSet *set);
 

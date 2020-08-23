@@ -24,21 +24,35 @@ ForSale::ForSale(QWidget *parent) :
         mSortModel->setFilterText(ui->forSaleLineEdit->text());
     });
 
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->copyAndPastePushButton, &QPushButton::setVisible);
+    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, [&] (bool isDirty) {
+        ui->numOfSelectedLabel->setVisible(isDirty);
+        ui->copyAndPastePushButton->setVisible(isDirty);
+        ui->fromForSaleToInStockPushButton->setVisible(isDirty);
+        ui->fromForSaleToSoldPushButton->setVisible(isDirty);
+    });
+
+    ui->numOfSelectedLabel->setVisible(mModel->selectionIsDirty());
+    static const QString selectedText = tr("selected");
+    connect(mModel, &LegoSetTableModel::numberOfSelectedLegoSetsChanged, [&] (int num) {
+        ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText);
+    });
+    ui->numOfSelectedLabel->setText(QString::number(mModel->numberOfSelectedLegoSets()) + " " + selectedText);
+
     ui->copyAndPastePushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->copySelectedLegoSets(mModel, mModel);
     });
 
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromForSaleToInStockPushButton, &QPushButton::setVisible);
     ui->fromForSaleToInStockPushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromForSaleToInStockPushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
         emit legoSetsMovedToInStock();
     });
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, ui->fromForSaleToSoldPushButton, &QPushButton::setVisible);
+
     ui->fromForSaleToSoldPushButton->setVisible(mModel->selectionIsDirty());
     connect(ui->fromForSaleToSoldPushButton, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getSoldModel());
         emit legoSetsMovedToSold();
     });

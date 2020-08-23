@@ -49,6 +49,11 @@ QVector<LegoSet *> LegoSetDataSource::getSelectedLegoSets()
     return selectedSets;
 }
 
+int LegoSetDataSource::getNumberSelectedLegoSets()
+{
+    return m_SelectedLegoSets;
+}
+
 
 void LegoSetDataSource::removeSelectedLegoSets()
 {
@@ -59,7 +64,7 @@ void LegoSetDataSource::removeSelectedLegoSets()
         m_legoSets.removeAt(index);
         emit postLegoSetRemoved();
     }
-    m_SelectedLegoSets = 0;
+    setNumberSelectedLegoSets(0);
     emit selectionIsDirtyChanged(false);
     BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(true);
 }
@@ -77,7 +82,7 @@ LegoSet *LegoSetDataSource::legoSetAt(int index)
 void LegoSetDataSource::clearLegoSets()
 {
     m_legoSets.clear();
-    m_SelectedLegoSets = 0;
+    setNumberSelectedLegoSets(0);
     BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(true);
 }
 
@@ -208,24 +213,33 @@ bool LegoSetDataSource::write(QJsonArray &legoSetArray)
 
 bool LegoSetDataSource::selectionIsDirty()
 {
-    return m_SelectedLegoSets > 0;
+    return getNumberSelectedLegoSets() > 0;
 }
 
+void LegoSetDataSource::setNumberSelectedLegoSets(int num)
+{
+    if (num == m_SelectedLegoSets)
+        return;
+    m_SelectedLegoSets = num;
+    emit numberSelectedLegoSetsChanged(m_SelectedLegoSets);
+}
 
 void LegoSetDataSource::connectSelection(LegoSet *set)
 {
     connect(set, &LegoSet::isSelectedChanged, [&](bool selected) {
-        const int previous = m_SelectedLegoSets;
-        m_SelectedLegoSets = selected ? ++m_SelectedLegoSets : --m_SelectedLegoSets;
+        const int previous = getNumberSelectedLegoSets();
+        int newNumber = getNumberSelectedLegoSets();
+        setNumberSelectedLegoSets(selected ? ++newNumber : --newNumber);
         if (previous == 0)
             emit selectionIsDirtyChanged(true);
-        if (previous == 1 && m_SelectedLegoSets == 0)
+        if (previous == 1 && getNumberSelectedLegoSets() == 0)
             emit selectionIsDirtyChanged(false);
     } );
 
     if (set->isSelected())
     {
-        ++m_SelectedLegoSets;
+        int newNumber = getNumberSelectedLegoSets();
+        setNumberSelectedLegoSets(++newNumber);
         emit selectionIsDirtyChanged(true);
     }
 }

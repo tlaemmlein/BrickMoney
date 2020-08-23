@@ -12,7 +12,6 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)
-    , m_NumberOfLegoSets(0)
 {
     setObjectName("LegoSetTableModel");
     setDataSource( new LegoSetDataSource(this));
@@ -240,7 +239,12 @@ bool LegoSetTableModel::selectionIsDirty() const
 
 int LegoSetTableModel::numberOfLegoSets() const
 {
-    return m_NumberOfLegoSets;
+    return m_dataSource->legoSetCount();
+}
+
+int LegoSetTableModel::numberOfSelectedLegoSets() const
+{
+    return m_dataSource->getNumberSelectedLegoSets();
 }
 
 
@@ -259,8 +263,7 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
     });
 
     connect(m_dataSource,&LegoSetDataSource::postLegoSetAdded,this,[=](){
-        m_NumberOfLegoSets = m_dataSource->legoSetCount();
-        emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
+        emit numberOfLegoSetsChanged(m_dataSource->legoSetCount());
         endInsertRows();
     });
 
@@ -269,8 +272,7 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
     });
 
     connect(m_dataSource,&LegoSetDataSource::postLegoSetRemoved,this,[=](){
-        m_NumberOfLegoSets = m_dataSource->legoSetCount();
-        emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
+        emit numberOfLegoSetsChanged(m_dataSource->legoSetCount());
         endRemoveRows();
     });
 
@@ -285,10 +287,13 @@ void LegoSetTableModel::setDataSource(LegoSetDataSource *dataSource)
 
     m_SelectionIsDirty = m_dataSource->selectionIsDirty();
 
+    connect(m_dataSource, &LegoSetDataSource::numberSelectedLegoSetsChanged, this, &LegoSetTableModel::numberOfSelectedLegoSetsChanged);
+
+    emit numberOfSelectedLegoSetsChanged(m_dataSource->getNumberSelectedLegoSets());
+
     m_signalConnected = true;
 
-    m_NumberOfLegoSets = m_dataSource->legoSetCount();
-    emit numberOfLegoSetsChanged(m_NumberOfLegoSets);
+    emit numberOfLegoSetsChanged(m_dataSource->legoSetCount());
 
     endResetModel();
 	emit modelReset();
