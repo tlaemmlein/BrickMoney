@@ -8,6 +8,9 @@
 
 #include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 
+#include <QMessageBox>
+
+
 InStock::InStock(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::InStock)
@@ -28,6 +31,7 @@ InStock::InStock(QWidget *parent) :
         ui->numOfSelectedLabel->setVisible(isDirty);
         ui->copyAndPastePushButton->setVisible(isDirty);
         ui->fromInStockToForSalePushButton->setVisible(isDirty);
+        ui->deletePushButton->setVisible(isDirty);
     });
 
     ui->numOfSelectedLabel->setVisible(mModel->selectionIsDirty());
@@ -49,7 +53,14 @@ InStock::InStock(QWidget *parent) :
         emit legoSetsMovedToForSale();
     });
 
-
+    ui->deletePushButton->setVisible(mModel->selectionIsDirty());
+    connect(ui->deletePushButton, &QPushButton::clicked, [&]() {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, tr("Do you want to delete the LegoSet(s)?"), "ID(s): " + mModel->getSelectedLegoSetIDs(),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes)
+            mModel->removeSelectedLegoSets();
+    });
 }
 
 InStock::~InStock()

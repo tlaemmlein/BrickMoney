@@ -59,6 +59,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="deletePushButton">
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="soldFilterLabel">
         <property name="text">
          <string>Filter:</string>

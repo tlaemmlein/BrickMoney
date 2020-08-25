@@ -8,6 +8,8 @@
 
 #include "Packages/BrickMoneyProject/BrickMoneyProject.h"
 
+#include <QMessageBox>
+
 ForSale::ForSale(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ForSale)
@@ -29,6 +31,7 @@ ForSale::ForSale(QWidget *parent) :
         ui->copyAndPastePushButton->setVisible(isDirty);
         ui->fromForSaleToInStockPushButton->setVisible(isDirty);
         ui->fromForSaleToSoldPushButton->setVisible(isDirty);
+        ui->deletePushButton->setVisible(isDirty);
     });
 
     ui->numOfSelectedLabel->setVisible(mModel->selectionIsDirty());
@@ -55,6 +58,15 @@ ForSale::ForSale(QWidget *parent) :
         BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getSoldModel());
         emit legoSetsMovedToSold();
+    });
+
+    ui->deletePushButton->setVisible(mModel->selectionIsDirty());
+    connect(ui->deletePushButton, &QPushButton::clicked, [&]() {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, tr("Do you want to delete the LegoSet(s)?"), "ID(s): " + mModel->getSelectedLegoSetIDs(),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes)
+            mModel->removeSelectedLegoSets();
     });
 
 }
