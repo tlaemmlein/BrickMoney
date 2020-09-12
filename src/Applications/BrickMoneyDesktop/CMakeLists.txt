@@ -31,6 +31,8 @@ set(SRC_FILES
     src/ImageDelegate.h
     src/CheckBoxDelegate.cpp
     src/CheckBoxDelegate.h
+    src/SpinBoxDelegate.cpp
+    src/SpinBoxDelegate.h
     )
 
 add_executable(${PROJECT_NAME}

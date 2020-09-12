@@ -2,6 +2,7 @@
 #include "ui_ForSale.h"
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
+#include "SpinBoxDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
@@ -22,6 +23,8 @@ ForSale::ForSale(QWidget *parent) :
     ui->forSaleTableView->setModel(mSortModel);
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new SpinBoxDelegate(this));
+    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new SpinBoxDelegate(this));
     connect(ui->forSaleLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->forSaleLineEdit->text());
     });

@@ -189,6 +189,35 @@ bool LegoSetTableModel::setData(const QModelIndex &index, const QVariant & value
 	return true;
 }
 
+Qt::ItemFlags LegoSetTableModel::flags(const QModelIndex &index) const
+{
+    if (index.row() < 0 || index.row() >= m_dataSource->legoSetCount() )
+        return QAbstractTableModel::flags(index);
+
+    int colIndex = index.column();
+
+    if (LegoSetProperty(colIndex) == LegoSetProperty::isSelected
+        //id,
+        || LegoSetProperty(colIndex) == setNumber
+        //imageUrl,
+        //description,
+        //year,
+        //recommendedRetailPrice,
+        || LegoSetProperty(colIndex) == purchasingPrice
+        //cheaperPercent,
+        || LegoSetProperty(colIndex) == seller
+        || LegoSetProperty(colIndex) == purchaseDate
+        || LegoSetProperty(colIndex) == retailPrice
+        //profitEuros,
+        //profitPercent,
+        || LegoSetProperty(colIndex) == saleDate
+        || LegoSetProperty(colIndex) == soldOver
+        || LegoSetProperty(colIndex) == buyer)
+        return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+
+    return QAbstractTableModel::flags(index);
+}
+
 
 LegoSet* LegoSetTableModel::addLegoSet(int setNumber)
 {
@@ -303,5 +332,7 @@ LegoSetDataSource *LegoSetTableModel::dataSource() const
 {
     return m_dataSource;
 }
+
+
 
 

@@ -2,6 +2,7 @@
 #include "ui_Sold.h"
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
+#include "SpinBoxDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
@@ -23,6 +24,8 @@ Sold::Sold(QWidget *parent) :
     ui->soldTableView->setModel(mSortModel);
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new SpinBoxDelegate(this));
+    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new SpinBoxDelegate(this));
     connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->soldLineEdit->text());
     });

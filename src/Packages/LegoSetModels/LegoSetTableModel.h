@@ -43,6 +43,8 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
     void setDataSource(LegoSetDataSource* dataSource);
 
     LegoSetDataSource *dataSource() const;
@@ -75,6 +77,7 @@ private:
     QVector<int> m_columnWidths = QVector<int>(LegoSetProperty::COUNT);
     QHash<int, QByteArray> m_roleNames;
     bool m_SelectionIsDirty;
+
 };
 
 
