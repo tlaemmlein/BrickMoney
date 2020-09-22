@@ -29,6 +29,8 @@ set(SRC_FILES
     src/MainWindow.ui
     src/ImageDelegate.cpp
     src/ImageDelegate.h
+    src/LineEditDelegate.cpp
+    src/LineEditDelegate.h
     src/CheckBoxDelegate.cpp
     src/CheckBoxDelegate.h
     src/SpinBoxDelegate.cpp

@@ -3,6 +3,7 @@
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
 #include "SpinBoxDelegate.h"
+#include "LineEditDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
@@ -24,8 +25,11 @@ InStock::InStock(QWidget *parent) :
     ui->inStockTableView->setModel(mModel);
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new SpinBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new SpinBoxDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->inStockLineEdit->text());
     });
