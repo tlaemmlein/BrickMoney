@@ -1,6 +1,7 @@
 #include "InStock.h"
 #include "ui_InStock.h"
 #include "ImageDelegate.h"
+#include "CalendarDelegate.h"
 #include "CheckBoxDelegate.h"
 #include "SpinBoxDelegate.h"
 #include "LineEditDelegate.h"
@@ -26,10 +27,12 @@ InStock::InStock(QWidget *parent) :
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::purchaseDate, new CalendarDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new SpinBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new SpinBoxDelegate(this));
-    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
     connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->inStockLineEdit->text());
     });

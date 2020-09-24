@@ -27,6 +27,8 @@ set(SRC_FILES
     src/MainWindow.h
     src/MainWindow.cpp
     src/MainWindow.ui
+    src/CalendarDelegate.h
+    src/CalendarDelegate.cpp
     src/ImageDelegate.cpp
     src/ImageDelegate.h
     src/LineEditDelegate.cpp
