@@ -1,4 +1,4 @@
-#include "SpinBoxDelegate.h"
+#include "DoubleSpinBoxDelegate.h"
 
 #include "Packages/LegoSetModels/LegoSetTableModel.h"
 
@@ -8,33 +8,13 @@
 #include <QEvent>
 #include <QApplication>
 
-SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
+DoubleSpinBoxDelegate::DoubleSpinBoxDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
     qDebug() << __FUNCTION__;
 }
 
-//void SpinBoxDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-//{
-//    qDebug() << __FUNCTION__;
-//    if (index.data(int(LegoSetTableModel::Role::Type)).toString() == QLatin1String("double")) {
-//        int percent = qRound(index.data(int(LegoSetTableModel::Role::Number)).toDouble());
-
-//        QStyleOptionProgressBar progressBarOption;
-//        progressBarOption.rect = option.rect;
-//        progressBarOption.minimum = 0;
-//        progressBarOption.maximum = 100;
-//        progressBarOption.progress = percent;
-//        progressBarOption.text = index.data().toString();
-//        progressBarOption.textVisible = true;
-
-//        QApplication::style()->drawControl(QStyle::CE_ProgressBar, &progressBarOption, painter);
-//    } else {
-//        QStyledItemDelegate::paint(painter, option, index);
-//    }
-//}
-
-QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
+QWidget *DoubleSpinBoxDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &/* index */) const
 {
@@ -47,7 +27,7 @@ QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
     return editor;
 }
 
-void SpinBoxDelegate::setEditorData(QWidget *editor,
+void DoubleSpinBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
     qDebug() << __FUNCTION__;
@@ -60,7 +40,7 @@ void SpinBoxDelegate::setEditorData(QWidget *editor,
     spinBox->setValue(value);
 }
 
-void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+void DoubleSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
     qDebug() << __FUNCTION__;
@@ -72,7 +52,7 @@ void SpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
     model->setData(index, value, int(LegoSetTableModel::Role::Number));
 }
 
-void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
+void DoubleSpinBoxDelegate::updateEditorGeometry(QWidget *editor,
                                            const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     qDebug() << __FUNCTION__;

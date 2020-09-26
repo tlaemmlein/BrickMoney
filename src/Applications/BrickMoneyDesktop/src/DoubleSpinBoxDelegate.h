@@ -1,17 +1,17 @@
-#ifndef SPINBOXDELEGATE_H
-#define SPINBOXDELEGATE_H
+#ifndef DoubleSpinBoxDelegate_H
+#define DoubleSpinBoxDelegate_H
 
 #include <QObject>
 
 #include <QStyledItemDelegate>
 
 
-class SpinBoxDelegate : public QStyledItemDelegate
+class DoubleSpinBoxDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 
 public:
-    SpinBoxDelegate(QObject *parent = 0);
+    DoubleSpinBoxDelegate(QObject *parent = 0);
 
 //    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 

@@ -35,8 +35,8 @@ set(SRC_FILES
     src/LineEditDelegate.h
     src/CheckBoxDelegate.cpp
     src/CheckBoxDelegate.h
-    src/SpinBoxDelegate.cpp
-    src/SpinBoxDelegate.h
+    src/DoubleSpinBoxDelegate.cpp
+    src/DoubleSpinBoxDelegate.h
     )
 
 add_executable(${PROJECT_NAME}

@@ -3,7 +3,7 @@
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
 #include "CalendarDelegate.h"
-#include "SpinBoxDelegate.h"
+#include "DoubleSpinBoxDelegate.h"
 #include "LineEditDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
@@ -27,8 +27,8 @@ ForSale::ForSale(QWidget *parent) :
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::purchaseDate, new CalendarDelegate(this));
-    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new SpinBoxDelegate(this));
-    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new SpinBoxDelegate(this));
+    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new DoubleSpinBoxDelegate(this));
+    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new DoubleSpinBoxDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
