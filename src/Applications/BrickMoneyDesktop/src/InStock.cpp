@@ -5,6 +5,7 @@
 #include "CheckBoxDelegate.h"
 #include "DoubleSpinBoxDelegate.h"
 #include "LineEditDelegate.h"
+#include "LegoSetSpinBoxDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
@@ -25,6 +26,7 @@ InStock::InStock(QWidget *parent) :
 
     ui->inStockTableView->setModel(mModel);
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
+    ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::purchaseDate, new CalendarDelegate(this));

@@ -5,6 +5,7 @@
 #include "CalendarDelegate.h"
 #include "DoubleSpinBoxDelegate.h"
 #include "LineEditDelegate.h"
+#include "LegoSetSpinBoxDelegate.h"
 
 #include "Packages/BrickMoneyData/BrickMoneySettings.h"
 #include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
@@ -24,6 +25,7 @@ ForSale::ForSale(QWidget *parent) :
 
     ui->forSaleTableView->setModel(mSortModel);
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
+    ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::purchaseDate, new CalendarDelegate(this));

@@ -37,6 +37,8 @@ set(SRC_FILES
     src/CheckBoxDelegate.h
     src/DoubleSpinBoxDelegate.cpp
     src/DoubleSpinBoxDelegate.h
+    src/LegoSetSpinBoxDelegate.cpp
+    src/LegoSetSpinBoxDelegate.h
     )
 
 add_executable(${PROJECT_NAME}
