@@ -22,7 +22,6 @@ void BrickMoneyTrans::selectLanguage(QString language)
 
     if ( !_translator->load(QString("bm_%1").arg(language),dir.path()) )
     {
-        //qDebug() << "Failed to load translation file, falling back to English";
         language = "english";
     }
     // it's a global thing, we can use it anywhere (after #including <QGuiApplication>)

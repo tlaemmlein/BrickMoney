@@ -1,8 +1,6 @@
 #include "LegoSetSortFilterTableModel.h"
 #include "LegoSetTableModel.h"
 
-#include <QDebug>
-
 LegoSetSortFilterTableModel::LegoSetSortFilterTableModel(LegoSetTableModel* model, QObject *parent)
   : QSortFilterProxyModel (parent)
 {

@@ -30,7 +30,6 @@ void ImageDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
             local=url.toLocalFile();
         }
-        //qDebug() << "Paint the image " << imageUrl << " " << local;
 
         QPixmap image(local);
         //Scaled size that will be used to set draw aera to QPainter, with aspect ratio preserved
@@ -41,4 +40,12 @@ void ImageDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     } else {
         QStyledItemDelegate::paint(painter, option, index);
     }
+}
+
+QSize ImageDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    if (index.data(int(LegoSetTableModel::Role::Type)).toString() == QLatin1String("image")) {
+        return QSize(100,100);
+    }
+    return QStyledItemDelegate::sizeHint(option, index);
 }

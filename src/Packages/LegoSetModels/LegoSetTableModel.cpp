@@ -8,7 +8,6 @@ SET_LOGGER("BrickMoney.LegoSetTableModel")
 #include <QUrl>
 #include <QFontMetrics>
 #include <QGuiApplication>
-#include <QDebug>
 
 LegoSetTableModel::LegoSetTableModel(QObject *parent) : QAbstractTableModel(parent)
     , m_signalConnected(false)

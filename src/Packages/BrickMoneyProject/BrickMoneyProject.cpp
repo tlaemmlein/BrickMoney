@@ -207,7 +207,6 @@ bool BrickMoneyProject::copySelectedLegoSets(LegoSetTableModel *from, LegoSetTab
 
 bool BrickMoneyProject::loadDataFrom(const QString &pathToCsvFile)
 {
-    qDebug() << __FUNCTION__;
     const QString local = toLocalFile(pathToCsvFile);
     QFile cvsData(local);
 

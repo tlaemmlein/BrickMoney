@@ -43,6 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->soldWidget, &Sold::legoSetsMovedToInStock, [&]() { ui->tabWidget->setCurrentIndex(mInStockTabIndex); });
     connect(ui->soldWidget, &Sold::legoSetsMovedToForSale, [&]() { ui->tabWidget->setCurrentIndex(mForSaleTabIndex); });
 
+    ui->tabWidget->setCurrentIndex(1);
+
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 

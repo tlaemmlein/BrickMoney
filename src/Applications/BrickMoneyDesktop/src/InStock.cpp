@@ -35,9 +35,22 @@ InStock::InStock(QWidget *parent) :
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
+
+    ui->inStockTableView->resizeColumnsToContents();
+
+    connect(ui->addPushButton, &QPushButton::clicked, [&] {
+        mModel->dataSource()->addLegoSet( new LegoSet(41599, mModel));
+        ui->inStockTableView->scrollToBottom();
+        ui->inStockTableView->setFocus();
+        QModelIndex index = mModel->index(mModel->rowCount() - 1, LegoSetProperty::setNumber);
+        ui->inStockTableView->setCurrentIndex(index);
+        ui->inStockTableView->edit(index);
+    });
+
     connect(ui->inStockLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->inStockLineEdit->text());
     });
+
 
     connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, [&] (bool isDirty) {
         ui->numOfSelectedLabel->setVisible(isDirty);

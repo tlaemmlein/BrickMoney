@@ -12,23 +12,18 @@
 LineEditDelegate::LineEditDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
-    qDebug() << __FUNCTION__;
-
 }
 
 QWidget *LineEditDelegate::createEditor(QWidget *parent,
                                         const QStyleOptionViewItem &/* option */,
                                         const QModelIndex &/* index */) const
 {
-    qDebug() << __FUNCTION__;
     return new QLineEdit(parent);
 }
 
 void LineEditDelegate::setEditorData(QWidget *editor,
                                      const QModelIndex &index) const
 {
-    qDebug() << __FUNCTION__;
-
     QString value = index.model()->data(index, int(LegoSetTableModel::Role::Sort)).toString();
 
     QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
@@ -38,8 +33,6 @@ void LineEditDelegate::setEditorData(QWidget *editor,
 void LineEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                     const QModelIndex &index) const
 {
-    qDebug() << __FUNCTION__;
-
     QLineEdit *lineEdit = static_cast<QLineEdit*>(editor);
     //    lineEdit->returnPressed();
     QString value = lineEdit->text();
@@ -50,7 +43,5 @@ void LineEditDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 void LineEditDelegate::updateEditorGeometry(QWidget *editor,
                                             const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    qDebug() << __FUNCTION__;
-
     editor->setGeometry(option.rect);
 }

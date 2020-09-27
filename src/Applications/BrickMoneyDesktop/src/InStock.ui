@@ -31,6 +31,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="addPushButton">
+        <property name="text">
+         <string>Add Set</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="numOfSelectedLabel">
         <property name="text">
          <string>Num Of Selected</string>

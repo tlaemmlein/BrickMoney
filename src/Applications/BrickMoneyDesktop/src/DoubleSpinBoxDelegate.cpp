@@ -11,15 +11,12 @@
 DoubleSpinBoxDelegate::DoubleSpinBoxDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
 {
-    qDebug() << __FUNCTION__;
 }
 
 QWidget *DoubleSpinBoxDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &/* index */) const
 {
-    qDebug() << __FUNCTION__;
-
     QDoubleSpinBox *editor = new QDoubleSpinBox(parent);
     editor->setMinimum(-1000000);
     editor->setMaximum( 1000000);
@@ -30,8 +27,6 @@ QWidget *DoubleSpinBoxDelegate::createEditor(QWidget *parent,
 void DoubleSpinBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
-    qDebug() << __FUNCTION__;
-
     double value = index.model()->data(index, int(LegoSetTableModel::Role::Number)).toDouble();
 
     QDoubleSpinBox *spinBox = static_cast<QDoubleSpinBox*>(editor);
@@ -43,8 +38,6 @@ void DoubleSpinBoxDelegate::setEditorData(QWidget *editor,
 void DoubleSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
-    qDebug() << __FUNCTION__;
-
     QDoubleSpinBox *spinBox = static_cast<QDoubleSpinBox*>(editor);
     spinBox->interpretText();
     double value = spinBox->value();
@@ -55,7 +48,5 @@ void DoubleSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *mo
 void DoubleSpinBoxDelegate::updateEditorGeometry(QWidget *editor,
                                            const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
-    qDebug() << __FUNCTION__;
-
     editor->setGeometry(option.rect);
 }
