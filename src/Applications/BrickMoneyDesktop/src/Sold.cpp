@@ -35,6 +35,20 @@ Sold::Sold(QWidget *parent) :
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
+
+    connect(ui->selectAllPushButton, &QPushButton::clicked, [&] {
+        mModel->dataSource()->selectAllSets();
+        ui->soldTableView->setFocus();
+        ui->soldTableView->update();
+    });
+
+    connect(ui->selectNonePushButton, &QPushButton::clicked, [&] {
+        mModel->dataSource()->selectNoneSets();
+        ui->soldTableView->setFocus();
+        ui->soldTableView->update();
+    });
+
+
     connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
         mSortModel->setFilterText(ui->soldLineEdit->text());
     });
