@@ -14,6 +14,8 @@ public:
 
     void addLegoSet(LegoSet* set);
     QVector<LegoSet*> getSelectedLegoSets();
+    void selectAllSets();
+    void selectNoneSets();
     int getNumberSelectedLegoSets();
     void removeSelectedLegoSets();
     int legoSetCount();

@@ -24,7 +24,7 @@ InStock::InStock(QWidget *parent) :
     mSortModel = BrickMoneyProject::Inst()->getInStockSortModel();
     mModel = BrickMoneyProject::Inst()->getInStockModel();
 
-    ui->inStockTableView->setModel(mModel);
+    ui->inStockTableView->setModel(mSortModel);
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
     ui->inStockTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
@@ -38,11 +38,28 @@ InStock::InStock(QWidget *parent) :
 
     ui->inStockTableView->resizeColumnsToContents();
 
+    connect(ui->selectAllPushButton, &QPushButton::clicked, [&] {
+        mModel->dataSource()->selectAllSets();
+        ui->inStockTableView->setFocus();
+        ui->inStockTableView->update();
+    });
+
+    connect(ui->selectNonePushButton, &QPushButton::clicked, [&] {
+        mModel->dataSource()->selectNoneSets();
+        ui->inStockTableView->setFocus();
+        ui->inStockTableView->update();
+    });
+
     connect(ui->addPushButton, &QPushButton::clicked, [&] {
-        mModel->dataSource()->addLegoSet( new LegoSet(41599, mModel));
+		ui->inStockLineEdit->setText("");
+		mSortModel->setFilterText("");
+		auto set = new LegoSet(41599, mSortModel);
+        auto source = mModel->dataSource();
+        set->setIsSelected(true);
+        source->addLegoSet( set );
         ui->inStockTableView->scrollToBottom();
         ui->inStockTableView->setFocus();
-        QModelIndex index = mModel->index(mModel->rowCount() - 1, LegoSetProperty::setNumber);
+        QModelIndex index = mSortModel->index(mSortModel->rowCount() - 1, LegoSetProperty::setNumber);
         ui->inStockTableView->setCurrentIndex(index);
         ui->inStockTableView->edit(index);
     });

@@ -49,6 +49,18 @@ QVector<LegoSet *> LegoSetDataSource::getSelectedLegoSets()
     return selectedSets;
 }
 
+void LegoSetDataSource::selectAllSets()
+{
+    for (const auto& set : m_legoSets)
+        set->setIsSelected(true);
+}
+
+void LegoSetDataSource::selectNoneSets()
+{
+    for (const auto& set : m_legoSets)
+        set->setIsSelected(false);
+}
+
 int LegoSetDataSource::getNumberSelectedLegoSets()
 {
     return m_SelectedLegoSets;

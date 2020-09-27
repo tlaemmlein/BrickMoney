@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
+    <width>682</width>
     <height>484</height>
    </rect>
   </property>
@@ -27,6 +27,32 @@
        <widget class="QLabel" name="inStockLabel">
         <property name="text">
          <string>In Stock</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="selectAllPushButton">
+        <property name="text">
+         <string>Select All</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>false</bool>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="selectNonePushButton">
+        <property name="text">
+         <string>Select None</string>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
