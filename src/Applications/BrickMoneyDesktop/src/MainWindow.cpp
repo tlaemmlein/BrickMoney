@@ -101,11 +101,29 @@ void MainWindow::closeEvent(QCloseEvent * event)
 {
 	if (BrickMoneyDataManager::Inst()->brickMoneyIsDirty())
 	{
-		QMessageBox::StandardButton reply;
-		reply = QMessageBox::question(this, tr("The document has been modified."), tr("Do you want to save your changes?"),
-			QMessageBox::Yes | QMessageBox::No);
-		if (reply == QMessageBox::Yes)
-			BrickMoneyProject::Inst()->save();
+        QMessageBox msgBox;
+        msgBox.setText(tr("The document has been modified."));
+        msgBox.setInformativeText(tr("Do you want to save your changes?"));
+        msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+        msgBox.setDefaultButton(QMessageBox::Save);
+        int ret = msgBox.exec();
+
+        if (ret == QMessageBox::Yes)
+        {
+            BrickMoneyProject::Inst()->save();
+            event->accept();
+            return;
+        }
+        if (ret == QMessageBox::Discard)
+        {
+            event->accept();
+            return;
+        }
+        if (ret == QMessageBox::Cancel)
+        {
+            event->ignore();
+            return;
+        }
 	}
 	event->accept();
 }
