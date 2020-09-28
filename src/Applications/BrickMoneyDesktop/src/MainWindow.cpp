@@ -80,10 +80,20 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
 
+    if ( BrickMoneySettings::Inst()->mainIsMaximized() )
+    {
+        showMaximized();
+    }
+    else
+    {
+        setGeometry(BrickMoneySettings::Inst()->mainWindow());
+    }
 }
 
 MainWindow::~MainWindow()
 {
+    BrickMoneySettings::Inst()->setMainWindow(geometry());
+    BrickMoneySettings::Inst()->setMainIsMaximized( isMaximized());
     delete ui;
 }
 
