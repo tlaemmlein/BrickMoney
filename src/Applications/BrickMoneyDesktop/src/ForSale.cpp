@@ -35,6 +35,8 @@ ForSale::ForSale(QWidget *parent) :
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->forSaleTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
 
+    ui->forSaleTableView->resizeColumnsToContents();
+
     connect(ui->selectAllPushButton, &QPushButton::clicked, [&] {
         mModel->dataSource()->selectAllSets();
         ui->forSaleTableView->setFocus();
