@@ -1,8 +1,8 @@
 #ifndef LEGOSET_TABLE_MODEL_H
 #define LEGOSET_TABLE_MODEL_H
 
-#include "Packages/BrickMoneyData/LegoSet.h"
-#include "Packages/BrickMoneyData/LegoSetDataSource.h"
+#include "Packages/BrickMoneyBackend/LegoSet.h"
+#include "Packages/BrickMoneyBackend/LegoSetDataSource.h"
 
 #include <QAbstractTableModel>
 

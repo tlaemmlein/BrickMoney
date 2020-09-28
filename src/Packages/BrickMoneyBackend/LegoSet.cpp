@@ -3,7 +3,7 @@
 
 #include "BrickMoneyDataManager.h"
 
-#include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
+#include "Packages/BrickMoneyBackend/LegoSetInfoGenerator.h"
 
 int LegoSet::IDCOUNTER = 0;
 

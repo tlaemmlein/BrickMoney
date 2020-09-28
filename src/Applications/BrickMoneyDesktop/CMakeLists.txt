@@ -49,8 +49,7 @@ add_executable(${PROJECT_NAME}
 
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets
-    BrickMoney::Logging BrickMoney::BrickMoneyData BrickMoney::LegoSetModels BrickMoney::LegoSetInfoGenerator
-    BrickMoney::BrickMoneyProject)
+    BrickMoney::Logging BrickMoney::BrickMoneyBackend)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 

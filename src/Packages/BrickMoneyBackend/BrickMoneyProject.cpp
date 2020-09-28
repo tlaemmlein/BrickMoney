@@ -2,7 +2,7 @@
 SET_LOGGER("BrickMoney.BrickMoneyProject")
 
 #include "BrickMoneyProject.h"
-#include "Packages/BrickMoneyData/BrickMoneySettings.h"
+#include "BrickMoneySettings.h"
 
 #include <QFileInfo>
 #include <QJsonDocument>

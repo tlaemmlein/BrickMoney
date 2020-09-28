@@ -7,10 +7,10 @@
 #include "LineEditDelegate.h"
 #include "LegoSetSpinBoxDelegate.h"
 
-#include "Packages/BrickMoneyData/BrickMoneySettings.h"
-#include "Packages/BrickMoneyData/BrickMoneyDataManager.h"
+#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
+#include "Packages/BrickMoneyBackend/BrickMoneyDataManager.h"
 
-#include "Packages/BrickMoneyProject/BrickMoneyProject.h"
+#include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
 
 #include <QMessageBox>
 

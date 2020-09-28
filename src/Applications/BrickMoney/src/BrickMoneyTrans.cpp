@@ -3,7 +3,7 @@ SET_LOGGER("BrickMoney.BrickMoneyProject")
 
 #include "BrickMoneyTrans.h"
 
-#include "Packages/BrickMoneyData/BrickMoneySettings.h"
+#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 
 #include <QDebug>
 #include <QGuiApplication>

@@ -1,8 +1,8 @@
 #include "LegoSetSpinBoxDelegate.h"
 
-#include "Packages/LegoSetModels/LegoSetTableModel.h"
+#include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
 
-#include "Packages/LegoSetInfoGenerator/LegoSetInfoGenerator.h"
+#include "Packages/BrickMoneyBackend/LegoSetInfoGenerator.h"
 
 #include <QFileInfo>
 #include <QSpinBox>

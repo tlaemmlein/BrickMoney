@@ -1,7 +1,7 @@
 #include "ImageDelegate.h"
 
 //#include "../qtquick/processmodel.h"
-#include "Packages/LegoSetModels/LegoSetTableModel.h"
+#include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
 
 #include <QFileInfo>
 #include <QPainter>
