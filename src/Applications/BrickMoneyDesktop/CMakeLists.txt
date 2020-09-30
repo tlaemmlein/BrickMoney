@@ -17,7 +17,6 @@ set(SRC_FILES
     src/main.cpp
     src/InStock.h
     src/InStock.cpp
-    src/InStock.ui
     src/ForSale.h
     src/ForSale.cpp
     src/ForSale.ui
@@ -39,6 +38,9 @@ set(SRC_FILES
     src/DoubleSpinBoxDelegate.h
     src/LegoSetSpinBoxDelegate.cpp
     src/LegoSetSpinBoxDelegate.h
+    src/LegSetTableView.cpp
+    src/LegSetTableView.h
+    src/LegSetTableView.ui
     )
 
 add_executable(${PROJECT_NAME}

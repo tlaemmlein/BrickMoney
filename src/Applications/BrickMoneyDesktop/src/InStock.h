@@ -1,16 +1,17 @@
 #ifndef INSTOCK_H
 #define INSTOCK_H
 
-#include <QWidget>
+#include "LegSetTableView.h"
+
+QT_BEGIN_NAMESPACE
+class QPushButton;
+QT_END_NAMESPACE
+
 
 class LegoSetSortFilterTableModel;
 class LegoSetTableModel;
 
-namespace Ui {
-class InStock;
-}
-
-class InStock : public QWidget
+class InStock : public LegSetTableView
 {
     Q_OBJECT
 
@@ -21,10 +22,25 @@ public:
 signals:
     void legoSetsMovedToForSale();
 
+
+    // LegSetTableView interface
+protected:
+    LegoSetSortFilterTableModel *getSortModel() const override;
+    LegoSetTableModel *getModel() const override;
+    QString title() const override;
+    void selectionIsDirty(bool isDirty) override;
+
 private:
-    Ui::InStock *ui;
     LegoSetSortFilterTableModel* mSortModel;
     LegoSetTableModel* mModel;
+    QString mTitle;
+
+    QPushButton* mFromInStockToForSalePushButton;
+
+
+    // LegSetTableView interface
+protected:
 };
+
 
 #endif // INSTOCK_H
