@@ -1,16 +1,17 @@
 #ifndef ForSale_H
 #define ForSale_H
 
-#include <QWidget>
+#include "LegSetTableView.h"
+
+QT_BEGIN_NAMESPACE
+class QPushButton;
+QT_END_NAMESPACE
 
 class LegoSetSortFilterTableModel;
 class LegoSetTableModel;
 
-namespace Ui {
-class ForSale;
-}
 
-class ForSale : public QWidget
+class ForSale : public LegSetTableView
 {
     Q_OBJECT
 
@@ -22,10 +23,19 @@ signals:
     void legoSetsMovedToInStock();
     void legoSetsMovedToSold();
 
+    // LegSetTableView interface
+protected:
+    LegoSetSortFilterTableModel *getSortModel() const override;
+    LegoSetTableModel *getModel() const override;
+    QString title() const override;
+    void selectionIsDirty(bool isDirty) override;
+
 private:
-    Ui::ForSale *ui;
     LegoSetSortFilterTableModel* mSortModel;
     LegoSetTableModel* mModel;
+    QString mTitle;
+    QPushButton* mToInStock;
+    QPushButton* mToSold;
 };
 
 #endif // ForSale_H

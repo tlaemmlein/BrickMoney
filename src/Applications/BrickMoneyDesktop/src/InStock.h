@@ -22,7 +22,6 @@ public:
 signals:
     void legoSetsMovedToForSale();
 
-
     // LegSetTableView interface
 protected:
     LegoSetSortFilterTableModel *getSortModel() const override;
@@ -34,12 +33,7 @@ private:
     LegoSetSortFilterTableModel* mSortModel;
     LegoSetTableModel* mModel;
     QString mTitle;
-
     QPushButton* mFromInStockToForSalePushButton;
-
-
-    // LegSetTableView interface
-protected:
 };
 
 

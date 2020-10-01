@@ -1,106 +1,55 @@
 #include "Sold.h"
-#include "ui_Sold.h"
-#include "ImageDelegate.h"
-#include "CheckBoxDelegate.h"
-#include "CalendarDelegate.h"
-#include "DoubleSpinBoxDelegate.h"
-#include "LineEditDelegate.h"
-#include "LegoSetSpinBoxDelegate.h"
-
-#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
-#include "Packages/BrickMoneyBackend/BrickMoneyDataManager.h"
 
 #include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
 
-#include <QMessageBox>
+#include <QPushButton>
 
-Sold::Sold(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Sold)
+Sold::Sold(QWidget *parent) : LegSetTableView(parent)
+    , mSortModel(BrickMoneyProject::Inst()->getSoldSortModel())
+    , mModel(BrickMoneyProject::Inst()->getSoldModel())
+    , mTitle(tr("Sold"))
 {
-    ui->setupUi(this);
+    LegSetTableView::init();
 
-    mSortModel = BrickMoneyProject::Inst()->getSoldSortModel();
-    mModel = BrickMoneyProject::Inst()->getSoldModel();
-
-
-    ui->soldTableView->setModel(mSortModel);
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::purchaseDate, new CalendarDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::purchasingPrice, new DoubleSpinBoxDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::retailPrice, new DoubleSpinBoxDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
-    ui->soldTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
-
-    ui->soldTableView->resizeColumnsToContents();
-
-    connect(ui->selectAllPushButton, &QPushButton::clicked, [&] {
-        mModel->dataSource()->selectAllSets();
-        ui->soldTableView->setFocus();
-        ui->soldTableView->update();
-    });
-
-    connect(ui->selectNonePushButton, &QPushButton::clicked, [&] {
-        mModel->dataSource()->selectNoneSets();
-        ui->soldTableView->setFocus();
-        ui->soldTableView->update();
-    });
-
-
-    connect(ui->soldLineEdit, &QLineEdit::editingFinished, [&]() {
-        mSortModel->setFilterText(ui->soldLineEdit->text());
-    });
-
-    connect(mModel, &LegoSetTableModel::selectionIsDirtyChanged, [&] (bool isDirty) {
-        ui->numOfSelectedLabel->setVisible(isDirty);
-        ui->copyAndPastePushButton->setVisible(isDirty);
-        ui->fromSoldToInStockPushButton->setVisible(isDirty);
-        ui->fromSoldToForSalePushButton->setVisible(isDirty);
-        ui->deletePushButton->setVisible(isDirty);
-    });
-
-    ui->numOfSelectedLabel->setVisible(mModel->selectionIsDirty());
-    static const QString selectedText = tr("selected");
-    connect(mModel, &LegoSetTableModel::numberOfSelectedLegoSetsChanged, [&] (int num) {
-        ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText);
-    });
-    ui->numOfSelectedLabel->setText(QString::number(mModel->numberOfSelectedLegoSets()) + " " + selectedText);
-
-    ui->copyAndPastePushButton->setVisible(mModel->selectionIsDirty());
-    connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
-        BrickMoneyProject::Inst()->copySelectedLegoSets(mModel, mModel);
-    });
-
-    ui->fromSoldToInStockPushButton->setVisible(mModel->selectionIsDirty());
-    connect(ui->fromSoldToInStockPushButton, &QPushButton::clicked, [&]() {
-        BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
-        BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
-        emit legoSetsMovedToInStock();
-    });
-
-    ui->fromSoldToForSalePushButton->setVisible(mModel->selectionIsDirty());
-    connect(ui->fromSoldToForSalePushButton, &QPushButton::clicked, [&]() {
+    mToForSale = addPushButton(tr("Move to For Sale"));
+    mToForSale->setVisible(mModel->selectionIsDirty());
+    connect(mToForSale, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });
 
-    ui->deletePushButton->setVisible(mModel->selectionIsDirty());
-    connect(ui->deletePushButton, &QPushButton::clicked, [&]() {
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this, tr("Do you want to delete the LegoSet(s)?"), "ID(s): " + mModel->getSelectedLegoSetIDs(),
-                                      QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::Yes)
-            mModel->removeSelectedLegoSets();
+    mToInStock = addPushButton(tr("Move to In Stock"));
+    mToInStock->setVisible(mModel->selectionIsDirty());
+    connect(mToInStock, &QPushButton::clicked, [&]() {
+        BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
+        BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
+        emit legoSetsMovedToInStock();
     });
-
 }
 
 Sold::~Sold()
 {
-    delete ui;
+}
+
+
+LegoSetSortFilterTableModel *Sold::getSortModel() const
+{
+    return mSortModel;
+}
+
+LegoSetTableModel *Sold::getModel() const
+{
+    return mModel;
+}
+
+QString Sold::title() const
+{
+    return mTitle;
+}
+
+void Sold::selectionIsDirty(bool isDirty)
+{
+    mToInStock->setVisible(isDirty);
+    mToForSale->setVisible(isDirty);
 }
