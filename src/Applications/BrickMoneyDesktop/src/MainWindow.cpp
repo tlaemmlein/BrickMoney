@@ -2,10 +2,10 @@
 #include "ui_MainWindow.h"
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
+#include "LegoSetImportDialog.h"
 
 #include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 #include "Packages/BrickMoneyBackend/BrickMoneyDataManager.h"
-
 #include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
 
 #include <QFileDialog>
@@ -79,6 +79,13 @@ MainWindow::MainWindow(QWidget *parent) :
             BrickMoneyProject::Inst()->save();
         }
     });
+
+    connect(ui->actionImport, &QAction::triggered, [&]() {
+        LegoSetImportDialog* d = new LegoSetImportDialog();
+        d->resize(200, 200);
+        d->show();
+    });
+
 
     if ( BrickMoneySettings::Inst()->mainIsMaximized() )
     {

@@ -41,6 +41,9 @@ set(SRC_FILES
     src/LegSetTableView.cpp
     src/LegSetTableView.h
     src/LegSetTableView.ui
+    src/LegoSetImportDialog.cpp
+    src/LegoSetImportDialog.h
+    src/LegoSetImportDialog.ui
     )
 
 add_executable(${PROJECT_NAME}

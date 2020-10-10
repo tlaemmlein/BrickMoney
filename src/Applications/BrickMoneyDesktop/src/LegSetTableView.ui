@@ -41,7 +41,7 @@
       <item>
        <widget class="QLabel" name="legSetTableViewTitle">
         <property name="text">
-         <string>For Sale</string>
+         <string>Title</string>
         </property>
        </widget>
       </item>
