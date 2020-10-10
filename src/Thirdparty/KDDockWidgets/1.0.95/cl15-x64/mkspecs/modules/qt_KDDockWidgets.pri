@@ -1,0 +1,12 @@
+QT.KDDockWidgets.VERSION = 1.1.95
+QT.KDDockWidgets.MAJOR_VERSION = 1
+QT.KDDockWidgets.MINOR_VERSION = 1
+QT.KDDockWidgets.PATCH_VERSION = 95
+QT.KDDockWidgets.name = kddockwidgets
+QT.KDDockWidgets.module = kddockwidgets
+QT.KDDockWidgets.defines = 
+QT.KDDockWidgets.includes = $$PWD/../../include/KDDockWidgets
+QT.KDDockWidgets.private_includes =
+QT.KDDockWidgets.libs = $$PWD/../../lib
+QT.KDDockWidgets.depends = 
+QT.KDDockWidgets.module_config = 

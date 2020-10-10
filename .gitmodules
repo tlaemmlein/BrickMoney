@@ -1,0 +1,3 @@
+[submodule "src/Modules/KDDockWidgets/src"]
+	path = src/Modules/KDDockWidgets/src
+	url = https://github.com/KDAB/KDDockWidgets.git

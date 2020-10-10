@@ -10,6 +10,7 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include "Packages/BrickMoneyBackend/LegoSetInfoGenerator.h"
 #include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
 
+#include <kddockwidgets/Config.h>
 
 #include <log4cplus/consoleappender.h>
 #include <log4cplus/initializer.h>
@@ -55,6 +56,18 @@ int main(int argc, char *argv[])
 		BrickMoneyProject::Inst()->load();
 	}
     BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
+
+	auto flags = KDDockWidgets::Config::self().flags();
+	flags |= KDDockWidgets::Config::Flag_AllowReorderTabs;
+	flags |= KDDockWidgets::Config::Flag_TitleBarIsFocusable;
+	flags |= KDDockWidgets::Config::Flag_AlwaysTitleBarWhenFloating;
+	flags |= KDDockWidgets::Config::Flag_TabsHaveCloseButton;
+	flags &= ~KDDockWidgets::Config::Flag_AeroSnapWithClientDecos;
+	/*flags |= KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
+	flags |= KDDockWidgets::Config::Flag_TitleBarHasMaximizeButton;*/
+	flags |= KDDockWidgets::Config::Flag_DoubleClickMaximizes;
+	KDDockWidgets::Config::self().setFlags(flags);
+
 
     MainWindow w;
     w.show();

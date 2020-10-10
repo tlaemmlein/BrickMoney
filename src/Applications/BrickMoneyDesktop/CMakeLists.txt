@@ -52,9 +52,14 @@ add_executable(${PROJECT_NAME}
     ${SRC_FILES}
 )
 
+message(STATUS "${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/lib/cmake/KDDockWidgets")
+set(KDDockWidgets_DIR "${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/lib/cmake/KDDockWidgets")
+find_package(KDDockWidgets REQUIRED)
+
+
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets
-    BrickMoney::Logging BrickMoney::BrickMoneyBackend)
+    BrickMoney::Logging BrickMoney::BrickMoneyBackend KDAB::kddockwidgets)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
 
@@ -85,12 +90,16 @@ add_custom_command(
                 ${THIRDPARTY_DIR}/OpenSSL/1.1.1d/vs2017-x64/bin/libssl-1_1-x64.dll
                 $<TARGET_FILE_DIR:${PROJECT_NAME}>/libssl-1_1-x64.dll)
 
-set( LOG4CPLUS_DLLS
+set( FILES_TO_COPY
    ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusU.dll
    ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusUD.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets_multisplitter1.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets_multisplitter1d.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets1.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets1d.dll
 )
 
-foreach( file_i ${LOG4CPLUS_DLLS})
+foreach( file_i ${FILES_TO_COPY})
     add_custom_command(
     TARGET ${PROJECT_NAME}
     POST_BUILD
