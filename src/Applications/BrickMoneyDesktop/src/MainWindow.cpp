@@ -34,7 +34,7 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     addDockWidget(dockInStock, KDDockWidgets::Location_OnLeft);
     m_dockwidgets.push_back(dockInStock);
     connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        dockInStock->setTitle(inStockTitle + " (" + QString::number(num) + ")");
+		m_dockwidgets[0]->setTitle(inStockTitle + " (" + QString::number(num) + ")");
         });
     dockInStock->setTitle(inStockTitle + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
     connect(ui->actionIn_Stock, &QAction::triggered, [&]() { m_dockwidgets[0]->show(); });
@@ -46,7 +46,7 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     addDockWidget(dockForSale, KDDockWidgets::Location_OnRight);
     m_dockwidgets.push_back(dockForSale);
     connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        dockForSale->setTitle(forSaleTitle + " (" + QString::number(num) + ")");
+		m_dockwidgets[1]->setTitle(forSaleTitle + " (" + QString::number(num) + ")");
         });
     dockForSale->setTitle(forSaleTitle + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
     connect(ui->actionFor_Sale, &QAction::triggered, [&]() { m_dockwidgets[1]->show(); });
@@ -58,7 +58,7 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     addDockWidget(dockSold, KDDockWidgets::Location_OnRight);
     m_dockwidgets.push_back(dockSold);
     connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        dockSold->setTitle(soldTitle + " (" + QString::number(num) + ")");
+		m_dockwidgets[2]->setTitle(soldTitle + " (" + QString::number(num) + ")");
         });
     dockSold->setTitle(soldTitle + " (" + QString::number(BrickMoneyProject::Inst()->getSoldModel()->numberOfLegoSets()) +")");
     connect(ui->actionSold, &QAction::triggered, [&]() { m_dockwidgets[2]->show(); });
