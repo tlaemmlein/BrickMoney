@@ -1,18 +1,20 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include <kddockwidgets/MainWindow.h>
 
 namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+namespace  BrickMoney {
+class MainWindow : public KDDockWidgets::MainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptions options,
+                        QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow();
 
 protected:
@@ -23,10 +25,6 @@ private:
     Ui::MainWindow *ui;
 
     QString m_postWindowTitel;
-
-	static const int mInStockTabIndex = 1;
-	static const int mForSaleTabIndex = 2;
-	static const int mSoldTabIndex = 3;
 };
-
+}
 #endif // MAINWINDOW_H

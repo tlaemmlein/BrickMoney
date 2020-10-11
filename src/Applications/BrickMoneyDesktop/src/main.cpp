@@ -20,6 +20,7 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include <QIcon>
 #include <QDate>
 
+using namespace KDDockWidgets;
 using namespace log4cplus;
 using namespace log4cplus::helpers;
 
@@ -68,8 +69,9 @@ int main(int argc, char *argv[])
 	flags |= KDDockWidgets::Config::Flag_DoubleClickMaximizes;
 	KDDockWidgets::Config::self().setFlags(flags);
 
+    MainWindowOptions options = MainWindowOption_None;
 
-    MainWindow w;
+    BrickMoney::MainWindow w(QStringLiteral("BrickMoneyMainWindow"), options);
     w.show();
 
     return app.exec();
