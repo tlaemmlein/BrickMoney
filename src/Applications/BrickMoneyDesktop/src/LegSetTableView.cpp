@@ -14,12 +14,14 @@
 
 #include <QMessageBox>
 #include <QPushButton>
+#include <QHeaderView>
 
 LegSetTableView::LegSetTableView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LegSetTableView)
 {
     ui->setupUi(this);
+    ui->legoSetTableView->horizontalHeader()->setStyleSheet("QHeaderView::section { background-color:'wheat' }");
 }
 
 LegSetTableView::~LegSetTableView()
