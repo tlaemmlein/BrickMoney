@@ -1,11 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <kddockwidgets/DockWidget.h>
 #include <kddockwidgets/MainWindow.h>
 
 namespace Ui {
 class MainWindow;
 }
+
+class InStock;
 
 namespace  BrickMoney {
 class MainWindow : public KDDockWidgets::MainWindow
@@ -23,6 +26,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+
+    KDDockWidgets::DockWidget::List m_dockwidgets;
 
     QString m_postWindowTitel;
 };

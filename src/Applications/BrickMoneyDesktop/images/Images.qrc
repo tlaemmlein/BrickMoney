@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/images">
         <file>empty.svg</file>
+        <file>forSale.svg</file>
+        <file>inStock.svg</file>
         <file>load.svg</file>
         <file>logoBrickMoneyIcon_16.png</file>
         <file>logoBrickMoneyIcon_32.png</file>
@@ -8,6 +10,7 @@
         <file>logoBrickMoneyIcon_64.png</file>
         <file>logoBrickMoneySquare.svg</file>
         <file>save.svg</file>
+        <file>sold.svg</file>
         <file>trash.svg</file>
     </qresource>
 </RCC>
