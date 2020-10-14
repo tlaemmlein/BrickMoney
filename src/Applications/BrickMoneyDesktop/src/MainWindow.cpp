@@ -26,41 +26,47 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
 {
     ui->setupUi(this);
 
+    std::function<void(const QString,
+                       LegSetTableView* tableView,
+                       const QIcon icon,
+                       KDDockWidgets::Location loc,
+                       LegoSetTableModel *model)>
+        tableCreator = [&] (const QString title,
+                          LegSetTableView* tableView,
+                          QIcon icon,
+                          KDDockWidgets::Location loc,
+                          LegoSetTableModel *model) {
+        auto dock = new KDDockWidgets::DockWidget(title);
+        dock->setWidget(tableView);
+        dock->setIcon(icon);
+        addDockWidget(dock, loc);
+        m_dockwidgets.push_back(dock);
+        dock->setTitle(title + " (" + QString::number(model->numberOfLegoSets()) + ")");
+    };
 
     static const QString inStockTitle = tr("In Stock");
-    auto dockInStock = new KDDockWidgets::DockWidget(inStockTitle);
-    dockInStock->setWidget(new InStock);
-    dockInStock->setIcon(QIcon(":/images/inStock.svg"));
-    addDockWidget(dockInStock, KDDockWidgets::Location_OnLeft);
-    m_dockwidgets.push_back(dockInStock);
+    tableCreator(inStockTitle, new InStock, QIcon(":/images/inStock.svg"), KDDockWidgets::Location_OnLeft,
+                 BrickMoneyProject::Inst()->getInStockModel());
     connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-		m_dockwidgets[0]->setTitle(inStockTitle + " (" + QString::number(num) + ")");
-        });
-    dockInStock->setTitle(inStockTitle + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
+        m_dockwidgets[0]->setTitle(inStockTitle + " (" + QString::number(num) + ")");
+    });
     connect(ui->actionIn_Stock, &QAction::triggered, [&]() { m_dockwidgets[0]->show(); });
 
     static const QString forSaleTitle = tr("For Sale");
-    auto dockForSale = new KDDockWidgets::DockWidget(forSaleTitle);
-    dockForSale->setWidget(new ForSale());
-    dockForSale->setIcon(QIcon(":/images/forSale.svg"));
-    addDockWidget(dockForSale, KDDockWidgets::Location_OnRight);
-    m_dockwidgets.push_back(dockForSale);
+    tableCreator(forSaleTitle, new ForSale, QIcon(":/images/forSale.svg"), KDDockWidgets::Location_OnRight,
+                 BrickMoneyProject::Inst()->getForSaleModel());
     connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-		m_dockwidgets[1]->setTitle(forSaleTitle + " (" + QString::number(num) + ")");
-        });
-    dockForSale->setTitle(forSaleTitle + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
+        m_dockwidgets[1]->setTitle(forSaleTitle + " (" + QString::number(num) + ")");
+    });
     connect(ui->actionFor_Sale, &QAction::triggered, [&]() { m_dockwidgets[1]->show(); });
 
+
     static const QString soldTitle = tr("Sold");
-    auto dockSold = new KDDockWidgets::DockWidget(soldTitle);
-    dockSold->setWidget(new Sold());
-    dockSold->setIcon(QIcon(":/images/sold.svg"));
-    addDockWidget(dockSold, KDDockWidgets::Location_OnRight);
-    m_dockwidgets.push_back(dockSold);
+    tableCreator(soldTitle, new Sold, QIcon(":/images/sold.svg"), KDDockWidgets::Location_OnRight,
+                 BrickMoneyProject::Inst()->getSoldModel());
     connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
 		m_dockwidgets[2]->setTitle(soldTitle + " (" + QString::number(num) + ")");
         });
-    dockSold->setTitle(soldTitle + " (" + QString::number(BrickMoneyProject::Inst()->getSoldModel()->numberOfLegoSets()) +")");
     connect(ui->actionSold, &QAction::triggered, [&]() { m_dockwidgets[2]->show(); });
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
