@@ -48,8 +48,8 @@
     <addaction name="actionSold"/>
    </widget>
    <addaction name="menuFile"/>
-   <addaction name="menuData"/>
    <addaction name="menuView"/>
+   <addaction name="menuData"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">

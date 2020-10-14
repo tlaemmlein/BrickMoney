@@ -15,8 +15,9 @@ public:
     explicit LegoSetImportDialog(QWidget *parent = nullptr);
     ~LegoSetImportDialog();
 
+
 private slots:
-    void on_closePushButton_clicked();
+    void on_importCsvPushButton_clicked();
 
 private:
     Ui::LegoSetImportDialog *ui;

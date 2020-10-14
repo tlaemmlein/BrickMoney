@@ -27,12 +27,12 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     ui->setupUi(this);
 
     std::function<void(const QString,
-                       LegSetTableView* tableView,
+                       QWidget* tableView,
                        const QIcon icon,
                        KDDockWidgets::Location loc,
                        LegoSetTableModel *model)>
         tableCreator = [&] (const QString title,
-                          LegSetTableView* tableView,
+                          QWidget* tableView,
                           QIcon icon,
                           KDDockWidgets::Location loc,
                           LegoSetTableModel *model) {
@@ -60,7 +60,6 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     });
     connect(ui->actionFor_Sale, &QAction::triggered, [&]() { m_dockwidgets[1]->show(); });
 
-
     static const QString soldTitle = tr("Sold");
     tableCreator(soldTitle, new Sold, QIcon(":/images/sold.svg"), KDDockWidgets::Location_OnRight,
                  BrickMoneyProject::Inst()->getSoldModel());
@@ -68,6 +67,18 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
 		m_dockwidgets[2]->setTitle(soldTitle + " (" + QString::number(num) + ")");
         });
     connect(ui->actionSold, &QAction::triggered, [&]() { m_dockwidgets[2]->show(); });
+
+    static const QString importTitle = tr("Import");
+    tableCreator(importTitle, new LegoSetImportDialog, QIcon(), KDDockWidgets::Location_OnTop,
+                 BrickMoneyProject::Inst()->getImportModel());
+    m_dockwidgets[3]->close();
+    connect(BrickMoneyProject::Inst()->getImportModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
+        m_dockwidgets[3]->setTitle(importTitle + " (" + QString::number(num) + ")");
+    });
+    connect(ui->actionImport, &QAction::triggered, [&]() { m_dockwidgets[3]->show(); });
+
+
+
 
     m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 
@@ -102,13 +113,6 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
             BrickMoneyProject::Inst()->save();
         }
     });
-
-    connect(ui->actionImport, &QAction::triggered, [&]() {
-        LegoSetImportDialog* d = new LegoSetImportDialog();
-        d->resize(200, 200);
-        d->show();
-    });
-
 
     if ( BrickMoneySettings::Inst()->mainIsMaximized() )
     {
