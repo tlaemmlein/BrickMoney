@@ -15,6 +15,9 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QHeaderView>
+#include <QStandardItemModel>
+#include <QStandardItem>
+
 
 LegSetTableView::LegSetTableView(QWidget *parent) :
     QWidget(parent),
@@ -44,6 +47,41 @@ void LegSetTableView::init()
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::saleDate, new CalendarDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
+
+    QStandardItemModel* model = new QStandardItemModel(3, 1); // 3 rows, 1 col
+
+
+    for (int r = 0; r < LegoSetProperty::COUNT; ++r)
+    {
+        QStandardItem* item = new QStandardItem(LegoSet::displayName( static_cast<LegoSetProperty>(r)));
+
+        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
+        item->setData(Qt::Unchecked, Qt::CheckStateRole);
+
+        mColumnItems.push_back(item);
+
+        model->setItem(r, 0, item);
+    }
+
+    connect(model, &QStandardItemModel::dataChanged, [&] (const QModelIndex& topLeft, const QModelIndex&) {
+        qDebug() << "Item " << topLeft.row();
+        QStandardItem* item = mColumnItems[topLeft.row()];
+        if(item->checkState() == Qt::Unchecked)
+        {
+            qDebug() << "Unchecked!";
+            ui->legoSetTableView->setColumnHidden(topLeft.row(), false);
+        }
+        else if(item->checkState() == Qt::Checked)
+        {
+            qDebug() << "Checked!";
+            ui->legoSetTableView->setColumnHidden(topLeft.row(), true);
+        }
+
+    });
+
+    ui->colVisibilityComboBox->setModel(model);
+
+
 
     ui->legoSetTableView->resizeColumnsToContents();
 

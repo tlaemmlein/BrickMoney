@@ -2,11 +2,13 @@
 #define LegSetTableView_H
 
 #include <QWidget>
+#include <QVector>
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
 class QTableView;
 class QLineEdit;
+class QStandardItem;
 QT_END_NAMESPACE
 
 class LegoSetSortFilterTableModel;
@@ -41,6 +43,9 @@ protected:
     virtual QString title() const = 0;
 
     virtual void selectionIsDirty(bool isDirty) = 0;
+
+private:
+    QVector<QStandardItem*> mColumnItems;
 };
 
 #endif // LegSetTableView_H
