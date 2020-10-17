@@ -3,6 +3,8 @@
 #include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
 
 #include <QPushButton>
+#include <QTableView>
+#include <QLineEdit>
 
 
 InStock::InStock(QWidget *parent) : LegSetTableView(parent)
@@ -11,6 +13,22 @@ InStock::InStock(QWidget *parent) : LegSetTableView(parent)
     , mTitle(tr("In Stock"))
 {
     LegSetTableView::init();
+
+    mAddLegoSetButton = addPushButton(tr("Add"));
+
+    connect(mAddLegoSetButton, &QPushButton::clicked, [&] {
+        filterLineEdit()->setText("");
+		mSortModel->setFilterText("");
+		auto set = new LegoSet(41599, mSortModel);
+        auto source = mModel->dataSource();
+        set->setIsSelected(true);
+        source->addLegoSet( set );
+        tableView()->scrollToBottom();
+        tableView()->setFocus();
+        QModelIndex index = mSortModel->index(mSortModel->rowCount() - 1, LegoSetProperty::setNumber);
+        tableView()->setCurrentIndex(index);
+        tableView()->edit(index);
+    });
 
     mFromInStockToForSalePushButton = addPushButton(tr("Move to For Sale"));
 

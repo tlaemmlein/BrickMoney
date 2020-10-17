@@ -5,10 +5,13 @@
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
+class QTableView;
+class QLineEdit;
 QT_END_NAMESPACE
 
 class LegoSetSortFilterTableModel;
 class LegoSetTableModel;
+
 
 namespace Ui {
 class LegSetTableView;
@@ -28,6 +31,9 @@ protected:
     Ui::LegSetTableView *ui;
 
     QPushButton* addPushButton(const QString& title);
+
+    QTableView* tableView();
+    QLineEdit* filterLineEdit();
 
     virtual LegoSetSortFilterTableModel* getSortModel() const = 0;
     virtual LegoSetTableModel* getModel() const = 0;

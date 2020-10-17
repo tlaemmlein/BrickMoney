@@ -102,3 +102,13 @@ QPushButton* LegSetTableView::addPushButton(const QString &title)
     return button;
 }
 
+QTableView *LegSetTableView::tableView()
+{
+    return ui->legoSetTableView;
+}
+
+QLineEdit *LegSetTableView::filterLineEdit()
+{
+    return ui->filterLineEdit;
+}
+
