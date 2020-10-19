@@ -18,6 +18,8 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QTreeView>
+#include <QMenu>
+#include <QWidgetAction>
 
 
 LegSetTableView::LegSetTableView(QWidget *parent) :
@@ -49,43 +51,23 @@ void LegSetTableView::init()
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::soldOver, new LineEditDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::buyer, new LineEditDelegate(this));
 
-    QTreeView *view = new QTreeView();
-    QStandardItemModel* model = new QStandardItemModel();
-
-    ui->colVisibilityComboBox->setModel(model);
-    ui->colVisibilityComboBox->setView(view);
-
-    for (int r = 0; r < LegoSetProperty::COUNT; ++r)
+    ui->colVisibilityToolButton->setPopupMode(QToolButton::MenuButtonPopup);
+    QMenu* menu = new QMenu(ui->colVisibilityToolButton);
+    for (int index = 0; index < LegoSetProperty::COUNT; ++index)
     {
-        QStandardItem* item = new QStandardItem(LegoSet::displayName( static_cast<LegoSetProperty>(r)));
-        item->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
-        item->setData(Qt::Checked, Qt::CheckStateRole);
-        mColumnItems.push_back(item);
-        model->setItem(r, 0, item);
+        QCheckBox *checkBox = new QCheckBox(LegoSet::displayName( static_cast<LegoSetProperty>(index)), menu);
+        checkBox->setChecked(true);
+        checkBox->setProperty("ColIndex", index);
+        QWidgetAction *checkableAction = new QWidgetAction(menu);
+        checkableAction->setDefaultWidget(checkBox);
+        menu->addAction(checkableAction);
+        connect(checkBox, &QCheckBox::toggled, [checkBox, this] (bool checked) {
+            int index = checkBox->property("ColIndex").toInt();
+            //qDebug() << "Column: " << index;
+			ui->legoSetTableView->setColumnHidden(index, !checked);
+        });
     }
-
-    model->setHorizontalHeaderLabels(QStringList() << tr("Column visibility"));
-    view->resizeColumnToContents(0);
-    //ui->colVisibilityComboBox->setCurrentText("");
-
-    connect(model, &QStandardItemModel::dataChanged, [&] (const QModelIndex& topLeft, const QModelIndex&) {
-        qDebug() << "Item " << topLeft.row();
-        QStandardItem* item = mColumnItems[topLeft.row()];
-        if(item->checkState() == Qt::Unchecked)
-        {
-            qDebug() << "Unchecked!";
-            ui->legoSetTableView->setColumnHidden(topLeft.row(), true);
-        }
-        else if(item->checkState() == Qt::Checked)
-        {
-            qDebug() << "Checked!";
-            ui->legoSetTableView->setColumnHidden(topLeft.row(), false);
-        }
-
-    });
-
-
-
+    ui->colVisibilityToolButton->setMenu(menu);
 
 
     ui->legoSetTableView->resizeColumnsToContents();

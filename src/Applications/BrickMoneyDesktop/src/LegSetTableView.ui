@@ -122,12 +122,9 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="colVisibilityComboBox">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QToolButton" name="colVisibilityToolButton">
+        <property name="text">
+         <string>Column Visibility</string>
         </property>
        </widget>
       </item>
