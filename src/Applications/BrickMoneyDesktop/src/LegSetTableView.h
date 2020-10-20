@@ -1,8 +1,13 @@
 #ifndef LegSetTableView_H
 #define LegSetTableView_H
 
+#include "Packages/BrickMoneyBackend/LegoSet.h"
+
 #include <QWidget>
 #include <QVector>
+
+#include <bitset>
+
 
 QT_BEGIN_NAMESPACE
 class QPushButton;
@@ -43,9 +48,12 @@ protected:
     virtual QString title() const = 0;
 
     virtual void selectionIsDirty(bool isDirty) = 0;
+    virtual uint getVisibilityFlags() const = 0;
+	virtual void setVisibilityFlags(uint flags) = 0;
+
 
 private:
-    QVector<QStandardItem*> mColumnItems;
+	std::bitset<LegoSetProperty::COUNT> mVisiblityFlags;
 };
 
 #endif // LegSetTableView_H

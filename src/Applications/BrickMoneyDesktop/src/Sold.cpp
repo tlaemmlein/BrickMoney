@@ -1,6 +1,7 @@
 #include "Sold.h"
 
 #include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
+#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 
 #include <QPushButton>
 
@@ -52,4 +53,14 @@ void Sold::selectionIsDirty(bool isDirty)
 {
     mToInStock->setVisible(isDirty);
     mToForSale->setVisible(isDirty);
+}
+
+uint Sold::getVisibilityFlags() const
+{
+    return BrickMoneySettings::Inst()->soldFlags();
+}
+
+void Sold::setVisibilityFlags(uint flags)
+{
+    BrickMoneySettings::Inst()->setSoldFlags(flags);
 }

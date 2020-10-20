@@ -1,6 +1,7 @@
 #include "InStock.h"
 
 #include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
+#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 
 #include <QPushButton>
 #include <QTableView>
@@ -64,4 +65,15 @@ QString InStock::title() const
 void InStock::selectionIsDirty(bool isDirty)
 {
     mFromInStockToForSalePushButton->setVisible(isDirty);
+}
+
+
+uint InStock::getVisibilityFlags() const
+{
+    return BrickMoneySettings::Inst()->inStockFlags();
+}
+
+void InStock::setVisibilityFlags(uint flags)
+{
+    BrickMoneySettings::Inst()->setInStockFlags(flags);
 }

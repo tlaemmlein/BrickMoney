@@ -36,6 +36,16 @@ private:
     QString mTitle;
     QPushButton* mToInStock;
     QPushButton* mToSold;
+
+
+    // LegSetTableView interface
+protected:
+    uint getVisibilityFlags() const override;
+    void setVisibilityFlags(uint flags) override;
 };
+
+
+
+
 
 #endif // ForSale_H

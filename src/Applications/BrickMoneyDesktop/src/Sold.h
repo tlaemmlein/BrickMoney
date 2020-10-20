@@ -29,6 +29,8 @@ protected:
     LegoSetTableModel *getModel() const override;
     QString title() const override;
     void selectionIsDirty(bool isDirty) override;
+    uint getVisibilityFlags() const override;
+    void setVisibilityFlags(uint flags) override;
 
 private:
     LegoSetSortFilterTableModel* mSortModel;
@@ -36,6 +38,12 @@ private:
     QString mTitle;
     QPushButton* mToInStock;
     QPushButton* mToForSale;
+
+
 };
+
+
+
+
 
 #endif // Sold_H

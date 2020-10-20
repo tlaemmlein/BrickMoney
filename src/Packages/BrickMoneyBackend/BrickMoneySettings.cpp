@@ -13,6 +13,9 @@ const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
 const QString BrickMoneySettings::MainWindowName("general/mainWindow");
 const QString BrickMoneySettings::MainIsMaximizedName("general/mainIsMaximized");
 const QString BrickMoneySettings::LanguageName("general/language");
+const QString BrickMoneySettings::InStockFlagsName("general/inStockFlags");
+const QString BrickMoneySettings::ForSaleFlagsName("general/forSaleFlags");
+const QString BrickMoneySettings::SoldFlagsName("general/soldFlags");
 
 
 BrickMoneySettings *BrickMoneySettings::Inst()
@@ -36,6 +39,10 @@ BrickMoneySettings::BrickMoneySettings()
     m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
     m_mainIsMaximized = m_Settings->value(MainIsMaximizedName, true).toBool();
     m_language = m_Settings->value(LanguageName, "german").toString();
+    const auto defaultFlags = ~static_cast<uint>(0);
+    m_inStockFlags = m_Settings->value(InStockFlagsName, defaultFlags).toUInt();
+    m_forSaleFlags = m_Settings->value(ForSaleFlagsName, defaultFlags).toUInt();
+    m_soldFlags = m_Settings->value(SoldFlagsName, defaultFlags).toUInt();
 }
 
 
@@ -63,6 +70,21 @@ bool BrickMoneySettings::mainIsMaximized() const
 QString BrickMoneySettings::language() const
 {
     return m_language;
+}
+
+uint BrickMoneySettings::inStockFlags() const
+{
+    return m_inStockFlags;
+}
+
+uint BrickMoneySettings::forSaleFlags() const
+{
+    return m_forSaleFlags;
+}
+
+uint BrickMoneySettings::soldFlags() const
+{
+    return m_soldFlags;
 }
 
 void BrickMoneySettings::setBrickMoneyFilePath(QString brickMoneyFilePath)
@@ -104,4 +126,34 @@ void BrickMoneySettings::setLanguage(QString language)
     m_language = language;
     m_Settings->setValue(LanguageName, m_language);
     emit languageChanged(m_language);
+}
+
+void BrickMoneySettings::setInStockFlags(uint inStockFlags)
+{
+    if (m_inStockFlags == inStockFlags)
+        return;
+
+    m_inStockFlags = inStockFlags;
+    m_Settings->setValue(InStockFlagsName, m_inStockFlags);
+    emit inStockFlagsChanged(m_inStockFlags);
+}
+
+void BrickMoneySettings::setForSaleFlags(uint forSaleFlags)
+{
+    if (m_forSaleFlags == forSaleFlags)
+        return;
+
+    m_forSaleFlags = forSaleFlags;
+    m_Settings->setValue(ForSaleFlagsName, m_forSaleFlags);
+    emit forSaleFlagsChanged(m_forSaleFlags);
+}
+
+void BrickMoneySettings::setSoldFlags(uint soldFlags)
+{
+    if (m_soldFlags == soldFlags)
+        return;
+
+    m_soldFlags = soldFlags;
+    m_Settings->setValue(SoldFlagsName, m_soldFlags);
+    emit soldFlagsChanged(m_soldFlags);
 }

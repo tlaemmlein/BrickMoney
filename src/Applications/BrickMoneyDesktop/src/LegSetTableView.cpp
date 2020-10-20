@@ -21,7 +21,6 @@
 #include <QMenu>
 #include <QWidgetAction>
 
-
 LegSetTableView::LegSetTableView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LegSetTableView)
@@ -53,11 +52,12 @@ void LegSetTableView::init()
 
     ui->colVisibilityToolButton->setPopupMode(QToolButton::MenuButtonPopup);
     QMenu* menu = new QMenu(ui->colVisibilityToolButton);
+    mVisiblityFlags  = getVisibilityFlags();
     for (int index = 0; index < LegoSetProperty::COUNT; ++index)
     {
         QCheckBox *checkBox = new QCheckBox(LegoSet::displayName( static_cast<LegoSetProperty>(index)), menu);
-        checkBox->setChecked(true);
-        checkBox->setProperty("ColIndex", index);
+		checkBox->setChecked(mVisiblityFlags.test(index));
+		checkBox->setProperty("ColIndex", index);
         QWidgetAction *checkableAction = new QWidgetAction(menu);
         checkableAction->setDefaultWidget(checkBox);
         menu->addAction(checkableAction);
@@ -65,8 +65,11 @@ void LegSetTableView::init()
             int index = checkBox->property("ColIndex").toInt();
             //qDebug() << "Column: " << index;
 			ui->legoSetTableView->setColumnHidden(index, !checked);
+			mVisiblityFlags.set(index, checked);
+            setVisibilityFlags(mVisiblityFlags.to_ulong());
         });
-    }
+		ui->legoSetTableView->setColumnHidden(index, !checkBox->isChecked());
+	}
     ui->colVisibilityToolButton->setMenu(menu);
 
 

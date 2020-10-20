@@ -73,6 +73,16 @@ private:
     QPushButton* mToInStock;
     QPushButton* mToForSale;
     QPushButton* mToSold;
+
+
+    // LegSetTableView interface
+protected:
+    uint getVisibilityFlags() const override
+    {
+        return ~static_cast<uint>(0);
+    }
+
+    void setVisibilityFlags(uint) override  { }
 };
 
 
