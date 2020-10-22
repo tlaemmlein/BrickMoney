@@ -14,7 +14,7 @@ call %~dp0\..\..\scripts\env_qt.bat %MyToolchain% %MyQtVersion%
 
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build\vcvars64.bat"
 
-set InstallFolder=%~dp0\..\..\Thirdparty\KDDockWidgets\1.0.95\cl15-x64
+set InstallFolder=%~dp0\..\..\Thirdparty\KDDockWidgets\1.1.95\cl15-x64
 if exist %InstallFolder% rmdir %InstallFolder% /q /s
 
 echo INFO: Start to build and install release

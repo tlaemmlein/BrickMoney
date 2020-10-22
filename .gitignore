@@ -23,3 +23,4 @@ src/Applications/build-BrickMoney-Qt_5_14_0_MSVC2017_64bit-Debug/
 /src/Applications/BrickMoneyWidget/CMakeLists.txt.user.4.10-pre1
 /src/Modules/KDDockWidgets/build/
 /src/build/
+/src/Thirdparty/KDDockWidgets/1.1.95/

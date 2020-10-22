@@ -50,8 +50,8 @@ add_executable(${PROJECT_NAME}
     ${SRC_FILES}
 )
 
-message(STATUS "${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/lib/cmake/KDDockWidgets")
-set(KDDockWidgets_DIR "${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/lib/cmake/KDDockWidgets")
+message(STATUS "${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/lib/cmake/KDDockWidgets")
+set(KDDockWidgets_DIR "${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/lib/cmake/KDDockWidgets")
 find_package(KDDockWidgets REQUIRED)
 
 
@@ -91,10 +91,10 @@ add_custom_command(
 set( FILES_TO_COPY
    ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusU.dll
    ${THIRDPARTY_DIR}/log4cplus/3.0.0/cl15-x64/bin/log4cplusUD.dll
-   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets_multisplitter1.dll
-   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets_multisplitter1d.dll
-   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets1.dll
-   ${THIRDPARTY_DIR}/KDDockWidgets/1.0.95/cl15-x64/bin/kddockwidgets1d.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/bin/kddockwidgets_multisplitter1.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/bin/kddockwidgets_multisplitter1d.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/bin/kddockwidgets1.dll
+   ${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/bin/kddockwidgets1d.dll
 )
 
 foreach( file_i ${FILES_TO_COPY})
