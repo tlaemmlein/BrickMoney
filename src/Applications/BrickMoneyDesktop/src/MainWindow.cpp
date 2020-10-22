@@ -114,6 +114,8 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
         }
     });
 
+    connect(ui->actionExit, &QAction::triggered, [&]() { close();});
+
     if ( BrickMoneySettings::Inst()->mainIsMaximized() )
     {
         showMaximized();
@@ -143,7 +145,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
         msgBox.setDefaultButton(QMessageBox::Save);
         int ret = msgBox.exec();
 
-        if (ret == QMessageBox::Yes)
+        if (ret == QMessageBox::Save)
         {
             BrickMoneyProject::Inst()->save();
             event->accept();
