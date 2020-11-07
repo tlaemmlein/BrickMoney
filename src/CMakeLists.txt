@@ -6,5 +6,6 @@ project(BrickMoneyProject)
 
 add_subdirectory(Applications/BrickMoney)
 add_subdirectory(Applications/BrickMoneyDesktop)
+add_subdirectory(Applications/BrickMoneyManager)
 add_subdirectory(Packages/BrickMoneyBackend)
 add_subdirectory(Packages/Logging)

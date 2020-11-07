@@ -1,5 +1,10 @@
+#include "Packages/Logging/Logging.h"
+SET_LOGGER("BrickMoneyManager.MainWindow")
+
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+
+#include "ConnectToDBDialog.h"
 
 #include <QDebug>
 #include <QSql>
@@ -15,34 +20,32 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC3");
+    setWindowTitle(tr("BrickMoneyMoney Vers. 0.2 - The software for LEGO Investment"));
 
-    QString connectString = QStringLiteral(
-    "Driver={ODBC Driver 17 for SQL Server};"
-    "Server=tcp:brickmoneyserver.database.windows.net,1433;"
-    "Database=BrickMoneyDB;"
-    "Uid=bmadmin;"
-    "Pwd={YOURPW};"
-    "Encrypt=yes;"
-    "TrustServerCertificate=no;"
-        "Connection Timeout=30;");
-    db.setDatabaseName(connectString);
-    if(!db.open())
-    {
-        qDebug() << "Can't Connect to DB !";
-    }
-    else
-    {
-        qDebug() << "Connected Successfully to DB !";
+    connect(ui->actionExit, &QAction::triggered, [&]() { close();});
 
-        //onlyQSqlTableModel();
-
-        onlyQSqlQuery();
-
-        fillTable();
-
-        //mixedQueryAndModel();
-    }
+    connect(ui->actionBrickMoneyDB, &QAction::triggered, [&] () {
+        ConnectToDBDialog dlg;
+        dlg.show();
+        const auto ret = dlg.exec();
+        if(ret != QDialog::Rejected)
+        {
+            m_Database = dlg.database();
+            if(!m_Database.open())
+            {
+                const QString msg = "Can't connect to BrickMoneyDB.";
+                ui->statusbar->showMessage(msg);
+                LOG_ERROR(msg.toStdWString());
+            }
+            else
+            {
+                const QString msg = "Connected successfully to BrickMoneyDB.";
+                ui->statusbar->showMessage(msg);
+                LOG_INFO(msg.toStdWString());
+                fillTable();
+            }
+        }
+         });
 }
 
 MainWindow::~MainWindow()
@@ -50,57 +53,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::onlyQSqlTableModel()
-{
-    QSqlTableModel* model = new QSqlTableModel(this);
-    model->setTable("LegoSets");
-    model->select();
-    while (model->canFetchMore())
-    {
-        model->fetchMore();
-    }
-    int rows = model->rowCount();
-    QString outext = "row Count:" + QString::number(rows);
-
-    //qDebug() << "rows: " << model->rowCount();
-
-    ui->tableView->setModel(model);
-
-//    for (int i = 0; i < model.rowCount(); ++i) {
-//        const auto& rec = model.record(i);
-//        QString msg = rec.value("set_id").toString();
-//        msg += ";" + rec.value("name_en").toString();
-//        msg += ";" + rec.value("name_de").toString();
-//        msg += ";" + QString::number(rec.value("year").toInt());
-//        msg += ";" + QString::number(rec.value("rr_price").toDouble());
-//        ui->textEdit->append(msg);
-//        qDebug() << ".";
-//    }
-}
-
-void MainWindow::onlyQSqlQuery()
-{
-    QSqlQuery query;
-    query.setForwardOnly(true);
-    query.prepare("SELECT * FROM LegoSets");
-    if(!query.exec())
-    {
-        qDebug() << "Can't Execute Query !";
-    }
-    else
-    {
-        qDebug() << "Query Executed Successfully !";
-        while(query.next())
-        {
-            QString msg = query.value("set_id").toString();
-            msg += ";" + query.value("name_en").toString();
-            msg += ";" + query.value("name_de").toString();
-            msg += ";" + QString::number(query.value("year").toInt());
-            msg += ";" + QString::number(query.value("rr_price").toDouble());
-            ui->textEdit->append(msg);
-        }
-    }
-}
 
 void MainWindow::fillTable()
 {
@@ -109,15 +61,13 @@ void MainWindow::fillTable()
     query.prepare("SELECT * FROM LegoSets");
     if(!query.exec())
     {
-        qDebug() << "Can't Execute Query !";
+        LOG_ERROR("Can't Execute Query !");
     }
     else
     {
-        qDebug() << "Query Executed Successfully !";
+        LOG_INFO("Query Executed Successfully !");
 
-        qDebug() << "Num of rows : " << query.numRowsAffected();
         auto model= new QStandardItemModel(0, 5, this);
-        qDebug() << "Model created !";
 
         int i = 0;
         while (query.next())
@@ -139,8 +89,6 @@ void MainWindow::fillTable()
             row.append(rr_price);
 
             model->appendRow(row);
-
-            qDebug() << i;
             i++;
         }
         model->setHeaderData(0, Qt::Horizontal, QObject::tr("Set number"));
@@ -149,33 +97,5 @@ void MainWindow::fillTable()
         model->setHeaderData(3, Qt::Horizontal, QObject::tr("Year"));
         model->setHeaderData(4, Qt::Horizontal, QObject::tr("RRPrice €"));
         ui->tableView->setModel(model);
-    }
-}
-
-void MainWindow::mixedQueryAndModel()
-{
-    QSqlQuery query;
-    query.setForwardOnly(true);
-    query.prepare("SELECT * FROM LegoSets");
-    if(!query.exec())
-    {
-        qDebug() << "Can't Execute Query !";
-    }
-    else
-    {
-        qDebug() << "Query Executed Successfully !";
-        QSqlQueryModel model;
-        model.setQuery(query);
-
-        for (int i = 0; i < model.rowCount(); ++i) {
-            const auto& rec = model.record(i);
-            QString msg = rec.value("set_id").toString();
-            msg += ";" + rec.value("name_en").toString();
-            msg += ";" + rec.value("name_de").toString();
-            msg += ";" + QString::number(rec.value("year").toInt());
-            msg += ";" + QString::number(rec.value("rr_price").toDouble());
-            ui->textEdit->append(msg);
-            qDebug() << ".";
-        }
     }
 }

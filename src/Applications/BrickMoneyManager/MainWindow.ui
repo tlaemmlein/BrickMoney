@@ -18,9 +18,6 @@
     <item>
      <widget class="QTableView" name="tableView"/>
     </item>
-    <item>
-     <widget class="QTextEdit" name="textEdit"/>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -32,8 +29,32 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuConnect">
+    <property name="title">
+     <string>Connect</string>
+    </property>
+    <addaction name="actionBrickMoneyDB"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuConnect"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionBrickMoneyDB">
+   <property name="text">
+    <string>BrickMoneyDB</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
