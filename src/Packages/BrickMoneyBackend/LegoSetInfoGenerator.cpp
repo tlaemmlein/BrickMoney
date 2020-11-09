@@ -6,6 +6,10 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include <QFile>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QSql>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 bool LegoSetInfoGenerator::mIsDataBaseReady = false;
 std::vector<LegoSetInfo> LegoSetInfoGenerator::mLegoSetDatabase {};
@@ -97,31 +101,54 @@ void LegoSetInfoGenerator::fillDatabase(const QString& legoSetDatabaseFilePath)
     {
         LOG_INFO("Start filling the database");
 
-        QFile cvsData(legoSetDatabaseFilePath);
+        auto db = QSqlDatabase::addDatabase("QODBC3");
+        QString connectString  = "Driver={ODBC Driver 17 for SQL Server};";
+        connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
+        connectString += "Database=BrickMoneyDB;";
+        connectString += "Uid=readonlyuser;";
+        connectString += "Pwd={};";
+        connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
 
-        if ( !cvsData.open(QFile::ReadOnly | QIODevice::Text))
+        db.setDatabaseName(connectString);
+        if(!db.open())
         {
-            LOG_ERROR("Could not read from " << legoSetDatabaseFilePath.toStdWString());
+            auto error = db.lastError();
+            LOG_ERROR("Could not open database with connection string.");
+            LOG_ERROR(error.databaseText().toStdWString());
+            LOG_ERROR(error.driverText().toStdWString());
+            LOG_ERROR(error.nativeErrorCode().toStdWString());
             return;
         }
-        QTextStream input(&cvsData);
-        input.setCodec("UTF-8");
-        const QChar sep = ';';
-        const int expectedCols = 5;
 
-        while (!input.atEnd()) {
-            QString line = input.readLine();
-            QStringList cols = line.split(sep);
-            if (cols.size() != expectedCols)
-                continue;
+        LOG_INFO("Database opend");
 
-            int     setNumber = cols.at(0).toInt();
-            QString description = cols.at(2);
-            int     year = cols.at(3).toInt();
-            double  recommendedRetailPrice = cols.at(4).toDouble();
-
-            mLegoSetDatabase.push_back(LegoSetInfo(setNumber,description,year,recommendedRetailPrice) );
+        QSqlQuery query;
+        query.setForwardOnly(true);
+        query.prepare("SELECT * FROM LegoSets");
+        if(!query.exec())
+        {
+            LOG_ERROR("Can't Execute Query !");
         }
+        else
+        {
+            LOG_INFO("Query Executed Successfully !");
+
+            while (query.next())
+            {
+                //query.value("set_id").toInt();
+                //query.value("name_en").toString();
+                //query.value("name_de").toString();
+                //query.value("year").toInt();
+                //query.value("rr_price").toDouble();
+                mLegoSetDatabase.push_back(
+                    LegoSetInfo(query.value("set_id").toInt()
+                               ,query.value("name_de").toString()
+                               ,query.value("year").toInt()
+                               ,query.value("rr_price").toDouble()) );
+            }
+        }
+
+        db.close();
 
         // Ref: https://en.cppreference.com/w/cpp/algorithm/unique
         // remove consecutive (adjacent) duplicates
