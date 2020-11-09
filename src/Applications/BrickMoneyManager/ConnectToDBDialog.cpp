@@ -1,7 +1,11 @@
+#include "Packages/Logging/Logging.h"
+SET_LOGGER("BrickMoneyManager.ConnectToDBDialog")
+
 #include "ConnectToDBDialog.h"
 #include "ui_ConnectToDBDialog.h"
 
 #include <QDebug>
+#include <QSqlError>
 
 
 ConnectToDBDialog::ConnectToDBDialog(QWidget *parent) :
@@ -40,7 +44,13 @@ ConnectToDBDialog::ConnectToDBDialog(QWidget *parent) :
         if(m_Database.open())
             accept();
         else
-            reject();
+        {
+            auto error = m_Database.lastError();
+            LOG_ERROR("Could not open database with connection string.");
+            LOG_ERROR(error.databaseText().toStdWString());
+            LOG_ERROR(error.driverText().toStdWString());
+            LOG_ERROR(error.nativeErrorCode().toStdWString());
+        }
     });
 }
 
