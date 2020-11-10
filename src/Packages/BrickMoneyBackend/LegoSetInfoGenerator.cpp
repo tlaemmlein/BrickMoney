@@ -106,7 +106,8 @@ void LegoSetInfoGenerator::fillDatabase(const QString& legoSetDatabaseFilePath)
         connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
         connectString += "Database=BrickMoneyDB;";
         connectString += "Uid=readonlyuser;";
-        connectString += "Pwd={};";
+		QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
+        connectString += "Pwd={"+ wan +"};";
         connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
 
         db.setDatabaseName(connectString);
