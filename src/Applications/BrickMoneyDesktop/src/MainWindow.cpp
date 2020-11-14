@@ -16,6 +16,7 @@
 #include <QFileDialog>
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QPixmapCache>
 
 using namespace BrickMoney;
 
@@ -25,6 +26,9 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QPixmap emptyPixmap(":/images/empty.svg");
+    QPixmapCache::insert("None", emptyPixmap);
 
     std::function<void(const QString,
                        QWidget* tableView,

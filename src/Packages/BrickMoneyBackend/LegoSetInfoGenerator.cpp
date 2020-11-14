@@ -6,12 +6,15 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include <QFile>
 #include <QDir>
 #include <QImage>
+#include <QPixmap>
+#include <QPixmapCache>
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QSql>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QUrl>
 
 bool LegoSetInfoGenerator::mIsDataBaseReady = false;
 std::vector<LegoSetInfo> LegoSetInfoGenerator::mLegoSetDatabase {};
@@ -137,11 +140,6 @@ void LegoSetInfoGenerator::fillDatabase()
 
             while (query.next())
             {
-                //query.value("set_id").toInt();
-                //query.value("name_en").toString();
-                //query.value("name_de").toString();
-                //query.value("year").toInt();
-                //query.value("rr_price").toDouble();
                 mLegoSetDatabase.push_back(
                     LegoSetInfo(query.value("set_id").toInt()
                                ,query.value("name_de").toString()
@@ -173,7 +171,26 @@ void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
 {
     emit setNumber(info.setNumber);
     QString imageurl = QString("file:///%1/%2.jpg").arg(mLegoSetImages).arg(info.setNumber);
-    emit imageUrl(imageurl);
+    QFileInfo fileInfo(imageurl);
+    QString local;
+
+    if (fileInfo.exists())
+        local=imageurl;
+    else
+    {
+        QUrl url(imageurl);
+        local=url.toLocalFile();
+    }
+    QPixmap pm;
+    QString imageKey = QString::number(info.setNumber);
+    if (!QPixmapCache::find(imageKey, &pm)) {
+        pm.load(local);
+        if (!QPixmapCache::insert(imageKey, pm))
+            LOG_ERROR("Could not insert image " << imageKey.toStdWString());
+        LOG_TRACE("Key: " << imageKey.toStdWString() << " imageUrl: " << local.toStdWString());
+    }
+
+    emit imageUrl(imageKey);
     emit description(info.description);
     emit year(info.year);
     emit recommendedRetailPrice(info.recommendedRetailPrice);

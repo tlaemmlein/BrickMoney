@@ -1,10 +1,13 @@
+#include "Packages/Logging/Logging.h"
+SET_LOGGER("BrickMoney.ImageDelegate")
+
 #include "ImageDelegate.h"
 
-//#include "../qtquick/processmodel.h"
 #include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
 
 #include <QFileInfo>
 #include <QPainter>
+#include <QPixmapCache>
 
 ImageDelegate::ImageDelegate(QObject *parent) : QStyledItemDelegate(parent)
 {
@@ -17,26 +20,17 @@ void ImageDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     if (index.data(int(LegoSetTableModel::Role::Type)).toString() == QLatin1String("image")) {
         QString imageUrl = index.data().toString();
 
-        QFileInfo info(imageUrl);
-        QString local;
-
-        if (info.exists())
+        QPixmap pm;
+        if (!QPixmapCache::find(imageUrl, &pm))
         {
-            local=imageUrl;
-        }
-        else
-        {
-            QUrl url(imageUrl);
-
-            local=url.toLocalFile();
+            LOG_ERROR("Could not find pixmap cache for " << imageUrl.toStdWString());
         }
 
-        QPixmap image(local);
         //Scaled size that will be used to set draw aera to QPainter, with aspect ratio preserved
-        QSize size = image.size().scaled(option.rect.size(), Qt::KeepAspectRatio);
+        QSize size = pm.size().scaled(option.rect.size(), Qt::KeepAspectRatio);
 
         //Draw the pixmap inside the scaled area, with aspect ratio preserved
-        painter->drawPixmap(option.rect.x(), option.rect.y(), size.width(), size.height(), image);
+        painter->drawPixmap(option.rect.x(), option.rect.y(), size.width(), size.height(), pm);
     } else {
         QStyledItemDelegate::paint(painter, option, index);
     }
