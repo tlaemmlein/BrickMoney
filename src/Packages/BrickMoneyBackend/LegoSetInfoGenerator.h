@@ -67,7 +67,7 @@ signals:
     void legoSetInfoChanged(LegoSetInfo legoSetInfo);
 
 private:
-    void fillDatabase(const QString& legoSetDatabaseFilePath);
+    void fillDatabase();
     void sendSignals(const LegoSetInfo& info);
     QString mLegoSetImages;
     static bool mIsDataBaseReady;

@@ -4,6 +4,8 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include "LegoSetInfoGenerator.h"
 
 #include <QFile>
+#include <QDir>
+#include <QImage>
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QSql>
@@ -21,9 +23,8 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent)
     LOG_SCOPE_METHOD(L"");
     qRegisterMetaType<LegoSetInfo>();
     const QString legoSetDatabasePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase";
-    const QString legoSetDatabaseFilePath = legoSetDatabasePath + "/BrickMoneyDatabase.csv";
     mLegoSetImages = legoSetDatabasePath + "/images";
-    fillDatabase(legoSetDatabaseFilePath);
+    fillDatabase();
 }
 
 bool LegoSetInfoGenerator::querySetNumber(int num)
@@ -95,7 +96,7 @@ LegoSetInfo LegoSetInfoGenerator::legoSetInfo() const
     return m_legoSetInfo;
 }
 
-void LegoSetInfoGenerator::fillDatabase(const QString& legoSetDatabaseFilePath)
+void LegoSetInfoGenerator::fillDatabase()
 {
     if (!mIsDataBaseReady)
     {
