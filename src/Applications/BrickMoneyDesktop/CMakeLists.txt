@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 project(BrickMoneyDesktop LANGUAGES CXX)
 
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Widgets Sql REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -56,7 +56,7 @@ find_package(KDDockWidgets REQUIRED)
 
 
 
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets Qt5::Sql
     BrickMoney::Logging BrickMoney::BrickMoneyBackend KDAB::kddockwidgets)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)

@@ -3,6 +3,8 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 
 #include "LegoSetInfoGenerator.h"
 
+#include <QBuffer>
+#include <QCryptographicHash>
 #include <QFile>
 #include <QDir>
 #include <QImage>
@@ -11,22 +13,97 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QSql>
-#include <QSqlDatabase>
 #include <QSqlError>
-#include <QSqlQuery>
 #include <QUrl>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 bool LegoSetInfoGenerator::mIsDataBaseReady = false;
 std::vector<LegoSetInfo> LegoSetInfoGenerator::mLegoSetDatabase {};
 
 
 
-LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent)
+
+class LegoSetInfoGeneratorPrivate : public QObject
+{
+public:
+	explicit LegoSetInfoGeneratorPrivate(QObject* parent = nullptr) : QObject(parent) {}
+
+	void prepareBrickMoneyImagesDB(const QString& legoSetDatabasePath)
+	{
+		if (!mBrickMoneyImagesDB.isOpen())
+		{
+			LOG_INFO("Prepare BrickMoneyUserImagesDB.");
+
+			QString dbName(legoSetDatabasePath + "/BrickMoneyImagesDB.db3");
+			auto names = mBrickMoneyImagesDB.connectionNames();
+			if (!mBrickMoneyImagesDB.contains("BrickMoneyImagesDB"))
+				mBrickMoneyImagesDB = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyImagesDB");
+			mBrickMoneyImagesDB.setDatabaseName(dbName);
+			if (!mBrickMoneyImagesDB.open())
+			{
+				LOG_ERROR("Could not open " << dbName.toStdWString());
+				return;
+			}
+			mBrickMoneyImagesDBQuery = QSqlQuery(mBrickMoneyImagesDB);
+			if (!mBrickMoneyImagesDBQuery.exec(
+				"CREATE TABLE IF NOT EXISTS Images ( [set_id] bigint, [name] varchar(8), [md5sum] TEXT, [image_data] BLOB )"
+				//"Das ist kein sql"
+			))
+			{
+				LOG_ERROR("Could not create Images table. Last error: " << mBrickMoneyImagesDBQuery.lastError().text().toStdWString());
+				mBrickMoneyImagesDB.close();
+			}
+		}
+	}
+
+	static QSqlDatabase mBrickMoneyImagesDB;
+	static QSqlQuery mBrickMoneyImagesDBQuery;
+};
+
+QSqlDatabase LegoSetInfoGeneratorPrivate::mBrickMoneyImagesDB{};
+QSqlQuery LegoSetInfoGeneratorPrivate::mBrickMoneyImagesDBQuery{};
+
+
+void createMD5Sum(const QString& legoSetImages)
+{
+	static bool alreadyCreated = false;
+
+	if (!alreadyCreated)
+	{
+		QDir directory(legoSetImages);
+		QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
+		foreach(QString filename, images) {
+			QPixmap pixmap;
+			QByteArray inByteArray;
+			QBuffer inBuffer(&inByteArray);
+			inBuffer.open(QIODevice::WriteOnly);
+			pixmap.save(&inBuffer, "JPG");
+			QCryptographicHash hash(QCryptographicHash::Algorithm::Md5);
+			hash.addData(inByteArray);
+			QString md5sum = hash.result().toHex();
+			QFile md5sumFile(legoSetImages + "/" + filename + ".md5");
+			if (md5sumFile.open(QIODevice::WriteOnly | QIODevice::Text))
+			{
+				QTextStream stream(&md5sumFile);
+				stream << md5sum;
+				md5sumFile.close();
+			}
+		}
+		alreadyCreated = true;
+	}
+}
+
+
+
+LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d_ptr(new LegoSetInfoGeneratorPrivate(this))
 {
     LOG_SCOPE_METHOD(L"");
     qRegisterMetaType<LegoSetInfo>();
     const QString legoSetDatabasePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase";
     mLegoSetImages = legoSetDatabasePath + "/images";
+    //createMD5Sum(mLegoSetImages);
+	d_ptr->prepareBrickMoneyImagesDB(legoSetDatabasePath);
     fillDatabase();
 }
 
@@ -197,4 +274,5 @@ void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
     m_legoSetInfo = info;
     emit legoSetInfoChanged(info);
 }
+
 

@@ -44,6 +44,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::addImgToTable(const QString& name, QSqlQuery& query)
 {
+    // Ref: https://stackoverflow.com/questions/31522059/how-to-load-an-image-from-a-file-in-qt
 	QPixmap pm(":/images/"+ name +".jpg");
 	QByteArray inByteArray;
 	QBuffer inBuffer(&inByteArray);

@@ -41,6 +41,8 @@ struct LegoSetInfo{
 
 Q_DECLARE_METATYPE(LegoSetInfo)
 
+class LegoSetInfoGeneratorPrivate;
+
 class LegoSetInfoGenerator : public QObject
 {
     Q_OBJECT
@@ -49,7 +51,6 @@ class LegoSetInfoGenerator : public QObject
 public:
     explicit LegoSetInfoGenerator(QObject *parent = nullptr);
 
-public:
     Q_INVOKABLE bool querySetNumber(int num);
     Q_INVOKABLE int nextSetNumber(int currentSetNumber);
     Q_INVOKABLE int previousSetNumber(int currentSetNumber);
@@ -69,6 +70,9 @@ signals:
 private:
     void fillDatabase();
     void sendSignals(const LegoSetInfo& info);
+
+	LegoSetInfoGeneratorPrivate* d_ptr;
+
     QString mLegoSetImages;
     static bool mIsDataBaseReady;
     static std::vector<LegoSetInfo> mLegoSetDatabase;
