@@ -18,8 +18,6 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
-bool LegoSetInfoGenerator::mIsDataBaseReady = false;
-std::vector<LegoSetInfo> LegoSetInfoGenerator::mLegoSetDatabase {};
 
 
 
@@ -29,40 +27,120 @@ class LegoSetInfoGeneratorPrivate : public QObject
 public:
 	explicit LegoSetInfoGeneratorPrivate(QObject* parent = nullptr) : QObject(parent) {}
 
-	void prepareBrickMoneyImagesDB(const QString& legoSetDatabasePath)
+	bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath)
 	{
-		if (!mBrickMoneyImagesDB.isOpen())
+		if (!mBrickMoneyDBLocale.isOpen())
 		{
 			LOG_INFO("Prepare BrickMoneyUserImagesDB.");
 
-			QString dbName(legoSetDatabasePath + "/BrickMoneyImagesDB.db3");
-			auto names = mBrickMoneyImagesDB.connectionNames();
-			if (!mBrickMoneyImagesDB.contains("BrickMoneyImagesDB"))
-				mBrickMoneyImagesDB = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyImagesDB");
-			mBrickMoneyImagesDB.setDatabaseName(dbName);
-			if (!mBrickMoneyImagesDB.open())
+			QString dbName(legoSetDatabasePath + "/BrickMoneyDBLocale.db3");
+			if (!mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
+				mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
+			mBrickMoneyDBLocale.setDatabaseName(dbName);
+			if (!mBrickMoneyDBLocale.open())
 			{
 				LOG_ERROR("Could not open " << dbName.toStdWString());
-				return;
+				return false;
 			}
-			mBrickMoneyImagesDBQuery = QSqlQuery(mBrickMoneyImagesDB);
-			if (!mBrickMoneyImagesDBQuery.exec(
-				"CREATE TABLE IF NOT EXISTS Images ( [set_id] bigint, [name] varchar(8), [md5sum] TEXT, [image_data] BLOB )"
-				//"Das ist kein sql"
-			))
+			mBrickMoneyDBLocaleQuery = QSqlQuery(mBrickMoneyDBLocale);
+
+			QStringList sql_querys;
+			sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
+				<< "CREATE TABLE IF NOT EXISTS Images (legoset_id bigint REFERENCES LegoSets (set_id), name text, md5sum text, image_data BLOB)"
+				<< "CREATE UNIQUE INDEX IF NOT EXISTS filename ON Images ( legoset_id, name )";
+
+			for (const auto& sql_query : sql_querys)
 			{
-				LOG_ERROR("Could not create Images table. Last error: " << mBrickMoneyImagesDBQuery.lastError().text().toStdWString());
-				mBrickMoneyImagesDB.close();
+				if (!mBrickMoneyDBLocaleQuery.exec(sql_query))
+				{
+					LOG_ERROR("Could not exec query. Last error: " << mBrickMoneyDBLocaleQuery.lastError().text().toStdWString());
+					mBrickMoneyDBLocale.close();
+					return false;
+				}
 			}
 		}
+		return mBrickMoneyDBLocale.isOpen();
 	}
 
-	static QSqlDatabase mBrickMoneyImagesDB;
-	static QSqlQuery mBrickMoneyImagesDBQuery;
+	void fillDatabase()
+	{
+		if (!mIsDataBaseReady)
+		{
+			LOG_INFO("Start filling the database");
+
+			auto db = QSqlDatabase::addDatabase("QODBC3");
+			QString connectString = "Driver={ODBC Driver 17 for SQL Server};";
+			connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
+			connectString += "Database=BrickMoneyDB;";
+			connectString += "Uid=readonlyuser;";
+			QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
+			connectString += "Pwd={" + wan + "};";
+			connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
+
+			db.setDatabaseName(connectString);
+			if (!db.open())
+			{
+				auto error = db.lastError();
+				LOG_ERROR("Could not open database with connection string.");
+				LOG_ERROR(error.databaseText().toStdWString());
+				LOG_ERROR(error.driverText().toStdWString());
+				LOG_ERROR(error.nativeErrorCode().toStdWString());
+				return;
+			}
+
+			LOG_INFO("Database opend");
+
+			QSqlQuery query;
+			query.setForwardOnly(true);
+			query.prepare("SELECT * FROM LegoSets");
+			if (!query.exec())
+			{
+				LOG_ERROR("Can't Execute Query !");
+			}
+			else
+			{
+				LOG_INFO("Query Executed Successfully !");
+
+				while (query.next())
+				{
+					mLegoSetDatabase.push_back(
+						LegoSetInfo(query.value("set_id").toInt()
+							, query.value("name_de").toString()
+							, query.value("year").toInt()
+							, query.value("rr_price").toDouble()));
+				}
+			}
+
+			db.close();
+
+			// Ref: https://en.cppreference.com/w/cpp/algorithm/unique
+			// remove consecutive (adjacent) duplicates
+			auto last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
+			mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
+
+			// sort followed by unique, to remove all duplicates
+			std::sort(mLegoSetDatabase.begin(), mLegoSetDatabase.end()); // {1 1 2 3 4 4 5}
+			last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
+
+			mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
+
+			mIsDataBaseReady = true;
+
+			LOG_INFO("Completed database filling");
+		}
+	}
+	QString mLegoSetImages;
+	static bool mIsDataBaseReady;
+	static std::vector<LegoSetInfo> mLegoSetDatabase;
+	LegoSetInfo mLegoSetInfo;
+	static QSqlDatabase mBrickMoneyDBLocale;
+	static QSqlQuery mBrickMoneyDBLocaleQuery;
 };
 
-QSqlDatabase LegoSetInfoGeneratorPrivate::mBrickMoneyImagesDB{};
-QSqlQuery LegoSetInfoGeneratorPrivate::mBrickMoneyImagesDBQuery{};
+bool LegoSetInfoGeneratorPrivate::mIsDataBaseReady = false;
+std::vector<LegoSetInfo> LegoSetInfoGeneratorPrivate::mLegoSetDatabase{};
+QSqlDatabase LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocale{};
+QSqlQuery LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocaleQuery{};
 
 
 void createMD5Sum(const QString& legoSetImages)
@@ -101,10 +179,10 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d
     LOG_SCOPE_METHOD(L"");
     qRegisterMetaType<LegoSetInfo>();
     const QString legoSetDatabasePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase";
-    mLegoSetImages = legoSetDatabasePath + "/images";
+	d_ptr->mLegoSetImages = legoSetDatabasePath + "/images";
     //createMD5Sum(mLegoSetImages);
-	d_ptr->prepareBrickMoneyImagesDB(legoSetDatabasePath);
-    fillDatabase();
+	d_ptr->prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+	d_ptr->fillDatabase();
 }
 
 bool LegoSetInfoGenerator::querySetNumber(int num)
@@ -112,7 +190,7 @@ bool LegoSetInfoGenerator::querySetNumber(int num)
     LOG_SCOPE_METHOD(L"");
     LOG_TRACE(QString("querySetNumber %1").arg(num).toStdWString());
 
-    for(const LegoSetInfo& info : mLegoSetDatabase)
+    for(const LegoSetInfo& info : d_ptr->mLegoSetDatabase)
     {
         if (info.setNumber == num)
         {
@@ -130,17 +208,17 @@ int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
     LOG_SCOPE_METHOD(L"");
     LOG_INFO(QString("nextSetNumber %1").arg(currentSetNumber).toStdWString());
 
-    for( size_t index = 0; index < mLegoSetDatabase.size(); ++index )
+    for( size_t index = 0; index < d_ptr->mLegoSetDatabase.size(); ++index )
     {
-        if ( mLegoSetDatabase.at(index).setNumber >= currentSetNumber)
+        if (d_ptr->mLegoSetDatabase.at(index).setNumber >= currentSetNumber)
         {
-            size_t nextIndex = mLegoSetDatabase.at(index).setNumber == currentSetNumber
-                               && index < mLegoSetDatabase.size() -1 ? index+1 : index;
-            if ( nextIndex <= mLegoSetDatabase.size() )
+            size_t nextIndex = d_ptr->mLegoSetDatabase.at(index).setNumber == currentSetNumber
+                               && index < d_ptr->mLegoSetDatabase.size() -1 ? index+1 : index;
+            if ( nextIndex <= d_ptr->mLegoSetDatabase.size() )
             {
-                LOG_INFO(QString("Found %1").arg(mLegoSetDatabase.at(nextIndex).setNumber).toStdWString());
-                sendSignals( mLegoSetDatabase.at(nextIndex) );
-                return mLegoSetDatabase.at(nextIndex).setNumber;
+                LOG_INFO(QString("Found %1").arg(d_ptr->mLegoSetDatabase.at(nextIndex).setNumber).toStdWString());
+                sendSignals(d_ptr->mLegoSetDatabase.at(nextIndex) );
+                return d_ptr->mLegoSetDatabase.at(nextIndex).setNumber;
             }
         }
     }
@@ -153,17 +231,17 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
     LOG_SCOPE_METHOD(L"");
     LOG_INFO(QString("previousSetNumber %1").arg(currentSetNumber).toStdWString());
 
-    for( size_t index = mLegoSetDatabase.size()-1; index >= 0 ; --index )
+    for( size_t index = d_ptr->mLegoSetDatabase.size()-1; index >= 0 ; --index )
     {
-        if ( mLegoSetDatabase.at(index).setNumber <= currentSetNumber)
+        if (d_ptr->mLegoSetDatabase.at(index).setNumber <= currentSetNumber)
         {
-            size_t prevIndex = mLegoSetDatabase.at(index).setNumber == currentSetNumber
+            size_t prevIndex = d_ptr->mLegoSetDatabase.at(index).setNumber == currentSetNumber
                                && index > 1 ? index-1 : index;
             if ( prevIndex >= 0 )
             {
-                LOG_INFO(QString("Found %1").arg(mLegoSetDatabase.at(prevIndex).setNumber).toStdWString());
-                sendSignals( mLegoSetDatabase.at(prevIndex) );
-                return mLegoSetDatabase.at(prevIndex).setNumber;
+                LOG_INFO(QString("Found %1").arg(d_ptr->mLegoSetDatabase.at(prevIndex).setNumber).toStdWString());
+                sendSignals(d_ptr->mLegoSetDatabase.at(prevIndex) );
+                return d_ptr->mLegoSetDatabase.at(prevIndex).setNumber;
             }
         }
     }
@@ -173,81 +251,13 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
 
 LegoSetInfo LegoSetInfoGenerator::legoSetInfo() const
 {
-    return m_legoSetInfo;
-}
-
-void LegoSetInfoGenerator::fillDatabase()
-{
-    if (!mIsDataBaseReady)
-    {
-        LOG_INFO("Start filling the database");
-
-        auto db = QSqlDatabase::addDatabase("QODBC3");
-        QString connectString  = "Driver={ODBC Driver 17 for SQL Server};";
-        connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
-        connectString += "Database=BrickMoneyDB;";
-        connectString += "Uid=readonlyuser;";
-		QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
-        connectString += "Pwd={"+ wan +"};";
-        connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
-
-        db.setDatabaseName(connectString);
-        if(!db.open())
-        {
-            auto error = db.lastError();
-            LOG_ERROR("Could not open database with connection string.");
-            LOG_ERROR(error.databaseText().toStdWString());
-            LOG_ERROR(error.driverText().toStdWString());
-            LOG_ERROR(error.nativeErrorCode().toStdWString());
-            return;
-        }
-
-        LOG_INFO("Database opend");
-
-        QSqlQuery query;
-        query.setForwardOnly(true);
-        query.prepare("SELECT * FROM LegoSets");
-        if(!query.exec())
-        {
-            LOG_ERROR("Can't Execute Query !");
-        }
-        else
-        {
-            LOG_INFO("Query Executed Successfully !");
-
-            while (query.next())
-            {
-                mLegoSetDatabase.push_back(
-                    LegoSetInfo(query.value("set_id").toInt()
-                               ,query.value("name_de").toString()
-                               ,query.value("year").toInt()
-                               ,query.value("rr_price").toDouble()) );
-            }
-        }
-
-        db.close();
-
-        // Ref: https://en.cppreference.com/w/cpp/algorithm/unique
-        // remove consecutive (adjacent) duplicates
-        auto last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
-        mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
-
-        // sort followed by unique, to remove all duplicates
-        std::sort(mLegoSetDatabase.begin(), mLegoSetDatabase.end()); // {1 1 2 3 4 4 5}
-        last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
-
-        mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
-
-        mIsDataBaseReady = true;
-
-        LOG_INFO("Completed database filling");
-    }
+    return d_ptr->mLegoSetInfo;
 }
 
 void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
 {
     emit setNumber(info.setNumber);
-    QString imageurl = QString("file:///%1/%2.jpg").arg(mLegoSetImages).arg(info.setNumber);
+    QString imageurl = QString("file:///%1/%2.jpg").arg(d_ptr->mLegoSetImages).arg(info.setNumber);
     QFileInfo fileInfo(imageurl);
     QString local;
 
@@ -271,7 +281,7 @@ void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
     emit description(info.description);
     emit year(info.year);
     emit recommendedRetailPrice(info.recommendedRetailPrice);
-    m_legoSetInfo = info;
+	d_ptr->mLegoSetInfo = info;
     emit legoSetInfoChanged(info);
 }
 

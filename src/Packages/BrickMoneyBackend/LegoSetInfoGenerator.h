@@ -68,15 +68,9 @@ signals:
     void legoSetInfoChanged(LegoSetInfo legoSetInfo);
 
 private:
-    void fillDatabase();
     void sendSignals(const LegoSetInfo& info);
 
 	LegoSetInfoGeneratorPrivate* d_ptr;
-
-    QString mLegoSetImages;
-    static bool mIsDataBaseReady;
-    static std::vector<LegoSetInfo> mLegoSetDatabase;
-    LegoSetInfo m_legoSetInfo;
 };
 
 
