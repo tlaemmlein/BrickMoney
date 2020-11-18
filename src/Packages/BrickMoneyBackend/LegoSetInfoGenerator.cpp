@@ -29,118 +29,160 @@ public:
 
 	bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath)
 	{
-		if (!mBrickMoneyDBLocale.isOpen())
+		if (mBrickMoneyDBLocale.isOpen())
 		{
-			LOG_INFO("Prepare BrickMoneyUserImagesDB.");
+			return true;
+		}
+		LOG_INFO("Prepare BrickMoneyDBLocale.");
 
-			QString dbName(legoSetDatabasePath + "/BrickMoneyDBLocale.db3");
-			if (!mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
-				mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
-			mBrickMoneyDBLocale.setDatabaseName(dbName);
-			if (!mBrickMoneyDBLocale.open())
+		QString dbName(legoSetDatabasePath + "/BrickMoneyDBLocale.db3");
+		if (!mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
+			mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
+		mBrickMoneyDBLocale.setDatabaseName(dbName);
+		if (!mBrickMoneyDBLocale.open())
+		{
+			auto error = mBrickMoneyDBLocale.lastError();
+			LOG_ERROR("Could not open " << dbName.toStdWString());
+			LOG_ERROR(error.databaseText().toStdWString());
+			LOG_ERROR(error.driverText().toStdWString());
+			LOG_ERROR(error.nativeErrorCode().toStdWString());
+			return false;
+		}
+		mBrickMoneyDBLocaleQuery = QSqlQuery(mBrickMoneyDBLocale);
+
+		QStringList sql_querys;
+		sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
+			<< "CREATE TABLE IF NOT EXISTS Images (legoset_id bigint REFERENCES LegoSets (set_id), name text, md5sum text, image_data BLOB)"
+			<< "CREATE UNIQUE INDEX IF NOT EXISTS filename ON Images ( legoset_id, name )";
+
+		for (const auto& sql_query : sql_querys)
+		{
+			if (!mBrickMoneyDBLocaleQuery.exec(sql_query))
 			{
-				LOG_ERROR("Could not open " << dbName.toStdWString());
+				LOG_ERROR("Could not exec query. Last error: " << mBrickMoneyDBLocaleQuery.lastError().text().toStdWString());
+				mBrickMoneyDBLocale.close();
 				return false;
 			}
-			mBrickMoneyDBLocaleQuery = QSqlQuery(mBrickMoneyDBLocale);
-
-			QStringList sql_querys;
-			sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
-				<< "CREATE TABLE IF NOT EXISTS Images (legoset_id bigint REFERENCES LegoSets (set_id), name text, md5sum text, image_data BLOB)"
-				<< "CREATE UNIQUE INDEX IF NOT EXISTS filename ON Images ( legoset_id, name )";
-
-			for (const auto& sql_query : sql_querys)
-			{
-				if (!mBrickMoneyDBLocaleQuery.exec(sql_query))
-				{
-					LOG_ERROR("Could not exec query. Last error: " << mBrickMoneyDBLocaleQuery.lastError().text().toStdWString());
-					mBrickMoneyDBLocale.close();
-					return false;
-				}
-			}
 		}
-		return mBrickMoneyDBLocale.isOpen();
-	}
+		LOG_INFO("BrickMoneyDBLocale is ready.");
 
-	void fillDatabase()
+		return true;
+	}
+	
+	void updateBrickMoneyDBLocale()
 	{
-		if (!mIsDataBaseReady)
+		if (!mBrickMoneyDBLocale.isOpen() || !mTryToUpdateBrickMoneyDBLocale)
+			return;
+
+		LOG_INFO("Update BrickMoneyDBLocale.");
+		
+		QSqlDatabase remoteDB = QSqlDatabase::addDatabase("QODBC3", "BrickMoneyDBRemote");
+
+		QString connectString = "Driver={ODBC Driver 17 for SQL Server};";
+		connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
+		connectString += "Database=BrickMoneyDB;";
+        connectString += "Uid=readonlyuser;";
+		QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
+		connectString += "Pwd={" + wan + "};";
+		connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
+
+		remoteDB.setDatabaseName(connectString);
+		if (!remoteDB.open())
 		{
-			LOG_INFO("Start filling the database");
-
-			auto db = QSqlDatabase::addDatabase("QODBC3");
-			QString connectString = "Driver={ODBC Driver 17 for SQL Server};";
-			connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
-			connectString += "Database=BrickMoneyDB;";
-			connectString += "Uid=readonlyuser;";
-			QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
-			connectString += "Pwd={" + wan + "};";
-			connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
-
-			db.setDatabaseName(connectString);
-			if (!db.open())
-			{
-				auto error = db.lastError();
-				LOG_ERROR("Could not open database with connection string.");
-				LOG_ERROR(error.databaseText().toStdWString());
-				LOG_ERROR(error.driverText().toStdWString());
-				LOG_ERROR(error.nativeErrorCode().toStdWString());
-				return;
-			}
-
-			LOG_INFO("Database opend");
-
-			QSqlQuery query;
-			query.setForwardOnly(true);
-			query.prepare("SELECT * FROM LegoSets");
-			if (!query.exec())
-			{
-				LOG_ERROR("Can't Execute Query !");
-			}
-			else
-			{
-				LOG_INFO("Query Executed Successfully !");
-
-				while (query.next())
-				{
-					mLegoSetDatabase.push_back(
-						LegoSetInfo(query.value("set_id").toInt()
-							, query.value("name_de").toString()
-							, query.value("year").toInt()
-							, query.value("rr_price").toDouble()));
-				}
-			}
-
-			db.close();
-
-			// Ref: https://en.cppreference.com/w/cpp/algorithm/unique
-			// remove consecutive (adjacent) duplicates
-			auto last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
-			mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
-
-			// sort followed by unique, to remove all duplicates
-			std::sort(mLegoSetDatabase.begin(), mLegoSetDatabase.end()); // {1 1 2 3 4 4 5}
-			last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
-
-			mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
-
-			mIsDataBaseReady = true;
-
-			LOG_INFO("Completed database filling");
+			auto error = remoteDB.lastError();
+			LOG_ERROR("Could not open remote db.");
+			LOG_ERROR(error.databaseText().toStdWString());
+			LOG_ERROR(error.driverText().toStdWString());
+			LOG_ERROR(error.nativeErrorCode().toStdWString());
+			mTryToUpdateBrickMoneyDBLocale = false;
+			return;
 		}
+
+		QSqlQuery remoteQuery(remoteDB);
+		remoteQuery.setForwardOnly(true);
+
+		remoteQuery.prepare("SELECT * FROM LegoSets");
+		if (!remoteQuery.exec())
+		{
+			LOG_ERROR("Can't execute query the remote LegoSets table!");
+			mTryToUpdateBrickMoneyDBLocale = false;
+			return;
+		}
+
+		LOG_INFO("Remote LegoSets query successful!");
+
+		while (remoteQuery.next())
+		{
+			// https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update
+			mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
+				"VALUES (:set_id, :name_en, :name_de, :year, :rr_price)");
+			mBrickMoneyDBLocaleQuery.bindValue(":set_id", remoteQuery.value("set_id").toInt());
+			mBrickMoneyDBLocaleQuery.bindValue(":name_en", remoteQuery.value("name_en").toString());
+			mBrickMoneyDBLocaleQuery.bindValue(":name_de", remoteQuery.value("name_de").toString());
+			mBrickMoneyDBLocaleQuery.bindValue(":year", remoteQuery.value("year").toInt());
+			mBrickMoneyDBLocaleQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
+			mBrickMoneyDBLocaleQuery.exec();
+		}
+		remoteDB.close();
+		mTryToUpdateBrickMoneyDBLocale = false;
+
+		LOG_INFO("BrickMoneyDBLocale updated.");
 	}
+
+	void fillLegoSetsDatabase()
+	{
+		if (mIsDataBaseReady)
+			return;
+			
+		mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets");
+		if (!mBrickMoneyDBLocaleQuery.exec())
+		{
+			LOG_ERROR("Can't execute query for selecting the LegoSets table!");
+			return;
+		}
+
+		LOG_INFO("Query Executed Successfully !");
+
+		while (mBrickMoneyDBLocaleQuery.next())
+		{
+			mLegoSetDatabase.push_back(
+				LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
+					, mBrickMoneyDBLocaleQuery.value("name_de").toString()
+					, mBrickMoneyDBLocaleQuery.value("year").toInt()
+					, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble()));
+		}
+
+		// Ref: https://en.cppreference.com/w/cpp/algorithm/unique
+		// remove consecutive (adjacent) duplicates
+		auto last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
+		mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
+
+		// sort followed by unique, to remove all duplicates
+		std::sort(mLegoSetDatabase.begin(), mLegoSetDatabase.end()); // {1 1 2 3 4 4 5}
+		last = std::unique(mLegoSetDatabase.begin(), mLegoSetDatabase.end());
+
+		mLegoSetDatabase.erase(last, mLegoSetDatabase.end());
+
+		mIsDataBaseReady = true;
+
+		LOG_INFO("Completed database filling");
+	}
+	
 	QString mLegoSetImages;
+	LegoSetInfo mLegoSetInfo;
+
 	static bool mIsDataBaseReady;
 	static std::vector<LegoSetInfo> mLegoSetDatabase;
-	LegoSetInfo mLegoSetInfo;
 	static QSqlDatabase mBrickMoneyDBLocale;
 	static QSqlQuery mBrickMoneyDBLocaleQuery;
+	static bool mTryToUpdateBrickMoneyDBLocale;
 };
 
 bool LegoSetInfoGeneratorPrivate::mIsDataBaseReady = false;
 std::vector<LegoSetInfo> LegoSetInfoGeneratorPrivate::mLegoSetDatabase{};
 QSqlDatabase LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocale{};
 QSqlQuery LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocaleQuery{};
+bool LegoSetInfoGeneratorPrivate::mTryToUpdateBrickMoneyDBLocale = true;
 
 
 void createMD5Sum(const QString& legoSetImages)
@@ -181,8 +223,11 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d
     const QString legoSetDatabasePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase";
 	d_ptr->mLegoSetImages = legoSetDatabasePath + "/images";
     //createMD5Sum(mLegoSetImages);
-	d_ptr->prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-	d_ptr->fillDatabase();
+	if (!d_ptr->prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)))
+		return;
+
+	d_ptr->updateBrickMoneyDBLocale();
+	d_ptr->fillLegoSetsDatabase();
 }
 
 bool LegoSetInfoGenerator::querySetNumber(int num)
@@ -257,20 +302,21 @@ LegoSetInfo LegoSetInfoGenerator::legoSetInfo() const
 void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
 {
     emit setNumber(info.setNumber);
-    QString imageurl = QString("file:///%1/%2.jpg").arg(d_ptr->mLegoSetImages).arg(info.setNumber);
-    QFileInfo fileInfo(imageurl);
-    QString local;
 
-    if (fileInfo.exists())
-        local=imageurl;
-    else
-    {
-        QUrl url(imageurl);
-        local=url.toLocalFile();
-    }
     QPixmap pm;
     QString imageKey = QString::number(info.setNumber);
     if (!QPixmapCache::find(imageKey, &pm)) {
+        QString imageurl = QString("file:///%1/%2.jpg").arg(d_ptr->mLegoSetImages).arg(info.setNumber);
+        QFileInfo fileInfo(imageurl);
+        QString local;
+
+        if (fileInfo.exists())
+            local=imageurl;
+        else
+        {
+            QUrl url(imageurl);
+            local=url.toLocalFile();
+        }
         pm.load(local);
         if (!QPixmapCache::insert(imageKey, pm))
             LOG_ERROR("Could not insert image " << imageKey.toStdWString());
