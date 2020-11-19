@@ -53,6 +53,8 @@ public:
 		QStringList sql_querys;
 		sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
 			<< "CREATE TABLE IF NOT EXISTS Images (legoset_id bigint REFERENCES LegoSets (set_id), name text, md5sum text, image_data BLOB)"
+			<< "CREATE TABLE IF NOT EXISTS Version (id int PRIMARY KEY, version bigint)"
+			<< "INSERT OR IGNORE INTO Version (id) VALUES (0)"
 			<< "CREATE UNIQUE INDEX IF NOT EXISTS filename ON Images ( legoset_id, name )";
 
 		for (const auto& sql_query : sql_querys)
@@ -101,11 +103,34 @@ public:
 		QSqlQuery remoteQuery(remoteDB);
 		remoteQuery.setForwardOnly(true);
 
+		int remoteVersion = 0;
+		remoteQuery.exec("SELECT version FROM Version");
+		while (remoteQuery.next())
+			remoteVersion = remoteQuery.value("version").toInt();
+
+		int localeVersion = 0;
+		mBrickMoneyDBLocaleQuery.exec("SELECT version FROM Version");
+		while (mBrickMoneyDBLocaleQuery.next())
+			localeVersion = mBrickMoneyDBLocaleQuery.value("version").toInt();
+
+		if (localeVersion == remoteVersion)
+		{
+			LOG_INFO("The locale db is up to date.");
+			mTryToUpdateBrickMoneyDBLocale = false;
+			return;
+		}
+
+		mBrickMoneyDBLocaleQuery.prepare("UPDATE Version SET version=:version WHERE ID=0");
+		mBrickMoneyDBLocaleQuery.bindValue(":version", remoteVersion);
+		mBrickMoneyDBLocaleQuery.exec();
+
+		QSqlDatabase::database().transaction();
 		remoteQuery.prepare("SELECT * FROM LegoSets");
 		if (!remoteQuery.exec())
 		{
 			LOG_ERROR("Can't execute query the remote LegoSets table!");
 			mTryToUpdateBrickMoneyDBLocale = false;
+			remoteDB.close();
 			return;
 		}
 
@@ -123,6 +148,7 @@ public:
 			mBrickMoneyDBLocaleQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
 			mBrickMoneyDBLocaleQuery.exec();
 		}
+		QSqlDatabase::database().commit();
 		remoteDB.close();
 		mTryToUpdateBrickMoneyDBLocale = false;
 
