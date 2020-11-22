@@ -34,17 +34,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setWindowTitle(tr("BrickMoneyMoney Vers. 0.2 - The software for LEGO Investment"));
 
- //   LOG_INFO("Start calc md5sum and blobs");
-	//auto imagesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/images";
-	//QDir directory(imagesPath);
-	//QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
-	//foreach(QString filename, images) {
-	//	const QString imageFilePath = imagesPath + "/" + filename;
-	//	const QString md5sum = BrickMoneyDatabaseImages::calcMD5Sum(imageFilePath);
-	//	const auto blob = BrickMoneyDatabaseImages::calcBlobData(imageFilePath);
-	//}
- //   LOG_INFO("Calc md5sum and blobs finished");
-
     connect(ui->actionExit, &QAction::triggered, [&]() { close();});
 
     connect(ui->actionBrickMoneyDB, &QAction::triggered, [&] () {
@@ -79,7 +68,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::fillTable()
 {
-    QSqlQuery query;
+	QSqlQuery query(m_Database);
     query.setForwardOnly(true);
     query.prepare("SELECT * FROM LegoSets");
     if(!query.exec())
@@ -122,19 +111,24 @@ void MainWindow::fillTable()
         ui->tableView->setModel(model);
     }
 
-	const int legoset_id = 75212;
-	const QString name = "0";
-	auto imagesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/images";
-	const QString imageFilePath = imagesPath + "/" + QString::number(legoset_id) + ".jpg";
-	const QString md5sum = BrickMoneyDatabaseImages::calcMD5Sum(imageFilePath);
-	const auto image_data = BrickMoneyDatabaseImages::calcBlobData(imageFilePath);
-
-	query.prepare("INSERT INTO Images (legoset_id, name, md5sum, image_data) VALUES (:legoset_id, :name, :md5sum, :image_data)");
-	query.bindValue(":legoset_id", legoset_id);
-	query.bindValue(":name", name);
-	query.bindValue(":md5sum", md5sum);
-	query.bindValue(":image_data", image_data);
-	if (!query.exec())
-		qDebug() << "Error inserting image into table:\n" << query.lastError();
-
+	//LOG_INFO("Start to insert all images into remote database.");
+	//auto imagesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/images";
+	//QDir directory(imagesPath);
+	//QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
+	//const QString name = "0";
+	//m_Database.transaction();
+	//foreach(QString filename, images) {
+	//	const int legoset_id = QFileInfo(filename).baseName().toInt();
+	//	const QString imageFilePath = imagesPath + "/" + filename;
+	//	const QString md5sum = BrickMoneyDatabaseImages::calcMD5Sum(imageFilePath);
+	//	const auto image_data = BrickMoneyDatabaseImages::calcBlobData(imageFilePath);
+	//	query.prepare("INSERT INTO Images (legoset_id, name, md5sum, image_data) VALUES (:legoset_id, :name, :md5sum, :image_data)");
+	//	query.bindValue(":legoset_id", legoset_id);
+	//	query.bindValue(":name", name);
+	//	query.bindValue(":md5sum", md5sum);
+	//	query.bindValue(":image_data", image_data);
+	//	query.exec();
+	//}
+	//m_Database.commit();
+	//LOG_INFO("Insert all images into remote database finished.");
 }
