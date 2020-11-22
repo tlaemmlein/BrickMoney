@@ -5,22 +5,18 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 
 #include <QBuffer>
 #include <QCryptographicHash>
-#include <QFile>
 #include <QDir>
+#include <QFile>
 #include <QImage>
 #include <QPixmap>
 #include <QPixmapCache>
+#include <QSql>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <QStandardPaths>
 #include <QTextStream>
-#include <QSql>
-#include <QSqlError>
 #include <QUrl>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-
-
-
-
 
 class LegoSetInfoGeneratorPrivate : public QObject
 {
@@ -124,7 +120,7 @@ public:
 		mBrickMoneyDBLocaleQuery.bindValue(":version", remoteVersion);
 		mBrickMoneyDBLocaleQuery.exec();
 
-		QSqlDatabase::database().transaction();
+		mBrickMoneyDBLocale.transaction();
 		remoteQuery.prepare("SELECT * FROM LegoSets");
 		if (!remoteQuery.exec())
 		{
@@ -148,7 +144,7 @@ public:
 			mBrickMoneyDBLocaleQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
 			mBrickMoneyDBLocaleQuery.exec();
 		}
-		QSqlDatabase::database().commit();
+		mBrickMoneyDBLocale.commit();
 		remoteDB.close();
 		mTryToUpdateBrickMoneyDBLocale = false;
 
@@ -210,45 +206,12 @@ QSqlDatabase LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocale{};
 QSqlQuery LegoSetInfoGeneratorPrivate::mBrickMoneyDBLocaleQuery{};
 bool LegoSetInfoGeneratorPrivate::mTryToUpdateBrickMoneyDBLocale = true;
 
-
-void createMD5Sum(const QString& legoSetImages)
-{
-	static bool alreadyCreated = false;
-
-	if (!alreadyCreated)
-	{
-		QDir directory(legoSetImages);
-		QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
-		foreach(QString filename, images) {
-			QPixmap pixmap;
-			QByteArray inByteArray;
-			QBuffer inBuffer(&inByteArray);
-			inBuffer.open(QIODevice::WriteOnly);
-			pixmap.save(&inBuffer, "JPG");
-			QCryptographicHash hash(QCryptographicHash::Algorithm::Md5);
-			hash.addData(inByteArray);
-			QString md5sum = hash.result().toHex();
-			QFile md5sumFile(legoSetImages + "/" + filename + ".md5");
-			if (md5sumFile.open(QIODevice::WriteOnly | QIODevice::Text))
-			{
-				QTextStream stream(&md5sumFile);
-				stream << md5sum;
-				md5sumFile.close();
-			}
-		}
-		alreadyCreated = true;
-	}
-}
-
-
-
 LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d_ptr(new LegoSetInfoGeneratorPrivate(this))
 {
     LOG_SCOPE_METHOD(L"");
     qRegisterMetaType<LegoSetInfo>();
-    const QString legoSetDatabasePath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase";
-	d_ptr->mLegoSetImages = legoSetDatabasePath + "/images";
-    //createMD5Sum(mLegoSetImages);
+	d_ptr->mLegoSetImages = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase/images";
+
 	if (!d_ptr->prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)))
 		return;
 
