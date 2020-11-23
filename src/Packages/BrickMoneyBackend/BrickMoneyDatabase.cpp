@@ -106,6 +106,7 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 	localeDBQuery.bindValue(":version", remoteVersion);
 	localeDBQuery.exec();
 
+	// Update LegoSets table
 	localeDB.transaction();
 	remoteQuery.prepare("SELECT * FROM LegoSets");
 	if (!remoteQuery.exec())
@@ -115,9 +116,7 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		return false;
 	}
 
-	LOG_INFO("Remote LegoSets query successful!");
-
-	while (remoteQuery.next())
+    while (remoteQuery.next())
 	{
 		// https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update
 		localeDBQuery.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
@@ -130,6 +129,78 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		localeDBQuery.exec();
 	}
 	localeDB.commit();
+
+	// Update Images table
+	localeDB.transaction();
+	remoteQuery.prepare("SELECT * FROM Images");
+	if (!remoteQuery.exec())
+	{
+		LOG_ERROR("Can't execute query the remote Images table!");
+		remoteDB.close();
+		return false;
+	}
+
+	while (remoteQuery.next())
+	{
+		// https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update
+		int remote_legoset_id = remoteQuery.value("legoset_id").toInt();
+		QString remote_name = remoteQuery.value("name").toString();
+		QString remote_md5sum = remoteQuery.value("md5sum").toString();
+		QByteArray remote_image_data = remoteQuery.value("image_data").toByteArray();
+		localeDBQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
+			"VALUES (:legoset_id, :name, :md5sum, :image_data)");
+		localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
+		localeDBQuery.bindValue(":name", remote_name);
+		localeDBQuery.bindValue(":md5sum", remote_md5sum);
+		localeDBQuery.bindValue(":image_data", remote_image_data);
+		localeDBQuery.exec();
+
+
+		//localeDBQuery.prepare("SELECT md5sum FROM Images WHERE legoset_id=:legoset_id AND name=':name'");
+		//localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
+		//localeDBQuery.bindValue(":name", remote_name);
+
+		//QString locale_md5sum = "";
+		//if (localeDBQuery.exec())
+		//{
+		//	while (localeDBQuery.next()) {
+		//		locale_md5sum = localeDBQuery.value("md5sum").toString();
+		//	}
+
+		//	if (locale_md5sum != remote_md5sum)
+		//	{
+		//		QSqlQuery remoteImageQuery(remoteDB);
+		//		//remoteImageQuery.setForwardOnly(true);
+		//		remoteImageQuery.prepare("SELECT image_data FROM Images WHERE legoset_id=:rlegoset_id AND name=':rname'");
+		//		remoteImageQuery.bindValue(":rlegoset_id", remote_legoset_id);
+		//		remoteImageQuery.bindValue(":rname", remote_name);
+		//		if (!remoteImageQuery.exec())
+		//		{
+		//			LOG_ERROR("Could not read the image data from remote Images table for " << remote_legoset_id << "|" << remote_name.toStdWString());
+		//			continue;
+		//		}
+
+		//		QByteArray remote_image_data;
+		//		while (remoteImageQuery.next()) {
+		//			remote_image_data = remoteImageQuery.value("image_data").toByteArray();
+		//		}
+
+		//		localeDBQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
+		//			"VALUES (:legoset_id, :name, :md5sum, :image_data)");
+		//		localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
+		//		localeDBQuery.bindValue(":name", remote_name);
+		//		localeDBQuery.bindValue(":md5sum", remote_md5sum);
+		//		localeDBQuery.bindValue(":image_data", remote_image_data);
+		//		localeDBQuery.exec();
+		//	}
+		//}
+	
+
+		
+		
+	}
+	localeDB.commit();
+
 	remoteDB.close();
 	LOG_INFO("BrickMoneyDBLocale updated.");
 	return true;
