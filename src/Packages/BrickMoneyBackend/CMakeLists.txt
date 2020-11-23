@@ -2,10 +2,10 @@
 project(BrickMoneyBackend)
 
 set(SRC_FILES
+	BrickMoneyDatabase.cpp
+	BrickMoneyDatabase.h
     BrickMoneyDataManager.cpp
     BrickMoneyDataManager.h
-	BrickMoneyDatabaseImages.cpp
-	BrickMoneyDatabaseImages.h
     BrickMoneyProject.cpp
     BrickMoneyProject.h
     BrickMoneySettings.cpp

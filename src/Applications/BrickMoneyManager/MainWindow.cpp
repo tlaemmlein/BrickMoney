@@ -6,7 +6,7 @@ SET_LOGGER("BrickMoneyManager.MainWindow")
 
 #include "ConnectToDBDialog.h"
 
-#include "BrickMoneyBackend/BrickMoneyDatabaseImages.h"
+#include "BrickMoneyBackend/BrickMoneyDatabase.h"
 
 #include <QBuffer>
 #include <QCryptographicHash>
@@ -110,25 +110,30 @@ void MainWindow::fillTable()
         model->setHeaderData(4, Qt::Horizontal, QObject::tr("RRPrice €"));
         ui->tableView->setModel(model);
     }
+	
+	static bool doRun = false;
 
-	//LOG_INFO("Start to insert all images into remote database.");
-	//auto imagesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/images";
-	//QDir directory(imagesPath);
-	//QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
-	//const QString name = "0";
-	//m_Database.transaction();
-	//foreach(QString filename, images) {
-	//	const int legoset_id = QFileInfo(filename).baseName().toInt();
-	//	const QString imageFilePath = imagesPath + "/" + filename;
-	//	const QString md5sum = BrickMoneyDatabaseImages::calcMD5Sum(imageFilePath);
-	//	const auto image_data = BrickMoneyDatabaseImages::calcBlobData(imageFilePath);
-	//	query.prepare("INSERT INTO Images (legoset_id, name, md5sum, image_data) VALUES (:legoset_id, :name, :md5sum, :image_data)");
-	//	query.bindValue(":legoset_id", legoset_id);
-	//	query.bindValue(":name", name);
-	//	query.bindValue(":md5sum", md5sum);
-	//	query.bindValue(":image_data", image_data);
-	//	query.exec();
-	//}
-	//m_Database.commit();
-	//LOG_INFO("Insert all images into remote database finished.");
+	if (doRun)
+	{
+		LOG_INFO("Start to insert all images into remote database.");
+		auto imagesPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/images";
+		QDir directory(imagesPath);
+		QStringList images = directory.entryList(QStringList() << "*.jpg" << "*.JPG", QDir::Files);
+		const QString name = "0";
+		m_Database.transaction();
+		foreach(QString filename, images) {
+			const int legoset_id = QFileInfo(filename).baseName().toInt();
+			const QString imageFilePath = imagesPath + "/" + filename;
+			const QString md5sum = BrickMoneyDatabase::calcMD5Sum(imageFilePath);
+			const auto image_data = BrickMoneyDatabase::calcBlobData(imageFilePath);
+			query.prepare("INSERT INTO Images (legoset_id, name, md5sum, image_data) VALUES (:legoset_id, :name, :md5sum, :image_data)");
+			query.bindValue(":legoset_id", legoset_id);
+			query.bindValue(":name", name);
+			query.bindValue(":md5sum", md5sum);
+			query.bindValue(":image_data", image_data);
+			query.exec();
+		}
+		m_Database.commit();
+		LOG_INFO("Insert all images into remote database finished.");
+	}
 }
