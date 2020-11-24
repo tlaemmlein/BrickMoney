@@ -1,8 +1,6 @@
 #ifndef LEGOSETINFOGENERATOR_H
 #define LEGOSETINFOGENERATOR_H
 
-#include "BrickMoneyDatabase.h"
-
 #include <QObject>
 #include <QString>
 
@@ -31,8 +29,6 @@ signals:
     void recommendedRetailPrice(double recommendedRetailPrice);
 
 private:
-    void sendSignals(const LegoSetInfo& info);
-
 	LegoSetInfoGeneratorPrivate* d_ptr;
 };
 

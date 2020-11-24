@@ -4,20 +4,12 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include "LegoSetInfoGenerator.h"
 #include "BrickMoneyDatabase.h"
 
-#include <QBuffer>
-#include <QCryptographicHash>
-#include <QDir>
-#include <QFile>
-#include <QImage>
 #include <QPixmap>
 #include <QPixmapCache>
-#include <QSql>
-#include <QSqlDatabase>
-#include <QSqlError>
 #include <QSqlQuery>
 #include <QStandardPaths>
-#include <QTextStream>
-#include <QUrl>
+#include <QVariant>
+
 
 class LegoSetInfoGeneratorPrivate : public QObject
 {
@@ -89,6 +81,19 @@ public:
 		LOG_INFO("Completed database filling");
 	}
 	
+	void updateLegoSetImages(int legoset_id)
+	{
+		QPixmap pm;
+		QString image_key = QString::number(legoset_id);
+		if (!QPixmapCache::find(image_key, &pm)) {
+			auto pixmaps = BrickMoneyDatabase::queryLegoSetImages(mBrickMoneyDBLocale, legoset_id);
+			if (!pixmaps.isEmpty()) {
+				pm = pixmaps.at(0);
+				if (!QPixmapCache::insert(image_key, pm))
+					LOG_ERROR("Could not insert image " << image_key.toStdWString());
+			}
+		}
+	}
 	static bool mIsDataBaseReady;
 	static std::vector<LegoSetInfo> mLegoSetDatabase;
 	static QSqlDatabase mBrickMoneyDBLocale;
@@ -121,8 +126,13 @@ bool LegoSetInfoGenerator::querySetNumber(int num)
     {
         if (info.setNumber == num)
         {
-            sendSignals(info);
-            return true;
+			emit setNumber(info.setNumber);
+			d_ptr->updateLegoSetImages(info.setNumber);
+			emit imageKey(QString::number(info.setNumber));
+			emit description(info.description);
+			emit year(info.year);
+			emit recommendedRetailPrice(info.recommendedRetailPrice);
+			return true;
         }
     }
 
@@ -143,8 +153,15 @@ int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
                                && index < d_ptr->mLegoSetDatabase.size() -1 ? index+1 : index;
             if ( nextIndex <= d_ptr->mLegoSetDatabase.size() )
             {
-                LOG_INFO(QString("Found %1").arg(d_ptr->mLegoSetDatabase.at(nextIndex).setNumber).toStdWString());
-                sendSignals(d_ptr->mLegoSetDatabase.at(nextIndex) );
+				auto info = d_ptr->mLegoSetDatabase.at(nextIndex);
+                LOG_INFO(QString("Found %1").arg(info.setNumber).toStdWString());
+				emit setNumber(info.setNumber);
+				d_ptr->updateLegoSetImages(info.setNumber);
+				emit imageKey(QString::number(info.setNumber));
+				emit description(info.description);
+				emit year(info.year);
+				emit recommendedRetailPrice(info.recommendedRetailPrice);
+
                 return d_ptr->mLegoSetDatabase.at(nextIndex).setNumber;
             }
         }
@@ -166,37 +183,19 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
                                && index > 1 ? index-1 : index;
             if ( prevIndex >= 0 )
             {
-                LOG_INFO(QString("Found %1").arg(d_ptr->mLegoSetDatabase.at(prevIndex).setNumber).toStdWString());
-                sendSignals(d_ptr->mLegoSetDatabase.at(prevIndex) );
-                return d_ptr->mLegoSetDatabase.at(prevIndex).setNumber;
+				auto info = d_ptr->mLegoSetDatabase.at(prevIndex);
+                LOG_INFO(QString("Found %1").arg(info.setNumber).toStdWString());
+				emit setNumber(info.setNumber);
+				d_ptr->updateLegoSetImages(info.setNumber);
+				emit imageKey(QString::number(info.setNumber));
+				emit description(info.description);
+				emit year(info.year);
+				emit recommendedRetailPrice(info.recommendedRetailPrice);
+				return d_ptr->mLegoSetDatabase.at(prevIndex).setNumber;
             }
         }
     }
     emit setNumberNotFound();
     return 0;
 }
-
-
-void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
-{
-    emit setNumber(info.setNumber);
-
-    QPixmap pm;
-    QString image_key = QString::number(info.setNumber);
-    if (!QPixmapCache::find(image_key, &pm)) {
-		auto pixmaps = BrickMoneyDatabase::queryLegoSetImages(d_ptr->mBrickMoneyDBLocale, info.setNumber);
-		if (!pixmaps.isEmpty()) {
-			pm = pixmaps.at(0);
-			if (!QPixmapCache::insert(image_key, pm))
-				LOG_ERROR("Could not insert image " << image_key.toStdWString());
-		}
-
-    }
-
-    emit imageKey(image_key);
-    emit description(info.description);
-    emit year(info.year);
-    emit recommendedRetailPrice(info.recommendedRetailPrice);
-}
-
 
