@@ -89,9 +89,6 @@ public:
 		LOG_INFO("Completed database filling");
 	}
 	
-	QString mLegoSetImages;
-	LegoSetInfo mLegoSetInfo;
-
 	static bool mIsDataBaseReady;
 	static std::vector<LegoSetInfo> mLegoSetDatabase;
 	static QSqlDatabase mBrickMoneyDBLocale;
@@ -107,7 +104,6 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d
 {
     LOG_SCOPE_METHOD(L"");
     qRegisterMetaType<LegoSetInfo>();
-	d_ptr->mLegoSetImages = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/LegoDatabase/images";
 
 	if (!d_ptr->prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)))
 		return;
@@ -180,10 +176,6 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
     return 0;
 }
 
-LegoSetInfo LegoSetInfoGenerator::legoSetInfo() const
-{
-    return d_ptr->mLegoSetInfo;
-}
 
 void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
 {
@@ -192,29 +184,19 @@ void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
     QPixmap pm;
     QString imageKey = QString::number(info.setNumber);
     if (!QPixmapCache::find(imageKey, &pm)) {
-        QString imageurl = QString("file:///%1/%2.jpg").arg(d_ptr->mLegoSetImages).arg(info.setNumber);
-        QFileInfo fileInfo(imageurl);
-        QString local;
+		auto pixmaps = BrickMoneyDatabase::queryLegoSetImages(d_ptr->mBrickMoneyDBLocale, info.setNumber);
+		if (!pixmaps.isEmpty()) {
+			pm = pixmaps.at(0);
+			if (!QPixmapCache::insert(imageKey, pm))
+				LOG_ERROR("Could not insert image " << imageKey.toStdWString());
+		}
 
-        if (fileInfo.exists())
-            local=imageurl;
-        else
-        {
-            QUrl url(imageurl);
-            local=url.toLocalFile();
-        }
-        pm.load(local);
-        if (!QPixmapCache::insert(imageKey, pm))
-            LOG_ERROR("Could not insert image " << imageKey.toStdWString());
-        LOG_TRACE("Key: " << imageKey.toStdWString() << " imageUrl: " << local.toStdWString());
     }
 
     emit imageUrl(imageKey);
     emit description(info.description);
     emit year(info.year);
     emit recommendedRetailPrice(info.recommendedRetailPrice);
-	d_ptr->mLegoSetInfo = info;
-    emit legoSetInfoChanged(info);
 }
 
 

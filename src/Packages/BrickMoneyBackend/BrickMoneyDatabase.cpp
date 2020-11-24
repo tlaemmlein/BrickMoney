@@ -206,6 +206,29 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 	return true;
 }
 
+QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(QSqlDatabase& localeDB, const int & legoset_id)
+{
+	 QVector<QPixmap> images;
+	 QSqlQuery localeDBQuery(localeDB);
+
+	 localeDBQuery.prepare("SELECT * FROM Images WHERE legoset_id=:legoset_id");
+	 localeDBQuery.bindValue(":legoset_id", legoset_id);
+	if (!localeDBQuery.exec())
+	{
+		LOG_ERROR("Can't execute query the locate Images table!");
+		return images;
+	}
+
+	while (localeDBQuery.next()) {
+		QByteArray outByteArray = localeDBQuery.value("image_data").toByteArray();
+		QPixmap outPixmap = QPixmap();
+		outPixmap.loadFromData(outByteArray);
+		images.append(outPixmap);
+	}
+
+	return images;
+}
+
 QString BrickMoneyDatabase::calcMD5Sum(const QString & imageFilePath)
 {
 	//Ref: https://stackoverflow.com/questions/16383392/how-to-get-the-sha-1-md5-checksum-of-a-file-with-qt
