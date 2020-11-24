@@ -11,7 +11,7 @@ enum LegoSetProperty {
     isSelected = 0,
     id,
     setNumber,
-    imageUrl,
+    imageKey,
     description,
     year,
     recommendedRetailPrice,
@@ -34,7 +34,7 @@ class LegoSet : public QObject
     Q_PROPERTY(int id READ id)
     Q_PROPERTY(bool isSelected READ isSelected WRITE setIsSelected NOTIFY isSelectedChanged)
     Q_PROPERTY(int setNumber READ setNumber WRITE setSetNumber NOTIFY setNumberChanged)
-    Q_PROPERTY(QString imageUrl READ imageUrl NOTIFY imageUrlChanged)
+    Q_PROPERTY(QString imageKey READ imageKey NOTIFY imageKeyChanged)
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
     Q_PROPERTY(int year READ year NOTIFY yearChanged)
     Q_PROPERTY(double recommendedRetailPrice READ recommendedRetailPrice NOTIFY recommendedRetailPriceChanged)
@@ -67,7 +67,7 @@ public:
     int id() const;
     bool isSelected() const;
     int setNumber() const;
-    QString imageUrl() const;
+    QString imageKey() const;
     QString description() const;
     int year() const;
     double recommendedRetailPrice() const;
@@ -98,7 +98,7 @@ public slots:
 signals:
     void isSelectedChanged(bool isSelected);
     void setNumberChanged(int setNumber);
-    void imageUrlChanged(QString imageUrl);
+    void imageKeyChanged(QString imageKey);
     void descriptionChanged(QString description);
     void yearChanged(int year);
     void recommendedRetailPriceChanged(double recommendedRetailPrice);
@@ -116,7 +116,7 @@ signals:
 
 
 private slots:
-    void setImageUrl(QString imageUrl);
+    void setImageKey(QString imageKey);
     void setDescription(QString description);
     void setYear(int year);
     void setRecommendedRetailPrice(double recommendedRetailPrice);
@@ -127,7 +127,7 @@ private:
     int     m_id;
     bool    m_isSelected;
     int     m_setNumber;
-    QString m_imageUrl;
+    QString m_imageKey;
     QString m_description;
     int     m_year;
     double  m_recommendedRetailPrice;

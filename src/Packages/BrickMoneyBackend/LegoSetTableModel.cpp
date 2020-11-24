@@ -84,7 +84,7 @@ QVariant LegoSetTableModel::data(const QModelIndex &index, int role) const
         case profitEuros:
         case profitPercent:
             return QLatin1String("readonlydouble");
-        case imageUrl:
+        case imageKey:
             return QLatin1String("image");
         case seller:
         case soldOver:
@@ -132,7 +132,7 @@ int LegoSetTableModel::columnWidth(int colIndex, const QFont *font)
     for (int r = 0; r < m_dataSource->legoSetCount(); ++r) {
         LegoSet* set = m_dataSource->legoSetAt(r);
         QString val = "image";
-        if ( LegoSetProperty(colIndex) != LegoSetProperty::imageUrl)
+        if ( LegoSetProperty(colIndex) != LegoSetProperty::imageKey)
         {
             val = set->data(LegoSetProperty(colIndex)).toString();
         }
@@ -198,7 +198,7 @@ Qt::ItemFlags LegoSetTableModel::flags(const QModelIndex &index) const
     if (LegoSetProperty(colIndex) == LegoSetProperty::isSelected
         //id,
         || LegoSetProperty(colIndex) == setNumber
-        //imageUrl,
+        //imageKey,
         //description,
         //year,
         //recommendedRetailPrice,

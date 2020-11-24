@@ -25,7 +25,7 @@ public:
 signals:
     void setNumberNotFound();
     void setNumber(int setNumber);
-    void imageUrl(QString imageUrl);
+    void imageKey(QString imageKey);
     void description(QString description);
     void year(int year);
     void recommendedRetailPrice(double recommendedRetailPrice);

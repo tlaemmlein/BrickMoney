@@ -30,7 +30,7 @@ QString LegoSet::displayName(LegoSetProperty prop)
         return tr("Sel");
     case LegoSetProperty::setNumber:
         return tr("Set");
-    case LegoSetProperty::imageUrl:
+    case LegoSetProperty::imageKey:
         return tr("Image");
     case LegoSetProperty::description:
         return tr("Description");
@@ -116,7 +116,7 @@ void LegoSet::initParams()
 {
     m_isSelected = false;
     m_setNumber=-1;
-    m_imageUrl="None";
+    m_imageKey="None";
     m_description="None";
     m_year=0;
     m_recommendedRetailPrice=0;
@@ -135,7 +135,7 @@ void LegoSet::initParams()
 void LegoSet::createConnections()
 {
     m_LegoSetInfoGenerator = new LegoSetInfoGenerator(this);
-    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageUrl, this, &LegoSet::setImageUrl);
+    connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::imageKey, this, &LegoSet::setImageKey);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::description, this, &LegoSet::setDescription);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::year, this, &LegoSet::setYear);
     connect(m_LegoSetInfoGenerator, &LegoSetInfoGenerator::recommendedRetailPrice, this, &LegoSet::setRecommendedRetailPrice);
@@ -153,9 +153,9 @@ int LegoSet::setNumber() const
 }
 
 
-QString LegoSet::imageUrl() const
+QString LegoSet::imageKey() const
 {
-    return m_imageUrl;
+    return m_imageKey;
 }
 
 QString LegoSet::description() const
@@ -330,13 +330,13 @@ void LegoSet::setBuyer(QString buyer)
 
 
 
-void LegoSet::setImageUrl(QString imageUrl)
+void LegoSet::setImageKey(QString imageKey)
 {
-    if (m_imageUrl == imageUrl)
+    if (m_imageKey == imageKey)
         return;
 
-    m_imageUrl = imageUrl;
-    emit imageUrlChanged(m_imageUrl);
+    m_imageKey = imageKey;
+    emit imageKeyChanged(m_imageKey);
 }
 
 void LegoSet::setDescription(QString description)

@@ -18,12 +18,12 @@ void ImageDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
     if (index.data(int(LegoSetTableModel::Role::Type)).toString() == QLatin1String("image")) {
-        QString imageUrl = index.data().toString();
+        QString imageKey = index.data().toString();
 
         QPixmap pm;
-        if (!QPixmapCache::find(imageUrl, &pm))
+        if (!QPixmapCache::find(imageKey, &pm))
         {
-            LOG_ERROR("Could not find pixmap cache for " << imageUrl.toStdWString());
+            LOG_ERROR("Could not find pixmap cache for " << imageKey.toStdWString());
         }
 
         //Scaled size that will be used to set draw aera to QPainter, with aspect ratio preserved

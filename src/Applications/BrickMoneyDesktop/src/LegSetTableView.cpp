@@ -39,7 +39,7 @@ void LegSetTableView::init()
     ui->legSetTableViewTitle->setText(title());
 
     ui->legoSetTableView->setModel(getSortModel());
-    ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::imageUrl, new ImageDelegate(this));
+    ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::imageKey, new ImageDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::isSelected, new CheckBoxDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::seller, new LineEditDelegate(this));

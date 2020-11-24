@@ -182,18 +182,18 @@ void LegoSetInfoGenerator::sendSignals(const LegoSetInfo &info)
     emit setNumber(info.setNumber);
 
     QPixmap pm;
-    QString imageKey = QString::number(info.setNumber);
-    if (!QPixmapCache::find(imageKey, &pm)) {
+    QString image_key = QString::number(info.setNumber);
+    if (!QPixmapCache::find(image_key, &pm)) {
 		auto pixmaps = BrickMoneyDatabase::queryLegoSetImages(d_ptr->mBrickMoneyDBLocale, info.setNumber);
 		if (!pixmaps.isEmpty()) {
 			pm = pixmaps.at(0);
-			if (!QPixmapCache::insert(imageKey, pm))
-				LOG_ERROR("Could not insert image " << imageKey.toStdWString());
+			if (!QPixmapCache::insert(image_key, pm))
+				LOG_ERROR("Could not insert image " << image_key.toStdWString());
 		}
 
     }
 
-    emit imageUrl(imageKey);
+    emit imageKey(image_key);
     emit description(info.description);
     emit year(info.year);
     emit recommendedRetailPrice(info.recommendedRetailPrice);

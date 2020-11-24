@@ -166,7 +166,7 @@ Item {
         Component.onCompleted: {
             //console.log(objectName + ":onCompleted")
             LegoSetInfoGenerator.setNumber.connect(onLegoSetNumber)
-            LegoSetInfoGenerator.imageUrl.connect(onLegoSetImageUrl)
+            LegoSetInfoGenerator.imageKey.connect(onLegoSetImageKey)
             LegoSetInfoGenerator.description.connect(onLegoSetDescription)
             LegoSetInfoGenerator.year.connect(onLegoSetYear)
             LegoSetInfoGenerator.recommendedRetailPrice.connect(onLegoSetRRPrice)
@@ -182,8 +182,8 @@ Item {
             }
         }
 
-        function onLegoSetImageUrl(imageUrl) {
-            legoSetImage.source = imageUrl
+        function onLegoSetImageKey(imageKey) {
+            legoSetImage.source = imageKey
         }
 
         function onLegoSetDescription(desc) {
