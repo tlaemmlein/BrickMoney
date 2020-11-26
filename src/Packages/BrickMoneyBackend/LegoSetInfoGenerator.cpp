@@ -34,7 +34,6 @@ public:
 LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d_ptr(new LegoSetInfoGeneratorPrivate(this))
 {
     LOG_SCOPE_METHOD(L"");
-    qRegisterMetaType<LegoSetInfo>();
 
 	if (!BrickMoneyDatabase::prepareBrickMoneyDBLocale(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)))
 		return;

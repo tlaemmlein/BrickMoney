@@ -19,30 +19,12 @@ struct LegoSetInfo {
 		, rr_price(other_rr_price)
 	{}
 
-	bool operator==(const LegoSetInfo& other) const
-	{
-		return (set_id == other.set_id && name_en == other.name_en
-			&& name_de == other.name_de
-			&& year == other.year && rr_price == other.rr_price);
-	}
-
-	bool operator!=(const LegoSetInfo& other) const
-	{
-		return (!operator==(other));
-	}
-
-	bool operator < (const LegoSetInfo &info) const {
-		return set_id < info.set_id;
-	}
-
 	std::optional<int>     set_id;
 	QString name_en;
 	QString name_de;
 	int     year;
 	double  rr_price; // recommended retail price
 };
-
-Q_DECLARE_METATYPE(LegoSetInfo)
 
 
 class BrickMoneyDatabase : public QObject
