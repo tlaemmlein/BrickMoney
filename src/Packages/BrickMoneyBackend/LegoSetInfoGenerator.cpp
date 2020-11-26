@@ -60,6 +60,7 @@ public:
 		{
 			mLegoSetDatabase.push_back(
 				LegoSetInfo(brickMoneyDBLocaleQuery.value("set_id").toInt()
+					, brickMoneyDBLocaleQuery.value("name_en").toString()
 					, brickMoneyDBLocaleQuery.value("name_de").toString()
 					, brickMoneyDBLocaleQuery.value("year").toInt()
 					, brickMoneyDBLocaleQuery.value("rr_price").toDouble()));
@@ -124,14 +125,14 @@ bool LegoSetInfoGenerator::querySetNumber(int num)
 
     for(const LegoSetInfo& info : d_ptr->mLegoSetDatabase)
     {
-        if (info.setNumber == num)
+        if (info.set_id == num)
         {
-			emit setNumber(info.setNumber);
-			d_ptr->updateLegoSetImages(info.setNumber);
-			emit imageKey(QString::number(info.setNumber));
-			emit description(info.description);
+			emit setNumber(info.set_id);
+			d_ptr->updateLegoSetImages(info.set_id);
+			emit imageKey(QString::number(info.set_id));
+			emit description(info.name_en);
 			emit year(info.year);
-			emit recommendedRetailPrice(info.recommendedRetailPrice);
+			emit recommendedRetailPrice(info.rr_price);
 			return true;
         }
     }
@@ -147,22 +148,22 @@ int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
 
     for( size_t index = 0; index < d_ptr->mLegoSetDatabase.size(); ++index )
     {
-        if (d_ptr->mLegoSetDatabase.at(index).setNumber >= currentSetNumber)
+        if (d_ptr->mLegoSetDatabase.at(index).set_id >= currentSetNumber)
         {
-            size_t nextIndex = d_ptr->mLegoSetDatabase.at(index).setNumber == currentSetNumber
+            size_t nextIndex = d_ptr->mLegoSetDatabase.at(index).set_id == currentSetNumber
                                && index < d_ptr->mLegoSetDatabase.size() -1 ? index+1 : index;
             if ( nextIndex <= d_ptr->mLegoSetDatabase.size() )
             {
 				auto info = d_ptr->mLegoSetDatabase.at(nextIndex);
-                LOG_INFO(QString("Found %1").arg(info.setNumber).toStdWString());
-				emit setNumber(info.setNumber);
-				d_ptr->updateLegoSetImages(info.setNumber);
-				emit imageKey(QString::number(info.setNumber));
-				emit description(info.description);
+                LOG_INFO(QString("Found %1").arg(info.set_id).toStdWString());
+				emit setNumber(info.set_id);
+				d_ptr->updateLegoSetImages(info.set_id);
+				emit imageKey(QString::number(info.set_id));
+				emit description(info.name_en);
 				emit year(info.year);
-				emit recommendedRetailPrice(info.recommendedRetailPrice);
+				emit recommendedRetailPrice(info.rr_price);
 
-                return d_ptr->mLegoSetDatabase.at(nextIndex).setNumber;
+                return d_ptr->mLegoSetDatabase.at(nextIndex).set_id;
             }
         }
     }
@@ -177,21 +178,21 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
 
     for( size_t index = d_ptr->mLegoSetDatabase.size()-1; index >= 0 ; --index )
     {
-        if (d_ptr->mLegoSetDatabase.at(index).setNumber <= currentSetNumber)
+        if (d_ptr->mLegoSetDatabase.at(index).set_id <= currentSetNumber)
         {
-            size_t prevIndex = d_ptr->mLegoSetDatabase.at(index).setNumber == currentSetNumber
+            size_t prevIndex = d_ptr->mLegoSetDatabase.at(index).set_id == currentSetNumber
                                && index > 1 ? index-1 : index;
             if ( prevIndex >= 0 )
             {
 				auto info = d_ptr->mLegoSetDatabase.at(prevIndex);
-                LOG_INFO(QString("Found %1").arg(info.setNumber).toStdWString());
-				emit setNumber(info.setNumber);
-				d_ptr->updateLegoSetImages(info.setNumber);
-				emit imageKey(QString::number(info.setNumber));
-				emit description(info.description);
+                LOG_INFO(QString("Found %1").arg(info.set_id).toStdWString());
+				emit setNumber(info.set_id);
+				d_ptr->updateLegoSetImages(info.set_id);
+				emit imageKey(QString::number(info.set_id));
+				emit description(info.name_en);
 				emit year(info.year);
-				emit recommendedRetailPrice(info.recommendedRetailPrice);
-				return d_ptr->mLegoSetDatabase.at(prevIndex).setNumber;
+				emit recommendedRetailPrice(info.rr_price);
+				return d_ptr->mLegoSetDatabase.at(prevIndex).set_id;
             }
         }
     }

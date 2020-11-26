@@ -6,20 +6,22 @@
 
 struct LegoSetInfo {
 
-	LegoSetInfo() : setNumber(-1), description(""), year(-1), recommendedRetailPrice(0.0)
+	LegoSetInfo() : set_id(-1), name_en(""), name_de(""), year(-1), rr_price(0.0)
 	{}
 
-	LegoSetInfo(int otherSetNumber, QString otherDescription, int otherYear, double  otherRecommendedRetailPrice
-	) : setNumber(otherSetNumber)
-		, description(otherDescription)
-		, year(otherYear)
-		, recommendedRetailPrice(otherRecommendedRetailPrice)
+	LegoSetInfo(int other_set_id, const QString& other_name_en, const QString& other_name_de,  int other_year, double  other_rr_price
+	) : set_id(other_set_id)
+		, name_en(other_name_en)
+		, name_de(other_name_de)
+		, year(other_year)
+		, rr_price(other_rr_price)
 	{}
 
 	bool operator==(const LegoSetInfo& other) const
 	{
-		return (setNumber == other.setNumber && description == other.description
-			&& year == other.year && recommendedRetailPrice == other.recommendedRetailPrice);
+		return (set_id == other.set_id && name_en == other.name_en
+			&& name_de == other.name_de
+			&& year == other.year && rr_price == other.rr_price);
 	}
 
 	bool operator!=(const LegoSetInfo& other) const
@@ -28,13 +30,14 @@ struct LegoSetInfo {
 	}
 
 	bool operator < (const LegoSetInfo &info) const {
-		return setNumber < info.setNumber;
+		return set_id < info.set_id;
 	}
 
-	int     setNumber;
-	QString description;
+	int     set_id;
+	QString name_en;
+	QString name_de;
 	int     year;
-	double  recommendedRetailPrice;
+	double  rr_price; // recommended retail price
 };
 
 Q_DECLARE_METATYPE(LegoSetInfo)
