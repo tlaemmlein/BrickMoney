@@ -52,14 +52,22 @@ public:
     BrickMoneyDatabase& operator=(const BrickMoneyDatabase&) = delete; //No assign op
 
 
-	static QSqlDatabase prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath);
-	static bool updateBrickMoneyDBLocale(QSqlDatabase& localeDB);
+	static bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath);
+	static bool updateBrickMoneyDBLocale();
 
-	static QVector<QPixmap> queryLegoSetImages(QSqlDatabase& localeDB, const int& legoset_id);
-	static LegoSetInfo queryLegoSetInfo(QSqlDatabase& localeDB, const int& legoset_id);
+	static QVector<QPixmap> queryLegoSetImages(const int& legoset_id);
+	static LegoSetInfo queryLegoSetInfo(const int& set_id);
+
+	static LegoSetInfo nextLegoSetInfo(const int& set_id);
+	static LegoSetInfo previousLegoSetInfo(const int& set_id);
+
 
 	static QString calcMD5Sum(const QString& imageFilePath);
 	static QByteArray calcBlobData(const QString& imageFilePath);
+
+private:
+	static QSqlDatabase mBrickMoneyDBLocale;
+
 };
 
 #endif

@@ -12,26 +12,30 @@ SET_LOGGER("BrickMoney.BrickMoneyDatabase")
 #include <QSqlQuery>
 #include <QVariant>
 
+QSqlDatabase BrickMoneyDatabase::mBrickMoneyDBLocale{};
 
-QSqlDatabase BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDatabasePath)
+
+bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDatabasePath)
 {
+	if (mBrickMoneyDBLocale.isOpen())
+		return true;
+
 	LOG_INFO("Prepare BrickMoneyDBLocale.");
-	QSqlDatabase localeDB;
 
 	QString dbName(legoSetDatabasePath + "/BrickMoneyDBLocale.db3");
-	if (!localeDB.contains("BrickMoneyDBLocale"))
-		localeDB = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
-	localeDB.setDatabaseName(dbName);
-	if (!localeDB.open())
+	if (!mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
+		mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
+	mBrickMoneyDBLocale.setDatabaseName(dbName);
+	if (!mBrickMoneyDBLocale.open())
 	{
-		auto error = localeDB.lastError();
+		auto error = mBrickMoneyDBLocale.lastError();
 		LOG_ERROR("Could not open " << dbName.toStdWString());
 		LOG_ERROR(error.databaseText().toStdWString());
 		LOG_ERROR(error.driverText().toStdWString());
 		LOG_ERROR(error.nativeErrorCode().toStdWString());
-		return localeDB;
+		return false;
 	}
-	QSqlQuery localeDBQuery(localeDB);
+	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
 
 	QStringList sql_querys;
 	sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
@@ -42,21 +46,21 @@ QSqlDatabase BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoS
 
 	for (const auto& sql_query : sql_querys)
 	{
-		if (!localeDBQuery.exec(sql_query))
+		if (!mBrickMoneyDBLocaleQuery.exec(sql_query))
 		{
-			LOG_ERROR("Could not exec query. Last error: " << localeDBQuery.lastError().text().toStdWString());
-			localeDB.close();
-			return localeDB;
+			LOG_ERROR("Could not exec query. Last error: " << mBrickMoneyDBLocaleQuery.lastError().text().toStdWString());
+			mBrickMoneyDBLocale.close();
+			return false;
 		}
 	}
 	LOG_INFO("BrickMoneyDBLocale is ready.");
 
-	return localeDB;
+	return true;
 }
 
-bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
+bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
 {
-	if (!localeDB.isOpen())
+	if (!mBrickMoneyDBLocale.isOpen())
 		return false;
 
 	LOG_INFO("Update BrickMoneyDBLocale.");
@@ -91,10 +95,10 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		remoteVersion = remoteQuery.value("version").toInt();
 
 	int localeVersion = 0;
-	QSqlQuery localeDBQuery(localeDB);
-	localeDBQuery.exec("SELECT version FROM Version");
-	while (localeDBQuery.next())
-		localeVersion = localeDBQuery.value("version").toInt();
+	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	mBrickMoneyDBLocaleQuery.exec("SELECT version FROM Version");
+	while (mBrickMoneyDBLocaleQuery.next())
+		localeVersion = mBrickMoneyDBLocaleQuery.value("version").toInt();
 
 	if (localeVersion == remoteVersion)
 	{
@@ -102,12 +106,12 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		return true;
 	}
 
-	localeDBQuery.prepare("UPDATE Version SET version=:version WHERE ID=0");
-	localeDBQuery.bindValue(":version", remoteVersion);
-	localeDBQuery.exec();
+	mBrickMoneyDBLocaleQuery.prepare("UPDATE Version SET version=:version WHERE ID=0");
+	mBrickMoneyDBLocaleQuery.bindValue(":version", remoteVersion);
+	mBrickMoneyDBLocaleQuery.exec();
 
 	// Update LegoSets table
-	localeDB.transaction();
+	mBrickMoneyDBLocale.transaction();
 	remoteQuery.prepare("SELECT * FROM LegoSets");
 	if (!remoteQuery.exec())
 	{
@@ -119,19 +123,19 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
     while (remoteQuery.next())
 	{
 		// https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update
-		localeDBQuery.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
+		mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
 			"VALUES (:set_id, :name_en, :name_de, :year, :rr_price)");
-		localeDBQuery.bindValue(":set_id", remoteQuery.value("set_id").toInt());
-		localeDBQuery.bindValue(":name_en", remoteQuery.value("name_en").toString());
-		localeDBQuery.bindValue(":name_de", remoteQuery.value("name_de").toString());
-		localeDBQuery.bindValue(":year", remoteQuery.value("year").toInt());
-		localeDBQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
-		localeDBQuery.exec();
+		mBrickMoneyDBLocaleQuery.bindValue(":set_id", remoteQuery.value("set_id").toInt());
+		mBrickMoneyDBLocaleQuery.bindValue(":name_en", remoteQuery.value("name_en").toString());
+		mBrickMoneyDBLocaleQuery.bindValue(":name_de", remoteQuery.value("name_de").toString());
+		mBrickMoneyDBLocaleQuery.bindValue(":year", remoteQuery.value("year").toInt());
+		mBrickMoneyDBLocaleQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
+		mBrickMoneyDBLocaleQuery.exec();
 	}
-	localeDB.commit();
+	mBrickMoneyDBLocale.commit();
 
 	// Update Images table
-	localeDB.transaction();
+	mBrickMoneyDBLocale.transaction();
 	remoteQuery.prepare("SELECT * FROM Images");
 	if (!remoteQuery.exec())
 	{
@@ -147,24 +151,24 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		QString remote_name = remoteQuery.value("name").toString();
 		QString remote_md5sum = remoteQuery.value("md5sum").toString();
 		QByteArray remote_image_data = remoteQuery.value("image_data").toByteArray();
-		localeDBQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
+		mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
 			"VALUES (:legoset_id, :name, :md5sum, :image_data)");
-		localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
-		localeDBQuery.bindValue(":name", remote_name);
-		localeDBQuery.bindValue(":md5sum", remote_md5sum);
-		localeDBQuery.bindValue(":image_data", remote_image_data);
-		localeDBQuery.exec();
+		mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", remote_legoset_id);
+		mBrickMoneyDBLocaleQuery.bindValue(":name", remote_name);
+		mBrickMoneyDBLocaleQuery.bindValue(":md5sum", remote_md5sum);
+		mBrickMoneyDBLocaleQuery.bindValue(":image_data", remote_image_data);
+		mBrickMoneyDBLocaleQuery.exec();
 
 
-		//localeDBQuery.prepare("SELECT md5sum FROM Images WHERE legoset_id=:legoset_id AND name=':name'");
-		//localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
-		//localeDBQuery.bindValue(":name", remote_name);
+		//mBrickMoneyDBLocaleQuery.prepare("SELECT md5sum FROM Images WHERE legoset_id=:legoset_id AND name=':name'");
+		//mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", remote_legoset_id);
+		//mBrickMoneyDBLocaleQuery.bindValue(":name", remote_name);
 
 		//QString locale_md5sum = "";
-		//if (localeDBQuery.exec())
+		//if (mBrickMoneyDBLocaleQuery.exec())
 		//{
-		//	while (localeDBQuery.next()) {
-		//		locale_md5sum = localeDBQuery.value("md5sum").toString();
+		//	while (mBrickMoneyDBLocaleQuery.next()) {
+		//		locale_md5sum = mBrickMoneyDBLocaleQuery.value("md5sum").toString();
 		//	}
 
 		//	if (locale_md5sum != remote_md5sum)
@@ -185,13 +189,13 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		//			remote_image_data = remoteImageQuery.value("image_data").toByteArray();
 		//		}
 
-		//		localeDBQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
+		//		mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
 		//			"VALUES (:legoset_id, :name, :md5sum, :image_data)");
-		//		localeDBQuery.bindValue(":legoset_id", remote_legoset_id);
-		//		localeDBQuery.bindValue(":name", remote_name);
-		//		localeDBQuery.bindValue(":md5sum", remote_md5sum);
-		//		localeDBQuery.bindValue(":image_data", remote_image_data);
-		//		localeDBQuery.exec();
+		//		mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", remote_legoset_id);
+		//		mBrickMoneyDBLocaleQuery.bindValue(":name", remote_name);
+		//		mBrickMoneyDBLocaleQuery.bindValue(":md5sum", remote_md5sum);
+		//		mBrickMoneyDBLocaleQuery.bindValue(":image_data", remote_image_data);
+		//		mBrickMoneyDBLocaleQuery.exec();
 		//	}
 		//}
 	
@@ -199,28 +203,28 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale(QSqlDatabase & localeDB)
 		
 		
 	}
-	localeDB.commit();
+	mBrickMoneyDBLocale.commit();
 
 	remoteDB.close();
 	LOG_INFO("BrickMoneyDBLocale updated.");
 	return true;
 }
 
-QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(QSqlDatabase& localeDB, const int & legoset_id)
+QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(const int & legoset_id)
 {
 	 QVector<QPixmap> images;
-	 QSqlQuery localeDBQuery(localeDB);
+	 QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
 
-	 localeDBQuery.prepare("SELECT * FROM Images WHERE legoset_id=:legoset_id");
-	 localeDBQuery.bindValue(":legoset_id", legoset_id);
-	if (!localeDBQuery.exec())
+	 mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM Images WHERE legoset_id=:legoset_id");
+	 mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", legoset_id);
+	if (!mBrickMoneyDBLocaleQuery.exec())
 	{
 		LOG_ERROR("Can't execute query the locate Images table!");
 		return images;
 	}
 
-	while (localeDBQuery.next()) {
-		QByteArray outByteArray = localeDBQuery.value("image_data").toByteArray();
+	while (mBrickMoneyDBLocaleQuery.next()) {
+		QByteArray outByteArray = mBrickMoneyDBLocaleQuery.value("image_data").toByteArray();
 		QPixmap outPixmap = QPixmap();
 		outPixmap.loadFromData(outByteArray);
 		images.append(outPixmap);
@@ -229,26 +233,76 @@ QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(QSqlDatabase& localeDB, 
 	return images;
 }
 
-LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(QSqlDatabase & localeDB, const int & set_id)
+LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
 
-	QSqlQuery localeDBQuery(localeDB);
+	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
 
-	localeDBQuery.prepare("SELECT * FROM LegoSets WHERE set_id=:set_id");
-	localeDBQuery.bindValue(":set_id", set_id);
-	if (!localeDBQuery.exec())
+	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id=:set_id");
+	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
+	if (!mBrickMoneyDBLocaleQuery.exec())
 	{
 		LOG_ERROR("Can't execute query the locate LegoSets table!");
 		return info;
 	}
 
-	while (localeDBQuery.next()) {
-		info = LegoSetInfo(localeDBQuery.value("set_id").toInt()
-			, localeDBQuery.value("name_en").toString()
-			, localeDBQuery.value("name_de").toString()
-			, localeDBQuery.value("year").toInt()
-			, localeDBQuery.value("rr_price").toDouble());
+	while (mBrickMoneyDBLocaleQuery.next()) {
+		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
+			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
+			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
+			, mBrickMoneyDBLocaleQuery.value("year").toInt()
+			, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble());
+	}
+
+	return info;
+}
+
+LegoSetInfo BrickMoneyDatabase::nextLegoSetInfo(const int & set_id)
+{
+	LegoSetInfo info;
+
+	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+
+	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id > :set_id ORDER BY set_id ASC LIMIT 1");
+	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
+	if (!mBrickMoneyDBLocaleQuery.exec())
+	{
+		LOG_ERROR("Can't execute query the locate LegoSets table!");
+		return info;
+	}
+
+	while (mBrickMoneyDBLocaleQuery.next()) {
+		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
+			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
+			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
+			, mBrickMoneyDBLocaleQuery.value("year").toInt()
+			, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble());
+	}
+
+	return info;
+}
+
+LegoSetInfo BrickMoneyDatabase::previousLegoSetInfo(const int & set_id)
+{
+	LegoSetInfo info;
+
+	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+
+	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id < :set_id ORDER BY set_id DESC LIMIT 1");
+	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
+	if (!mBrickMoneyDBLocaleQuery.exec())
+	{
+		LOG_ERROR("Can't execute query the locate LegoSets table!");
+		return info;
+	}
+
+	while (mBrickMoneyDBLocaleQuery.next()) {
+		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
+			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
+			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
+			, mBrickMoneyDBLocaleQuery.value("year").toInt()
+			, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble());
 	}
 
 	return info;
