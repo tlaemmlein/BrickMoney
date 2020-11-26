@@ -123,22 +123,21 @@ bool LegoSetInfoGenerator::querySetNumber(int num)
     LOG_SCOPE_METHOD(L"");
     LOG_TRACE(QString("querySetNumber %1").arg(num).toStdWString());
 
-    for(const LegoSetInfo& info : d_ptr->mLegoSetDatabase)
-    {
-        if (info.set_id == num)
-        {
-			emit setNumber(info.set_id);
-			d_ptr->updateLegoSetImages(info.set_id);
-			emit imageKey(QString::number(info.set_id));
-			emit description(info.name_en);
-			emit year(info.year);
-			emit recommendedRetailPrice(info.rr_price);
-			return true;
-        }
-    }
+	auto info = BrickMoneyDatabase::queryLegoSetInfo(d_ptr->mBrickMoneyDBLocale, num);
 
-    emit setNumberNotFound();
-	return false;
+	if (!info.set_id.has_value())
+	{
+		emit setNumberNotFound();
+		return false;
+	}
+	const auto set_id = info.set_id.value();
+	emit setNumber(set_id);
+	d_ptr->updateLegoSetImages(set_id);
+	emit imageKey(QString::number(set_id));
+	emit description(info.name_en);
+	emit year(info.year);
+	emit recommendedRetailPrice(info.rr_price);
+	return true;
 }
 
 int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
@@ -155,15 +154,15 @@ int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
             if ( nextIndex <= d_ptr->mLegoSetDatabase.size() )
             {
 				auto info = d_ptr->mLegoSetDatabase.at(nextIndex);
-                LOG_INFO(QString("Found %1").arg(info.set_id).toStdWString());
-				emit setNumber(info.set_id);
-				d_ptr->updateLegoSetImages(info.set_id);
-				emit imageKey(QString::number(info.set_id));
+                LOG_INFO(QString("Found %1").arg(info.set_id.value()).toStdWString());
+				emit setNumber(info.set_id.value());
+				d_ptr->updateLegoSetImages(info.set_id.value());
+				emit imageKey(QString::number(info.set_id.value()));
 				emit description(info.name_en);
 				emit year(info.year);
 				emit recommendedRetailPrice(info.rr_price);
 
-                return d_ptr->mLegoSetDatabase.at(nextIndex).set_id;
+                return d_ptr->mLegoSetDatabase.at(nextIndex).set_id.value();
             }
         }
     }
@@ -185,14 +184,14 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
             if ( prevIndex >= 0 )
             {
 				auto info = d_ptr->mLegoSetDatabase.at(prevIndex);
-                LOG_INFO(QString("Found %1").arg(info.set_id).toStdWString());
-				emit setNumber(info.set_id);
-				d_ptr->updateLegoSetImages(info.set_id);
-				emit imageKey(QString::number(info.set_id));
+                LOG_INFO(QString("Found %1").arg(info.set_id.value()).toStdWString());
+				emit setNumber(info.set_id.value());
+				d_ptr->updateLegoSetImages(info.set_id.value());
+				emit imageKey(QString::number(info.set_id.value()));
 				emit description(info.name_en);
 				emit year(info.year);
 				emit recommendedRetailPrice(info.rr_price);
-				return d_ptr->mLegoSetDatabase.at(prevIndex).set_id;
+				return d_ptr->mLegoSetDatabase.at(prevIndex).set_id.value();
             }
         }
     }

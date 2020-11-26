@@ -4,9 +4,11 @@
 #include <QObject>
 #include <QSqlDatabase>
 
+#include <optional>
+
 struct LegoSetInfo {
 
-	LegoSetInfo() : set_id(-1), name_en(""), name_de(""), year(-1), rr_price(0.0)
+	LegoSetInfo() : set_id{}, name_en(""), name_de(""), year(-1), rr_price(0.0)
 	{}
 
 	LegoSetInfo(int other_set_id, const QString& other_name_en, const QString& other_name_de,  int other_year, double  other_rr_price
@@ -33,7 +35,7 @@ struct LegoSetInfo {
 		return set_id < info.set_id;
 	}
 
-	int     set_id;
+	std::optional<int>     set_id;
 	QString name_en;
 	QString name_de;
 	int     year;
@@ -54,6 +56,7 @@ public:
 	static bool updateBrickMoneyDBLocale(QSqlDatabase& localeDB);
 
 	static QVector<QPixmap> queryLegoSetImages(QSqlDatabase& localeDB, const int& legoset_id);
+	static LegoSetInfo queryLegoSetInfo(QSqlDatabase& localeDB, const int& legoset_id);
 
 	static QString calcMD5Sum(const QString& imageFilePath);
 	static QByteArray calcBlobData(const QString& imageFilePath);
