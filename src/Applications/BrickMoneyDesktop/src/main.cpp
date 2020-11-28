@@ -19,7 +19,6 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QDate>
-#include <QPixmapCache>
 
 using namespace KDDockWidgets;
 using namespace log4cplus;
@@ -52,10 +51,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QCoreApplication::setApplicationName("BrickMoney");
-
-    QPixmapCache::clear();
-    const int cacheLimit200MB = 20 * 10240;
-    QPixmapCache::setCacheLimit(cacheLimit200MB);
 
 	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
 	{

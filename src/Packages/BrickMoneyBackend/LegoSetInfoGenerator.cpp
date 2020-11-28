@@ -3,9 +3,9 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 
 #include "LegoSetInfoGenerator.h"
 #include "BrickMoneyDatabase.h"
+#include "BrickMoneyImages.h"
 
 #include <QPixmap>
-#include <QPixmapCache>
 #include <QSqlQuery>
 #include <QStandardPaths>
 #include <QVariant>
@@ -20,13 +20,11 @@ public:
 	{
 		QPixmap pm;
 		QString image_key = QString::number(legoset_id);
-		if (!QPixmapCache::find(image_key, &pm)) {
+		if (!BrickMoneyImages::Inst()->contains(image_key))
+		{
 			auto pixmaps = BrickMoneyDatabase::queryLegoSetImages(legoset_id);
-			if (!pixmaps.isEmpty()) {
-				pm = pixmaps.at(0);
-				if (!QPixmapCache::insert(image_key, pm))
-					LOG_ERROR("Could not insert image " << image_key.toStdWString());
-			}
+			if (!pixmaps.isEmpty())
+				BrickMoneyImages::Inst()->setImage(image_key, pixmaps.at(0));
 		}
 	}
 };

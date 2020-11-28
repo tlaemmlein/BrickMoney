@@ -6,6 +6,8 @@ set(SRC_FILES
 	BrickMoneyDatabase.h
     BrickMoneyDataManager.cpp
     BrickMoneyDataManager.h
+    BrickMoneyImages.cpp
+    BrickMoneyImages.h
     BrickMoneyProject.cpp
     BrickMoneyProject.h
     BrickMoneySettings.cpp

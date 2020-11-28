@@ -4,10 +4,10 @@ SET_LOGGER("BrickMoney.ImageDelegate")
 #include "ImageDelegate.h"
 
 #include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
+#include "Packages/BrickMoneyBackend/BrickMoneyImages.h"
 
 #include <QFileInfo>
 #include <QPainter>
-#include <QPixmapCache>
 
 ImageDelegate::ImageDelegate(QObject *parent) : QStyledItemDelegate(parent)
 {
@@ -20,11 +20,7 @@ void ImageDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     if (index.data(int(LegoSetTableModel::Role::Type)).toString() == QLatin1String("image")) {
         QString imageKey = index.data().toString();
 
-        QPixmap pm;
-        if (!QPixmapCache::find(imageKey, &pm))
-        {
-            LOG_ERROR("Could not find pixmap cache for " << imageKey.toStdWString());
-        }
+		QPixmap pm = BrickMoneyImages::Inst()->image(imageKey);
 
         //Scaled size that will be used to set draw aera to QPainter, with aspect ratio preserved
         QSize size = pm.size().scaled(option.rect.size(), Qt::KeepAspectRatio);

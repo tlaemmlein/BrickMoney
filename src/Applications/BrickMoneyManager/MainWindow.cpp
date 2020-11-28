@@ -15,7 +15,6 @@ SET_LOGGER("BrickMoneyManager.MainWindow")
 #include <QFile>
 #include <QImage>
 #include <QPixmap>
-#include <QPixmapCache>
 #include <QSql>
 #include <QSqlDatabase>
 #include <QSqlError>
