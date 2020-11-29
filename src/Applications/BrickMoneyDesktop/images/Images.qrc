@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/images">
+        <file>brickMoney_splashscreen.png</file>
         <file>empty.svg</file>
         <file>forSale.svg</file>
         <file>inStock.svg</file>

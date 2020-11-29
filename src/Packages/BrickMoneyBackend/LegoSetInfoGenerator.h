@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QString>
 
-#include <vector>
-
 
 class LegoSetInfoGeneratorPrivate;
 

@@ -123,8 +123,8 @@ void MainWindow::fillTable()
 		foreach(QString filename, images) {
 			const int legoset_id = QFileInfo(filename).baseName().toInt();
 			const QString imageFilePath = imagesPath + "/" + filename;
-			const QString md5sum = BrickMoneyDatabase::calcMD5Sum(imageFilePath);
-			const auto image_data = BrickMoneyDatabase::calcBlobData(imageFilePath);
+			const QString md5sum = BrickMoneyDatabase::Inst()->calcMD5Sum(imageFilePath);
+			const auto image_data = BrickMoneyDatabase::Inst()->calcBlobData(imageFilePath);
 			query.prepare("INSERT INTO Images (legoset_id, name, md5sum, image_data) VALUES (:legoset_id, :name, :md5sum, :image_data)");
 			query.bindValue(":legoset_id", legoset_id);
 			query.bindValue(":name", name);

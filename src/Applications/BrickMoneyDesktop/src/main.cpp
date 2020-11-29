@@ -3,6 +3,7 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 
 #include "MainWindow.h"
 
+#include "Packages/BrickMoneyBackend/BrickMoneyDatabase.h"
 #include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 #include "Packages/BrickMoneyBackend/BrickMoneyDataManager.h"
 #include "Packages/BrickMoneyBackend/LegoSet.h"
@@ -19,6 +20,9 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include <QAbstractTableModel>
 #include <QIcon>
 #include <QDate>
+#include <QStandardPaths>
+#include <QMessageBox>
+#include <QSplashScreen>
 
 using namespace KDDockWidgets;
 using namespace log4cplus;
@@ -51,6 +55,46 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QCoreApplication::setApplicationName("BrickMoney");
+	const QString appdataLoc = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+
+	QPixmap pixmap(":/images/brickMoney_splashscreen.png");
+	QSplashScreen splash(pixmap);
+
+	if (!BrickMoneyDatabase::Inst()->prepareBrickMoneyDBLocale(appdataLoc) )
+	{
+		QMessageBox messageBox;
+		QString msg = "Could not prepare locale database!\n";
+		msg += QString("Please check %1 folder.\n").arg(appdataLoc);
+		messageBox.critical(0, "Error with locale database", msg);
+		return -1;
+	}
+
+	try
+	{
+		if (BrickMoneyDatabase::Inst()->isNewRemoteVersionAvailable()) {
+			splash.show();
+			app.processEvents();
+			splash.showMessage("The database must be updated. That will take some time.");
+			BrickMoneyDatabase::Inst()->updateBrickMoneyDBLocale();
+		}
+	}
+	catch (const RemoteDBException& e)
+	{
+		QMessageBox messageBox;
+		QString msg = "The remote database is not online!\n";
+		msg += QString("Hint: Please check your internet connection.\n");
+		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		messageBox.warning(0, "Error with remote database", msg);
+	}
+	catch (const std::exception& e)
+	{
+		QMessageBox messageBox;
+		QString msg = "Something is wrong with the database!\n";
+		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		messageBox.critical(0, "Error with database", msg);
+		return -1;
+	}
 
 	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
 	{
@@ -72,7 +116,9 @@ int main(int argc, char *argv[])
     MainWindowOptions options = MainWindowOption_None;
 
     BrickMoney::MainWindow w(QStringLiteral("BrickMoneyMainWindow"), options);
+	splash.showMessage("Setting up the main window.");
     w.show();
+	splash.finish(&w);
 
     return app.exec();
 }

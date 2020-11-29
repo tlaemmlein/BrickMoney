@@ -1,8 +1,9 @@
-#ifndef BRICKMONEY_DATABASE_IMAGES_H
-#define BRICKMONEY_DATABASE_IMAGES_H
+#ifndef BRICKMONEY_DATABASE_H
+#define BRICKMONEY_DATABASE_H
 
-#include <QObject>
-#include <QSqlDatabase>
+#include <QPixmap>
+#include <QString>
+#include <QVector>
 
 #include <optional>
 
@@ -26,30 +27,60 @@ struct LegoSetInfo {
 	double  rr_price; // recommended retail price
 };
 
-
-class BrickMoneyDatabase : public QObject
+class RemoteDBException : public std::exception
 {
 public:
-    BrickMoneyDatabase(const BrickMoneyDatabase&) = delete;            // No copy ctor
-    BrickMoneyDatabase& operator=(const BrickMoneyDatabase&) = delete; //No assign op
+	explicit RemoteDBException(const char* message) :
+		msg_(message)	{
+	}
+
+	explicit RemoteDBException(const std::string& message) :
+		msg_(message){}
+
+	virtual ~RemoteDBException() noexcept {}
+
+	virtual const char* what() const noexcept {
+		return msg_.c_str();
+	}
+
+protected:
+	std::string msg_;
+};
+
+class BrickMoneyDatabasePrivate;
+
+class BrickMoneyDatabase
+{
+public:
+	static BrickMoneyDatabase* Inst();
+	~BrickMoneyDatabase();
+	BrickMoneyDatabase(const BrickMoneyDatabase&) = delete;            // No copy ctor
+	BrickMoneyDatabase& operator=(const BrickMoneyDatabase&) = delete; //No assign op
+
+	bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath);
+
+	/// Check if the remote database is online.
+	/// \exception RemoteDBException if the db is not online.  
+	bool isNewRemoteVersionAvailable();
+
+	/// \exception RemoteDBException if the db is not online.  
+	bool updateBrickMoneyDBLocale();
+
+	QVector<QPixmap> queryLegoSetImages(const int& legoset_id);
+	LegoSetInfo queryLegoSetInfo(const int& set_id);
+
+	LegoSetInfo nextLegoSetInfo(const int& set_id);
+	LegoSetInfo previousLegoSetInfo(const int& set_id);
 
 
-	static bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath);
-	static bool updateBrickMoneyDBLocale();
-
-	static QVector<QPixmap> queryLegoSetImages(const int& legoset_id);
-	static LegoSetInfo queryLegoSetInfo(const int& set_id);
-
-	static LegoSetInfo nextLegoSetInfo(const int& set_id);
-	static LegoSetInfo previousLegoSetInfo(const int& set_id);
-
-
-	static QString calcMD5Sum(const QString& imageFilePath);
-	static QByteArray calcBlobData(const QString& imageFilePath);
+	QString calcMD5Sum(const QString& imageFilePath);
+	QByteArray calcBlobData(const QString& imageFilePath);
 
 private:
-	static QSqlDatabase mBrickMoneyDBLocale;
+	static std::unique_ptr<BrickMoneyDatabase> smInstance;
+	BrickMoneyDatabase();
 
+	std::unique_ptr<BrickMoneyDatabasePrivate> d_ptr;
 };
 
 #endif

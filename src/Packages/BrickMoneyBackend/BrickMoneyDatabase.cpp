@@ -8,34 +8,89 @@ SET_LOGGER("BrickMoney.BrickMoneyDatabase")
 #include <QCryptographicHash>
 #include <QDir>
 #include <QPixmap>
+#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
 
-QSqlDatabase BrickMoneyDatabase::mBrickMoneyDBLocale{};
+std::unique_ptr<BrickMoneyDatabase> BrickMoneyDatabase::smInstance = nullptr;
 
+class BrickMoneyDatabasePrivate {
+public:
+
+	QSqlDatabase getRemoteDB() {
+		QSqlDatabase remoteDB = QSqlDatabase::addDatabase("QODBC3", "BrickMoneyDBRemote");
+
+		QString connectString = "Driver={ODBC Driver 17 for SQL Server};";
+		connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
+		connectString += "Database=BrickMoneyDB;";
+		connectString += "Uid=readonlyuser;";
+		QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
+		connectString += "Pwd={" + wan + "};";
+		connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
+
+		remoteDB.setDatabaseName(connectString);
+		return remoteDB;
+	}
+
+	void openDatabase(QSqlDatabase& db) {
+		if (!db.open())
+		{
+			auto error = db.lastError();
+			LOG_ERROR("Could not open db.");
+			LOG_ERROR(error.databaseText().toStdWString());
+			LOG_ERROR(error.driverText().toStdWString());
+			LOG_ERROR(error.nativeErrorCode().toStdWString());
+			throw RemoteDBException("Could not open db.");
+		}
+	}
+
+
+	QSqlDatabase mBrickMoneyDBLocale;
+
+	int mRemoteVersion = 0;
+};
+
+
+BrickMoneyDatabase * BrickMoneyDatabase::Inst()
+{
+	if (!smInstance)
+	{
+		smInstance = std::unique_ptr<BrickMoneyDatabase>(new BrickMoneyDatabase());
+	}
+	return smInstance.get();
+}
+
+BrickMoneyDatabase::~BrickMoneyDatabase()
+{
+}
+
+BrickMoneyDatabase::BrickMoneyDatabase() : d_ptr(new BrickMoneyDatabasePrivate)
+{
+
+}
 
 bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDatabasePath)
 {
-	if (mBrickMoneyDBLocale.isOpen())
+	if (d_ptr->mBrickMoneyDBLocale.isOpen())
 		return true;
 
 	LOG_INFO("Prepare BrickMoneyDBLocale.");
 
 	QString dbName(legoSetDatabasePath + "/BrickMoneyDBLocale.db3");
-	if (!mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
-		mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
-	mBrickMoneyDBLocale.setDatabaseName(dbName);
-	if (!mBrickMoneyDBLocale.open())
+	if (!d_ptr->mBrickMoneyDBLocale.contains("BrickMoneyDBLocale"))
+		d_ptr->mBrickMoneyDBLocale = QSqlDatabase::addDatabase("QSQLITE", "BrickMoneyDBLocale");
+	d_ptr->mBrickMoneyDBLocale.setDatabaseName(dbName);
+	if (!d_ptr->mBrickMoneyDBLocale.open())
 	{
-		auto error = mBrickMoneyDBLocale.lastError();
+		auto error = d_ptr->mBrickMoneyDBLocale.lastError();
 		LOG_ERROR("Could not open " << dbName.toStdWString());
 		LOG_ERROR(error.databaseText().toStdWString());
 		LOG_ERROR(error.driverText().toStdWString());
 		LOG_ERROR(error.nativeErrorCode().toStdWString());
 		return false;
 	}
-	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
 	QStringList sql_querys;
 	sql_querys << "CREATE TABLE IF NOT EXISTS LegoSets (set_id bigint PRIMARY KEY, name_en text NOT NULL, name_de text NOT NULL, year INTEGER NOT NULL, rr_price float)"
@@ -46,10 +101,10 @@ bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDataba
 
 	for (const auto& sql_query : sql_querys)
 	{
-		if (!mBrickMoneyDBLocaleQuery.exec(sql_query))
+		if (!brickmoney_locale_query.exec(sql_query))
 		{
-			LOG_ERROR("Could not exec query. Last error: " << mBrickMoneyDBLocaleQuery.lastError().text().toStdWString());
-			mBrickMoneyDBLocale.close();
+			LOG_ERROR("Could not exec query. Last error: " << brickmoney_locale_query.lastError().text().toStdWString());
+			d_ptr->mBrickMoneyDBLocale.close();
 			return false;
 		}
 	}
@@ -58,60 +113,55 @@ bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDataba
 	return true;
 }
 
-bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
+
+bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
 {
-	if (!mBrickMoneyDBLocale.isOpen())
-		return false;
-
-	LOG_INFO("Update BrickMoneyDBLocale.");
-
-	QSqlDatabase remoteDB = QSqlDatabase::addDatabase("QODBC3", "BrickMoneyDBRemote");
-
-	QString connectString = "Driver={ODBC Driver 17 for SQL Server};";
-	connectString += "Server=tcp:brickmoneyserver.database.windows.net,1433;";
-	connectString += "Database=BrickMoneyDB;";
-	connectString += "Uid=readonlyuser;";
-	QString wan = QString(QByteArray::fromBase64("VW50ZXIyMndlZ3MzNA=="));
-	connectString += "Pwd={" + wan + "};";
-	connectString += "Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;";
-
-	remoteDB.setDatabaseName(connectString);
-	if (!remoteDB.open())
-	{
-		auto error = remoteDB.lastError();
-		LOG_ERROR("Could not open remote db.");
-		LOG_ERROR(error.databaseText().toStdWString());
-		LOG_ERROR(error.driverText().toStdWString());
-		LOG_ERROR(error.nativeErrorCode().toStdWString());
-		return false;
-	}
+	QSqlDatabase remoteDB = d_ptr->getRemoteDB();
+	d_ptr->openDatabase(remoteDB);
 
 	QSqlQuery remoteQuery(remoteDB);
 	remoteQuery.setForwardOnly(true);
 
-	int remoteVersion = 0;
 	remoteQuery.exec("SELECT version FROM Version");
 	while (remoteQuery.next())
-		remoteVersion = remoteQuery.value("version").toInt();
+		d_ptr->mRemoteVersion = remoteQuery.value("version").toInt();
 
 	int localeVersion = 0;
-	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
-	mBrickMoneyDBLocaleQuery.exec("SELECT version FROM Version");
-	while (mBrickMoneyDBLocaleQuery.next())
-		localeVersion = mBrickMoneyDBLocaleQuery.value("version").toInt();
+	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
+	brickmoney_locale_query.exec("SELECT version FROM Version");
+	while (brickmoney_locale_query.next())
+		localeVersion = brickmoney_locale_query.value("version").toInt();
 
-	if (localeVersion == remoteVersion)
+	if (localeVersion != d_ptr->mRemoteVersion)
 	{
+		return true;
+	}
+
+	return false;
+}
+
+bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
+{
+	if (!d_ptr->mBrickMoneyDBLocale.isOpen())
+		return false;
+
+	LOG_INFO("Update BrickMoneyDBLocale.");
+
+	if (!isNewRemoteVersionAvailable()) {
 		LOG_INFO("The locale db is up to date.");
 		return true;
 	}
 
-	mBrickMoneyDBLocaleQuery.prepare("UPDATE Version SET version=:version WHERE ID=0");
-	mBrickMoneyDBLocaleQuery.bindValue(":version", remoteVersion);
-	mBrickMoneyDBLocaleQuery.exec();
+	QSqlDatabase remoteDB = d_ptr->getRemoteDB();
+	d_ptr->openDatabase(remoteDB);
+
+	QSqlQuery remoteQuery(remoteDB);
+	remoteQuery.setForwardOnly(true);
+
+	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
 	// Update LegoSets table
-	mBrickMoneyDBLocale.transaction();
+	d_ptr->mBrickMoneyDBLocale.transaction();
 	remoteQuery.prepare("SELECT * FROM LegoSets");
 	if (!remoteQuery.exec())
 	{
@@ -123,19 +173,19 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
     while (remoteQuery.next())
 	{
 		// https://stackoverflow.com/questions/3634984/insert-if-not-exists-else-update
-		mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
+		brickmoney_locale_query.prepare("INSERT OR REPLACE INTO LegoSets (set_id, name_en, name_de, year, rr_price) "
 			"VALUES (:set_id, :name_en, :name_de, :year, :rr_price)");
-		mBrickMoneyDBLocaleQuery.bindValue(":set_id", remoteQuery.value("set_id").toInt());
-		mBrickMoneyDBLocaleQuery.bindValue(":name_en", remoteQuery.value("name_en").toString());
-		mBrickMoneyDBLocaleQuery.bindValue(":name_de", remoteQuery.value("name_de").toString());
-		mBrickMoneyDBLocaleQuery.bindValue(":year", remoteQuery.value("year").toInt());
-		mBrickMoneyDBLocaleQuery.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
-		mBrickMoneyDBLocaleQuery.exec();
+		brickmoney_locale_query.bindValue(":set_id", remoteQuery.value("set_id").toInt());
+		brickmoney_locale_query.bindValue(":name_en", remoteQuery.value("name_en").toString());
+		brickmoney_locale_query.bindValue(":name_de", remoteQuery.value("name_de").toString());
+		brickmoney_locale_query.bindValue(":year", remoteQuery.value("year").toInt());
+		brickmoney_locale_query.bindValue(":rr_price", remoteQuery.value("rr_price").toDouble());
+		brickmoney_locale_query.exec();
 	}
-	mBrickMoneyDBLocale.commit();
+	d_ptr->mBrickMoneyDBLocale.commit();
 
 	// Update Images table
-	mBrickMoneyDBLocale.transaction();
+	d_ptr->mBrickMoneyDBLocale.transaction();
 	remoteQuery.prepare("SELECT * FROM Images");
 	if (!remoteQuery.exec())
 	{
@@ -151,13 +201,13 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
 		QString remote_name = remoteQuery.value("name").toString();
 		QString remote_md5sum = remoteQuery.value("md5sum").toString();
 		QByteArray remote_image_data = remoteQuery.value("image_data").toByteArray();
-		mBrickMoneyDBLocaleQuery.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
+		brickmoney_locale_query.prepare("INSERT OR REPLACE INTO Images (legoset_id, name, md5sum, image_data) "
 			"VALUES (:legoset_id, :name, :md5sum, :image_data)");
-		mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", remote_legoset_id);
-		mBrickMoneyDBLocaleQuery.bindValue(":name", remote_name);
-		mBrickMoneyDBLocaleQuery.bindValue(":md5sum", remote_md5sum);
-		mBrickMoneyDBLocaleQuery.bindValue(":image_data", remote_image_data);
-		mBrickMoneyDBLocaleQuery.exec();
+		brickmoney_locale_query.bindValue(":legoset_id", remote_legoset_id);
+		brickmoney_locale_query.bindValue(":name", remote_name);
+		brickmoney_locale_query.bindValue(":md5sum", remote_md5sum);
+		brickmoney_locale_query.bindValue(":image_data", remote_image_data);
+		brickmoney_locale_query.exec();
 
 
 		//mBrickMoneyDBLocaleQuery.prepare("SELECT md5sum FROM Images WHERE legoset_id=:legoset_id AND name=':name'");
@@ -203,7 +253,11 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
 		
 		
 	}
-	mBrickMoneyDBLocale.commit();
+	d_ptr->mBrickMoneyDBLocale.commit();
+
+	brickmoney_locale_query.prepare("UPDATE Version SET version=:version WHERE ID=0");
+	brickmoney_locale_query.bindValue(":version", d_ptr->mRemoteVersion);
+	brickmoney_locale_query.exec();
 
 	remoteDB.close();
 	LOG_INFO("BrickMoneyDBLocale updated.");
@@ -213,18 +267,18 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
 QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(const int & legoset_id)
 {
 	 QVector<QPixmap> images;
-	 QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	 QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
-	 mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM Images WHERE legoset_id=:legoset_id");
-	 mBrickMoneyDBLocaleQuery.bindValue(":legoset_id", legoset_id);
-	if (!mBrickMoneyDBLocaleQuery.exec())
+	 brickmoney_locale_query.prepare("SELECT * FROM Images WHERE legoset_id=:legoset_id");
+	 brickmoney_locale_query.bindValue(":legoset_id", legoset_id);
+	if (!brickmoney_locale_query.exec())
 	{
 		LOG_ERROR("Can't execute query the locate Images table!");
 		return images;
 	}
 
-	while (mBrickMoneyDBLocaleQuery.next()) {
-		QByteArray outByteArray = mBrickMoneyDBLocaleQuery.value("image_data").toByteArray();
+	while (brickmoney_locale_query.next()) {
+		QByteArray outByteArray = brickmoney_locale_query.value("image_data").toByteArray();
 		QPixmap outPixmap = QPixmap();
 		outPixmap.loadFromData(outByteArray);
 		images.append(outPixmap);
@@ -237,22 +291,22 @@ LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
 
-	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
-	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id=:set_id");
-	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
-	if (!mBrickMoneyDBLocaleQuery.exec())
+	brickmoney_locale_query.prepare("SELECT * FROM LegoSets WHERE set_id=:set_id");
+	brickmoney_locale_query.bindValue(":set_id", set_id);
+	if (!brickmoney_locale_query.exec())
 	{
 		LOG_ERROR("Can't execute query the locate LegoSets table!");
 		return info;
 	}
 
-	while (mBrickMoneyDBLocaleQuery.next()) {
-		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
-			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
-			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
-			, mBrickMoneyDBLocaleQuery.value("year").toInt()
-			, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble());
+	while (brickmoney_locale_query.next()) {
+		info = LegoSetInfo(brickmoney_locale_query.value("set_id").toInt()
+			, brickmoney_locale_query.value("name_en").toString()
+			, brickmoney_locale_query.value("name_de").toString()
+			, brickmoney_locale_query.value("year").toInt()
+			, brickmoney_locale_query.value("rr_price").toDouble());
 	}
 
 	return info;
@@ -262,22 +316,22 @@ LegoSetInfo BrickMoneyDatabase::nextLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
 
-	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
-	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id > :set_id ORDER BY set_id ASC LIMIT 1");
-	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
-	if (!mBrickMoneyDBLocaleQuery.exec())
+	brickmoney_locale_query.prepare("SELECT * FROM LegoSets WHERE set_id > :set_id ORDER BY set_id ASC LIMIT 1");
+	brickmoney_locale_query.bindValue(":set_id", set_id);
+	if (!brickmoney_locale_query.exec())
 	{
 		LOG_ERROR("Can't execute query the locate LegoSets table!");
 		return info;
 	}
 
-	while (mBrickMoneyDBLocaleQuery.next()) {
-		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
-			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
-			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
-			, mBrickMoneyDBLocaleQuery.value("year").toInt()
-			, mBrickMoneyDBLocaleQuery.value("rr_price").toDouble());
+	while (brickmoney_locale_query.next()) {
+		info = LegoSetInfo(brickmoney_locale_query.value("set_id").toInt()
+			, brickmoney_locale_query.value("name_en").toString()
+			, brickmoney_locale_query.value("name_de").toString()
+			, brickmoney_locale_query.value("year").toInt()
+			, brickmoney_locale_query.value("rr_price").toDouble());
 	}
 
 	return info;
@@ -287,7 +341,7 @@ LegoSetInfo BrickMoneyDatabase::previousLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
 
-	QSqlQuery mBrickMoneyDBLocaleQuery(mBrickMoneyDBLocale);
+	QSqlQuery mBrickMoneyDBLocaleQuery(d_ptr->mBrickMoneyDBLocale);
 
 	mBrickMoneyDBLocaleQuery.prepare("SELECT * FROM LegoSets WHERE set_id < :set_id ORDER BY set_id DESC LIMIT 1");
 	mBrickMoneyDBLocaleQuery.bindValue(":set_id", set_id);
