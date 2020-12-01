@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "AboutDialog.h"
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
 #include "LegoSetImportDialog.h"
@@ -128,6 +129,12 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     {
         setGeometry(BrickMoneySettings::Inst()->mainWindow());
     }
+
+    connect(ui->actionAbout, &QAction::triggered, [&]() {
+        AboutDialog* dlg = new AboutDialog(this);
+        dlg->setModal(true);
+        dlg->show();
+    });
 }
 
 MainWindow::~MainWindow()

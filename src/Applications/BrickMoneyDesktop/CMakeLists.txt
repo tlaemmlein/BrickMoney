@@ -14,6 +14,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(THIRDPARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../Thirdparty)
 
 set(SRC_FILES
+    src/AboutDialog.cpp
+    src/AboutDialog.h
+    src/AboutDialog.ui
     src/main.cpp
     src/InStock.h
     src/InStock.cpp

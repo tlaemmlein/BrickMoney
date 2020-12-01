@@ -59,6 +59,10 @@ public:
 
 	bool prepareBrickMoneyDBLocale(const QString& legoSetDatabasePath);
 
+	int remoteDBVersion() const;
+
+	int localeDBVersion() const;
+
 	/// Check if the remote database is online.
 	/// \exception RemoteDBException if the db is not online.  
 	bool isNewRemoteVersionAvailable();

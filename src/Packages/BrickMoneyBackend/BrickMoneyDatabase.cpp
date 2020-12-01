@@ -113,8 +113,7 @@ bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDataba
 	return true;
 }
 
-
-bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
+int BrickMoneyDatabase::remoteDBVersion() const
 {
 	QSqlDatabase remoteDB = d_ptr->getRemoteDB();
 	d_ptr->openDatabase(remoteDB);
@@ -122,9 +121,19 @@ bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
 	QSqlQuery remoteQuery(remoteDB);
 	remoteQuery.setForwardOnly(true);
 
+	int remoteVersion = 0;
+
 	remoteQuery.exec("SELECT version FROM Version");
 	while (remoteQuery.next())
-		d_ptr->mRemoteVersion = remoteQuery.value("version").toInt();
+		remoteVersion = remoteQuery.value("version").toInt();
+
+	return remoteVersion;
+}
+
+int BrickMoneyDatabase::localeDBVersion() const
+{
+	if (!d_ptr->mBrickMoneyDBLocale.isOpen())
+		return 0;
 
 	int localeVersion = 0;
 	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
@@ -132,10 +141,15 @@ bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
 	while (brickmoney_locale_query.next())
 		localeVersion = brickmoney_locale_query.value("version").toInt();
 
-	if (localeVersion != d_ptr->mRemoteVersion)
-	{
-		return true;
-	}
+	return localeVersion;
+}
+
+
+bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
+{
+	d_ptr->mRemoteVersion = remoteDBVersion();
+
+	int localeVersion = localeDBVersion();
 
 	return false;
 }
