@@ -23,22 +23,35 @@ public:
                         QWidget *parent = nullptr, Qt::WindowFlags flags = Qt::WindowFlags());
     ~MainWindow();
 
+public slots:
+	void updateInStockTitle();
+	void updateForStockTitle();
+	void updateSoldTitle();
+	void updateImportTitle();
+
 protected:
 
 	void closeEvent(QCloseEvent *event) override;
 
 	void changeEvent(QEvent* event);
 
+
+
 private:
     Ui::MainWindow *ui;
 
-    KDDockWidgets::DockWidget::List m_dockwidgets;
-
-    QString m_postWindowTitel;
+	KDDockWidgets::DockWidget* m_InStockDock;
+	KDDockWidgets::DockWidget* m_ForSaleDock;
+	KDDockWidgets::DockWidget* m_SoldDock;
+	KDDockWidgets::DockWidget* m_ImportDock;
 
 	QTranslator m_Translator;
 
 	QString postWindowTitle();
+	QString inStockText() const;
+	QString forSaleText() const;
+	QString soldText() const;
+	QString importText() const;
 };
 }
 #endif // MAINWINDOW_H

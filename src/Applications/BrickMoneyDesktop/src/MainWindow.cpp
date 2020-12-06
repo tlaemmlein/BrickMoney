@@ -73,56 +73,35 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     QPixmap emptyPixmap(":/images/empty.svg");
 	BrickMoneyImages::Inst()->setImage("None", emptyPixmap);
 
-    std::function<void(const QString,
-                       QWidget* tableView,
-                       const QIcon icon,
-                       KDDockWidgets::Location loc,
-                       LegoSetTableModel *model)>
-        tableCreator = [&] (const QString title,
-                          QWidget* tableView,
-                          QIcon icon,
-                          KDDockWidgets::Location loc,
-                          LegoSetTableModel *model) {
-        auto dock = new KDDockWidgets::DockWidget(title);
-        dock->setWidget(tableView);
-        dock->setIcon(icon);
-        addDockWidget(dock, loc);
-        m_dockwidgets.push_back(dock);
-        dock->setTitle(title + " (" + QString::number(model->numberOfLegoSets()) + ")");
-    };
+	std::function<KDDockWidgets::DockWidget* (const QString, QWidget* tableView, const QIcon icon, 	KDDockWidgets::Location loc, LegoSetTableModel *model)>
+		dockCreator = [&](const QString uniqueID, QWidget* tableView, QIcon icon, KDDockWidgets::Location loc, LegoSetTableModel *model) -> KDDockWidgets::DockWidget* {
+				auto dock = new KDDockWidgets::DockWidget(uniqueID);
+				dock->setWidget(tableView);
+				dock->setIcon(icon);
+				addDockWidget(dock, loc);
+				return dock;
+	};
 
-    static const QString inStockTitle = tr("In Stock");
-    tableCreator(inStockTitle, new InStock, QIcon(":/images/inStock.svg"), KDDockWidgets::Location_OnLeft,
-                 BrickMoneyProject::Inst()->getInStockModel());
-    connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        m_dockwidgets[0]->setTitle(inStockTitle + " (" + QString::number(num) + ")");
-    });
-    connect(ui->actionIn_Stock, &QAction::triggered, [&]() { m_dockwidgets[0]->show(); });
+	m_InStockDock = dockCreator("InStockID", new InStock, QIcon(":/images/inStock.svg"), KDDockWidgets::Location_OnLeft, BrickMoneyProject::Inst()->getInStockModel());
+	connect(BrickMoneyProject::Inst()->getInStockModel(), &LegoSetTableModel::numberOfLegoSetsChanged, this, &BrickMoney::MainWindow::updateInStockTitle);
+    connect(ui->actionIn_Stock, &QAction::triggered, [&]() { m_InStockDock->show(); });
+	updateInStockTitle();
 
-    static const QString forSaleTitle = tr("For Sale");
-    tableCreator(forSaleTitle, new ForSale, QIcon(":/images/forSale.svg"), KDDockWidgets::Location_OnRight,
-                 BrickMoneyProject::Inst()->getForSaleModel());
-    connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        m_dockwidgets[1]->setTitle(forSaleTitle + " (" + QString::number(num) + ")");
-    });
-    connect(ui->actionFor_Sale, &QAction::triggered, [&]() { m_dockwidgets[1]->show(); });
+	m_ForSaleDock = dockCreator("ForSaleID", new ForSale, QIcon(":/images/forSale.svg"), KDDockWidgets::Location_OnRight, BrickMoneyProject::Inst()->getForSaleModel());
+	connect(BrickMoneyProject::Inst()->getForSaleModel(), &LegoSetTableModel::numberOfLegoSetsChanged, this, &BrickMoney::MainWindow::updateForStockTitle);
+	connect(ui->actionFor_Sale, &QAction::triggered, [&]() { m_ForSaleDock->show(); });
+	updateForStockTitle();
 
-    static const QString soldTitle = tr("Sold");
-    tableCreator(soldTitle, new Sold, QIcon(":/images/sold.svg"), KDDockWidgets::Location_OnRight,
-                 BrickMoneyProject::Inst()->getSoldModel());
-    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-		m_dockwidgets[2]->setTitle(soldTitle + " (" + QString::number(num) + ")");
-        });
-    connect(ui->actionSold, &QAction::triggered, [&]() { m_dockwidgets[2]->show(); });
+	m_SoldDock = dockCreator("SoldID", new Sold, QIcon(":/images/sold.svg"), KDDockWidgets::Location_OnRight, BrickMoneyProject::Inst()->getSoldModel());
+    connect(BrickMoneyProject::Inst()->getSoldModel(), &LegoSetTableModel::numberOfLegoSetsChanged, this, &BrickMoney::MainWindow::updateSoldTitle);
+    connect(ui->actionSold, &QAction::triggered, [&]() { m_SoldDock->show(); });
+	updateSoldTitle();
 
-    static const QString importTitle = tr("Import");
-    tableCreator(importTitle, new LegoSetImportDialog, QIcon(), KDDockWidgets::Location_OnTop,
-                 BrickMoneyProject::Inst()->getImportModel());
-    m_dockwidgets[3]->close();
-    connect(BrickMoneyProject::Inst()->getImportModel(), &LegoSetTableModel::numberOfLegoSetsChanged, [&](int num) {
-        m_dockwidgets[3]->setTitle(importTitle + " (" + QString::number(num) + ")");
-    });
-    connect(ui->actionImport, &QAction::triggered, [&]() { m_dockwidgets[3]->show(); });
+	m_ImportDock = dockCreator("ImportID", new LegoSetImportDialog, QIcon(), KDDockWidgets::Location_OnTop, BrickMoneyProject::Inst()->getImportModel());
+	m_ImportDock->close();
+    connect(BrickMoneyProject::Inst()->getImportModel(), &LegoSetTableModel::numberOfLegoSetsChanged, this, &BrickMoney::MainWindow::updateImportTitle);
+    connect(ui->actionImport, &QAction::triggered, [&]() { m_ImportDock->show(); });
+	updateImportTitle();
 
     connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, [&](QString filepath){
         setWindowTitle(filepath + postWindowTitle());
@@ -179,8 +158,12 @@ MainWindow::~MainWindow()
     BrickMoneySettings::Inst()->setMainWindow(geometry());
     BrickMoneySettings::Inst()->setMainIsMaximized( isMaximized());
     delete ui;
-    qDeleteAll(m_dockwidgets);
+	delete m_InStockDock;
+	delete m_ForSaleDock;
+	delete m_SoldDock;
+	delete m_ImportDock;
 }
+
 
 void MainWindow::closeEvent(QCloseEvent * event)
 {
@@ -219,12 +202,57 @@ void MainWindow::changeEvent(QEvent * event)
 		// this event is send if a translator is loaded
 		ui->retranslateUi(this);
 		setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + postWindowTitle());
+		updateInStockTitle();
+		updateForStockTitle();
+		updateSoldTitle();
+		updateImportTitle();
 	}
 	QMainWindow::changeEvent(event);
 }
 
+void BrickMoney::MainWindow::updateInStockTitle()
+{
+	m_InStockDock->setTitle(inStockText() + " (" + QString::number(BrickMoneyProject::Inst()->getInStockModel()->numberOfLegoSets()) + ")");
+}
+
+void BrickMoney::MainWindow::updateForStockTitle()
+{
+	m_ForSaleDock->setTitle(forSaleText() + " (" + QString::number(BrickMoneyProject::Inst()->getForSaleModel()->numberOfLegoSets()) + ")");
+}
+
+void BrickMoney::MainWindow::updateSoldTitle()
+{
+	m_SoldDock->setTitle(soldText() + " (" + QString::number(BrickMoneyProject::Inst()->getSoldModel()->numberOfLegoSets()) + ")");
+}
+
+void BrickMoney::MainWindow::updateImportTitle()
+{
+	m_ImportDock->setTitle(importText() + " (" + QString::number(BrickMoneyProject::Inst()->getImportModel()->numberOfLegoSets()) + ")");
+}
+
+
 QString BrickMoney::MainWindow::postWindowTitle()
 {
 	return tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
+}
+
+QString BrickMoney::MainWindow::inStockText() const
+{
+	return tr("In Stock");
+}
+
+QString BrickMoney::MainWindow::forSaleText() const
+{
+	return tr("For Sale");
+}
+
+QString BrickMoney::MainWindow::soldText() const
+{
+	return tr("Sold");
+}
+
+QString BrickMoney::MainWindow::importText() const
+{
+	return tr("Import");
 }
 
