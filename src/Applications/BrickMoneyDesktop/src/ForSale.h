@@ -41,7 +41,13 @@ private:
 protected:
     uint getVisibilityFlags() const override;
     void setVisibilityFlags(uint flags) override;
+
+    // LegSetTableView interface
+protected:
+    void retranslateUi() const override;
 };
+
+
 
 
 

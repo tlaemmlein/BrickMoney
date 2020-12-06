@@ -11,7 +11,7 @@ Sold::Sold(QWidget *parent) : LegSetTableView(parent)
 {
     LegSetTableView::init();
 
-    mToForSale = addPushButton(tr("Move to For Sale"));
+    mToForSale = addPushButton();
     mToForSale->setVisible(mModel->selectionIsDirty());
     connect(mToForSale, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
@@ -19,7 +19,7 @@ Sold::Sold(QWidget *parent) : LegSetTableView(parent)
         emit legoSetsMovedToForSale();
     });
 
-    mToInStock = addPushButton(tr("Move to In Stock"));
+    mToInStock = addPushButton();
     mToInStock->setVisible(mModel->selectionIsDirty());
     connect(mToInStock, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
@@ -62,4 +62,10 @@ uint Sold::getVisibilityFlags() const
 void Sold::setVisibilityFlags(uint flags)
 {
     BrickMoneySettings::Inst()->setSoldFlags(flags);
+}
+
+void Sold::retranslateUi() const
+{
+    mToForSale->setText(moveToForSaleText());
+    mToInStock->setText(moveToInStockText());
 }

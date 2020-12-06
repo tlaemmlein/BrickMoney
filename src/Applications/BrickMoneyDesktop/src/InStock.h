@@ -36,7 +36,13 @@ private:
     LegoSetTableModel* mModel;
     QPushButton* mAddLegoSetButton;
     QPushButton* mFromInStockToForSalePushButton;
+
+    // LegSetTableView interface
+protected:
+    void retranslateUi() const override;
 };
+
+
 
 
 

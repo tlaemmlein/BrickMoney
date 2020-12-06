@@ -59,33 +59,33 @@
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="134"/>
+        <location filename="../src/MainWindow.cpp" line="232"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="142"/>
+        <location filename="../src/MainWindow.cpp" line="137"/>
         <source>Load BrickMoney Project</source>
         <translation>BrickMony Projekt laden</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="144"/>
-        <location filename="../src/MainWindow.cpp" line="160"/>
+        <location filename="../src/MainWindow.cpp" line="139"/>
+        <location filename="../src/MainWindow.cpp" line="155"/>
         <source>JSON files (*.json)</source>
         <translation>JSON Dateien (*.json)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="158"/>
+        <location filename="../src/MainWindow.cpp" line="153"/>
         <source>Save BrickMoney project as...</source>
         <translation>BrickMony Projekt speichern unter...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="199"/>
+        <location filename="../src/MainWindow.cpp" line="194"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="200"/>
+        <location filename="../src/MainWindow.cpp" line="195"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
@@ -93,60 +93,25 @@
 <context>
     <name>ForSale</name>
     <message>
-        <location filename="../src/ForSale.cpp" line="22"/>
-        <source>Move to In Stock</source>
-        <translation>Verschiebe Auf Lager</translation>
-    </message>
-    <message>
         <location filename="../src/ForSale.cpp" line="47"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
-    </message>
-    <message>
-        <location filename="../src/ForSale.cpp" line="14"/>
-        <source>Move to Sold</source>
-        <translation>Verschiebe nach Verkauft</translation>
     </message>
 </context>
 <context>
     <name>ImportTable</name>
     <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="21"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="61"/>
         <source>Import</source>
         <translation>Importieren</translation>
-    </message>
-    <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="25"/>
-        <source>Move to Sold</source>
-        <translation>Verschiebe nach Verkauft</translation>
-    </message>
-    <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="33"/>
-        <source>Move to For Sale</source>
-        <translation>Verschiebe Zum Verkauf</translation>
-    </message>
-    <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="41"/>
-        <source>Move to In Stock</source>
-        <translation>Verschiebe Auf Lager</translation>
     </message>
 </context>
 <context>
     <name>InStock</name>
     <message>
-        <location filename="../src/InStock.cpp" line="60"/>
+        <location filename="../src/InStock.cpp" line="61"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
-    </message>
-    <message>
-        <location filename="../src/InStock.cpp" line="17"/>
-        <source>Add</source>
-        <translation>Hinzufügen</translation>
-    </message>
-    <message>
-        <location filename="../src/InStock.cpp" line="33"/>
-        <source>Move to For Sale</source>
-        <translation>Verschiebe Zum Verkauf</translation>
     </message>
 </context>
 <context>
@@ -197,7 +162,27 @@
         <translation>Spalten Sichtbarkeit</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="103"/>
+        <location filename="../src/LegSetTableView.cpp" line="157"/>
+        <source>Move to In Stock</source>
+        <translation>Verschiebe Auf Lager</translation>
+    </message>
+    <message>
+        <location filename="../src/LegSetTableView.cpp" line="162"/>
+        <source>Move to For Sale</source>
+        <translation>Verschiebe Zum Verkauf</translation>
+    </message>
+    <message>
+        <location filename="../src/LegSetTableView.cpp" line="167"/>
+        <source>Move to Sold</source>
+        <translation>Verschiebe nach Verkauft</translation>
+    </message>
+    <message>
+        <location filename="../src/LegSetTableView.cpp" line="172"/>
+        <source>Add</source>
+        <translation>Hinzufügen</translation>
+    </message>
+    <message>
+        <location filename="../src/LegSetTableView.cpp" line="177"/>
         <source>selected</source>
         <translation>ausgewählt</translation>
     </message>
@@ -217,12 +202,12 @@
     </message>
     <message>
         <location filename="../src/LegoSetImportDialog.ui" line="37"/>
-        <location filename="../src/LegoSetImportDialog.cpp" line="116"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="122"/>
         <source>Import from csv file...</source>
         <translation>Importiere aus CSV Datei...</translation>
     </message>
     <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="117"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="123"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV Datei (*.csv)</translation>
     </message>
@@ -313,16 +298,6 @@
         <location filename="../src/Sold.cpp" line="48"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
-    </message>
-    <message>
-        <location filename="../src/Sold.cpp" line="22"/>
-        <source>Move to In Stock</source>
-        <translation>Verschiebe Auf Lager</translation>
-    </message>
-    <message>
-        <location filename="../src/Sold.cpp" line="14"/>
-        <source>Move to For Sale</source>
-        <translation>Verschiebe Zum Verkauf</translation>
     </message>
 </context>
 </TS>

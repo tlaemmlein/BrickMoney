@@ -14,7 +14,7 @@ InStock::InStock(QWidget *parent) : LegSetTableView(parent)
 {
     LegSetTableView::init();
 
-    mAddLegoSetButton = addPushButton(tr("Add"));
+    mAddLegoSetButton = addPushButton();
 
     connect(mAddLegoSetButton, &QPushButton::clicked, [&] {
         filterLineEdit()->setText("");
@@ -30,7 +30,7 @@ InStock::InStock(QWidget *parent) : LegSetTableView(parent)
         tableView()->edit(index);
     });
 
-    mFromInStockToForSalePushButton = addPushButton(tr("Move to For Sale"));
+    mFromInStockToForSalePushButton = addPushButton();
 
     mFromInStockToForSalePushButton->setVisible(mModel->selectionIsDirty());
     connect(mFromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
@@ -38,6 +38,7 @@ InStock::InStock(QWidget *parent) : LegSetTableView(parent)
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });
+    retranslateUi();
 }
 
 InStock::~InStock()
@@ -75,4 +76,10 @@ uint InStock::getVisibilityFlags() const
 void InStock::setVisibilityFlags(uint flags)
 {
     BrickMoneySettings::Inst()->setInStockFlags(flags);
+}
+
+void InStock::retranslateUi() const
+{
+    mAddLegoSetButton->setText(addText());
+    mFromInStockToForSalePushButton->setText(moveToForSaleText());
 }

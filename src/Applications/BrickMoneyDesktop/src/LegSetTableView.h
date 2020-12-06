@@ -39,10 +39,17 @@ protected:
 
     Ui::LegSetTableView *ui;
 
-    QPushButton* addPushButton(const QString& title);
+    QPushButton* addPushButton();
 
     QTableView* tableView();
     QLineEdit* filterLineEdit();
+
+	QString moveToInStockText() const;
+	QString moveToForSaleText() const;
+	QString moveToSoldText() const;
+	QString addText() const;
+
+	virtual void retranslateUi() const = 0;
 
     virtual LegoSetSortFilterTableModel* getSortModel() const = 0;
     virtual LegoSetTableModel* getModel() const = 0;
@@ -56,6 +63,8 @@ protected:
 
 private:
 	std::bitset<LegoSetProperty::COUNT> mVisiblityFlags;
+
+	QString selectedText();
 };
 
 #endif // LegSetTableView_H

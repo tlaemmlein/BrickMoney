@@ -100,11 +100,11 @@ void LegSetTableView::init()
     });
 
     ui->numOfSelectedLabel->setVisible(getModel()->selectionIsDirty());
-    static const QString selectedText = tr("selected");
+
     connect(getModel(), &LegoSetTableModel::numberOfSelectedLegoSetsChanged, [&] (int num) {
-        ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText);
+        ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText());
     });
-    ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText);
+    ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText());
 
     ui->copyAndPastePushButton->setVisible(getModel()->selectionIsDirty());
     connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
@@ -127,13 +127,15 @@ void LegSetTableView::changeEvent(QEvent *event)
 		// this event is send if a translator is loaded
 		ui->retranslateUi(this);
 		ui->legSetTableViewTitle->setText(title());
+		ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText());
+        retranslateUi();
 	}
 	QWidget::changeEvent(event);
 }
 
-QPushButton* LegSetTableView::addPushButton(const QString &title)
+QPushButton* LegSetTableView::addPushButton()
 {
-    QPushButton* button = new QPushButton(title, ui->LegSetTableViewFrame);
+    QPushButton* button = new QPushButton(ui->LegSetTableViewFrame);
 
     ui->horizontalLayout->insertWidget(5, button);
 
@@ -150,3 +152,27 @@ QLineEdit *LegSetTableView::filterLineEdit()
     return ui->filterLineEdit;
 }
 
+QString LegSetTableView::moveToInStockText() const
+{
+	return tr("Move to In Stock");
+}
+
+QString LegSetTableView::moveToForSaleText() const
+{
+	return tr("Move to For Sale");
+}
+
+QString LegSetTableView::moveToSoldText() const
+{
+	return tr("Move to Sold");
+}
+
+QString LegSetTableView::addText() const
+{
+	return tr("Add");
+}
+
+QString LegSetTableView::selectedText()
+{
+	return tr("selected");
+}

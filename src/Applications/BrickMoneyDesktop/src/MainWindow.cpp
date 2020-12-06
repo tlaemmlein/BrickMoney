@@ -32,10 +32,6 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
 {
     ui->setupUi(this);
 
-    QWidget* spacer = new QWidget();
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    ui->toolBar->addWidget(spacer);
-
     QActionGroup *languageActionGroup = new QActionGroup(this);
     QAction* lang_de_action = new QAction(QIcon(":/images/lang_de.svg"), "DE", languageActionGroup);
     QAction* lang_en_action = new QAction(QIcon(":/images/lang_en.svg"), "EN", languageActionGroup);

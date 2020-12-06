@@ -18,11 +18,10 @@ public:
     explicit ImportTable(QWidget *parent = nullptr) : LegSetTableView(parent)
             , mSortModel(BrickMoneyProject::Inst()->getImportSortModel())
             , mModel(BrickMoneyProject::Inst()->getImportModel())
-            , mTitle(tr("Import"))
     {
         LegSetTableView::init();
 
-        mToSold = addPushButton(tr("Move to Sold"));
+        mToSold = addPushButton();
         mToSold->setVisible(mModel->selectionIsDirty());
         connect(mToSold, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
@@ -30,7 +29,7 @@ public:
             emit legoSetsMovedToSold();
         });
 
-        mToForSale = addPushButton(tr("Move to For Sale"));
+        mToForSale = addPushButton();
         mToForSale->setVisible(mModel->selectionIsDirty());
         connect(mToForSale, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
@@ -38,13 +37,14 @@ public:
             emit legoSetsMovedToForSale();
         });
 
-        mToInStock = addPushButton(tr("Move to In Stock"));
+        mToInStock = addPushButton();
         mToInStock->setVisible(mModel->selectionIsDirty());
         connect(mToInStock, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
             emit legoSetsMovedToInStock();
         });
+        retranslateUi();
     }
 
     ~ImportTable() {}
@@ -58,7 +58,7 @@ signals:
 protected:
     LegoSetSortFilterTableModel *getSortModel() const override { return mSortModel;}
     LegoSetTableModel *getModel() const override { return mModel;}
-    QString title() const override { return mTitle;}
+    QString title() const override { return tr("Import");}
     void selectionIsDirty(bool isDirty) override
     {
         mToInStock->setVisible(isDirty);
@@ -69,7 +69,6 @@ protected:
 private:
     LegoSetSortFilterTableModel* mSortModel;
     LegoSetTableModel* mModel;
-    QString mTitle;
     QPushButton* mToInStock;
     QPushButton* mToForSale;
     QPushButton* mToSold;
@@ -83,6 +82,13 @@ protected:
     }
 
     void setVisibilityFlags(uint) override  { }
+
+    void retranslateUi() const override
+    {
+        mToSold->setText(moveToSoldText());
+        mToForSale->setText(moveToForSaleText());
+        mToInStock->setText(moveToInStockText());
+    }
 };
 
 

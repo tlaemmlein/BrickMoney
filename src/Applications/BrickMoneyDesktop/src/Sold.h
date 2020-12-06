@@ -25,6 +25,7 @@ signals:
 
     // LegSetTableView interface
 protected:
+
     LegoSetSortFilterTableModel *getSortModel() const override;
     LegoSetTableModel *getModel() const override;
     QString title() const override;
@@ -39,7 +40,13 @@ private:
     QPushButton* mToForSale;
 
 
+
+    // LegSetTableView interface
+protected:
+    void retranslateUi() const override;
 };
+
+
 
 
 
