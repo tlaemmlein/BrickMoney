@@ -54,12 +54,14 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
             LOG_ERROR("Could not load translation from " << resourecePath.toStdWString());
         }
         qApp->installTranslator(&m_Translator);
-    });
+		BrickMoneySettings::Inst()->setLanguage("de");
+		});
 
     connect(lang_en_action, &QAction::toggled, [&](bool isChecked) {
 		if (!isChecked)
 			return;
 		qApp->removeTranslator(&m_Translator);
+		BrickMoneySettings::Inst()->setLanguage("en");
 	});
 
 	auto lang = BrickMoneySettings::Inst()->language();

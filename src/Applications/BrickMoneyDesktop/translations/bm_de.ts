@@ -39,53 +39,53 @@
 <context>
     <name>BrickMoney::MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="89"/>
+        <location filename="../src/MainWindow.cpp" line="96"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="97"/>
+        <location filename="../src/MainWindow.cpp" line="104"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="105"/>
+        <location filename="../src/MainWindow.cpp" line="112"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="113"/>
+        <location filename="../src/MainWindow.cpp" line="120"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="125"/>
+        <location filename="../src/MainWindow.cpp" line="132"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="133"/>
+        <location filename="../src/MainWindow.cpp" line="140"/>
         <source>Load BrickMoney Project</source>
         <translation>BrickMony Projekt laden</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="135"/>
-        <location filename="../src/MainWindow.cpp" line="151"/>
+        <location filename="../src/MainWindow.cpp" line="142"/>
+        <location filename="../src/MainWindow.cpp" line="158"/>
         <source>JSON files (*.json)</source>
         <translation>JSON Dateien (*.json)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="149"/>
+        <location filename="../src/MainWindow.cpp" line="156"/>
         <source>Save BrickMoney project as...</source>
         <translation>BrickMony Projekt speichern unter...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="190"/>
+        <location filename="../src/MainWindow.cpp" line="197"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="191"/>
+        <location filename="../src/MainWindow.cpp" line="198"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
@@ -217,12 +217,12 @@
     </message>
     <message>
         <location filename="../src/LegoSetImportDialog.ui" line="37"/>
-        <location filename="../src/LegoSetImportDialog.cpp" line="107"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="116"/>
         <source>Import from csv file...</source>
         <translation>Importiere aus CSV Datei...</translation>
     </message>
     <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="108"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="117"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV Datei (*.csv)</translation>
     </message>
