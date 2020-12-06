@@ -8,7 +8,6 @@
 ForSale::ForSale(QWidget *parent) : LegSetTableView(parent)
     , mSortModel(BrickMoneyProject::Inst()->getForSaleSortModel())
     , mModel(BrickMoneyProject::Inst()->getForSaleModel())
-    , mTitle(tr("In Stock"))
 {
     LegSetTableView::init();
 
@@ -45,7 +44,7 @@ LegoSetTableModel *ForSale::getModel() const
 
 QString ForSale::title() const
 {
-    return mTitle;
+    return tr("For Sale");
 }
 
 void ForSale::selectionIsDirty(bool isDirty)

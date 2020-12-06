@@ -11,7 +11,6 @@
 InStock::InStock(QWidget *parent) : LegSetTableView(parent)
     , mSortModel(BrickMoneyProject::Inst()->getInStockSortModel())
     , mModel(BrickMoneyProject::Inst()->getInStockModel())
-    , mTitle(tr("In Stock"))
 {
     LegSetTableView::init();
 
@@ -58,7 +57,7 @@ LegoSetTableModel *InStock::getModel() const
 
 QString InStock::title() const
 {
-    return mTitle;
+    return tr("In Stock");
 }
 
 

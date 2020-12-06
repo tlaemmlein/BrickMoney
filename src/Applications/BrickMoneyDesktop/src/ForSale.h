@@ -33,7 +33,6 @@ protected:
 private:
     LegoSetSortFilterTableModel* mSortModel;
     LegoSetTableModel* mModel;
-    QString mTitle;
     QPushButton* mToInStock;
     QPushButton* mToSold;
 

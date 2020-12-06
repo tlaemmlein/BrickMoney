@@ -8,7 +8,6 @@
 Sold::Sold(QWidget *parent) : LegSetTableView(parent)
     , mSortModel(BrickMoneyProject::Inst()->getSoldSortModel())
     , mModel(BrickMoneyProject::Inst()->getSoldModel())
-    , mTitle(tr("Sold"))
 {
     LegSetTableView::init();
 
@@ -46,7 +45,7 @@ LegoSetTableModel *Sold::getModel() const
 
 QString Sold::title() const
 {
-    return mTitle;
+    return tr("Sold");
 }
 
 void Sold::selectionIsDirty(bool isDirty)

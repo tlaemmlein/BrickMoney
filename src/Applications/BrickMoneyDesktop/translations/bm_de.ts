@@ -39,53 +39,53 @@
 <context>
     <name>BrickMoney::MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="96"/>
+        <location filename="../src/MainWindow.cpp" line="98"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="104"/>
+        <location filename="../src/MainWindow.cpp" line="106"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="112"/>
+        <location filename="../src/MainWindow.cpp" line="114"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="120"/>
+        <location filename="../src/MainWindow.cpp" line="122"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="132"/>
+        <location filename="../src/MainWindow.cpp" line="134"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="140"/>
+        <location filename="../src/MainWindow.cpp" line="142"/>
         <source>Load BrickMoney Project</source>
         <translation>BrickMony Projekt laden</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="142"/>
-        <location filename="../src/MainWindow.cpp" line="158"/>
+        <location filename="../src/MainWindow.cpp" line="144"/>
+        <location filename="../src/MainWindow.cpp" line="160"/>
         <source>JSON files (*.json)</source>
         <translation>JSON Dateien (*.json)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="156"/>
+        <location filename="../src/MainWindow.cpp" line="158"/>
         <source>Save BrickMoney project as...</source>
         <translation>BrickMony Projekt speichern unter...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="197"/>
+        <location filename="../src/MainWindow.cpp" line="199"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="198"/>
+        <location filename="../src/MainWindow.cpp" line="200"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
@@ -93,17 +93,17 @@
 <context>
     <name>ForSale</name>
     <message>
-        <location filename="../src/ForSale.cpp" line="11"/>
-        <source>In Stock</source>
-        <translation>AusfLager</translation>
-    </message>
-    <message>
-        <location filename="../src/ForSale.cpp" line="23"/>
+        <location filename="../src/ForSale.cpp" line="22"/>
         <source>Move to In Stock</source>
         <translation>Verschiebe Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/ForSale.cpp" line="15"/>
+        <location filename="../src/ForSale.cpp" line="47"/>
+        <source>For Sale</source>
+        <translation>Zum Verkauf</translation>
+    </message>
+    <message>
+        <location filename="../src/ForSale.cpp" line="14"/>
         <source>Move to Sold</source>
         <translation>Verschiebe nach Verkauft</translation>
     </message>
@@ -134,17 +134,17 @@
 <context>
     <name>InStock</name>
     <message>
-        <location filename="../src/InStock.cpp" line="14"/>
+        <location filename="../src/InStock.cpp" line="60"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/InStock.cpp" line="18"/>
+        <location filename="../src/InStock.cpp" line="17"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/InStock.cpp" line="34"/>
+        <location filename="../src/InStock.cpp" line="33"/>
         <source>Move to For Sale</source>
         <translation>Verschiebe Zum Verkauf</translation>
     </message>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../src/LegSetTableView.cpp" line="117"/>
         <source>Do you want to delete the LegoSet(s)?</source>
-        <translation>Möchtest Du die ausgewälten LegoSet löschen?</translation>
+        <translation>Möchtest Du die ausgewälten LegoSets löschen?</translation>
     </message>
 </context>
 <context>
@@ -310,17 +310,17 @@
 <context>
     <name>Sold</name>
     <message>
-        <location filename="../src/Sold.cpp" line="11"/>
+        <location filename="../src/Sold.cpp" line="48"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/Sold.cpp" line="23"/>
+        <location filename="../src/Sold.cpp" line="22"/>
         <source>Move to In Stock</source>
         <translation>Verschiebe Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/Sold.cpp" line="15"/>
+        <location filename="../src/Sold.cpp" line="14"/>
         <source>Move to For Sale</source>
         <translation>Verschiebe Zum Verkauf</translation>
     </message>

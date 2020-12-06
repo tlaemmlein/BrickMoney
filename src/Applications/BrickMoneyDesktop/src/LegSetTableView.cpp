@@ -126,6 +126,7 @@ void LegSetTableView::changeEvent(QEvent *event)
 	if (event && QEvent::LanguageChange == event->type()) {
 		// this event is send if a translator is loaded
 		ui->retranslateUi(this);
+		ui->legSetTableViewTitle->setText(title());
 	}
 	QWidget::changeEvent(event);
 }
