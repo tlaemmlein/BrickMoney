@@ -37,6 +37,8 @@ private:
     QString m_postWindowTitel;
 
 	QTranslator m_Translator;
+
+	QString postWindowTitle();
 };
 }
 #endif // MAINWINDOW_H

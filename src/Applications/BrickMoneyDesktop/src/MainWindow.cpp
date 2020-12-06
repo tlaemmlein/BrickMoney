@@ -128,15 +128,10 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     });
     connect(ui->actionImport, &QAction::triggered, [&]() { m_dockwidgets[3]->show(); });
 
-
-
-
-    m_postWindowTitel = tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
-
     connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, [&](QString filepath){
-        setWindowTitle(filepath + m_postWindowTitel);
+        setWindowTitle(filepath + postWindowTitle());
     });
-    setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + m_postWindowTitel);
+    setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + postWindowTitle());
 
     connect(ui->actionLoad_Project, &QAction::triggered, [&]() {
         QString brickMoneyFilePath = QFileDialog::getOpenFileUrl(this, tr("Load BrickMoney Project"),
@@ -227,8 +222,13 @@ void MainWindow::changeEvent(QEvent * event)
 	if (event && QEvent::LanguageChange == event->type()) {
 		// this event is send if a translator is loaded
 		ui->retranslateUi(this);
-		setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + m_postWindowTitel);
+		setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + postWindowTitle());
 	}
 	QMainWindow::changeEvent(event);
+}
+
+QString BrickMoney::MainWindow::postWindowTitle()
+{
+	return tr(" - BrickMoney Vers. 0.2 - The software for LEGO Investment");
 }
 
