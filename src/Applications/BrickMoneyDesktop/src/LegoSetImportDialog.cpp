@@ -101,6 +101,15 @@ LegoSetImportDialog::~LegoSetImportDialog()
     delete ui;
 }
 
+void LegoSetImportDialog::changeEvent(QEvent * event)
+{
+	if (event && QEvent::LanguageChange == event->type()) {
+		// this event is send if a translator is loaded
+		ui->retranslateUi(this);
+	}
+	QWidget::changeEvent(event);
+}
+
 void LegoSetImportDialog::on_importCsvPushButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,

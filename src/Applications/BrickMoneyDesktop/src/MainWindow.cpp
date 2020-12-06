@@ -1,3 +1,6 @@
+#include "Packages/Logging/Logging.h"
+SET_LOGGER("BrickMoney.MainWindow")
+
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include "AboutDialog.h"
@@ -19,6 +22,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 
+
 using namespace BrickMoney;
 
 
@@ -27,6 +31,46 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    QWidget* spacer = new QWidget();
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    ui->toolBar->addWidget(spacer);
+
+    QActionGroup *languageActionGroup = new QActionGroup(this);
+    QAction* lang_de_action = new QAction(QIcon(":/images/lang_de.svg"), "DE", languageActionGroup);
+    QAction* lang_en_action = new QAction(QIcon(":/images/lang_en.svg"), "EN", languageActionGroup);
+    lang_de_action->setCheckable(true);
+    lang_en_action->setCheckable(true);
+
+	// https://forum.qt.io/topic/74995/load-qm-file-from-resource/8
+	// https://wiki.qt.io/How_to_create_a_multi_language_application
+    connect(lang_de_action, &QAction::toggled, [&](bool isChecked) {
+		if (!isChecked)
+			return;
+		qApp->removeTranslator(&m_Translator);
+        QString language = "de";
+		QString resourecePath = QString(":/translations/bm_%1.qm").arg(language);
+        if (!m_Translator.load(resourecePath))	{
+            LOG_ERROR("Could not load translation from " << resourecePath.toStdWString());
+        }
+        qApp->installTranslator(&m_Translator);
+    });
+
+    connect(lang_en_action, &QAction::toggled, [&](bool isChecked) {
+		if (!isChecked)
+			return;
+		qApp->removeTranslator(&m_Translator);
+	});
+
+	auto lang = BrickMoneySettings::Inst()->language();
+	if (lang == "de"){ 
+		lang_de_action->setChecked(true);
+	}
+	else {
+		lang_en_action->setChecked(true);
+	}
+
+    ui->toolBar->addActions(languageActionGroup->actions());
 
     QPixmap emptyPixmap(":/images/empty.svg");
 	BrickMoneyImages::Inst()->setImage("None", emptyPixmap);
@@ -174,5 +218,15 @@ void MainWindow::closeEvent(QCloseEvent * event)
         }
 	}
 	event->accept();
+}
+
+void MainWindow::changeEvent(QEvent * event)
+{
+	if (event && QEvent::LanguageChange == event->type()) {
+		// this event is send if a translator is loaded
+		ui->retranslateUi(this);
+		setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + m_postWindowTitel);
+	}
+	QMainWindow::changeEvent(event);
 }
 

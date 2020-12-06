@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.1)
 
 project(BrickMoneyDesktop LANGUAGES CXX)
 
-find_package(Qt5 COMPONENTS Core Gui Widgets Sql REQUIRED)
+# Managing translations require LinguistTools module
+# The cmake function is defined in the Qt installation tree:
+# i.e. Qt5.9.1/5.9.1/gcc_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake
+# Reference: https://doc.qt.io/qt-5/cmake-manual.html#qt5linguisttools-macros
+find_package(Qt5 COMPONENTS Core Gui Widgets LinguistTools Sql REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -47,10 +51,39 @@ set(SRC_FILES
     src/LegoSetImportDialog.ui
     )
 
+set(TS_FILES
+    translations/bm_de.ts
+    )
+
+# https://stackoverflow.com/questions/44782914/cmake-qt5-add-translation-how-to-specify-the-output-path
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/translations)    
+
+# Call lupdate to generate (or update already existing) ts files from source
+# code (.cpp and .ui) code AND generate qm files. We can call it with a source
+# directory OR individual files to search for strings to translate. The ts files
+# are generated in the source directory and the qm files are created in the
+# build directory, as it should, because we don't want to pollute our source
+# directory with generated binary files.
+#
+# Recall that the ts files are edited by translators, while qm files are just
+# binary representation of the ts file for perfomance and size optimization.
+#
+# Using a source file list:
+# qt5_create_translation(QM_FILES
+#     translatemainwindow.cpp translatemainwindow.ui
+#     english.ts french.ts
+# )
+#
+# Using a source directory:
+qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} ${TS_FILES})
+
+
 add_executable(${PROJECT_NAME}
     images/BrickMoney.rc
     images/images.qrc
+    translations/translations.qrc
     ${SRC_FILES}
+    ${QM_FILES}
 )
 
 message(STATUS "${THIRDPARTY_DIR}/KDDockWidgets/1.1.95/cl15-x64/lib/cmake/KDDockWidgets")

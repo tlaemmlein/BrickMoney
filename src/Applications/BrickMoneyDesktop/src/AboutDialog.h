@@ -15,6 +15,9 @@ public:
     explicit AboutDialog(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     ~AboutDialog();
 
+protected:
+	void changeEvent(QEvent* event);
+
 private:
     Ui::AboutDialog *ui;
 };

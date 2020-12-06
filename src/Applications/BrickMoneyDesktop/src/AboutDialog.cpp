@@ -30,3 +30,12 @@ AboutDialog::~AboutDialog()
 {
     delete ui;
 }
+
+void AboutDialog::changeEvent(QEvent * event)
+{
+	if (event && QEvent::LanguageChange == event->type()) {
+		// this event is send if a translator is loaded
+		ui->retranslateUi(this);
+	}
+	QWidget::changeEvent(event);
+}

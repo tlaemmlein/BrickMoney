@@ -121,6 +121,15 @@ void LegSetTableView::init()
     });
 }
 
+void LegSetTableView::changeEvent(QEvent *event)
+{
+	if (event && QEvent::LanguageChange == event->type()) {
+		// this event is send if a translator is loaded
+		ui->retranslateUi(this);
+	}
+	QWidget::changeEvent(event);
+}
+
 QPushButton* LegSetTableView::addPushButton(const QString &title)
 {
     QPushButton* button = new QPushButton(title, ui->LegSetTableViewFrame);

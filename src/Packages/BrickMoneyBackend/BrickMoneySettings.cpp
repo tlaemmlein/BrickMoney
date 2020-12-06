@@ -38,7 +38,7 @@ BrickMoneySettings::BrickMoneySettings()
     m_brickMoneyFilePath = m_Settings->value(BrickMoneyName, "").toString();
     m_mainWindow = m_Settings->value(MainWindowName, QRect(10,10,1600,800)).toRect();
     m_mainIsMaximized = m_Settings->value(MainIsMaximizedName, true).toBool();
-    m_language = m_Settings->value(LanguageName, "german").toString();
+    m_language = m_Settings->value(LanguageName, "de").toString();
     const auto defaultFlags = ~static_cast<uint>(0);
     m_inStockFlags = m_Settings->value(InStockFlagsName, defaultFlags).toUInt();
     m_forSaleFlags = m_Settings->value(ForSaleFlagsName, defaultFlags).toUInt();

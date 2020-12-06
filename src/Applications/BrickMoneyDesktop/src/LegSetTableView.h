@@ -35,6 +35,8 @@ public:
     virtual void init();
 
 protected:
+	void changeEvent(QEvent* event);
+
     Ui::LegSetTableView *ui;
 
     QPushButton* addPushButton(const QString& title);

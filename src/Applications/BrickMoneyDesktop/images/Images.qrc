@@ -13,5 +13,7 @@
         <file>save.svg</file>
         <file>sold.svg</file>
         <file>trash.svg</file>
+        <file>lang_de.svg</file>
+        <file>lang_en.svg</file>
     </qresource>
 </RCC>
