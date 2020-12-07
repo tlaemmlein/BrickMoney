@@ -206,6 +206,34 @@ void MainWindow::changeEvent(QEvent * event)
 		updateForStockTitle();
 		updateSoldTitle();
 		updateImportTitle();
+
+		bool reloadProject = true;
+
+		if (BrickMoneyDataManager::Inst()->brickMoneyIsDirty())
+		{
+			QMessageBox msgBox;
+			msgBox.setText(tr("The document has been modified."));
+			msgBox.setInformativeText(tr("Do you want to save your changes before switching the language?"));
+			msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::No | QMessageBox::Discard);
+			msgBox.setDefaultButton(QMessageBox::Save);
+			int ret = msgBox.exec();
+
+			if (ret == QMessageBox::Save)
+				BrickMoneyProject::Inst()->save();
+
+			if (ret == QMessageBox::Discard)
+				reloadProject = false;
+		}
+
+		if (reloadProject)
+		{
+			if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
+			{
+				BrickMoneyProject::Inst()->load();
+			}
+			BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
+		}
+
 	}
 	QMainWindow::changeEvent(event);
 }

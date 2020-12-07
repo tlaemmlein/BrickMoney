@@ -4,6 +4,7 @@ SET_LOGGER("BrickMoney.LegoSetInfoGenerator")
 #include "LegoSetInfoGenerator.h"
 #include "BrickMoneyDatabase.h"
 #include "BrickMoneyImages.h"
+#include "BrickMoneySettings.h"
 
 #include <QPixmap>
 #include <QSqlQuery>
@@ -50,7 +51,10 @@ bool LegoSetInfoGenerator::querySetNumber(int num)
 	emit setNumber(set_id);
 	d_ptr->updateLegoSetImages(set_id);
 	emit imageKey(QString::number(set_id));
-	emit description(info.name_en);
+	if ("de" == BrickMoneySettings::Inst()->language() )
+		emit description(info.name_de);
+	else
+		emit description(info.name_en);
 	emit year(info.year);
 	emit recommendedRetailPrice(info.rr_price);
 	return true;
