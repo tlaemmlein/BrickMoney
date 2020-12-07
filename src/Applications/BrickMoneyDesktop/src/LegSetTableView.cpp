@@ -36,8 +36,6 @@ LegSetTableView::~LegSetTableView()
 
 void LegSetTableView::init()
 {
-    ui->legSetTableViewTitle->setText(title());
-
     ui->legoSetTableView->setModel(getSortModel());
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::imageKey, new ImageDelegate(this));
     ui->legoSetTableView->setItemDelegateForColumn(LegoSetProperty::setNumber, new LegoSetSpinBoxDelegate(this));
@@ -93,25 +91,20 @@ void LegSetTableView::init()
     });
 
     connect(getModel(), &LegoSetTableModel::selectionIsDirtyChanged, [&] (bool isDirty) {
-        ui->numOfSelectedLabel->setVisible(isDirty);
-        ui->copyAndPastePushButton->setVisible(isDirty);
-        ui->deletePushButton->setVisible(isDirty);
-        selectionIsDirty(isDirty);
+        ui->LegSetTableViewFrameAction->setVisible(isDirty);
     });
 
-    ui->numOfSelectedLabel->setVisible(getModel()->selectionIsDirty());
+    ui->LegSetTableViewFrameAction->setVisible(getModel()->selectionIsDirty());
 
     connect(getModel(), &LegoSetTableModel::numberOfSelectedLegoSetsChanged, [&] (int num) {
         ui->numOfSelectedLabel->setText(QString::number(num) + " " + selectedText());
     });
     ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText());
 
-    ui->copyAndPastePushButton->setVisible(getModel()->selectionIsDirty());
     connect(ui->copyAndPastePushButton, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->copySelectedLegoSets(getModel(), getModel());
     });
 
-    ui->deletePushButton->setVisible(getModel()->selectionIsDirty());
     connect(ui->deletePushButton, &QPushButton::clicked, [&]() {
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(this, tr("Do you want to delete the LegoSet(s)?"), "ID(s): " + getModel()->getSelectedLegoSetIDs(),
@@ -126,7 +119,6 @@ void LegSetTableView::changeEvent(QEvent *event)
 	if (event && QEvent::LanguageChange == event->type()) {
 		// this event is send if a translator is loaded
 		ui->retranslateUi(this);
-		ui->legSetTableViewTitle->setText(title());
 		ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText());
         retranslateUi();
 	}
@@ -137,7 +129,7 @@ QPushButton* LegSetTableView::addPushButton()
 {
     QPushButton* button = new QPushButton(ui->LegSetTableViewFrame);
 
-    ui->horizontalLayout->insertWidget(5, button);
+    ui->horizontalLayoutAction->insertWidget(3, button);
 
     return button;
 }

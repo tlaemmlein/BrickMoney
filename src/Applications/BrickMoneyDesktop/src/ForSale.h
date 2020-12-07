@@ -27,8 +27,6 @@ signals:
 protected:
     LegoSetSortFilterTableModel *getSortModel() const override;
     LegoSetTableModel *getModel() const override;
-    QString title() const override;
-    void selectionIsDirty(bool isDirty) override;
 
 private:
     LegoSetSortFilterTableModel* mSortModel;

@@ -22,7 +22,6 @@ public:
         LegSetTableView::init();
 
         mToSold = addPushButton();
-        mToSold->setVisible(mModel->selectionIsDirty());
         connect(mToSold, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getSoldModel());
@@ -30,7 +29,6 @@ public:
         });
 
         mToForSale = addPushButton();
-        mToForSale->setVisible(mModel->selectionIsDirty());
         connect(mToForSale, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
@@ -38,7 +36,6 @@ public:
         });
 
         mToInStock = addPushButton();
-        mToInStock->setVisible(mModel->selectionIsDirty());
         connect(mToInStock, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
@@ -58,13 +55,6 @@ signals:
 protected:
     LegoSetSortFilterTableModel *getSortModel() const override { return mSortModel;}
     LegoSetTableModel *getModel() const override { return mModel;}
-    QString title() const override { return tr("Import");}
-    void selectionIsDirty(bool isDirty) override
-    {
-        mToInStock->setVisible(isDirty);
-        mToForSale->setVisible(isDirty);
-        mToSold->setVisible(isDirty);
-    }
 
 private:
     LegoSetSortFilterTableModel* mSortModel;

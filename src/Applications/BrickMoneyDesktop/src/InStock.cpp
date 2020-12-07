@@ -32,7 +32,6 @@ InStock::InStock(QWidget *parent) : LegSetTableView(parent)
 
     mFromInStockToForSalePushButton = addPushButton();
 
-    mFromInStockToForSalePushButton->setVisible(mModel->selectionIsDirty());
     connect(mFromInStockToForSalePushButton, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
@@ -55,18 +54,6 @@ LegoSetTableModel *InStock::getModel() const
 {
     return mModel;
 }
-
-QString InStock::title() const
-{
-    return tr("In Stock");
-}
-
-
-void InStock::selectionIsDirty(bool isDirty)
-{
-    mFromInStockToForSalePushButton->setVisible(isDirty);
-}
-
 
 uint InStock::getVisibilityFlags() const
 {

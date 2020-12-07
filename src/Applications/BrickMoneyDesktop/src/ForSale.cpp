@@ -12,7 +12,6 @@ ForSale::ForSale(QWidget *parent) : LegSetTableView(parent)
     LegSetTableView::init();
 
     mToSold = addPushButton();
-    mToSold->setVisible(mModel->selectionIsDirty());
     connect(mToSold, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getSoldModel());
@@ -20,7 +19,6 @@ ForSale::ForSale(QWidget *parent) : LegSetTableView(parent)
     });
 
     mToInStock = addPushButton();
-    mToInStock->setVisible(mModel->selectionIsDirty());
     connect(mToInStock, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
@@ -40,17 +38,6 @@ LegoSetSortFilterTableModel *ForSale::getSortModel() const
 LegoSetTableModel *ForSale::getModel() const
 {
     return mModel;
-}
-
-QString ForSale::title() const
-{
-    return tr("For Sale");
-}
-
-void ForSale::selectionIsDirty(bool isDirty)
-{
-    mToInStock->setVisible(isDirty);
-    mToSold->setVisible(isDirty);
 }
 
 uint ForSale::getVisibilityFlags() const

@@ -15,5 +15,8 @@
         <file>trash.svg</file>
         <file>lang_de.svg</file>
         <file>lang_en.svg</file>
+        <file>NoneSelected.svg</file>
+        <file>AllSelected.svg</file>
+        <file>CopyAndPaste.svg</file>
     </qresource>
 </RCC>

@@ -54,9 +54,6 @@ protected:
     virtual LegoSetSortFilterTableModel* getSortModel() const = 0;
     virtual LegoSetTableModel* getModel() const = 0;
 
-    virtual QString title() const = 0;
-
-    virtual void selectionIsDirty(bool isDirty) = 0;
     virtual uint getVisibilityFlags() const = 0;
 	virtual void setVisibilityFlags(uint flags) = 0;
 

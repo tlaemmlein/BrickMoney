@@ -28,8 +28,6 @@ protected:
 
     LegoSetSortFilterTableModel *getSortModel() const override;
     LegoSetTableModel *getModel() const override;
-    QString title() const override;
-    void selectionIsDirty(bool isDirty) override;
     uint getVisibilityFlags() const override;
     void setVisibilityFlags(uint flags) override;
 
