@@ -170,6 +170,94 @@
     </message>
 </context>
 <context>
+    <name>LegoSet</name>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="28"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="30"/>
+        <source>Sel</source>
+        <translation>Wahl</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="32"/>
+        <source>Set</source>
+        <translation>Set</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="34"/>
+        <source>Image</source>
+        <translation>Bild</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="36"/>
+        <source>Description</source>
+        <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="38"/>
+        <source>Year</source>
+        <translation>Jahr</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="40"/>
+        <source>RRPrice €</source>
+        <translation>UVP €</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="42"/>
+        <source>Purchasing Price €</source>
+        <translation>Kaufpreis €</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="44"/>
+        <source>Cheaper %</source>
+        <translation>Günstiger %</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="46"/>
+        <source>Seller</source>
+        <translation>Verkäufer</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="48"/>
+        <source>Purchase Date</source>
+        <translation>Kaufdatum</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="50"/>
+        <source>Retail Price €</source>
+        <translation>Verkaufspreis €</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="52"/>
+        <source>Profit €</source>
+        <translation>Gewinn €</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="54"/>
+        <source>Profit %</source>
+        <translation>Gewinn %</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="56"/>
+        <source>Sale Date</source>
+        <translation>Verkaufsdatum</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="58"/>
+        <source>Sold over</source>
+        <translation>Verkauft über</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/LegoSet.cpp" line="60"/>
+        <source>Buyer</source>
+        <translation>Käufer</translation>
+    </message>
+</context>
+<context>
     <name>LegoSetImportDialog</name>
     <message>
         <location filename="../LegoSetImportDialog.ui" line="16"/>
