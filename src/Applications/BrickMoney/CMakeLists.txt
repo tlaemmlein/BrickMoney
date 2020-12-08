@@ -6,7 +6,7 @@ project(BrickMoney LANGUAGES CXX)
 # The cmake function is defined in the Qt installation tree:
 # i.e. Qt5.9.1/5.9.1/gcc_64/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake
 # Reference: https://doc.qt.io/qt-5/cmake-manual.html#qt5linguisttools-macros
-find_package(Qt5 COMPONENTS Core Quick QuickControls2 Widgets LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick QuickControls2 Widgets LinguistTools Sql REQUIRED)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -67,7 +67,7 @@ set(SRC_FILES
 # )
 #
 # Using a source directory:
-qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} bm_german.ts)
+#qt5_create_translation(QM_FILES ${CMAKE_CURRENT_SOURCE_DIR} bm_german.ts)
 
 add_executable(${PROJECT_NAME}
     images/BrickMoney.rc
@@ -87,7 +87,7 @@ source_group("Qml/helper Files" FILES ${QML_HELPER_FILES})
 source_group("Qml/sandbox Files" FILES ${QML_SANDBOX_FILES})
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt5::Core Qt5::Quick Qt5::QuickControls2 Qt5::Widgets Qt5::Sql
     BrickMoney::Logging BrickMoney::BrickMoneyBackend)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../../ ${CMAKE_CURRENT_SOURCE_DIR}/../)
