@@ -11,14 +11,14 @@ Sold::Sold(QWidget *parent) : LegSetTableView(parent)
 {
     LegSetTableView::init();
 
-    mToForSale = addPushButton();
+    mToForSale = addActionButton(":/images/move_to_forSale.svg");
     connect(mToForSale, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
         emit legoSetsMovedToForSale();
     });
 
-    mToInStock = addPushButton();
+    mToInStock = addActionButton(":/images/move_to_inStock.svg");
     connect(mToInStock, &QPushButton::clicked, [&]() {
         BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
         BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
@@ -53,6 +53,6 @@ void Sold::setVisibilityFlags(uint flags)
 
 void Sold::retranslateUi() const
 {
-    mToForSale->setText(moveToForSaleText());
-    mToInStock->setText(moveToInStockText());
+    mToForSale->setToolTip(moveToForSaleText());
+    mToInStock->setToolTip(moveToInStockText());
 }

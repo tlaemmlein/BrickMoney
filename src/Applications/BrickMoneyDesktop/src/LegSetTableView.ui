@@ -25,13 +25,13 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>45</height>
+       <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>45</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="frameShape">
@@ -64,10 +64,16 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>25</width>
-          <height>16777215</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -79,6 +85,12 @@
         <property name="icon">
          <iconset resource="../images/Images.qrc">
           <normaloff>:/images/AllSelected.svg</normaloff>:/images/AllSelected.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
         </property>
         <property name="flat">
          <bool>false</bool>
@@ -93,10 +105,16 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="maximumSize">
          <size>
-          <width>25</width>
-          <height>16777215</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -109,6 +127,12 @@
          <iconset resource="../images/Images.qrc">
           <normaloff>:/images/NoneSelected.svg</normaloff>:/images/NoneSelected.svg</iconset>
         </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
         <property name="flat">
          <bool>false</bool>
         </property>
@@ -116,6 +140,18 @@
       </item>
       <item>
        <widget class="QLabel" name="filterLabel">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="text">
          <string>Filter:</string>
         </property>
@@ -129,10 +165,34 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>32</height>
+         </size>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="colVisibilityToolButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="text">
          <string>Column Visibility</string>
         </property>
@@ -159,13 +219,13 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>45</height>
+       <height>0</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>45</height>
+       <height>16777215</height>
       </size>
      </property>
      <property name="frameShape">
@@ -192,6 +252,18 @@
       </property>
       <item>
        <widget class="QLabel" name="numOfSelectedLabel">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>32</height>
+         </size>
+        </property>
         <property name="text">
          <string>Num Of Selected</string>
         </property>
@@ -201,14 +273,14 @@
        <widget class="QPushButton" name="copyAndPastePushButton">
         <property name="minimumSize">
          <size>
-          <width>25</width>
-          <height>35</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>25</width>
-          <height>35</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -221,20 +293,26 @@
          <iconset resource="../images/Images.qrc">
           <normaloff>:/images/CopyAndPaste.svg</normaloff>:/images/CopyAndPaste.svg</iconset>
         </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="deletePushButton">
         <property name="minimumSize">
          <size>
-          <width>25</width>
-          <height>35</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>25</width>
-          <height>35</height>
+          <width>32</width>
+          <height>32</height>
          </size>
         </property>
         <property name="toolTip">
@@ -246,6 +324,12 @@
         <property name="icon">
          <iconset resource="../../BrickMoney/images/Images.qrc">
           <normaloff>:/images/trash.svg</normaloff>:/images/trash.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>24</width>
+          <height>24</height>
+         </size>
         </property>
        </widget>
       </item>

@@ -19,5 +19,8 @@
         <file>AllSelected.svg</file>
         <file>CopyAndPaste.svg</file>
         <file>move_to_forSale.svg</file>
+        <file>move_to_inStock.svg</file>
+        <file>move_to_Sold.svg</file>
+        <file>add_legoSet.svg</file>
     </qresource>
 </RCC>

@@ -39,7 +39,8 @@ protected:
 
     Ui::LegSetTableView *ui;
 
-    QPushButton* addPushButton(const QString& imageResource = "");
+    QPushButton* addModifierButton(const QString& imageResource = "", const QSize iconSize = QSize(48,24));
+    QPushButton* addActionButton(const QString& imageResource = "", const QSize iconSize = QSize(48,24));
 
     QTableView* tableView();
     QLineEdit* filterLineEdit();

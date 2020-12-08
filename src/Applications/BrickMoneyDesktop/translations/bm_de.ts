@@ -39,27 +39,27 @@
 <context>
     <name>BrickMoney::MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="241"/>
+        <location filename="../src/MainWindow.cpp" line="269"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="246"/>
+        <location filename="../src/MainWindow.cpp" line="274"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="251"/>
+        <location filename="../src/MainWindow.cpp" line="279"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="256"/>
+        <location filename="../src/MainWindow.cpp" line="284"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="236"/>
+        <location filename="../src/MainWindow.cpp" line="264"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
@@ -81,6 +81,7 @@
     </message>
     <message>
         <location filename="../src/MainWindow.cpp" line="173"/>
+        <location filename="../src/MainWindow.cpp" line="215"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
@@ -89,29 +90,10 @@
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
-</context>
-<context>
-    <name>ForSale</name>
     <message>
-        <location filename="../src/ForSale.cpp" line="47"/>
-        <source>For Sale</source>
-        <translation>Zum Verkauf</translation>
-    </message>
-</context>
-<context>
-    <name>ImportTable</name>
-    <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="61"/>
-        <source>Import</source>
-        <translation>Importieren</translation>
-    </message>
-</context>
-<context>
-    <name>InStock</name>
-    <message>
-        <location filename="../src/InStock.cpp" line="61"/>
-        <source>In Stock</source>
-        <translation>Auf Lager</translation>
+        <location filename="../src/MainWindow.cpp" line="216"/>
+        <source>Do you want to save your changes before switching the language?</source>
+        <translation>Möchtest Deine Änderungen speichern vor dem Wechsel der Sprache?</translation>
     </message>
 </context>
 <context>
@@ -122,72 +104,67 @@
         <translation>Form</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="50"/>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <location filename="../src/LegSetTableView.ui" line="63"/>
+        <location filename="../src/LegSetTableView.ui" line="80"/>
         <source>Select All</source>
         <translation>Alles Auswählen</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="79"/>
+        <location filename="../src/LegSetTableView.ui" line="121"/>
         <source>Select None</source>
         <translation>Auswahl aufheben</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="89"/>
+        <location filename="../src/LegSetTableView.ui" line="268"/>
         <source>Num Of Selected</source>
         <translation>Anz. Auswahl</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="96"/>
+        <location filename="../src/LegSetTableView.ui" line="287"/>
         <source>Copy &amp;&amp; Paste</source>
         <translation>Kopieren &amp;&amp; Einfügen</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="103"/>
+        <location filename="../src/LegSetTableView.ui" line="319"/>
         <source>Delete</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="110"/>
+        <location filename="../src/LegSetTableView.ui" line="156"/>
         <source>Filter:</source>
         <translation>Filter:</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.ui" line="127"/>
+        <location filename="../src/LegSetTableView.ui" line="197"/>
         <source>Column Visibility</source>
         <translation>Spalten Sichtbarkeit</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="157"/>
+        <location filename="../src/LegSetTableView.cpp" line="173"/>
         <source>Move to In Stock</source>
         <translation>Verschiebe Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="162"/>
+        <location filename="../src/LegSetTableView.cpp" line="178"/>
         <source>Move to For Sale</source>
         <translation>Verschiebe Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="167"/>
+        <location filename="../src/LegSetTableView.cpp" line="183"/>
         <source>Move to Sold</source>
         <translation>Verschiebe nach Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="172"/>
-        <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <location filename="../src/LegSetTableView.cpp" line="188"/>
+        <source>Add LegoSet</source>
+        <translation>LegoSet hinzufügen</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="177"/>
+        <location filename="../src/LegSetTableView.cpp" line="193"/>
         <source>selected</source>
         <translation>ausgewählt</translation>
     </message>
     <message>
-        <location filename="../src/LegSetTableView.cpp" line="117"/>
+        <location filename="../src/LegSetTableView.cpp" line="110"/>
         <source>Do you want to delete the LegoSet(s)?</source>
         <translation>Möchtest Du die ausgewälten LegoSets löschen?</translation>
     </message>
@@ -202,12 +179,12 @@
     </message>
     <message>
         <location filename="../src/LegoSetImportDialog.ui" line="37"/>
-        <location filename="../src/LegoSetImportDialog.cpp" line="122"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="112"/>
         <source>Import from csv file...</source>
         <translation>Importiere aus CSV Datei...</translation>
     </message>
     <message>
-        <location filename="../src/LegoSetImportDialog.cpp" line="123"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="113"/>
         <source>CSV files (*.csv)</source>
         <translation>CSV Datei (*.csv)</translation>
     </message>
@@ -290,14 +267,6 @@
         <location filename="../src/MainWindow.ui" line="147"/>
         <source>About</source>
         <translation>Über</translation>
-    </message>
-</context>
-<context>
-    <name>Sold</name>
-    <message>
-        <location filename="../src/Sold.cpp" line="48"/>
-        <source>Sold</source>
-        <translation>Verkauft</translation>
     </message>
 </context>
 </TS>

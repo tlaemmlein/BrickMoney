@@ -122,25 +122,35 @@ void LegSetTableView::changeEvent(QEvent *event)
 		ui->numOfSelectedLabel->setText(QString::number(getModel()->numberOfSelectedLegoSets()) + " " + selectedText());
         retranslateUi();
 	}
-	QWidget::changeEvent(event);
+    QWidget::changeEvent(event);
 }
 
-QPushButton* LegSetTableView::addPushButton(const QString &imageResource)
+QPushButton *LegSetTableView::addModifierButton(const QString &imageResource, const QSize iconSize)
 {
-    QPushButton* button = new QPushButton(ui->LegSetTableViewFrame);
+    QPushButton* button = new QPushButton(ui->LegSetTableViewFrameAction);
     if (!imageResource.isEmpty())
     {
-//        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Preferred);
-//        sizePolicy1.setHorizontalStretch(0);
-//        sizePolicy1.setVerticalStretch(0);
-//        sizePolicy1.setHeightForWidth(button->sizePolicy().hasHeightForWidth());
-//        button->setSizePolicy(sizePolicy1);
-//        button->setMinimumSize(QSize(50, 16777215));
-//        button->setMaximumSize(QSize(50, 16777215));
         QIcon icon;
         icon.addFile(imageResource, QSize(), QIcon::Normal, QIcon::Off);
         button->setIcon(icon);
-        button->setIconSize(QSize(50,25));
+        button->setIconSize(iconSize);
+    }
+
+    ui->horizontalLayout->insertWidget(5, button);
+
+    return button;
+
+}
+
+QPushButton* LegSetTableView::addActionButton(const QString &imageResource, const QSize iconSize)
+{
+    QPushButton* button = new QPushButton(ui->LegSetTableViewFrameAction);
+    if (!imageResource.isEmpty())
+    {
+        QIcon icon;
+        icon.addFile(imageResource, QSize(), QIcon::Normal, QIcon::Off);
+        button->setIcon(icon);
+        button->setIconSize(iconSize);
     }
 
     ui->horizontalLayoutAction->insertWidget(3, button);
@@ -175,7 +185,7 @@ QString LegSetTableView::moveToSoldText() const
 
 QString LegSetTableView::addText() const
 {
-	return tr("Add");
+    return tr("Add LegoSet");
 }
 
 QString LegSetTableView::selectedText()

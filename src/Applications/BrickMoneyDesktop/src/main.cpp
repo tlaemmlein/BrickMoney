@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
 	flags |= KDDockWidgets::Config::Flag_TitleBarIsFocusable;
 	flags |= KDDockWidgets::Config::Flag_AlwaysTitleBarWhenFloating;
 	flags |= KDDockWidgets::Config::Flag_TabsHaveCloseButton;
+    flags |= KDDockWidgets::Config::Flag_TitleBarHasMinimizeButton;
 	flags &= ~KDDockWidgets::Config::Flag_AeroSnapWithClientDecos;
 	/*flags |= KDDockWidgets::Config::Flag_HideTitleBarWhenTabsVisible;
 	flags |= KDDockWidgets::Config::Flag_TitleBarHasMaximizeButton;*/

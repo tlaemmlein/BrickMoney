@@ -21,21 +21,21 @@ public:
     {
         LegSetTableView::init();
 
-        mToSold = addPushButton();
+        mToSold = addActionButton(":/images/move_to_Sold.svg");
         connect(mToSold, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getSoldModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getSoldModel());
             emit legoSetsMovedToSold();
         });
 
-        mToForSale = addPushButton();
+        mToForSale = addActionButton(":/images/move_to_forSale.svg");
         connect(mToForSale, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getForSaleModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getForSaleModel());
             emit legoSetsMovedToForSale();
         });
 
-        mToInStock = addPushButton();
+        mToInStock = addActionButton(":/images/move_to_inStock.svg");
         connect(mToInStock, &QPushButton::clicked, [&]() {
             BrickMoneyProject::Inst()->getInStockModel()->removeSelectedLegoSets();
             BrickMoneyProject::Inst()->moveSelectedLegoSets(mModel, BrickMoneyProject::Inst()->getInStockModel());
@@ -75,9 +75,9 @@ protected:
 
     void retranslateUi() const override
     {
-        mToSold->setText(moveToSoldText());
-        mToForSale->setText(moveToForSaleText());
-        mToInStock->setText(moveToInStockText());
+        mToSold->setToolTip(moveToSoldText());
+        mToForSale->setToolTip(moveToForSaleText());
+        mToInStock->setToolTip(moveToInStockText());
     }
 };
 
