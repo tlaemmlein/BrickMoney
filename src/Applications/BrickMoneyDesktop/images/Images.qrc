@@ -18,5 +18,6 @@
         <file>NoneSelected.svg</file>
         <file>AllSelected.svg</file>
         <file>CopyAndPaste.svg</file>
+        <file>move_to_forSale.svg</file>
     </qresource>
 </RCC>

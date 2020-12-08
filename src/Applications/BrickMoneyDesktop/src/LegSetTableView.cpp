@@ -125,9 +125,23 @@ void LegSetTableView::changeEvent(QEvent *event)
 	QWidget::changeEvent(event);
 }
 
-QPushButton* LegSetTableView::addPushButton()
+QPushButton* LegSetTableView::addPushButton(const QString &imageResource)
 {
     QPushButton* button = new QPushButton(ui->LegSetTableViewFrame);
+    if (!imageResource.isEmpty())
+    {
+//        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Preferred);
+//        sizePolicy1.setHorizontalStretch(0);
+//        sizePolicy1.setVerticalStretch(0);
+//        sizePolicy1.setHeightForWidth(button->sizePolicy().hasHeightForWidth());
+//        button->setSizePolicy(sizePolicy1);
+//        button->setMinimumSize(QSize(50, 16777215));
+//        button->setMaximumSize(QSize(50, 16777215));
+        QIcon icon;
+        icon.addFile(imageResource, QSize(), QIcon::Normal, QIcon::Off);
+        button->setIcon(icon);
+        button->setIconSize(QSize(50,25));
+    }
 
     ui->horizontalLayoutAction->insertWidget(3, button);
 

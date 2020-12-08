@@ -39,7 +39,7 @@ protected:
 
     Ui::LegSetTableView *ui;
 
-    QPushButton* addPushButton();
+    QPushButton* addPushButton(const QString& imageResource = "");
 
     QTableView* tableView();
     QLineEdit* filterLineEdit();
