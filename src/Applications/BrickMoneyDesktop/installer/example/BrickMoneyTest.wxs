@@ -3,13 +3,13 @@
 <?define ProductUpgradeCode = "DE33A546-295C-4364-A14D-E2972DA8A709"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
    <Product Id="*" UpgradeCode="$(var.ProductUpgradeCode)" 
-            Name="Example Product Name" Version="$(var.ProductVersion)" Manufacturer="Example Company Name" Language="1033">
+            Name="BrickMoneyTest Product Name" Version="$(var.ProductVersion)" Manufacturer="BrickMoneyTest Company Name" Language="1033">
       <Package InstallerVersion="200" Compressed="yes" Comments="Windows Installer Package"/>
       <Media Id="1" Cabinet="product.cab" EmbedCab="yes"/>
       <Icon Id="ProductIcon" SourceFile="logoBrickMoney.ico"/>
       <Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
-      <Property Id="ARPHELPLINK" Value="http://www.exampleproduct.com"/>
-      <Property Id="ARPURLINFOABOUT" Value="http://www.examplecompany.com"/>
+      <Property Id="ARPHELPLINK" Value="http://www.brickmoney.de"/>
+      <Property Id="ARPURLINFOABOUT" Value="http://www.brickmoney.de"/>
       <Property Id="ARPNOREPAIR" Value="1"/>
       <Property Id="ARPNOMODIFY" Value="1"/>	  
 		<Upgrade Id="$(var.ProductUpgradeCode)">
@@ -21,7 +21,7 @@
  
       <Directory Id="TARGETDIR" Name="SourceDir">
          <Directory Id="ProgramFilesFolder">
-            <Directory Id="INSTALLDIR" Name="Example">
+            <Directory Id="INSTALLDIR" Name="BrickMoneyTest">
                <Component Id="ApplicationFiles" Guid="2DA021A4-DA54-4611-B77D-85CF706C12FA">
                   <File Id="ApplicationFile1" Source="BrickMoneyTest.exe"/>
                </Component>
@@ -29,11 +29,11 @@
          </Directory>		 
 	  
 		<Directory Id="ProgramMenuFolder">
-            <Directory Id="ProgramMenuSubfolder" Name="Example">
+            <Directory Id="ProgramMenuSubfolder" Name="BrickMoneyTest">
                <Component Id="ApplicationShortcuts" Guid="21003056-C850-4045-B991-1EC9898F7514">
-                  <Shortcut Id="ApplicationShortcut1" Name="Example Shortcut Name" Description="Example Product Name" 
+                  <Shortcut Id="ApplicationShortcut1" Name="BrickMoneyTest Shortcut Name" Description="BrickMoneyTest Product Name" 
                             Target="[INSTALLDIR]BrickMoneyTest.exe" WorkingDirectory="INSTALLDIR"/>
-                  <RegistryValue Root="HKCU" Key="Software\Example Company Name\Example Product Name" 
+                  <RegistryValue Root="HKCU" Key="Software\BrickMoneyTest Company Name\BrickMoneyTest Product Name" 
                             Name="installed" Type="integer" Value="1" KeyPath="yes"/>
                   <RemoveFolder Id="ProgramMenuSubfolder" On="uninstall"/>
                </Component>
