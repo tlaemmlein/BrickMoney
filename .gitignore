@@ -31,3 +31,6 @@ src/Applications/build-BrickMoney-Qt_5_14_0_MSVC2017_64bit-Debug/
 /src/Applications/BrickMoneyDesktop/installer/example/example.msi
 /src/Applications/BrickMoneyDesktop/installer/example/example.wixobj
 /src/Applications/BrickMoneyDesktop/installer/example/example.wixpdb
+/src/Applications/BrickMoneyDesktop/installer/example/BrickMoneyTest.msi
+/src/Applications/BrickMoneyDesktop/installer/example/BrickMoneyTest.wixobj
+/src/Applications/BrickMoneyDesktop/installer/example/BrickMoneyTest.wixpdb
