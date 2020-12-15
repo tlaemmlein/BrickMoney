@@ -21,54 +21,75 @@
       <Condition Message="A newer version of this software is already installed.">NOT NEWERVERSIONDETECTED</Condition>	  
  
       <Directory Id="TARGETDIR" Name="SourceDir">
-         <Directory Id="ProgramFiles64Folder">
-			<Directory Id="ProgramFilesBrickMoneyFolder" Name="BrickMoney">
+			<Directory Id="ProgramFiles64Folder">
 				<Directory Id="INSTALLDIR" Name="BrickMoney">
 					<Component Id="ApplicationFiles" Guid="EAE4F0E4-B18E-443E-9966-C4F28915F4A5">
-					  <File Id="BrickMoney.exe" Source="..\..\deploy\BrickMoney.exe"/>
-					  <File Id="d3dcompiler_47.dll" Source="..\..\deploy\d3dcompiler_47.dll"/>
-					  <File Id="kddockwidgets_multisplitter1.dll" Source="..\..\deploy\kddockwidgets_multisplitter1.dll"/>
-					  <File Id="kddockwidgets1.dll" Source="..\..\deploy\kddockwidgets1.dll"/>
-					  <File Id="libcrypto.dll" Source="..\..\deploy\libcrypto-1_1-x64.dll"/>
-					  <File Id="libEGL.dll" Source="..\..\deploy\libEGL.dll"/>
-					  <File Id="libGLESv2.dll" Source="..\..\deploy\libGLESv2.dll"/>
-					  <File Id="libssl.dll" Source="..\..\deploy\libssl-1_1-x64.dll"/>
-					  <File Id="log4cplusU.dll" Source="..\..\deploy\log4cplusU.dll"/>
-					  <File Id="Qt5Core.dll" Source="..\..\deploy\Qt5Core.dll"/>
-					  <File Id="Qt5Gui.dll" Source="..\..\deploy\Qt5Gui.dll"/>
-					  <File Id="Qt5Sql.dll" Source="..\..\deploy\Qt5Sql.dll"/>
-					  <File Id="Qt5Svg.dll" Source="..\..\deploy\Qt5Svg.dll"/>
-					  <File Id="Qt5Widgets.dll" Source="..\..\deploy\Qt5Widgets.dll"/>
-					  <File Id="qsvgicon.dll" Source="..\..\deploy\iconengines\qsvgicon.dll"/>
-					  <File Id="qgif.dll" Source="..\..\deploy\imageformats\qgif.dll"/>
-					  <File Id="qicns.dll" Source="..\..\deploy\imageformats\qicns.dll"/>
-					  <File Id="qico.dll" Source="..\..\deploy\imageformats\qico.dll"/>
-					  <File Id="qjpeg.dll" Source="..\..\deploy\imageformats\qjpeg.dll"/>
-					  <File Id="qsvg.dll" Source="..\..\deploy\imageformats\qsvg.dll"/>
-					  <File Id="qtga.dll" Source="..\..\deploy\imageformats\qtga.dll"/>
-					  <File Id="qtiff.dll" Source="..\..\deploy\imageformats\qtiff.dll"/>
-					  <File Id="qwbmp.dll" Source="..\..\deploy\imageformats\qwbmp.dll"/>
-					  <File Id="qwebp.dll" Source="..\..\deploy\imageformats\qwebp.dll"/>
-					  <File Id="qwindows.dll" Source="..\..\deploy\platforms\qwindows.dll"/>
-					  <File Id="qsqlite.dll" Source="..\..\deploy\sqldrivers\qsqlite.dll"/>
-					  <File Id="qsqlodbc.dll" Source="..\..\deploy\sqldrivers\qsqlodbc.dll"/>
-					  <File Id="qwindowsvistastyle.dll" Source="..\..\deploy\styles\qwindowsvistastyle.dll"/>
+						<File Id="BrickMoney.exe" 					Source="..\..\deploy\BrickMoney.exe"/>
+						<File Id="d3dcompiler_47.dll" 				Source="..\..\deploy\d3dcompiler_47.dll"/>
+						<File Id="kddockwidgets_multisplitter1.dll" Source="..\..\deploy\kddockwidgets_multisplitter1.dll"/>
+						<File Id="kddockwidgets1.dll" 				Source="..\..\deploy\kddockwidgets1.dll"/>
+						<File Id="libcrypto.dll" 					Source="..\..\deploy\libcrypto-1_1-x64.dll"/>
+						<File Id="libEGL.dll" 						Source="..\..\deploy\libEGL.dll"/>
+						<File Id="libGLESv2.dll" 					Source="..\..\deploy\libGLESv2.dll"/>
+						<File Id="libssl.dll"						Source="..\..\deploy\libssl-1_1-x64.dll"/>
+						<File Id="log4cplusU.dll" 					Source="..\..\deploy\log4cplusU.dll"/>
+						<File Id="Qt5Core.dll" 						Source="..\..\deploy\Qt5Core.dll"/>
+						<File Id="Qt5Gui.dll" 						Source="..\..\deploy\Qt5Gui.dll"/>
+						<File Id="Qt5Sql.dll" 						Source="..\..\deploy\Qt5Sql.dll"/>
+						<File Id="Qt5Svg.dll" 						Source="..\..\deploy\Qt5Svg.dll"/>
+						<File Id="Qt5Widgets.dll" 					Source="..\..\deploy\Qt5Widgets.dll"/>
+					</Component>
+					<Directory Id="iconenginesFolder" Name="iconengines">
+						<Component Id="ApplicationFilesIconEngines" Guid="C6F06428-ABC3-4600-A440-44BD395EEC9D">
+							<File Id="qsvgicon.dll" 					Source="..\..\deploy\iconengines\qsvgicon.dll"/>
+						</Component>
+					</Directory>
+					<Directory Id="imageformatsFolder" Name="imageformats">
+						<Component Id="ApplicationFilesImageformats" Guid="0866A4A5-37EA-41A8-9B02-4F89D67059A2">
+							<File Id="qgif.dll" 						Source="..\..\deploy\imageformats\qgif.dll"/>
+							<File Id="qicns.dll" 						Source="..\..\deploy\imageformats\qicns.dll"/>
+							<File Id="qico.dll" 						Source="..\..\deploy\imageformats\qico.dll"/>
+							<File Id="qjpeg.dll" 						Source="..\..\deploy\imageformats\qjpeg.dll"/>
+							<File Id="qsvg.dll" 						Source="..\..\deploy\imageformats\qsvg.dll"/>
+							<File Id="qtga.dll" 						Source="..\..\deploy\imageformats\qtga.dll"/>
+							<File Id="qtiff.dll" 						Source="..\..\deploy\imageformats\qtiff.dll"/>
+							<File Id="qwbmp.dll" 						Source="..\..\deploy\imageformats\qwbmp.dll"/>
+							<File Id="qwebp.dll" 						Source="..\..\deploy\imageformats\qwebp.dll"/>					
+						</Component>
+					</Directory>
+					<Directory Id="platformsFolder" Name="platforms">
+						<Component Id="ApplicationFilesPlatforms" Guid="08008239-C1C9-4D07-A3AA-AC73DB1B5A49">
+							<File Id="qwindows.dll" 					Source="..\..\deploy\platforms\qwindows.dll"/>
+						</Component>
+					</Directory>
+					<Directory Id="sqldriversFolder" Name="sqldrivers">
+						<Component Id="ApplicationFilesSqldrivers" Guid="6E2FC4F4-9FA9-463E-9007-D166F48C6D5F">
+							<File Id="qsqlite.dll"  					Source="..\..\deploy\sqldrivers\qsqlite.dll"/>
+							<File Id="qsqlodbc.dll" 					Source="..\..\deploy\sqldrivers\qsqlodbc.dll"/>
+						</Component>
+					</Directory>
+					<Directory Id="stylesFolder" Name="styles">
+						<Component Id="ApplicationFilesStyles" Guid="EBC1554E-FF65-4E33-973A-690597EA3F58">
+							<File Id="qwindowsvistastyle.dll" 			Source="..\..\deploy\styles\qwindowsvistastyle.dll"/>
+						</Component>
+					</Directory>
+
+				</Directory>
+			</Directory>		 
+	  
+			<Directory Id="ProgramMenuFolder">
+				<Directory Id="ProgramMenuSubfolder" Name="BrickMoney">
+					<Component Id="ApplicationShortcuts" Guid="1590B657-9D7B-4313-91C9-3C16C2E25994">
+						<Shortcut Id="ApplicationShortcut1" Name="BrickMoney $(var.ProductVersion)" Description="BrickMoney - The software for LEGO Investment" 
+									Target="[INSTALLDIR]BrickMoney.exe" WorkingDirectory="INSTALLDIR"/>
+						<Shortcut Id="UninstallProduct" Name="Uninstall BrickMoney" Description="Uninstalls BrickMoney"
+                          Target="[System64Folder]msiexec.exe" Arguments="/x [ProductCode]"/>
+						<RegistryValue Root="HKCU" Key="Software\BrickMoney\Brickmoney" 
+									Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+						<RemoveFolder Id="RemoveProgramMenuSubfolder" Directory="ProgramMenuSubfolder" On="uninstall"/>
 					</Component>
 				</Directory>
-            </Directory>
-         </Directory>		 
-	  
-		<Directory Id="ProgramMenuFolder">
-			<Directory Id="ProgramMenuSubfolder" Name="BrickMoney">
-			   <Component Id="ApplicationShortcuts" Guid="1590B657-9D7B-4313-91C9-3C16C2E25994">
-				  <Shortcut Id="ApplicationShortcut1" Name="BrickMoney $(var.ProductVersion)" Description="BrickMoney - The software for LEGO Investment" 
-							Target="[INSTALLDIR]BrickMoney.exe" WorkingDirectory="INSTALLDIR"/>
-				  <RegistryValue Root="HKCU" Key="Software\BrickMoney\Brickmoney" 
-							Name="installed" Type="integer" Value="1" KeyPath="yes"/>
-				  <RemoveFolder Id="RemoveProgramMenuSubfolder" Directory="ProgramMenuSubfolder" On="uninstall"/>
-			   </Component>
 			</Directory>
-		</Directory>
       </Directory>
 	  
       <InstallExecuteSequence>
@@ -92,6 +113,11 @@
  
       <Feature Id="DefaultFeature" Level="1">
          <ComponentRef Id="ApplicationFiles"/>
+         <ComponentRef Id="ApplicationFilesIconEngines"/>
+         <ComponentRef Id="ApplicationFilesImageformats"/>
+         <ComponentRef Id="ApplicationFilesPlatforms"/>
+         <ComponentRef Id="ApplicationFilesSqldrivers"/>
+         <ComponentRef Id="ApplicationFilesStyles"/>
 		 <ComponentRef Id="ApplicationShortcuts"/>
       </Feature>
    </Product>
