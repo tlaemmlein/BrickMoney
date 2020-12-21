@@ -14,10 +14,12 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include <kddockwidgets/Config.h>
 
 #include <log4cplus/consoleappender.h>
+#include <log4cplus/fileappender.h>
 #include <log4cplus/initializer.h>
 
 #include <QApplication>
 #include <QAbstractTableModel>
+#include <QDir>
 #include <QIcon>
 #include <QDate>
 #include <QStandardPaths>
@@ -25,8 +27,8 @@ SET_LOGGER("BrickMoneyDesktop.Main")
 #include <QSplashScreen>
 
 using namespace KDDockWidgets;
-using namespace log4cplus;
-using namespace log4cplus::helpers;
+//using namespace log4cplus;
+//using namespace log4cplus::helpers;
 
 //Ref: https://stackoverflow.com/questions/11785157/replacing-winmain-with-main-function-in-win32-programs
 #ifdef _MSC_VER
@@ -35,37 +37,48 @@ using namespace log4cplus::helpers;
 
 int main(int argc, char *argv[])
 {
-    // Initialization and deinitialization.
-    log4cplus::Initializer initializer;
-
-    log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
-
-    SharedObjectPtr<Appender> console_appender(new ConsoleAppender(false, true));
-    console_appender->setName(LOG4CPLUS_TEXT("BrickMoneyConsole"));
-    console_appender->setLayout(std::unique_ptr<Layout>(new PatternLayout(pattern)));
-    Logger::getRoot().addAppender(console_appender);
-
-    Logger::getRoot().setLogLevel(DEBUG_LOG_LEVEL);
-
-    LOG_INFO("Start BrickMoneyDesktop");
-
     qputenv("QT_QUICK_CONTROLS_STYLE", "universal");
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
 
     QCoreApplication::setApplicationName("BrickMoney");
-	const QString appdataLoc = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	const QString app_data_loc = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+	if (!QDir(app_data_loc).exists())
+	{
+		QDir().mkdir(app_data_loc);
+	}
+
+    // Initialization and deinitialization.
+    log4cplus::Initializer initializer;
+
+    log4cplus::tstring pattern = LOG4CPLUS_TEXT("%D{%Y-%m-%d %H:%M:%S,%q} [%t] %-5p %c - %m%n");
+
+	log4cplus::helpers::SharedObjectPtr<log4cplus::Appender> console_appender(new log4cplus::ConsoleAppender(false, true));
+    console_appender->setName(LOG4CPLUS_TEXT("BrickMoneyConsole"));
+    console_appender->setLayout(std::unique_ptr<log4cplus::Layout>(new log4cplus::PatternLayout(pattern)));
+	log4cplus::Logger::getRoot().addAppender(console_appender);
+
+	log4cplus::tstring log_file_name = (QString(app_data_loc) + "/BrickMoney.log").toStdWString();
+	log4cplus::helpers::SharedObjectPtr<log4cplus::Appender> rolling_file_appender(new log4cplus::RollingFileAppender(log_file_name));
+	rolling_file_appender->setName(LOG4CPLUS_TEXT("BrickMoneyRollingFile"));
+	rolling_file_appender->setLayout(std::unique_ptr<log4cplus::Layout>(new log4cplus::PatternLayout(pattern)));
+	log4cplus::Logger::getRoot().addAppender(rolling_file_appender);
+
+	log4cplus::Logger::getRoot().setLogLevel(log4cplus::DEBUG_LOG_LEVEL);
+
+    LOG_INFO("Start " << QCoreApplication::applicationName().toStdWString() << " 0.2" );
 
 
 	QPixmap pixmap(":/images/brickMoney_splashscreen.png");
 	QSplashScreen splash(pixmap);
 
-	if (!BrickMoneyDatabase::Inst()->prepareBrickMoneyDBLocale(appdataLoc) )
+	if (!BrickMoneyDatabase::Inst()->prepareBrickMoneyDBLocale(app_data_loc) )
 	{
 		QMessageBox messageBox;
 		QString msg = "Could not prepare locale database!\n";
-		msg += QString("Please check %1 folder.\n").arg(appdataLoc);
+		msg += QString("Please check %1 folder.\n").arg(app_data_loc);
+		LOG_ERROR(msg.toStdWString());
 		messageBox.critical(0, "Error with locale database", msg);
 		return -1;
 	}
@@ -75,7 +88,9 @@ int main(int argc, char *argv[])
 		if (BrickMoneyDatabase::Inst()->isNewRemoteVersionAvailable()) {
 			splash.show();
 			app.processEvents();
-			splash.showMessage("The database must be updated. That will take some time.");
+			QString msg = "The database must be updated. That will take some time.";
+			splash.showMessage(msg);
+			LOG_INFO(msg.toStdWString());
 			BrickMoneyDatabase::Inst()->updateBrickMoneyDBLocale();
 		}
 	}
@@ -85,6 +100,7 @@ int main(int argc, char *argv[])
 		QString msg = "The remote database is not online!\n";
 		msg += QString("Hint: Please check your internet connection.\n");
 		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		LOG_ERROR(msg.toStdWString());
 		messageBox.warning(0, "Error with remote database", msg);
 	}
 	catch (const std::exception& e)
@@ -92,6 +108,7 @@ int main(int argc, char *argv[])
 		QMessageBox messageBox;
 		QString msg = "Something is wrong with the database!\n";
 		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		LOG_ERROR(msg.toStdWString());
 		messageBox.critical(0, "Error with database", msg);
 		return -1;
 	}
