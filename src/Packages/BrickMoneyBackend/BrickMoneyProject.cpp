@@ -159,7 +159,7 @@ bool BrickMoneyProject::checkBrickMoneyProject(const QString& brickMoneyFilePath
 
     if ( !info.exists() )
     {
-        LOG_ERROR(brickMoneyFilePath.toStdWString() << " doesn't exits.");
+        LOG_ERROR("The file path '" << brickMoneyFilePath.toStdWString() << "' doesn't exits.");
         return false;
     }
 
@@ -280,12 +280,10 @@ void BrickMoneyProject::setBrickMoneyFilePath(const QString& brickMoneyFilePath)
 
 QString BrickMoneyProject::toLocalFile(const QString &fileUrl)
 {
-	LOG_INFO("fileUrl " << fileUrl.toStdWString());
 	QFileInfo info(fileUrl);
 
 	if (info.exists())
 	{
-		LOG_INFO("exists");
 		return fileUrl;
 	}
 
