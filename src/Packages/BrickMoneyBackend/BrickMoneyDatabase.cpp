@@ -108,7 +108,7 @@ bool BrickMoneyDatabase::prepareBrickMoneyDBLocale(const QString & legoSetDataba
 			return false;
 		}
 	}
-	LOG_INFO("BrickMoneyDBLocale is ready.");
+	LOG_INFO("BrickMoneyDBLocale version: " << localeDBVersion());
 
 	return true;
 }
@@ -151,7 +151,7 @@ bool BrickMoneyDatabase::isNewRemoteVersionAvailable()
 
 	int localeVersion = localeDBVersion();
 
-	return false;
+	return d_ptr->mRemoteVersion > localeVersion;
 }
 
 bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
@@ -159,7 +159,7 @@ bool BrickMoneyDatabase::updateBrickMoneyDBLocale()
 	if (!d_ptr->mBrickMoneyDBLocale.isOpen())
 		return false;
 
-	LOG_INFO("Update BrickMoneyDBLocale.");
+	LOG_INFO("Update BrickMoneyDBLocale version from " << localeDBVersion() << " to " << remoteDBVersion() );
 
 	if (!isNewRemoteVersionAvailable()) {
 		LOG_INFO("The locale db is up to date.");
