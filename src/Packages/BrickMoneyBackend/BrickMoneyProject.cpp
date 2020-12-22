@@ -3,11 +3,13 @@ SET_LOGGER("BrickMoney.BrickMoneyProject")
 
 #include "BrickMoneyProject.h"
 #include "BrickMoneySettings.h"
+#include "BrickMoneyDataManager.h"
 
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QStandardPaths>
 #include <QUrl>
 
 
@@ -142,6 +144,8 @@ BrickMoneyProject::BrickMoneyProject()
     m_ImportModel.setDataSource(new LegoSetDataSource(this));
     m_ImportSortModel = new LegoSetSortFilterTableModel(&m_ImportModel);
 
+	const QString temp_loc = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
+	m_tempBrickMoneyFilePath = temp_loc + "/TempBrickMoney.json";
 
     connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, this, &BrickMoneyProject::setBrickMoneyFilePath);
 	setBrickMoneyFilePath(BrickMoneySettings::Inst()->brickMoneyFilePath());
@@ -151,6 +155,32 @@ BrickMoneyProject::BrickMoneyProject()
 QString BrickMoneyProject::brickMoneyFilePath() const
 {
     return m_brickMoneyFilePath;
+}
+
+bool BrickMoneyProject::prepareBrickMoneyProject()
+{
+	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
+	{
+		BrickMoneyProject::Inst()->load();
+	}
+	else
+	{
+		QFile file(m_tempBrickMoneyFilePath);
+		if (!file.open(QIODevice::WriteOnly)) {
+			LOG_ERROR("Could not create " << m_tempBrickMoneyFilePath.toStdWString());
+			return false;
+		}
+		file.close();
+		BrickMoneySettings::Inst()->setBrickMoneyFilePath(m_tempBrickMoneyFilePath);
+	}
+	BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
+
+	return true;
+}
+
+bool BrickMoneyProject::isTemporaryProject()
+{
+	return QFileInfo(m_brickMoneyFilePath) == QFileInfo(m_tempBrickMoneyFilePath);
 }
 
 bool BrickMoneyProject::checkBrickMoneyProject(const QString& brickMoneyFilePath)

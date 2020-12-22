@@ -20,6 +20,11 @@ public:
 
 
     QString brickMoneyFilePath() const;
+
+	bool prepareBrickMoneyProject();
+
+	bool isTemporaryProject();
+
     Q_INVOKABLE bool checkBrickMoneyProject(const QString& brickMoneyFilePath);
 
     Q_INVOKABLE bool moveSelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
@@ -76,6 +81,7 @@ private:
     LegoSetSortFilterTableModel* m_ImportSortModel;
 
     QString m_brickMoneyFilePath;
+	QString m_tempBrickMoneyFilePath;
 
 	QString toLocalFile(const QString& fileUrl);
 };

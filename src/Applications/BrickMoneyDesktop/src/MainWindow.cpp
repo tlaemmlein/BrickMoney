@@ -135,6 +135,14 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
         }
     });
 
+	if (BrickMoneyProject::Inst()->isTemporaryProject()) {
+		QMessageBox messageBox;
+		QString msg = tr("Welcome to BrickMoney!\n");
+		msg += tr("Please save the BrickMoney project to another location.\n");
+		LOG_INFO(msg.toStdWString());
+		messageBox.information(0, "BrickMoney project file location", msg);
+	}
+
     connect(ui->actionExit, &QAction::triggered, [&]() { close();});
 
     if ( BrickMoneySettings::Inst()->mainIsMaximized() )

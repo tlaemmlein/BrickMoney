@@ -39,27 +39,27 @@
 <context>
     <name>BrickMoney::MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="269"/>
+        <location filename="../src/MainWindow.cpp" line="277"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="274"/>
+        <location filename="../src/MainWindow.cpp" line="282"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="279"/>
+        <location filename="../src/MainWindow.cpp" line="287"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="284"/>
+        <location filename="../src/MainWindow.cpp" line="292"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="264"/>
+        <location filename="../src/MainWindow.cpp" line="272"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
@@ -80,18 +80,32 @@
         <translation>BrickMony Projekt speichern unter...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="173"/>
-        <location filename="../src/MainWindow.cpp" line="215"/>
+        <location filename="../src/MainWindow.cpp" line="140"/>
+        <source>Welcome to BrickMoney!
+</source>
+        <translation>Willkommen bei BrickMoney!
+</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="141"/>
+        <source>Please save the BrickMoney project to another location.
+</source>
+        <translation>Bitte speichere Dein BrickMoney Projekt in ein anderes Verzeichnis.
+</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="181"/>
+        <location filename="../src/MainWindow.cpp" line="223"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="174"/>
+        <location filename="../src/MainWindow.cpp" line="182"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="216"/>
+        <location filename="../src/MainWindow.cpp" line="224"/>
         <source>Do you want to save your changes before switching the language?</source>
         <translation>Möchtest Deine Änderungen speichern vor dem Wechsel der Sprache?</translation>
     </message>
@@ -355,6 +369,52 @@
         <location filename="../src/MainWindow.ui" line="147"/>
         <source>About</source>
         <translation>Über</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <location filename="../src/main.cpp" line="79"/>
+        <source>Could not prepare locale database!
+</source>
+        <translation>Datenbank konnte nicht initialisiert werden!
+</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="80"/>
+        <source>Please check %1 folder.
+</source>
+        <translation>Bitte prüfe das %1 Verzeichnis.
+</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="100"/>
+        <source>The remote database is not online!
+</source>
+        <translation>Die Remote Datenbank ist nicht online!
+</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="101"/>
+        <source>Hint: Please check your internet connection.
+</source>
+        <translation>Hinweis: Besteht eine Internet Verbindung?
+</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="102"/>
+        <location filename="../src/main.cpp" line="110"/>
+        <source>Error message: %1.
+</source>
+        <translation>Fehlermeldung: %1.
+</translation>
+    </message>
+    <message>
+        <location filename="../src/main.cpp" line="109"/>
+        <source>Something is wrong with the database!
+</source>
+        <translation>Irgendetwas ist mit der Datenbank falsch!
+</translation>
     </message>
 </context>
 </TS>

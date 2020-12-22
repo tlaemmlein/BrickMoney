@@ -76,8 +76,8 @@ int main(int argc, char *argv[])
 	if (!BrickMoneyDatabase::Inst()->prepareBrickMoneyDBLocale(app_data_loc) )
 	{
 		QMessageBox messageBox;
-		QString msg = "Could not prepare locale database!\n";
-		msg += QString("Please check %1 folder.\n").arg(app_data_loc);
+		QString msg = QCoreApplication::translate("main", "Could not prepare locale database!\n");
+		msg += QCoreApplication::translate("main", "Please check %1 folder.\n").arg(app_data_loc);
 		LOG_ERROR(msg.toStdWString());
 		messageBox.critical(0, "Error with locale database", msg);
 		return -1;
@@ -97,27 +97,26 @@ int main(int argc, char *argv[])
 	catch (const RemoteDBException& e)
 	{
 		QMessageBox messageBox;
-		QString msg = "The remote database is not online!\n";
-		msg += QString("Hint: Please check your internet connection.\n");
-		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		QString msg = QCoreApplication::translate("main", "The remote database is not online!\n");
+		msg += QCoreApplication::translate("main", "Hint: Please check your internet connection.\n");
+		msg += QCoreApplication::translate("main", "Error message: %1.\n").arg(QString::fromStdString(e.what()));
 		LOG_ERROR(msg.toStdWString());
 		messageBox.warning(0, "Error with remote database", msg);
 	}
 	catch (const std::exception& e)
 	{
 		QMessageBox messageBox;
-		QString msg = "Something is wrong with the database!\n";
-		msg += QString("Error message: %1.\n").arg(QString::fromStdString(e.what()));
+		QString msg = QCoreApplication::translate("main", "Something is wrong with the database!\n");
+		msg += QCoreApplication::translate("main", "Error message: %1.\n").arg(QString::fromStdString(e.what()));
 		LOG_ERROR(msg.toStdWString());
 		messageBox.critical(0, "Error with database", msg);
 		return -1;
 	}
 
-	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
+	if ( !BrickMoneyProject::Inst()->prepareBrickMoneyProject() )
 	{
-		BrickMoneyProject::Inst()->load();
+		LOG_WARN("Could not prepare BrickMoneyProject.");
 	}
-    BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
 
 	auto flags = KDDockWidgets::Config::self().flags();
 	flags |= KDDockWidgets::Config::Flag_AllowReorderTabs;
