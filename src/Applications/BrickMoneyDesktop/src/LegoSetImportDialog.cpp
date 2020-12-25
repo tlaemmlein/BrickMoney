@@ -110,12 +110,12 @@ void LegoSetImportDialog::changeEvent(QEvent * event)
 
 void LegoSetImportDialog::on_importCsvPushButton_clicked()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,
-                                                    tr("Import from csv file..."), BrickMoneySettings::Inst()->brickMoneyFilePath()
-                                                        , tr("CSV files (*.csv)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Import from csv file..."), m_defaultDir, tr("CSV files (*.csv)"));
     if (!fileName.isEmpty())
     {
         BrickMoneyProject::Inst()->loadDataFrom(fileName);
+		QDir d = QFileInfo(fileName).absoluteDir();
+		m_defaultDir = d.absolutePath();
     }
 }
 

@@ -23,6 +23,7 @@ private slots:
 
 private:
     Ui::LegoSetImportDialog *ui;
+	QString m_defaultDir;
 };
 
 #endif // LEGOSETIMPORTDIALOG_H
