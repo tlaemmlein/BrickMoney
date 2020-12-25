@@ -181,6 +181,11 @@ Expected: </source>
         <source> Actual: </source>
         <translation>Aktuell: </translation>
     </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="112"/>
+        <source>Could not open project file for writing: </source>
+        <translation>Projekt Datei kann nicht zum Schreiben geöffnet werden: </translation>
+    </message>
 </context>
 <context>
     <name>LegSetTableView</name>

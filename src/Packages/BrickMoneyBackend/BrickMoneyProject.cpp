@@ -109,7 +109,8 @@ void BrickMoneyProject::saveProjectFromSettings()
 	QFile projectFile(localeFile);
 
 	if (!projectFile.open(QIODevice::WriteOnly)) {
-		LOG_ERROR("Couldn't open project file for writing.");
+		QString msg = tr("Could not open project file for writing: ") + localeFile;
+		LOG_ERROR(msg.toStdWString());
 		return;
 	}
 
