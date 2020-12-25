@@ -284,7 +284,7 @@
          </size>
         </property>
         <property name="toolTip">
-         <string>Copy &amp;&amp; Paste</string>
+         <string>Copy &amp; Paste</string>
         </property>
         <property name="text">
          <string/>

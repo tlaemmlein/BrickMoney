@@ -206,8 +206,8 @@ Expected: </source>
     </message>
     <message>
         <location filename="../src/LegSetTableView.ui" line="287"/>
-        <source>Copy &amp;&amp; Paste</source>
-        <translation>Kopieren &amp;&amp; Einfügen</translation>
+        <source>Copy &amp; Paste</source>
+        <translation>Kopieren &amp; Einfügen</translation>
     </message>
     <message>
         <location filename="../src/LegSetTableView.ui" line="319"/>
@@ -352,7 +352,7 @@ Expected: </source>
     </message>
     <message>
         <location filename="../src/LegoSetImportDialog.ui" line="37"/>
-        <location filename="../src/LegoSetImportDialog.cpp" line="112"/>
+        <location filename="../src/LegoSetImportDialog.cpp" line="113"/>
         <source>Import from csv file...</source>
         <translation>Importiere aus CSV Datei...</translation>
     </message>
