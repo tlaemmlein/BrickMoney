@@ -23,24 +23,29 @@ BrickMoneyTranslator::BrickMoneyTranslator()
 }
 
 
+
 BrickMoneyTranslator::~BrickMoneyTranslator()
 {
 }
 
 void BrickMoneyTranslator::setGermanTranslation()
 {
-	qApp->removeTranslator(&m_Translator);
-	QString language = "de";
-	QString resourecePath = QString(":/translations/bm_%1.qm").arg(language);
-	if (!m_Translator.load(resourecePath)) {
-		LOG_ERROR("Could not load translation from " << resourecePath.toStdWString());
-	}
-	qApp->installTranslator(&m_Translator);
+	switchTranslator(m_Translator, ":/translations/bm_de.qm");
+	switchTranslator(m_translatorQt, ":/translations/qtbase_de.qm");
 }
 
 void BrickMoneyTranslator::setEnglishTranslation()
 {
 	qApp->removeTranslator(&m_Translator);
+	qApp->removeTranslator(&m_translatorQt);
 }
 
 
+void BrickMoneyTranslator::switchTranslator(QTranslator & translator, const QString & resourcePath)
+{
+	qApp->removeTranslator(&translator);
+	if (!translator.load(resourcePath)) {
+		LOG_ERROR("Could not load translation from " << resourcePath.toStdWString());
+	}
+	qApp->installTranslator(&translator);
+}

@@ -4,6 +4,7 @@
 #include <QTranslator>
 
 
+/// https://wiki.qt.io/How_to_create_a_multi_language_application
 class BrickMoneyTranslator 
 {
 public:
@@ -20,7 +21,10 @@ private:
     static std::unique_ptr<BrickMoneyTranslator> smInstance;
     BrickMoneyTranslator();
 
+	void switchTranslator(QTranslator& translator, const QString& resourcePath);
+
 	QTranslator m_Translator;
+	QTranslator m_translatorQt; // contains the translations for qt
 };
 
 #endif // BrickMoneyTranslator_H
