@@ -14,12 +14,11 @@ class LegoSetInfoGenerator : public QObject
 public:
     explicit LegoSetInfoGenerator(QObject *parent = nullptr);
 
-    Q_INVOKABLE bool querySetNumber(int num);
+    Q_INVOKABLE void querySetNumber(int num);
     Q_INVOKABLE int nextSetNumber(int currentSetNumber);
     Q_INVOKABLE int previousSetNumber(int currentSetNumber);
 
 signals:
-    void setNumberNotFound();
     void setNumber(int setNumber);
     void imageKey(QString imageKey);
     void description(QString description);

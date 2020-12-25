@@ -9,18 +9,20 @@
 
 struct LegoSetInfo {
 
-	LegoSetInfo() : set_id{}, name_en(""), name_de(""), year(-1), rr_price(0.0)
+	LegoSetInfo() : is_valid(false), set_id(0), name_en("Null"), name_de("Null"), year(-1), rr_price(0.0)
 	{}
-
-	LegoSetInfo(int other_set_id, const QString& other_name_en, const QString& other_name_de,  int other_year, double  other_rr_price
-	) : set_id(other_set_id)
+	
+	LegoSetInfo(bool other_info_is_valid, int other_set_id, const QString& other_name_en, const QString& other_name_de,  int other_year, double  other_rr_price
+	) : is_valid(other_info_is_valid)
+		, set_id(other_set_id)
 		, name_en(other_name_en)
 		, name_de(other_name_de)
 		, year(other_year)
 		, rr_price(other_rr_price)
 	{}
 
-	std::optional<int>     set_id;
+	bool    is_valid;
+	int     set_id;
 	QString name_en;
 	QString name_de;
 	int     year;

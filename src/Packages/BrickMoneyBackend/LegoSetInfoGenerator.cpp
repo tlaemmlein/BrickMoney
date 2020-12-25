@@ -35,29 +35,22 @@ LegoSetInfoGenerator::LegoSetInfoGenerator(QObject *parent) : QObject(parent), d
     LOG_SCOPE_METHOD(L"");
 }
 
-bool LegoSetInfoGenerator::querySetNumber(int num)
+void LegoSetInfoGenerator::querySetNumber(int num)
 {
     LOG_SCOPE_METHOD(L"");
     LOG_TRACE(QString("querySetNumber %1").arg(num).toStdWString());
 
 	auto info = BrickMoneyDatabase::Inst()->queryLegoSetInfo(num);
 
-	if (!info.set_id.has_value())
-	{
-		emit setNumberNotFound();
-		return false;
-	}
-	const auto set_id = info.set_id.value();
-	emit setNumber(set_id);
-	d_ptr->updateLegoSetImages(set_id);
-	emit imageKey(QString::number(set_id));
+	emit setNumber(info.set_id);
+	d_ptr->updateLegoSetImages(info.set_id);
+	emit imageKey(info.is_valid ? QString::number(info.set_id) : "Null");
 	if ("de" == BrickMoneySettings::Inst()->language() )
 		emit description(info.name_de);
 	else
 		emit description(info.name_en);
 	emit year(info.year);
 	emit recommendedRetailPrice(info.rr_price);
-	return true;
 }
 
 int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
@@ -67,19 +60,15 @@ int LegoSetInfoGenerator::nextSetNumber(int currentSetNumber)
 
 	auto info = BrickMoneyDatabase::Inst()->nextLegoSetInfo(currentSetNumber);
 
-	if (!info.set_id.has_value())
-	{
-		emit setNumberNotFound();
+	if (!info.is_valid)
 		return currentSetNumber; // Remains at the current set number!
-	}
-	const auto set_id = info.set_id.value();
-	emit setNumber(set_id);
-	d_ptr->updateLegoSetImages(set_id);
-	emit imageKey(QString::number(set_id));
+	emit setNumber(info.set_id);
+	d_ptr->updateLegoSetImages(info.set_id);
+	emit imageKey(QString::number(info.set_id));
 	emit description(info.name_en);
 	emit year(info.year);
 	emit recommendedRetailPrice(info.rr_price);
-	return set_id;
+	return info.set_id;
 }
 
 int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
@@ -89,18 +78,14 @@ int LegoSetInfoGenerator::previousSetNumber(int currentSetNumber)
 
 	auto info = BrickMoneyDatabase::Inst()->previousLegoSetInfo(currentSetNumber);
 
-	if (!info.set_id.has_value())
-	{
-		emit setNumberNotFound();
+	if (!info.is_valid)
 		return currentSetNumber; // Remains at the current set number!
-	}
-	const auto set_id = info.set_id.value();
-	emit setNumber(set_id);
-	d_ptr->updateLegoSetImages(set_id);
-	emit imageKey(QString::number(set_id));
+	emit setNumber(info.set_id);
+	d_ptr->updateLegoSetImages(info.set_id);
+	emit imageKey(QString::number(info.set_id));
 	emit description(info.name_en);
 	emit year(info.year);
 	emit recommendedRetailPrice(info.rr_price);
-	return set_id;
+	return info.set_id;
 }
 

@@ -92,7 +92,7 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     ui->toolBar->addActions(languageActionGroup->actions());
 
     QPixmap emptyPixmap(":/images/empty.svg");
-	BrickMoneyImages::Inst()->setImage("None", emptyPixmap);
+	BrickMoneyImages::Inst()->setImage("Null", emptyPixmap);
 
 	std::function<KDDockWidgets::DockWidget* (const QString, QWidget* tableView, const QIcon icon, 	KDDockWidgets::Location loc, LegoSetTableModel *model)>
 		dockCreator = [&](const QString uniqueID, QWidget* tableView, QIcon icon, KDDockWidgets::Location loc, LegoSetTableModel *model) -> KDDockWidgets::DockWidget* {

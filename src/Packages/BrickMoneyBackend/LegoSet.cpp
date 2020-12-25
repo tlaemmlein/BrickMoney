@@ -116,13 +116,13 @@ void LegoSet::initParams()
 {
     m_isSelected = false;
     m_setNumber=-1;
-    m_imageKey="None";
-    m_description="None";
+    m_imageKey="Null";
+    m_description="Null";
     m_year=0;
     m_recommendedRetailPrice=0;
     m_purchasingPrice=0;
     m_cheaperPercent=0;
-    m_seller="None";
+    m_seller="Null";
     m_purchaseDate = QDate::currentDate();
     m_retailPrice =0;
     m_profitEuros =0;

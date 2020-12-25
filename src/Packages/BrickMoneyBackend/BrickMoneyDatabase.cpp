@@ -304,6 +304,7 @@ QVector<QPixmap> BrickMoneyDatabase::queryLegoSetImages(const int & legoset_id)
 LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
+	info.set_id = set_id;
 
 	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
@@ -316,7 +317,8 @@ LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(const int & set_id)
 	}
 
 	while (brickmoney_locale_query.next()) {
-		info = LegoSetInfo(brickmoney_locale_query.value("set_id").toInt()
+		info = LegoSetInfo(true
+			, brickmoney_locale_query.value("set_id").toInt()
 			, brickmoney_locale_query.value("name_en").toString()
 			, brickmoney_locale_query.value("name_de").toString()
 			, brickmoney_locale_query.value("year").toInt()
@@ -329,6 +331,7 @@ LegoSetInfo BrickMoneyDatabase::queryLegoSetInfo(const int & set_id)
 LegoSetInfo BrickMoneyDatabase::nextLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
+	info.set_id = set_id;
 
 	QSqlQuery brickmoney_locale_query(d_ptr->mBrickMoneyDBLocale);
 
@@ -341,7 +344,8 @@ LegoSetInfo BrickMoneyDatabase::nextLegoSetInfo(const int & set_id)
 	}
 
 	while (brickmoney_locale_query.next()) {
-		info = LegoSetInfo(brickmoney_locale_query.value("set_id").toInt()
+		info = LegoSetInfo(true
+			, brickmoney_locale_query.value("set_id").toInt()
 			, brickmoney_locale_query.value("name_en").toString()
 			, brickmoney_locale_query.value("name_de").toString()
 			, brickmoney_locale_query.value("year").toInt()
@@ -354,6 +358,7 @@ LegoSetInfo BrickMoneyDatabase::nextLegoSetInfo(const int & set_id)
 LegoSetInfo BrickMoneyDatabase::previousLegoSetInfo(const int & set_id)
 {
 	LegoSetInfo info;
+	info.set_id = set_id;
 
 	QSqlQuery mBrickMoneyDBLocaleQuery(d_ptr->mBrickMoneyDBLocale);
 
@@ -366,7 +371,8 @@ LegoSetInfo BrickMoneyDatabase::previousLegoSetInfo(const int & set_id)
 	}
 
 	while (mBrickMoneyDBLocaleQuery.next()) {
-		info = LegoSetInfo(mBrickMoneyDBLocaleQuery.value("set_id").toInt()
+		info = LegoSetInfo(true
+			, mBrickMoneyDBLocaleQuery.value("set_id").toInt()
 			, mBrickMoneyDBLocaleQuery.value("name_en").toString()
 			, mBrickMoneyDBLocaleQuery.value("name_de").toString()
 			, mBrickMoneyDBLocaleQuery.value("year").toInt()
