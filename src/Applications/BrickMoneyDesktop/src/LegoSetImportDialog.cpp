@@ -89,7 +89,9 @@ LegoSetImportDialog::LegoSetImportDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->importLegoTableView->parentWidget()->layout()->replaceWidget(ui->importLegoTableView, new ImportTable(this));
+	auto impTable = new ImportTable(this);
+	impTable->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+	ui->verticalLayout->addWidget(impTable);
 }
 
 LegoSetImportDialog::~LegoSetImportDialog()
