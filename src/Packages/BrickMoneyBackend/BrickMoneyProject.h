@@ -8,24 +8,43 @@
 
 #include <QObject>
 
+class ProjectLoadException : public std::exception
+{
+public:
+	explicit ProjectLoadException(const char* message) :
+		msg_(message) {
+	}
+
+	explicit ProjectLoadException(const std::string& message) :
+		msg_(message) {}
+
+	virtual ~ProjectLoadException() noexcept {}
+
+	virtual const char* what() const noexcept {
+		return msg_.c_str();
+	}
+
+protected:
+	std::string msg_;
+};
+
 class BrickMoneyProject : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString brickMoneyFilePath READ brickMoneyFilePath WRITE setBrickMoneyFilePath NOTIFY brickMoneyFilePathChanged)
 
 public:
     static BrickMoneyProject* Inst();
     BrickMoneyProject(const BrickMoneyProject&) = delete;            // No copy ctor
     BrickMoneyProject& operator=(const BrickMoneyProject&) = delete; //No assign op
 
+	/// Loads the project from BrickMoneySettings
+	/// \exception ProjectLoadException is something is wrong with loading.
+	void loadProjectFromSettings();
 
-    QString brickMoneyFilePath() const;
+	/// Save the project from BrickMoneySettings
+	void saveProjectFromSettings();
 
-	bool prepareBrickMoneyProject();
-
-	bool isTemporaryProject();
-
-    Q_INVOKABLE bool checkBrickMoneyProject(const QString& brickMoneyFilePath);
+	QString temporaryProjectFilePath() const;
 
     Q_INVOKABLE bool moveSelectedLegoSets(LegoSetTableModel* from, LegoSetTableModel* to);
 
@@ -46,26 +65,19 @@ public:
     LegoSetTableModel* getImportModel();
     LegoSetSortFilterTableModel* getImportSortModel();
 
-public slots:
-    void load();
-    void save();
-    void setBrickMoneyFilePath(const QString& brickMoneyFilePath);
-
-signals:
-    void brickMoneyFilePathChanged(QString brickMoneyFilePath);
 
 private:
     static std::unique_ptr<BrickMoneyProject> smInstance;
     BrickMoneyProject();
-    static const QString BrickMoneyTitleKey;
-    static const QString BrickMoneyTitleValue;
-    static const QString BrickMoneyVersionKey;
-    static const QString BrickMoneyVersionValue;
+    static const QString TitleKey;
+    static const QString TitleValue;
+    static const QString ProjectVersionKey;
+    static const int     ProjectVersionValue;
     static const QString BrickMoneyLinkKey;
     static const QString BrickMoneyLinkValue;
-    static const QString BrickMoneyInStock;
-    static const QString BrickMoneyForSale;
-    static const QString BrickMoneySold;
+    static const QString InStockKey;
+    static const QString ForSaleKey;
+    static const QString SoldKey;
 
 
     LegoSetTableModel  m_InStockModel;
@@ -80,7 +92,6 @@ private:
     LegoSetTableModel  m_ImportModel;
     LegoSetSortFilterTableModel* m_ImportSortModel;
 
-    QString m_brickMoneyFilePath;
 	QString m_tempBrickMoneyFilePath;
 
 	QString toLocalFile(const QString& fileUrl);

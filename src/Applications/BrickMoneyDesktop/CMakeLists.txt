@@ -21,6 +21,8 @@ set(SRC_FILES
     src/AboutDialog.cpp
     src/AboutDialog.h
     src/AboutDialog.ui
+	src/BrickMoneyTranslator.cpp
+	src/BrickMoneyTranslator.h
     src/main.cpp
     src/InStock.h
     src/InStock.cpp

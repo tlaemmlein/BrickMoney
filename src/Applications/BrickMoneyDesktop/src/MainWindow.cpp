@@ -3,6 +3,7 @@ SET_LOGGER("BrickMoney.MainWindow")
 
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "BrickMoneyTranslator.h"
 #include "AboutDialog.h"
 #include "ImageDelegate.h"
 #include "CheckBoxDelegate.h"
@@ -30,7 +31,34 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     KDDockWidgets::MainWindow(uniqueName, options, parent, flags),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+	if (BrickMoneySettings::Inst()->isFirstStart())
+	{
+		BrickMoneySettings::Inst()->setBrickMoneyFilePath(BrickMoneyProject::Inst()->temporaryProjectFilePath());
+		BrickMoneyProject::Inst()->saveProjectFromSettings();
+
+		QMessageBox messageBox;
+		QString msg = tr("Welcome to BrickMoney!\n");
+		msg += tr("Please save the BrickMoney project to another location.\n");
+		LOG_INFO(msg.toStdWString());
+		messageBox.information(0, tr("BrickMoney project file location"), msg);
+		BrickMoneySettings::Inst()->setIsFirstStart(false);
+	}
+	else if (BrickMoneySettings::Inst()->brickMoneyFilePath() == BrickMoneyProject::Inst()->temporaryProjectFilePath())
+	{
+		QMessageBox messageBox;
+		QString msg = tr("Please save the BrickMoney project to another location because this is only temporary and can be cleared every time.");
+		msg += ("\n") + BrickMoneySettings::Inst()->brickMoneyFilePath();
+		LOG_WARN(msg.toStdWString());
+		messageBox.warning(0, tr("BrickMoney project file location"), msg);
+	}
+
+	if (!loadProjectFromSettings())
+	{
+		BrickMoneySettings::Inst()->setBrickMoneyFilePath(BrickMoneyProject::Inst()->temporaryProjectFilePath());
+		BrickMoneyProject::Inst()->saveProjectFromSettings();
+	}
+
+	ui->setupUi(this);
 
     QActionGroup *languageActionGroup = new QActionGroup(this);
     QAction* lang_de_action = new QAction(QIcon(":/images/lang_de.svg"), "DE", languageActionGroup);
@@ -43,25 +71,18 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     connect(lang_de_action, &QAction::toggled, [&](bool isChecked) {
 		if (!isChecked)
 			return;
-		qApp->removeTranslator(&m_Translator);
-        QString language = "de";
-		QString resourecePath = QString(":/translations/bm_%1.qm").arg(language);
-        if (!m_Translator.load(resourecePath))	{
-            LOG_ERROR("Could not load translation from " << resourecePath.toStdWString());
-        }
-        qApp->installTranslator(&m_Translator);
+		BrickMoneyTranslator::Inst()->setGermanTranslation();
 		BrickMoneySettings::Inst()->setLanguage("de");
 		});
 
     connect(lang_en_action, &QAction::toggled, [&](bool isChecked) {
 		if (!isChecked)
 			return;
-		qApp->removeTranslator(&m_Translator);
+		BrickMoneyTranslator::Inst()->setEnglishTranslation();
 		BrickMoneySettings::Inst()->setLanguage("en");
 	});
 
-	auto lang = BrickMoneySettings::Inst()->language();
-	if (lang == "de"){ 
+	if (BrickMoneySettings::Inst()->language() == "de"){
 		lang_de_action->setChecked(true);
 	}
 	else {
@@ -109,18 +130,15 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
     setWindowTitle(BrickMoneySettings::Inst()->brickMoneyFilePath() + postWindowTitle());
 
     connect(ui->actionLoad_Project, &QAction::triggered, [&]() {
-        QString brickMoneyFilePath = QFileDialog::getOpenFileUrl(this, tr("Load BrickMoney Project"),
-                                                                  BrickMoneySettings::Inst()->brickMoneyFilePath(),
-                                                                  tr("JSON files (*.json)")).toString();
+		QString loadedProject = BrickMoneySettings::Inst()->brickMoneyFilePath();
+        QString newProject = QFileDialog::getOpenFileUrl(this, tr("Load BrickMoney Project"), loadedProject, tr("JSON files (*.json)")).toString();
 
-        if ( BrickMoneyProject::Inst()->checkBrickMoneyProject(brickMoneyFilePath))
-        {
-            BrickMoneySettings::Inst()->setBrickMoneyFilePath(brickMoneyFilePath);
-            BrickMoneyProject::Inst()->load();
-        }
+		BrickMoneySettings::Inst()->setBrickMoneyFilePath(newProject);
+		if (!loadProjectFromSettings())
+			BrickMoneySettings::Inst()->setBrickMoneyFilePath(loadedProject);
     });
     
-	connect(ui->actionSave_Project, &QAction::triggered, [&]() { BrickMoneyProject::Inst()->save(); });
+	connect(ui->actionSave_Project, &QAction::triggered, [&]() { BrickMoneyProject::Inst()->saveProjectFromSettings(); });
 	connect(BrickMoneyDataManager::Inst(), &BrickMoneyDataManager::brickMoneyIsDirtyChanged, ui->actionSave_Project, &QAction::setEnabled);
 	ui->actionSave_Project->setEnabled(BrickMoneyDataManager::Inst()->brickMoneyIsDirty());
 
@@ -131,17 +149,9 @@ MainWindow::MainWindow(const QString &uniqueName, KDDockWidgets::MainWindowOptio
         if (!brickMoneyFilePath.isEmpty())
         {
             BrickMoneySettings::Inst()->setBrickMoneyFilePath(brickMoneyFilePath);
-            BrickMoneyProject::Inst()->save();
+            BrickMoneyProject::Inst()->saveProjectFromSettings();
         }
     });
-
-	if (BrickMoneyProject::Inst()->isTemporaryProject()) {
-		QMessageBox messageBox;
-		QString msg = tr("Welcome to BrickMoney!\n");
-		msg += tr("Please save the BrickMoney project to another location.\n");
-		LOG_INFO(msg.toStdWString());
-		messageBox.information(0, "BrickMoney project file location", msg);
-	}
 
     connect(ui->actionExit, &QAction::triggered, [&]() { close();});
 
@@ -186,7 +196,7 @@ void MainWindow::closeEvent(QCloseEvent * event)
 
         if (ret == QMessageBox::Save)
         {
-            BrickMoneyProject::Inst()->save();
+            BrickMoneyProject::Inst()->saveProjectFromSettings();
             event->accept();
             return;
         }
@@ -227,7 +237,7 @@ void MainWindow::changeEvent(QEvent * event)
 			int ret = msgBox.exec();
 
 			if (ret == QMessageBox::Save)
-				BrickMoneyProject::Inst()->save();
+				BrickMoneyProject::Inst()->saveProjectFromSettings();
 
 			if (ret == QMessageBox::Discard)
 				reloadProject = false;
@@ -235,9 +245,10 @@ void MainWindow::changeEvent(QEvent * event)
 
 		if (reloadProject)
 		{
-			if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
+			if (!loadProjectFromSettings())
 			{
-				BrickMoneyProject::Inst()->load();
+				BrickMoneySettings::Inst()->setBrickMoneyFilePath(BrickMoneyProject::Inst()->temporaryProjectFilePath());
+				BrickMoneyProject::Inst()->saveProjectFromSettings();
 			}
 			BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
 		}
@@ -266,6 +277,28 @@ void BrickMoney::MainWindow::updateImportTitle()
 	m_ImportDock->setTitle(importText() + " (" + QString::number(BrickMoneyProject::Inst()->getImportModel()->numberOfLegoSets()) + ")");
 }
 
+
+bool BrickMoney::MainWindow::loadProjectFromSettings()
+{
+	try
+	{
+		BrickMoneyProject::Inst()->loadProjectFromSettings();
+		return true;
+	}
+	catch (const ProjectLoadException& e)
+	{
+		LOG_ERROR(e.what());
+		QMessageBox messageBox;
+		messageBox.critical(0, tr("BrickMoney project load error"), QString::fromStdString(e.what()));
+	}
+	catch (const std::exception& e)
+	{
+		LOG_ERROR(e.what());
+		QMessageBox messageBox;
+		messageBox.critical(0, tr("BrickMoney project load error"), QString::fromStdString(e.what()));
+	}
+	return false;
+}
 
 QString BrickMoney::MainWindow::postWindowTitle()
 {

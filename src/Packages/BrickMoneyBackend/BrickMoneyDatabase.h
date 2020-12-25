@@ -63,7 +63,6 @@ public:
 
 	int localeDBVersion() const;
 
-	/// Check if the remote database is online.
 	/// \exception RemoteDBException if the db is not online.  
 	bool isNewRemoteVersionAvailable();
 

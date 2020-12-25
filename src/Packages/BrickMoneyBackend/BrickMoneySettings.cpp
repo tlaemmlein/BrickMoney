@@ -9,13 +9,14 @@ SET_LOGGER("BrickMoney.BrickMoneySettings")
 std::unique_ptr<BrickMoneySettings> BrickMoneySettings::smInstance = nullptr;
 
 
-const QString BrickMoneySettings::BrickMoneyName("general/brickMoneyFilePath");
-const QString BrickMoneySettings::MainWindowName("general/mainWindow");
-const QString BrickMoneySettings::MainIsMaximizedName("general/mainIsMaximized");
-const QString BrickMoneySettings::LanguageName("general/language");
-const QString BrickMoneySettings::InStockFlagsName("general/inStockFlags");
-const QString BrickMoneySettings::ForSaleFlagsName("general/forSaleFlags");
-const QString BrickMoneySettings::SoldFlagsName("general/soldFlags");
+const QString BrickMoneySettings::BrickMoneyName("General/brickMoneyFilePath");
+const QString BrickMoneySettings::MainWindowName("General/mainWindow");
+const QString BrickMoneySettings::MainIsMaximizedName("General/mainIsMaximized");
+const QString BrickMoneySettings::LanguageName("General/language");
+const QString BrickMoneySettings::InStockFlagsName("General/inStockFlags");
+const QString BrickMoneySettings::ForSaleFlagsName("General/forSaleFlags");
+const QString BrickMoneySettings::SoldFlagsName("General/soldFlags");
+const QString BrickMoneySettings::IsFirstStartName("General/isFirstStart");
 
 
 BrickMoneySettings *BrickMoneySettings::Inst()
@@ -43,6 +44,7 @@ BrickMoneySettings::BrickMoneySettings()
     m_inStockFlags = m_Settings->value(InStockFlagsName, defaultFlags).toUInt();
     m_forSaleFlags = m_Settings->value(ForSaleFlagsName, defaultFlags).toUInt();
     m_soldFlags = m_Settings->value(SoldFlagsName, defaultFlags).toUInt();
+    m_isFirstStart = m_Settings->value(IsFirstStartName, true).toBool();
 }
 
 
@@ -85,6 +87,11 @@ uint BrickMoneySettings::forSaleFlags() const
 uint BrickMoneySettings::soldFlags() const
 {
     return m_soldFlags;
+}
+
+bool BrickMoneySettings::isFirstStart() const
+{
+    return m_isFirstStart;
 }
 
 void BrickMoneySettings::setBrickMoneyFilePath(QString brickMoneyFilePath)
@@ -156,4 +163,10 @@ void BrickMoneySettings::setSoldFlags(uint soldFlags)
     m_soldFlags = soldFlags;
     m_Settings->setValue(SoldFlagsName, m_soldFlags);
     emit soldFlagsChanged(m_soldFlags);
+}
+
+void BrickMoneySettings::setIsFirstStart(bool isFirstStart)
+{
+    m_isFirstStart = isFirstStart;
+    m_Settings->setValue(IsFirstStartName, m_isFirstStart);
 }

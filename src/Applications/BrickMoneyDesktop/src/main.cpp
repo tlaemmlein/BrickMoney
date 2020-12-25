@@ -2,12 +2,12 @@
 SET_LOGGER("BrickMoneyDesktop.Main")
 
 #include "MainWindow.h"
+#include "BrickMoneyTranslator.h"
 
 #include "Packages/BrickMoneyBackend/BrickMoneyDatabase.h"
-#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 #include "Packages/BrickMoneyBackend/BrickMoneyDataManager.h"
+#include "Packages/BrickMoneyBackend/BrickMoneySettings.h"
 #include "Packages/BrickMoneyBackend/LegoSet.h"
-#include "Packages/BrickMoneyBackend/BrickMoneyProject.h"
 #include "Packages/BrickMoneyBackend/LegoSetInfoGenerator.h"
 #include "Packages/BrickMoneyBackend/LegoSetTableModel.h"
 
@@ -47,6 +47,13 @@ int main(int argc, char *argv[])
 	if (!QDir(app_data_loc).exists())
 	{
 		QDir().mkdir(app_data_loc);
+	}
+
+	if (BrickMoneySettings::Inst()->language() == "de") {
+		BrickMoneyTranslator::Inst()->setGermanTranslation();
+	}
+	else {
+		BrickMoneyTranslator::Inst()->setEnglishTranslation();
 	}
 
     // Initialization and deinitialization.
@@ -111,11 +118,6 @@ int main(int argc, char *argv[])
 		LOG_ERROR(msg.toStdWString());
 		messageBox.critical(0, "Error with database", msg);
 		return -1;
-	}
-
-	if ( !BrickMoneyProject::Inst()->prepareBrickMoneyProject() )
-	{
-		LOG_WARN("Could not prepare BrickMoneyProject.");
 	}
 
 	auto flags = KDDockWidgets::Config::self().flags();

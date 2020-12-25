@@ -15,15 +15,15 @@ SET_LOGGER("BrickMoney.BrickMoneyProject")
 
 std::unique_ptr<BrickMoneyProject> BrickMoneyProject::smInstance = nullptr;
 
-const QString BrickMoneyProject::BrickMoneyTitleKey{"BrickMoneyTitle"};
-const QString BrickMoneyProject::BrickMoneyTitleValue{"BrickMoney Project File"};
-const QString BrickMoneyProject::BrickMoneyVersionKey{"BrickMoneyVersion"};
-const QString BrickMoneyProject::BrickMoneyVersionValue{"0.2"};
+const QString BrickMoneyProject::TitleKey{"BrickMoneyTitle"};
+const QString BrickMoneyProject::TitleValue{"BrickMoney Project File"};
+const QString BrickMoneyProject::ProjectVersionKey{"ProjectVersion"};
+const int     BrickMoneyProject::ProjectVersionValue = 1;
 const QString BrickMoneyProject::BrickMoneyLinkKey{"BrickMoneyLink"};
 const QString BrickMoneyProject::BrickMoneyLinkValue{"https://brickmoney.de/"};
-const QString BrickMoneyProject::BrickMoneyInStock{"InStock"};
-const QString BrickMoneyProject::BrickMoneyForSale{"ForSale"};
-const QString BrickMoneyProject::BrickMoneySold{"Sold"};
+const QString BrickMoneyProject::InStockKey{"InStock"};
+const QString BrickMoneyProject::ForSaleKey{"ForSale"};
+const QString BrickMoneyProject::SoldKey{"Sold"};
 
 
 
@@ -37,70 +37,75 @@ BrickMoneyProject *BrickMoneyProject::Inst()
     return smInstance.get();
 }
 
-void BrickMoneyProject::load()
+void BrickMoneyProject::loadProjectFromSettings()
 {
-	QString localeProjectFile = toLocalFile(m_brickMoneyFilePath);
+	QString localeProjectFile = toLocalFile(BrickMoneySettings::Inst()->brickMoneyFilePath());
 
-    if (!checkBrickMoneyProject(localeProjectFile) )
-        return;
+	QFileInfo info(toLocalFile(localeProjectFile));
 
-    QFile projectFile(localeProjectFile);
-
-    if (!projectFile.open(QIODevice::ReadOnly)) {
-        LOG_ERROR("Couldn't open project file for reading.");
-        return;
-    }
-
-    QByteArray jsonData = projectFile.readAll();
-
-    QJsonDocument projectDoc( QJsonDocument::fromJson(jsonData) );
-
-    const QJsonObject &jsonProject = projectDoc.object();
-
-    if (jsonProject.contains(BrickMoneyTitleKey) && jsonProject[BrickMoneyTitleKey].isString())
-	{
-        if (jsonProject[BrickMoneyTitleKey].toString() != BrickMoneyTitleValue)
-		{
-			LOG_ERROR(m_brickMoneyFilePath.toStdWString() << " is not a BrickMoney Project File.");
-			return;
-		}
+	if (!info.exists()) {
+		QString msg = tr("The project file doesn't exits: ") + localeProjectFile;
+		throw ProjectLoadException(msg.toStdString().c_str());
 	}
-	
-    if (jsonProject.contains(BrickMoneyVersionKey) && jsonProject[BrickMoneyVersionKey].isString())
-	{
-        QString version = jsonProject[BrickMoneyVersionKey].toString();
-        if (version != BrickMoneyVersionValue)
-		{
-            LOG_ERROR("Version mismatch: Expected: " << BrickMoneyVersionValue.toStdWString()<< " Actual: " << version.toStdWString() );
-			return;
-		}
+
+	QFile projectFile(localeProjectFile);
+
+	if (!projectFile.open(QIODevice::ReadOnly)) {
+		QString msg = tr("Could not open project file for reading: ") + localeProjectFile;
+		throw ProjectLoadException(msg.toStdString().c_str());
 	}
-	QFileInfo fileInfo(localeProjectFile);
 
-	QString projectPath = fileInfo.absolutePath();
+	QByteArray jsonData = projectFile.readAll();
 
-    if (jsonProject.contains(BrickMoneyInStock) && jsonProject[BrickMoneyInStock].isArray())
-	{
+	QJsonDocument projectDoc(QJsonDocument::fromJson(jsonData));
+
+	const QJsonObject &jsonProject = projectDoc.object();
+
+	if (!jsonProject.contains(TitleKey) || !jsonProject[TitleKey].isString() ) {
+		QString msg = tr("This it not a valid project file because of missing or invalid title: ") + localeProjectFile;
+		throw ProjectLoadException(msg.toStdString().c_str());
+	}
+
+	auto actualTitle = jsonProject[TitleKey].toString();
+
+	if (actualTitle != TitleValue)	{
+		QString msg = tr("This it not a valid project file because of title mismatch: ") + localeProjectFile;
+		msg += tr("\nExpected: '") + TitleValue + tr("' Actual: '") + actualTitle +"'";
+		throw ProjectLoadException(msg.toStdString().c_str());
+	}
+
+	if (!jsonProject.contains(ProjectVersionKey)) {
+		QString msg = tr("This it not a valid project file because of missing project version: ") + localeProjectFile;
+		throw ProjectLoadException(msg.toStdString().c_str());
+	}
+
+	auto actualVersion = jsonProject[ProjectVersionKey].toInt();
+
+	if (actualVersion != ProjectVersionValue) {
+		QString msg = tr("This it not a valid project file because of project version mismatch: ") + localeProjectFile;
+		msg += tr("\nExpected: ") + QString::number(ProjectVersionValue) + tr(" Actual: ") + QString::number(actualVersion);
+		throw ProjectLoadException(msg.toStdString().c_str());
+	}
+
+	if (jsonProject.contains(InStockKey) && jsonProject[InStockKey].isArray()) {
 		m_InStockModel.clearAll();
-        m_InStockModel.dataSource()->read(jsonProject[BrickMoneyInStock].toArray());
+		m_InStockModel.dataSource()->read(jsonProject[InStockKey].toArray());
 	}
 
-    if (jsonProject.contains(BrickMoneyForSale) && jsonProject[BrickMoneyForSale].isArray())
-	{
+	if (jsonProject.contains(ForSaleKey) && jsonProject[ForSaleKey].isArray())	{
 		m_ForSaleModel.clearAll();
-        m_ForSaleModel.dataSource()->read(jsonProject[BrickMoneyForSale].toArray());
+		m_ForSaleModel.dataSource()->read(jsonProject[ForSaleKey].toArray());
 	}
 
-    if (jsonProject.contains(BrickMoneySold) && jsonProject[BrickMoneySold].isArray())
-	{
+	if (jsonProject.contains(SoldKey) && jsonProject[SoldKey].isArray()) {
 		m_SoldModel.clearAll();
-        m_SoldModel.dataSource()->read(jsonProject[BrickMoneySold].toArray());
+		m_SoldModel.dataSource()->read(jsonProject[SoldKey].toArray());
 	}
 }
 
-void BrickMoneyProject::save()
+void BrickMoneyProject::saveProjectFromSettings()
 {
-	const QString localeFile = toLocalFile(m_brickMoneyFilePath);
+	const QString localeFile = toLocalFile(BrickMoneySettings::Inst()->brickMoneyFilePath());
 	QFile projectFile(localeFile);
 
 	if (!projectFile.open(QIODevice::WriteOnly)) {
@@ -110,21 +115,21 @@ void BrickMoneyProject::save()
 
 	QJsonObject projectJObject;
 
-    projectJObject[BrickMoneyTitleKey] = BrickMoneyTitleValue;
+    projectJObject[TitleKey] = TitleValue;
     projectJObject[BrickMoneyLinkKey] = BrickMoneyLinkValue;
-    projectJObject[BrickMoneyVersionKey] = BrickMoneyVersionValue;
+    projectJObject[ProjectVersionKey] = ProjectVersionValue;
 
     QJsonArray inStock;
     m_InStockModel.dataSource()->write(inStock);
-	projectJObject[BrickMoneyInStock] = inStock;
+	projectJObject[InStockKey] = inStock;
 
 	QJsonArray forSale;
     m_ForSaleModel.dataSource()->write(forSale);
-	projectJObject[BrickMoneyForSale] = forSale;
+	projectJObject[ForSaleKey] = forSale;
 
 	QJsonArray sold;
     m_SoldModel.dataSource()->write(sold);
-	projectJObject[BrickMoneySold] = sold;
+	projectJObject[SoldKey] = sold;
 
 	QJsonDocument projectDoc(projectJObject);
 	projectFile.write(projectDoc.toJson());
@@ -147,54 +152,16 @@ BrickMoneyProject::BrickMoneyProject()
 	const QString temp_loc = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
 	m_tempBrickMoneyFilePath = temp_loc + "/TempBrickMoney.json";
 
-    connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, this, &BrickMoneyProject::setBrickMoneyFilePath);
-	setBrickMoneyFilePath(BrickMoneySettings::Inst()->brickMoneyFilePath());
+    //connect(BrickMoneySettings::Inst(), &BrickMoneySettings::brickMoneyFilePathChanged, this, &BrickMoneyProject::reloadProject);
 }
 
 
-QString BrickMoneyProject::brickMoneyFilePath() const
+QString BrickMoneyProject::temporaryProjectFilePath() const
 {
-    return m_brickMoneyFilePath;
+	return m_tempBrickMoneyFilePath;
 }
 
-bool BrickMoneyProject::prepareBrickMoneyProject()
-{
-	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
-	{
-		BrickMoneyProject::Inst()->load();
-	}
-	else
-	{
-		QFile file(m_tempBrickMoneyFilePath);
-		if (!file.open(QIODevice::WriteOnly)) {
-			LOG_ERROR("Could not create " << m_tempBrickMoneyFilePath.toStdWString());
-			return false;
-		}
-		file.close();
-		BrickMoneySettings::Inst()->setBrickMoneyFilePath(m_tempBrickMoneyFilePath);
-	}
-	BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
 
-	return true;
-}
-
-bool BrickMoneyProject::isTemporaryProject()
-{
-	return QFileInfo(m_brickMoneyFilePath) == QFileInfo(m_tempBrickMoneyFilePath);
-}
-
-bool BrickMoneyProject::checkBrickMoneyProject(const QString& brickMoneyFilePath)
-{
-    QFileInfo info(toLocalFile(brickMoneyFilePath));
-
-    if ( !info.exists() )
-    {
-        LOG_ERROR("The file path '" << brickMoneyFilePath.toStdWString() << "' doesn't exits.");
-        return false;
-    }
-
-    return true;
-}
 
 bool BrickMoneyProject::moveSelectedLegoSets(LegoSetTableModel *from, LegoSetTableModel *to)
 {
@@ -297,15 +264,6 @@ LegoSetTableModel *BrickMoneyProject::getImportModel()
 LegoSetSortFilterTableModel *BrickMoneyProject::getImportSortModel()
 {
     return m_ImportSortModel;
-}
-
-void BrickMoneyProject::setBrickMoneyFilePath(const QString& brickMoneyFilePath)
-{
-    if (m_brickMoneyFilePath == brickMoneyFilePath)
-        return;
-
-    m_brickMoneyFilePath = brickMoneyFilePath;
-    emit brickMoneyFilePathChanged(m_brickMoneyFilePath);
 }
 
 QString BrickMoneyProject::toLocalFile(const QString &fileUrl)

@@ -4,8 +4,6 @@
 #include <kddockwidgets/DockWidget.h>
 #include <kddockwidgets/MainWindow.h>
 
-#include <QTranslator>
-
 
 namespace Ui {
 class MainWindow;
@@ -45,8 +43,7 @@ private:
 	KDDockWidgets::DockWidget* m_SoldDock;
 	KDDockWidgets::DockWidget* m_ImportDock;
 
-	QTranslator m_Translator;
-
+	bool loadProjectFromSettings();
 	QString postWindowTitle();
 	QString inStockText() const;
 	QString forSaleText() const;

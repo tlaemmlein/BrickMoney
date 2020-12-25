@@ -90,12 +90,8 @@ int main(int argc, char *argv[])
     if (engine.rootObjects().isEmpty())
         return -1;
 
-	if (BrickMoneyProject::Inst()->checkBrickMoneyProject(BrickMoneySettings::Inst()->brickMoneyFilePath()))
-	{
-		BrickMoneyProject::Inst()->load();
-	}
+	BrickMoneyProject::Inst()->loadProjectFromSettings();
     BrickMoneyDataManager::Inst()->setBrickMoneyIsDirty(false);
-
 
     return app.exec();
 }

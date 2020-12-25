@@ -39,75 +39,147 @@
 <context>
     <name>BrickMoney::MainWindow</name>
     <message>
-        <location filename="../src/MainWindow.cpp" line="277"/>
+        <location filename="../src/MainWindow.cpp" line="310"/>
         <source>In Stock</source>
         <translation>Auf Lager</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="282"/>
+        <location filename="../src/MainWindow.cpp" line="315"/>
         <source>For Sale</source>
         <translation>Zum Verkauf</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="287"/>
+        <location filename="../src/MainWindow.cpp" line="320"/>
         <source>Sold</source>
         <translation>Verkauft</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="292"/>
+        <location filename="../src/MainWindow.cpp" line="325"/>
         <source>Import</source>
         <translation>Import</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="272"/>
+        <location filename="../src/MainWindow.cpp" line="305"/>
         <source> - BrickMoney Vers. 0.2 - The software for LEGO Investment</source>
         <translation> - BrickMoney Vers. 0.2 - Die Software für LEGO Investment</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="112"/>
+        <location filename="../src/MainWindow.cpp" line="134"/>
         <source>Load BrickMoney Project</source>
         <translation>BrickMony Projekt laden</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="114"/>
-        <location filename="../src/MainWindow.cpp" line="130"/>
+        <location filename="../src/MainWindow.cpp" line="134"/>
+        <location filename="../src/MainWindow.cpp" line="148"/>
         <source>JSON files (*.json)</source>
         <translation>JSON Dateien (*.json)</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="128"/>
+        <location filename="../src/MainWindow.cpp" line="146"/>
         <source>Save BrickMoney project as...</source>
         <translation>BrickMony Projekt speichern unter...</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="140"/>
+        <location filename="../src/MainWindow.cpp" line="40"/>
         <source>Welcome to BrickMoney!
 </source>
         <translation>Willkommen bei BrickMoney!
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="141"/>
+        <location filename="../src/MainWindow.cpp" line="41"/>
         <source>Please save the BrickMoney project to another location.
 </source>
         <translation>Bitte speichere Dein BrickMoney Projekt in ein anderes Verzeichnis.
 </translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="181"/>
-        <location filename="../src/MainWindow.cpp" line="223"/>
+        <location filename="../src/MainWindow.cpp" line="43"/>
+        <location filename="../src/MainWindow.cpp" line="52"/>
+        <source>BrickMoney project file location</source>
+        <translation>Speicherort der BrickMoney-Projektdatei</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="49"/>
+        <source>Please save the BrickMoney project to another location because this is only temporary and can be cleared every time.</source>
+        <translation>Bitte speichere das BrickMoney-Projekt an einem anderen Ort, da dies nur vorübergehend ist und jeder Zeit gelöscht werden kann.</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="191"/>
+        <location filename="../src/MainWindow.cpp" line="233"/>
         <source>The document has been modified.</source>
         <translation>Das Dokument hat sich geändert.</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="182"/>
+        <location filename="../src/MainWindow.cpp" line="192"/>
         <source>Do you want to save your changes?</source>
         <translation>Möchtest Deine Änderungen speichern?</translation>
     </message>
     <message>
-        <location filename="../src/MainWindow.cpp" line="224"/>
+        <location filename="../src/MainWindow.cpp" line="234"/>
         <source>Do you want to save your changes before switching the language?</source>
         <translation>Möchtest Deine Änderungen speichern vor dem Wechsel der Sprache?</translation>
+    </message>
+    <message>
+        <location filename="../src/MainWindow.cpp" line="292"/>
+        <location filename="../src/MainWindow.cpp" line="298"/>
+        <source>BrickMoney project load error</source>
+        <translation>Fehler beim Laden des BrickMoney-Projekts</translation>
+    </message>
+</context>
+<context>
+    <name>BrickMoneyProject</name>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="47"/>
+        <source>The project file doesn&apos;t exits: </source>
+        <translation>Die Projektdatei existiert nicht: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="54"/>
+        <source>Could not open project file for reading: </source>
+        <translation>Projektdatei konnte nicht zum Lesen geöffnet werden: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="65"/>
+        <source>This it not a valid project file because of missing or invalid title: </source>
+        <translation>Dies ist keine gültige Projektdatei, da der Titel fehlt oder ungültig ist: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="72"/>
+        <source>This it not a valid project file because of title mismatch: </source>
+        <translation>Dies ist keine gültige Projektdatei, da der Titel nicht übereinstimmt: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="73"/>
+        <source>
+Expected: &apos;</source>
+        <translation>Erwartet: &apos;</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="73"/>
+        <source>&apos; Actual: &apos;</source>
+        <translation>&apos; Aktuell: &apos;</translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="78"/>
+        <source>This it not a valid project file because of missing project version: </source>
+        <translation>Dies ist keine gültige Projektdatei, da die Projektversion fehlt: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="85"/>
+        <source>This it not a valid project file because of project version mismatch: </source>
+        <translation>Dies ist keine gültige Projektdatei, da die Projektversion nicht übereinstimmt: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="86"/>
+        <source>
+Expected: </source>
+        <translation>Erwartet: </translation>
+    </message>
+    <message>
+        <location filename="../../../Packages/BrickMoneyBackend/BrickMoneyProject.cpp" line="86"/>
+        <source> Actual: </source>
+        <translation>Aktuell: </translation>
     </message>
 </context>
 <context>
@@ -274,7 +346,6 @@
 <context>
     <name>LegoSetImportDialog</name>
     <message>
-        <location filename="../LegoSetImportDialog.ui" line="16"/>
         <location filename="../src/LegoSetImportDialog.ui" line="14"/>
         <source>Form</source>
         <translation>Form</translation>
@@ -374,43 +445,43 @@
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/main.cpp" line="79"/>
+        <location filename="../src/main.cpp" line="86"/>
         <source>Could not prepare locale database!
 </source>
         <translation>Datenbank konnte nicht initialisiert werden!
 </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="80"/>
+        <location filename="../src/main.cpp" line="87"/>
         <source>Please check %1 folder.
 </source>
         <translation>Bitte prüfe das %1 Verzeichnis.
 </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="100"/>
+        <location filename="../src/main.cpp" line="107"/>
         <source>The remote database is not online!
 </source>
         <translation>Die Remote Datenbank ist nicht online!
 </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="101"/>
+        <location filename="../src/main.cpp" line="108"/>
         <source>Hint: Please check your internet connection.
 </source>
         <translation>Hinweis: Besteht eine Internet Verbindung?
 </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="102"/>
-        <location filename="../src/main.cpp" line="110"/>
+        <location filename="../src/main.cpp" line="109"/>
+        <location filename="../src/main.cpp" line="117"/>
         <source>Error message: %1.
 </source>
         <translation>Fehlermeldung: %1.
 </translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="109"/>
+        <location filename="../src/main.cpp" line="116"/>
         <source>Something is wrong with the database!
 </source>
         <translation>Irgendetwas ist mit der Datenbank falsch!

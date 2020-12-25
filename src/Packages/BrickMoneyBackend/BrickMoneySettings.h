@@ -15,6 +15,7 @@ class BrickMoneySettings : public QObject
     Q_PROPERTY(uint inStockFlags READ inStockFlags WRITE setInStockFlags NOTIFY inStockFlagsChanged)
     Q_PROPERTY(uint forSaleFlags READ forSaleFlags WRITE setForSaleFlags NOTIFY forSaleFlagsChanged)
     Q_PROPERTY(uint soldFlags READ soldFlags WRITE setSoldFlags NOTIFY soldFlagsChanged)
+    Q_PROPERTY(bool isFirstStart READ isFirstStart WRITE setIsFirstStart)
 public:
     static BrickMoneySettings* Inst();
     ~BrickMoneySettings();
@@ -28,6 +29,7 @@ public:
     uint inStockFlags() const;
     uint forSaleFlags() const;
     uint soldFlags() const;
+    bool isFirstStart() const;
 
 public slots:
     void setBrickMoneyFilePath(QString brickMoneyFilePath);
@@ -37,6 +39,7 @@ public slots:
     void setInStockFlags(uint inStockFlags);
     void setForSaleFlags(uint forSaleFlags);
     void setSoldFlags(uint soldFlags);
+    void setIsFirstStart(bool isFirstStart);
 
 signals:
     void brickMoneyFilePathChanged(QString brickMoneyFilePath);
@@ -45,7 +48,6 @@ signals:
     void languageChanged(QString language);
     void inStockFlagsChanged(uint inStockFlags);
     void forSaleFlagsChanged(uint forSaleFlags);
-
     void soldFlagsChanged(uint soldFlags);
 
 private:
@@ -74,6 +76,9 @@ private:
 
     static const QString SoldFlagsName;
     uint m_soldFlags;
+
+    static const QString IsFirstStartName;
+    bool m_isFirstStart;
 };
 
 #endif // BRICKMONEYSETTINGS_H
